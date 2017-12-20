@@ -10,11 +10,47 @@ import io
 import pprint
 import shutil
 import subprocess
+from PIL import Image
 
 
 API_KEY = 'AIzaSyBZZcmX_W0rFAJUmHbLnQyOGOxJqdm902w'
-ocr_text = 'testing ocr test'
+#ocr_text = 'testing ocr test'
+#This section changes the size of an image file if it is larger than 4MB
+#https://stackoverflow.com/questions/13407717/python-image-library-pil-how-to-compress-image-into-desired-file-size
+class file_counter(object):
+    def __init__(self):
+        self.position = self.size = 0
 
+    def seek(self, offset, whence=0):
+        if whence == 1:
+            offset += self.position
+        elif whence == 2:
+            offset += self.size
+        self.position = min(offset, self.size)
+
+    def tell(self):
+        return self.position
+
+    def write(self, string):
+        self.position += len(string)
+        self.size = max(self.size, self.position)
+
+def smaller_than(im, size, guess=70, subsampling=1, low=1, high=100):
+    while low < high:
+        counter = file_counter()
+        im.save(counter, format='JPEG', subsampling=subsampling, quality=guess)
+        if counter.size < size:
+            low = guess
+        else:
+            high = guess - 1
+        guess = (low + high + 1) // 2
+    return low
+
+def change_size_if_needed(file):
+    if os.path.getsize(file) > 4000000:
+        im = Image.open(file)
+        size = smaller_than(im,4000000)
+        im.save(file, 'JPEG', quality=size)
 
 
 def vision_ocr(dip_name,file):
@@ -46,8 +82,8 @@ def vision_ocr(dip_name,file):
 
                 else:
                         text = response['responses'][0]['textAnnotations'][0]['description']
-                text = text.encode('utf-8')
-                return text 
+                        text = text.encode('utf-8')
+                        return text 
 
 
 class Command(BaseCommand):
@@ -78,10 +114,13 @@ class Command(BaseCommand):
                                 pass
 
                         else:
+                            path = '/Users/ajanco/projects/GAM/DIPs/' + dip_name + '/objects/' + file
+                            change_size_if_needed(path)
                             ocr_text = vision_ocr(dip_name,file)
-
+                            print(ocr_text)
                             location = file.split('-')[-1]
-                            location, physical_location = location.split('.')[0]
+                            location = location.split('.')[0]
+                            physical_location = location
                             location = location.split('_')
                             box = location[0]
                             bundle = location[1]

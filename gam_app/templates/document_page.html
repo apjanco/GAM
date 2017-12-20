@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}GAM{% endblock %}
+
+{% block content %}
+{% if state %}
+  <ul>
+    
+    <h4>Filename: {{ state.filename }}<br></h4>
+    <h3>Text: {{ state.ocr_text }}<br></h3>
+
+
+
+  </ul>  
+    
+{% else %}
+    <p>No document with that filename</p>
+{% endif %}
+{% endblock %}

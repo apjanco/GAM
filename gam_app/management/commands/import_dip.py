@@ -55,7 +55,6 @@ def change_size_if_needed(file):
 
 def vision_ocr(dip_name,file):
         #TODO
-        #Pre-process file, currently too big for Vision 4MB, currently 6MB
 
         service = googleapiclient.discovery.build('vision', 'v1', developerKey=API_KEY)
         language = 'es'
@@ -94,7 +93,10 @@ class Command(BaseCommand):
                 project_list = os.listdir('/Users/ajanco/projects/GAM/DIPs/') #change to '/tmp/DIP'
 
                 for project in project_list:
-                    print(project_list.index(project), project)
+                    if project == '.DS_Store':
+                        pass
+                    else:    
+                        print(project_list.index(project), project)
                 
                 dip = input("Enter the number of the DIP for import: ") 
                 #bag_name = raw_input("Enter the name of the DIP for upload: ")
@@ -110,22 +112,32 @@ class Command(BaseCommand):
                     collection = collection_choice
 
                 for file in os.listdir('/Users/ajanco/projects/GAM/DIPs/' + dip_name + '/objects/'):
-                        if file.split('.')[1] == 'csv':
+                        #skip the csv file made for DIP upload
+                        if file.split('.')[1] != 'jpg':
                                 pass
-
-                        else:
+                        
+                        if file.split('.')[1] == 'jpg':
                             path = '/Users/ajanco/projects/GAM/DIPs/' + dip_name + '/objects/' + file
+                            #change to 4mb if larger
                             change_size_if_needed(path)
+                            
+                            #send to vision for ocr
                             ocr_text = vision_ocr(dip_name,file)
-                            print(ocr_text)
+                            print('File: %s' % file)
+                            print('Text: %s' % ocr_text)
+                            
+                            
                             location = file.split('-')[-1]
                             location = location.split('.')[0]
                             physical_location = location
-                            location = location.split('_')
-                            box = location[0]
-                            bundle = location[1]
-                            folder = location[2]
-                            image = location[3]
+                            #print(physical_location)
+                            #print(location)
+                            parts = location.split('_')
+                            #print(parts)
+                            box = parts[0]
+                            bundle = parts[1]
+                            folder = parts[2]
+                            image = parts[3]
 
                             
                             Document.objects.update_or_create(

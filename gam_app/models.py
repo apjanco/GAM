@@ -1,5 +1,4 @@
 from django.db import models
-from mptt.models import MPTTModel, TreeForeignKey
 
 
 
@@ -13,18 +12,13 @@ class Place(models.Model):
 class Organization(models.Model):
     organization_name = models.CharField(max_length=200, null=True)
 
-class Archivo(MPTTModel):
-    name = models.CharField(max_length=50, unique=True)
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, on_delete=models.CASCADE)
-
-    class MPTTMeta:
-        order_insertion_by = ['name']
-
-class Document(MPTTModel):
+class Document(models.Model):
     filename = models.CharField(max_length=200, blank=True)
     physical_location = models.CharField(max_length=200, blank=True)
+    url = models.URLField(blank=True, null=True)
+    thumbnail = models.URLField(blank=True, null=True)
     #TODO enter physical location hierarchy
-    archivo = TreeForeignKey(Archivo, on_delete=models.CASCADE)
+    archivo = models.CharField(max_length=200, blank=True)
     collection = models.CharField(max_length=200, blank=True)
     box = models.CharField(max_length=200, blank=True)
     bundle = models.CharField(max_length=200, blank=True)
@@ -32,6 +26,8 @@ class Document(MPTTModel):
     image = models.CharField(max_length=200, blank=True)
 
     ocr_text = models.TextField()
+    def __str__(self):
+   		return self.physical_location
     
                         
 class Metadata(models.Model):

@@ -4,7 +4,7 @@
 {% load staticfiles %}
 
 {% block content %}
-<h1>Archivo del Grupo de Apoyo Mutio</h1>
+<h1>Archivo del Grupo de Apoyo Mutuo</h1>
 <img src="{% static 'Logo_01.png' %}" height="75%" width="50%"/>
 <form action="{% url 'search' %}" method="post">
   {% csrf_token %}
@@ -13,5 +13,5 @@
 </form>
 <h2>Bienvenidos</h2>
 <p>
-Welcome to the Grupo de Apoyo Mutio Archives.</p>
+Welcome to the Grupo de Apoyo Mutuo Archives.</p>
 {% endblock  %}

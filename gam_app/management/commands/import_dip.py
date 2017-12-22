@@ -11,6 +11,10 @@ import pprint
 import shutil
 import subprocess
 from PIL import Image
+#import boto3
+#s3 = boto3.resource('s3')
+from shutil import copyfile
+
 
 
 API_KEY = 'AIzaSyBZZcmX_W0rFAJUmHbLnQyOGOxJqdm902w'
@@ -103,13 +107,17 @@ class Command(BaseCommand):
                 dip_name = project_list[int(dip)]
                 print("Let's import %s" % dip_name) 
 
-                collection_choice = input("Collection -- Enter (1) for desaparecidos, (2) for casos legales: ") 
-                if collection_choice == 1:
+                collection_choice = input("Collection -- Enter 1 for desaparecidos, 2 for casos legales: ") 
+
+                if collection_choice == '1':
                     collection = 'desaparecidos'
-                if collection_choice == 2:
+
+                elif collection_choice == '2':
                     collection = 'casos_legales'
+
                 else:
-                    collection = collection_choice
+                    collection = ''
+
 
                 for file in os.listdir('/Users/ajanco/projects/GAM/DIPs/' + dip_name + '/objects/'):
                         #skip the csv file made for DIP upload
@@ -139,10 +147,16 @@ class Command(BaseCommand):
                             folder = parts[2]
                             image = parts[3]
 
-                            
+                            #url and thumbnail urls (valid after collectstatic)
+                            url = 'https://archivo.nyc3.digitaloceanspaces.com/static/documents/' + file
+                            thumbnail = 'https://archivo.nyc3.digitaloceanspaces.com/static/thumbnails/' + file
+
+                            #create the document in the db
                             Document.objects.update_or_create(
                             filename = file,
                             physical_location = physical_location,
+                            url = url,
+                            thumbnail = thumbnail,
                             archivo = 'Archivo del Grupo de Apoyo Mutuo',
                             collection = collection,
                             box = box,
@@ -151,8 +165,22 @@ class Command(BaseCommand):
                             image = image,
                             ocr_text = ocr_text,
                             )
-                            #move jpg to static?
-                            #move thumbnail to static?
+                            #move jpg files to static
+                            #https://www.digitalocean.com/community/tutorials/how-to-set-up-object-storage-with-django
+                            #https://boto3.readthedocs.io/en/latest/guide/migrations3.html#storing-data
+                            #s3.Object('archivo', file).put(Body=open(path, 'rb'))
+                            copyfile(path, '/Users/ajanco/projects/GAM/archivo/gam_app/static/documents/%s' % file)
+
+                            #move thumbnail to static
+                            parts = file.split('-')[:-1]
+                            uuid = ''
+                            for i in parts:
+                                uuid += i + '-'
+                            print(uuid[:-1])
+                            thumbnail = '/Users/ajanco/projects/GAM/DIPs/' + dip_name + '/thumbnails/' + uuid[:-1] + '.jpg'
+
+                            copyfile(thumbnail,'/Users/ajanco/projects/GAM/archivo/gam_app/static/thumbnails/%s' % file)
+                            print('Copied files.  To complete and upload to DO Space, run collectstatic')
                             #create DZIs for open sea dragon? 
                             #what to do with METs file
                             #what is processing MCP file? 

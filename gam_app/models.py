@@ -5,12 +5,20 @@ from django.db import models
 # Create your models here.
 class Person(models.Model):
     person_name = models.CharField(max_length=200, null=True)
+    def __str__(self):
+   		return self.person_name
+    
 
 class Place(models.Model):
     place_name = models.CharField(max_length=200, null=True)
+    def __str__(self):
+   		return self.place_name
+    
 
 class Organization(models.Model):
     organization_name = models.CharField(max_length=200, null=True)
+    def __str__(self):
+   		return self.organization_name
 
 class Document(models.Model):
     filename = models.CharField(max_length=200, blank=True)
@@ -31,7 +39,7 @@ class Document(models.Model):
     
                         
 class Metadata(models.Model):
-	physical_location = models.CharField(max_length=200, blank=True)
+	filename = models.CharField(max_length=200, blank=True)
 	case_name = models.ManyToManyField(Person, blank=True)
 	date_of_disapearance = models.CharField(max_length=200, blank=True)
 	page_count = models.IntegerField(blank=True)
@@ -47,8 +55,10 @@ class Metadata(models.Model):
 	political_activities = models.ManyToManyField(Organization, blank=True)
 	profession = models.CharField(max_length=200, blank=True)
 	notes = models.TextField()
+	def __str__(self):
+   		return self.filename
 
-class Database(models.Model):
+class Caso(models.Model):
 	caso = models.CharField(max_length=200, blank=True)
 	fecha_desaparicion = models.CharField(max_length=200, blank=True)
 	departamento = models.CharField(max_length=200, blank=True)
@@ -61,6 +71,8 @@ class Database(models.Model):
 	legajo_no = models.CharField(max_length=200, blank=True)
 	carpeta_no = models.CharField(max_length=200, blank=True)
 	descripcion_caso = models.TextField()
+	def __str__(self):
+   		return self.caso
 
 
 

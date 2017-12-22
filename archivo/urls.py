@@ -23,5 +23,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('search_results/', views.search, name='search'),
     path('<filename>/', views.document, name='document'),
+    path('database/', views.caso, name='caso'),
+
 
 ]

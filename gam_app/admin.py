@@ -23,3 +23,12 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 admin.site.register(Organization, OrganizationAdmin) 
 
+class CasoAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Caso, CasoAdmin) 
+
+class MetadataAdmin(admin.ModelAdmin):
+	pass
+
+admin.site.register(Metadata, MetadataAdmin)

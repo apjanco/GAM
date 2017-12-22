@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}GAM{% endblock %}
+
+{% block content %}
+{% if state %}
+  <ul>
+    
+    <p>{{ state }}</p>
+
+
+
+  </ul>  
+    
+{% else %}
+    <p>No document with that filename</p>
+{% endif %}
+{% endblock %}

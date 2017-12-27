@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'mptt',
     'gam_app',
     'storages',
+    'elasticsearch_dsl',
 ]
 
 MIDDLEWARE = [
@@ -77,6 +78,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'archivo.wsgi.application'
 
+ELASTICSEARCH_DSL={
+    'default': {
+        'hosts': 'localhost:9200'
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -155,3 +161,4 @@ STATICFILES_DIRS = [
 ]
 STATIC_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+

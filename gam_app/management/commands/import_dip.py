@@ -14,10 +14,9 @@ from PIL import Image
 #import boto3
 #s3 = boto3.resource('s3')
 from shutil import copyfile
+from gam_app.settings_secret import API_KEY
 
 
-
-API_KEY = 'AIzaSyBZZcmX_W0rFAJUmHbLnQyOGOxJqdm902w'
 #ocr_text = 'testing ocr test'
 #This section changes the size of an image file if it is larger than 4MB
 #https://stackoverflow.com/questions/13407717/python-image-library-pil-how-to-compress-image-into-desired-file-size

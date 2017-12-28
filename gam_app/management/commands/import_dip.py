@@ -180,10 +180,10 @@ class Command(BaseCommand):
                             thumbnail = '/Users/ajanco/projects/GAM/DIPs/' + dip_name + '/thumbnails/' + uuid[:-1] + '.jpg'
 
                             copyfile(thumbnail,'/Users/ajanco/projects/GAM/archivo/gam_app/static/thumbnails/%s' % file)
-                            print('To complete and upload to DO Space, run collectstatic')
-                            #create DZIs for open sea dragon? 
-                            #what to do with METs file
-                            #what is processing MCP file? 
+                print('To complete and upload to DO Space, run collectstatic')
+                #create DZIs for open sea dragon? 
+                #what to do with METs file
+                #what is processing MCP file? 
 
 
 

@@ -24,6 +24,8 @@ urlpatterns = [
     path('search_results/', views.search, name='search'),
     path('<filename>/', views.document, name='document'),
     path('database/', views.caso, name='caso'),
+    path('advanced_search_submit/', views.advanced_search_submit, name='advanced-search-submit'),
+
 
 
 ]

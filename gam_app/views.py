@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Document, Caso
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from gam_app import advanced_search
 
 
 
@@ -22,3 +23,11 @@ def caso(request):
 	state = Database.objects.all()
 	context  = {'state':state}
 	return render(request, 'database_page.html', context)
+
+def advanced_search_submit(request):
+    context = advanced_search.advanced_search(request)
+    if context:
+        return render(request, 'search.html', context)
+    else:
+        context = {"failed" : True}
+        return render(request, 'index.html', context)

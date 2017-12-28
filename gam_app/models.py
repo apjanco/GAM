@@ -7,6 +7,7 @@ class Person(models.Model):
     person_name = models.CharField(max_length=200, null=True)
     def __str__(self):
    		return self.person_name
+   		
     
 
 class Place(models.Model):
@@ -39,7 +40,7 @@ class Document(models.Model):
     
                         
 class Metadata(models.Model):
-	filename = models.CharField(max_length=200, blank=True)
+	filename = models.ForeignKey(Document, on_delete=models.CASCADE)
 	case_name = models.ManyToManyField(Person, blank=True)
 	date_of_disapearance = models.CharField(max_length=200, blank=True)
 	page_count = models.IntegerField(blank=True)
@@ -57,6 +58,8 @@ class Metadata(models.Model):
 	notes = models.TextField()
 	def __str__(self):
    		return self.filename
+   	
+
 
 class Caso(models.Model):
 	caso = models.CharField(max_length=200, blank=True)

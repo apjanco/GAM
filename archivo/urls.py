@@ -22,10 +22,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('search_results/', views.search, name='search'),
-    path('<filename>/', views.document, name='document'),
+    path('<filename>', views.document, name='document'),
     path('database/', views.caso, name='caso'),
     path('advanced_search_submit/', views.advanced_search_submit, name='advanced-search-submit'),
-
+    path('sobre/', views.sobre, name='sobre'),
 
 
 ]

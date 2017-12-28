@@ -24,6 +24,9 @@ def caso(request):
 	context  = {'state':state}
 	return render(request, 'database_page.html', context)
 
+def sobre(request):
+	return render(request, 'about.html')
+
 def advanced_search_submit(request):
     context = advanced_search.advanced_search(request)
     if context:

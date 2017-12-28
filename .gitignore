@@ -1,0 +1,11 @@
+*.pyc
+*.swp
+*~
+.DS_Store
+*.log
+*.pdf
+index/
+logs
+uwsgi_params
+
+gam_app/settings_secret.py

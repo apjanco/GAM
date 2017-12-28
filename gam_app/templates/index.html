@@ -4,6 +4,7 @@
 {% load staticfiles %}
 
 {% block content %}
+<img src="{% static 'Logo_01.png' %}" height="75%" width="50%"/>
 
 
 {% if failed %}
@@ -14,7 +15,7 @@
        <div id="searchers">
           <div id="searcher1"></div>
        </div>
-       <input id="search_submit_button" type="submit" value="Search">
+       <input id="search_submit_button" type="submit" value="Submit">
        <input id="full_info" type="hidden" value='' name="full_info" >
     </form>
 
@@ -24,9 +25,9 @@
     <input id="OR_search" type='button' value='OR'/>
     <input id="AND_search" type='button' value='AND'/>
     <input id="NOT_search" type='button' value='NOT'/>
-    <script src="{% static 'gtr_site/jquery.js' %}"></script>
-    <script src="{% static 'gtr_site/jquery-ui.js' %}"></script>
-    <script src="{% static 'gtr_site/jQDateRangeSlider-min.js' %}"></script>
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/jquery-ui.js' %}"></script>
+    <script src="{% static 'js/jQDateRangeSlider-min.js' %}"></script>
     <script>
       // reset counter to 1
       // might want to get rid of this if we load based on previous counter
@@ -34,7 +35,7 @@
 	$("#searcher_counter").val("1");
 	});
       // These long lines are just html we will be using and reusing
-      var select_fields = "<select class='field_option'> <option>Any field</option> <option>Title</option>  <option>Statement ID</option>  <option>Author</option>  <option>Organization</option> <option>Keyword</option>  <option>Context</option> <option>Keyword in Context</option></select>";
+      var select_fields = "<select class='field_option'> <option>cualquiera de estas palabras</option> <option>Title</option>  <option>Statement ID</option>  <option>Author</option>  <option>Organization</option> <option>Keyword</option>  <option>Context</option> <option>Keyword in Context</option></select>";
       var delete_button = "<a href='#' class='delete_searcher'>  Delete</a>"; 
       
       function createLogicDropdown(operator) {
@@ -49,7 +50,7 @@
         }
       }
       // make first search bar. This one can't be deleted
-      $("#searcher1").append("<span><input type='text' class='search_text' name='search' placeholder='Search...'> in " + select_fields + "</span");
+      $("#searcher1").append("<span><input type='text' class='search_text' name='search' placeholder='Buscar'> in " + select_fields + "</span");
        	// only submits the first slider as of right now
 	$("#filter_form").submit(function( event) {
 	  for(i=1; i <= $("#searcher_counter").val(); i++) {
@@ -120,6 +121,5 @@
       });
     </script>
 
-<img src="{% static 'Logo_01.png' %}" height="75%" width="50%"/>
 
 {% endblock  %}

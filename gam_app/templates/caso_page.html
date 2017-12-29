@@ -3,13 +3,15 @@
 
 {% block content %}
 {% if state %}
-  <ul>
+  
+    <ul>
+{% for item in state %}
+    <li>{{ item.caso }} <br> {{ item.fecha_desaparicion }}<br>{{ item.departamento }} <br></li>
+{% endfor %}
+</ul>
     
-    <p>{{ state }}</p>
 
 
-
-  </ul>  
     
 {% else %}
     <p>No document with that filename</p>

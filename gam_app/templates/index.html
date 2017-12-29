@@ -4,12 +4,13 @@
 {% load staticfiles %}
 
 {% block content %}
-<img src="{% static 'Logo_01.png' %}" height="75%" width="50%"/>
 
 
 {% if failed %}
        <span>Error Message</span>
     {% endif %}
+    <span><img src="{% static 'Logo_01.png' %}" height="20%" width="16.2%"/></span>
+
     <form id="searchers_form"  action="{% url 'advanced-search-submit' %}" method="GET">
        {% csrf_token %}
        <div id="searchers">

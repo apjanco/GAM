@@ -19,10 +19,15 @@ def document(request, filename):
 	context  = {'state':state}
 	return render(request, 'document_page.html', context)
 
-def caso(request):
-	state = Database.objects.all()
+def all_documents(request):
+	state = Document.objects.all()
 	context  = {'state':state}
-	return render(request, 'database_page.html', context)
+	return render(request, 'all_documents_page.html', context)
+
+def caso(request):
+	state = Caso.objects.all()
+	context  = {'state':state}
+	return render(request, 'caso_page.html', context)
 
 def sobre(request):
 	return render(request, 'about.html')

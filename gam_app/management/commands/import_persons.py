@@ -7,9 +7,9 @@ class Command(BaseCommand):
         help = "Imports people from the Casos titles"
         def handle(self, *args, **options):
                 print ("**Import People to Django**")
-                state = Caso.objects.all()
-                for item in state:
+                for e in Caso.objects.all():
                     Person.objects.update_or_create(
-                            person_name = item,
+                            person_name = e.caso,
                             )
+                
                         

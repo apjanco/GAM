@@ -21,11 +21,11 @@
     </form>
 
     
-    <span> Add a searcher </span>
+    <span> </span>
     <input type="hidden" id="searcher_counter" name="seacher_count" value="1">
-    <input id="OR_search" type='button' value='OR'/>
-    <input id="AND_search" type='button' value='AND'/>
-    <input id="NOT_search" type='button' value='NOT'/>
+    <input id="OR_search" type='button' value='O'/>
+    <input id="AND_search" type='button' value='Y'/>
+    <input id="NOT_search" type='button' value='NO'/>
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/jquery-ui.js' %}"></script>
     <script src="{% static 'js/jQDateRangeSlider-min.js' %}"></script>
@@ -37,7 +37,7 @@
 	});
       // These long lines are just html we will be using and reusing
       var select_fields = "<select class='field_option'> <option>cualquiera de estas palabras</option> <option>Title</option>  <option>Statement ID</option>  <option>Author</option>  <option>Organization</option> <option>Keyword</option>  <option>Context</option> <option>Keyword in Context</option></select>";
-      var delete_button = "<a href='#' class='delete_searcher'>  Delete</a>"; 
+      var delete_button = "<a href='#' class='delete_searcher'>  Borrar</a>"; 
       
       function createLogicDropdown(operator) {
         if(operator=="AND") {
@@ -51,7 +51,7 @@
         }
       }
       // make first search bar. This one can't be deleted
-      $("#searcher1").append("<span><input type='text' class='search_text' name='search' placeholder='Buscar'> in " + select_fields + "</span");
+      $("#searcher1").append("<span><input type='text' class='search_text' name='search' placeholder='Buscar...'> in " + select_fields + "</span");
        	// only submits the first slider as of right now
 	$("#filter_form").submit(function( event) {
 	  for(i=1; i <= $("#searcher_counter").val(); i++) {
@@ -67,7 +67,7 @@
 	  $("#searcher_counter").val(+$("#searcher_counter").val() + 1);
 	  var id_num = $("#searcher_counter").val();
           $("#searchers").append("<div id='searcher"+ id_num +"'></div>");
-	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("AND") + "<input type='text' class='search_text' name='AND_search' placeholder='Search...'> in " + select_fields + delete_button + "</span>");
+	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("AND") + "<input type='text' class='search_text' name='AND_search' placeholder='Buscar...'> in " + select_fields + delete_button + "</span>");
 	}
       });
       // what happens when you click OR
@@ -77,7 +77,7 @@
 	  $("#searcher_counter").val(+$("#searcher_counter").val() + 1);
 	  var id_num = $("#searcher_counter").val();
           $("#searchers").append("<div id='searcher"+ id_num +"'></div>");
-	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("OR") + "<input type='text' class='search_text' name='OR_search' placeholder='Search...'> in "+ select_fields + delete_button + "</span>");
+	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("OR") + "<input type='text' class='search_text' name='OR_search' placeholder='Buscar...'> in "+ select_fields + delete_button + "</span>");
 	}
       });
       // what happens when you click NOT
@@ -87,7 +87,7 @@
 	  $("#searcher_counter").val(+$("#searcher_counter").val() + 1);
 	  var id_num = $("#searcher_counter").val();
           $("#searchers").append("<div id='searcher"+ id_num +"'></div>");
-	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("NOT") + "<input type='text' class='search_text' name='NOT_search' placeholder='Search...'> in "+ select_fields + delete_button + "</span>");
+	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("NOT") + "<input type='text' class='search_text' name='NOT_search' placeholder='Buscar...'> in "+ select_fields + delete_button + "</span>");
 	}
       });
       // what happens when you click Delete

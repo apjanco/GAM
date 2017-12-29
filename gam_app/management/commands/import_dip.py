@@ -131,7 +131,7 @@ class Command(BaseCommand):
                             #send to vision for ocr
                             ocr_text = vision_ocr(dip_name,file)
                             print('File: %s' % file)
-                            print('Text: %s' % ocr_text)
+                            print('Text: %s' % ocr_text.decode('utf-8'))
                             
                             
                             location = file.split('-')[-1]
@@ -162,7 +162,7 @@ class Command(BaseCommand):
                             bundle = bundle,
                             folder = folder,
                             image = image,
-                            ocr_text = ocr_text,
+                            ocr_text = ocr_text.decode('utf-8'),
                             )
                             #move jpg files to static
                             #https://www.digitalocean.com/community/tutorials/how-to-set-up-object-storage-with-django

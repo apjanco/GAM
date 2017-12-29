@@ -28,7 +28,3 @@ class CasoAdmin(admin.ModelAdmin):
 
 admin.site.register(Caso, CasoAdmin) 
 
-class MetadataAdmin(admin.ModelAdmin):
-	pass
-
-admin.site.register(Metadata, MetadataAdmin)

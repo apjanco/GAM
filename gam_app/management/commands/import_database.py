@@ -1,6 +1,6 @@
 import csv
 from django.core.management.base import BaseCommand, CommandError
-from gam_app.models import Database
+from gam_app.models import Caso
 
 
 class Command(BaseCommand):
@@ -11,7 +11,7 @@ class Command(BaseCommand):
                 with open('/Users/ajanco/Downloads/gam-loading-data.csv') as f:
                     for row in csv.DictReader(f, skipinitialspace=True):
                         print(row)
-                        Database.objects.update_or_create(
+                        Caso.objects.update_or_create(
                             caso = row['Caso'],
                             fecha_desaparicion = row['fecha_desaparicion'],
                             departamento = row['departamento'],

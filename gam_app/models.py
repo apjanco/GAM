@@ -33,32 +33,24 @@ class Document(models.Model):
     bundle = models.CharField(max_length=200, blank=True)
     folder = models.CharField(max_length=200, blank=True)
     image = models.CharField(max_length=200, blank=True)
-
+    date_of_disapearance = models.CharField(max_length=200, blank=True)
+    page_count = models.IntegerField()
+    no_victims = models.IntegerField()
+    geographic_location = models.ManyToManyField(Place, blank=True)
+    age_at_time = models.CharField(max_length=200, blank=True)
+    gender = models.CharField(max_length=200, blank=True)
+    ethnicity = models.CharField(max_length=200, blank=True)
+    gam_form = models.CharField(max_length=200, blank=True)
+    police_military = models.CharField(max_length=200, blank=True)
+    kind_of_violence = models.CharField(max_length=200, blank=True)
+    ngo_involvement = models.CharField(max_length=200, blank=True)
+    political_activities = models.ManyToManyField(Organization, blank=True)
+    profession = models.CharField(max_length=200, blank=True)
     ocr_text = models.TextField()
     def __str__(self):
    		return self.physical_location
     
-                        
-class Metadata(models.Model):
-	filename = models.ForeignKey(Document, on_delete=models.CASCADE)
-	case_name = models.ManyToManyField(Person, blank=True)
-	date_of_disapearance = models.CharField(max_length=200, blank=True)
-	page_count = models.IntegerField(blank=True)
-	no_victims = models.IntegerField(blank=True)
-	geographic_location = models.ManyToManyField(Place, blank=True)
-	age_at_time = models.CharField(max_length=200, blank=True)
-	gender = models.CharField(max_length=200, blank=True)
-	ethnicity = models.CharField(max_length=200, blank=True)
-	gam_form = models.CharField(max_length=200, blank=True)
-	police_military = models.CharField(max_length=200, blank=True)
-	kind_of_violence = models.CharField(max_length=200, blank=True)
-	ngo_involvement = models.CharField(max_length=200, blank=True)
-	political_activities = models.ManyToManyField(Organization, blank=True)
-	profession = models.CharField(max_length=200, blank=True)
-	notes = models.TextField()
-	def __str__(self):
-   		return self.filename
-   	
+              
 
 
 class Caso(models.Model):

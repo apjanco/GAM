@@ -29,6 +29,11 @@ def caso(request):
 	context  = {'state':state}
 	return render(request, 'caso_page.html', context)
 
+def single_caso(request, caso):
+	state = get_object_or_404(Caso, caso=caso)
+	context  = {'state':state}
+	return render(request, 'single_caso_page.html', context)
+
 def sobre(request):
 	return render(request, 'about.html')
 

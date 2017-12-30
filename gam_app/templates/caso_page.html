@@ -6,7 +6,7 @@
   
     <ul>
 {% for item in state %}
-    <li>{{ item.caso }} <br> {{ item.fecha_desaparicion }}<br>{{ item.departamento }} <br></li>
+    <li><a href="/caso/{{ item.caso }}">{{ item.caso }}</a> <br> {{ item.fecha_desaparicion }}<br>{{ item.departamento }} <br></li>
 {% endfor %}
 </ul>
     

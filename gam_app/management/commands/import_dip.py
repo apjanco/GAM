@@ -127,6 +127,10 @@ class Command(BaseCommand):
                             path = '/Users/ajanco/projects/GAM/DIPs/' + dip_name + '/objects/' + file
                             #change to 4mb if larger
                             change_size_if_needed(path)
+
+                            #textcleaner
+                            print(os.getcwd())
+                            os.system('bash textcleaner %s %s' % (path, path))
                             
                             #send to vision for ocr
                             ocr_text = vision_ocr(dip_name,file)

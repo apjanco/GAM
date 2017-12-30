@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}GAM{% endblock %}
+
+{% block content %}
+{% if state %}
+  <ul>
+    
+    {{ state.caso }}
+	{{ state.fecha_desaparicion }} 
+	{{ state.departamento }}
+	{{ state.local }} 
+	{{ state.area }}
+	{{ state.ambiente }}
+	{{ state.estanteria_no }}
+	{{ state.plato_no }} 
+	{{ state.caja_no }}
+	{{ state.legajo_no }} 
+	{{ state.carpeta_no }}
+	{{ state.descripcion_caso }}
+
+
+
+
+  </ul>  
+    
+{% else %}
+    <p>No document with that filename</p>
+{% endif %}
+{% endblock %}

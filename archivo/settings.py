@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['45.55.221.231']
 
 
 # Application definition
@@ -86,20 +86,6 @@ ELASTICSEARCH_DSL={
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    #'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    #}
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'gam_db',
-        'USER': 'root',
-        'PASSWORD': 'pushka',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
 
 
 # Password validation

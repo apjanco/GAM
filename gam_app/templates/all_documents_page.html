@@ -6,8 +6,8 @@
   
     <ul>
 {% for item in state %}
-    <p><a href="{{ item.url }}"><img src={{ item.thumbnail }}></a>
     <p><a href="/file/{{ item.filename }}"><p>{{ item.physical_location }}</p></a>
+    <p><a href="/file/{{ item.filename }}"><img src={{ item.thumbnail }}></a>
  	<hr>
 {% endfor %}
 </ul>

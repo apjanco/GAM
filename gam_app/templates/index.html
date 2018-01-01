@@ -10,7 +10,6 @@
        <span>Error Message</span>
     {% endif %}
     <span><img src="{% static 'Logo_01.png' %}" height="20%" width="16.2%"/></span>
-    <link rel="shortcut icon" type="image/gif" href="{% static 'Logo_02.gif' %}">
 
     <form id="searchers_form"  action="{% url 'advanced-search-submit' %}" method="GET">
        {% csrf_token %}

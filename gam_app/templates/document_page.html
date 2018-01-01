@@ -4,12 +4,16 @@
 {% block content %}
 {% if state %}
   <ul>
-    <p><a href="{{ state.url }}"><img src={{ state.thumbnail }}></a>
-
-    <h4>Filename: <p>{{ state.filename }}</p><br></h4>
-    <h3>Text: {{ state.ocr_text }}<br></h3>
-
-
+     <p>Nombre: {% for name in state.person.all %}{{ name }}<br></p>{% endfor %}
+    <p>Fecha desaparición: {{ state.date_of_disapearance }}<br></p>
+    <p>Ubicación geográfica: {% for place in state.geographic_location.all %}{{ place }}<br></p>{% endfor %}
+     <p>Número de víctimas: {{ state.no_victims }}<br></p>
+      <p>Edad en ese momento:  {{ state.age_at_time }}<br></p>
+       <p>Unidad policial o militar involucrada:  {{ state.police_military }}<br></p>
+    <p>Número de páginas: {{ state.page_count }}<br></p>
+     <p>Texto:<br> {{ state.ocr_text }}<br></p>
+<hr>
+<p><a href="{{ state.url }}"><img src={{ state.url }} height="200%" width="100%"></a>
 
 
   </ul>  

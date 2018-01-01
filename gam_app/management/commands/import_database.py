@@ -8,7 +8,7 @@ class Command(BaseCommand):
         def handle(self, *args, **options):
                 print ("**Import DB to Django**")
                 
-                with open('/Users/ajanco/Downloads/gam-loading-data.csv') as f:
+                with open('/tmp/gam-loading-data.csv') as f:
                     for row in csv.DictReader(f, skipinitialspace=True):
                         print(row)
                         Caso.objects.update_or_create(

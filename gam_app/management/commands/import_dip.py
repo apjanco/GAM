@@ -61,7 +61,7 @@ def vision_ocr(dip_name,file):
 
         service = googleapiclient.discovery.build('vision', 'v1', developerKey=API_KEY)
         language = 'es'
-        directory = '/Users/ajanco/projects/GAM/DIPs/' + dip_name + '/objects/'
+        directory = '/tmp/DIP/' + dip_name + '/objects/'
         with open(directory + file, 'rb') as image:
                 image_content = base64.b64encode(image.read())
                 service_request = service.images().annotate(body={
@@ -93,7 +93,7 @@ class Command(BaseCommand):
         def handle(self, *args, **options):
                 print ("**Import DIP to Django**")
 
-                project_list = os.listdir('/Users/ajanco/projects/GAM/DIPs/') #change to '/tmp/DIP'
+                project_list = os.listdir('/tmp/DIP/') #change to '/tmp/DIP'
 
                 for project in project_list:
                     if project == '.DS_Store':
@@ -118,13 +118,13 @@ class Command(BaseCommand):
                     collection = ''
 
 
-                for file in os.listdir('/Users/ajanco/projects/GAM/DIPs/' + dip_name + '/objects/'):
+                for file in os.listdir('/tmp/DIP/' + dip_name + '/objects/'):
                         #skip the csv file made for DIP upload
                         if file.split('.')[1] != 'jpg':
                                 pass
                         
                         if file.split('.')[1] == 'jpg':
-                            path = '/Users/ajanco/projects/GAM/DIPs/' + dip_name + '/objects/' + file
+                            path = '/tmp/DIP/' + dip_name + '/objects/' + file
                             #change to 4mb if larger
                             change_size_if_needed(path)
 
@@ -172,7 +172,7 @@ class Command(BaseCommand):
                             #https://www.digitalocean.com/community/tutorials/how-to-set-up-object-storage-with-django
                             #https://boto3.readthedocs.io/en/latest/guide/migrations3.html#storing-data
                             #s3.Object('archivo', file).put(Body=open(path, 'rb'))
-                            copyfile(path, '/Users/ajanco/projects/GAM/archivo/gam_app/static/documents/%s' % file)
+                            copyfile(path, '/srv/GAM/gam_app/static/documents/%s' % file)
 
                             #move thumbnail to static folder
                             parts = file.split('-')[:-1]
@@ -180,9 +180,9 @@ class Command(BaseCommand):
                             for i in parts:
                                 uuid += i + '-'
                             print(uuid[:-1])
-                            thumbnail = '/Users/ajanco/projects/GAM/DIPs/' + dip_name + '/thumbnails/' + uuid[:-1] + '.jpg'
+                            thumbnail = '/tmp/DIP/' + dip_name + '/thumbnails/' + uuid[:-1] + '.jpg'
 
-                            copyfile(thumbnail,'/Users/ajanco/projects/GAM/archivo/gam_app/static/thumbnails/%s' % file)
+                            copyfile(thumbnail,'/srv/GAM/gam_app/static/thumbnails/%s' % file)
                 print('To complete and upload to DO Space, run collectstatic')
                 #create DZIs for open sea dragon? 
                 #what to do with METs file

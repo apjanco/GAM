@@ -14,6 +14,7 @@ from PIL import Image
 #import boto3
 #s3 = boto3.resource('s3')
 from shutil import copyfile
+import pyvips
 from gam_app.settings_secret import API_KEY
 
 
@@ -128,10 +129,9 @@ class Command(BaseCommand):
                             #change to 4mb if larger
                             change_size_if_needed(path)
 
-                            #textcleaner
-                            print(os.getcwd())
-                            os.system('bash textcleaner %s %s' % (path, path))
                             
+
+
                             #send to vision for ocr
                             ocr_text = vision_ocr(dip_name,file)
                             print('File: %s' % file)
@@ -153,6 +153,7 @@ class Command(BaseCommand):
                             #url and thumbnail urls (valid after collectstatic)
                             url = 'https://archivo.nyc3.digitaloceanspaces.com/static/documents/' + file
                             thumbnail = 'https://archivo.nyc3.digitaloceanspaces.com/static/thumbnails/' + file
+                            dzi = 'https://archivo.nyc3.digitaloceanspaces.com/static/dzi/' + file
 
                             #create the document in the db
                             Document.objects.update_or_create(
@@ -160,6 +161,7 @@ class Command(BaseCommand):
                             physical_location = physical_location,
                             url = url,
                             thumbnail = thumbnail,
+                            dzi = dzi,
                             archivo = 'Archivo del Grupo de Apoyo Mutuo',
                             collection = collection,
                             box = box,
@@ -183,6 +185,11 @@ class Command(BaseCommand):
                             thumbnail = '/tmp/DIP/' + dip_name + '/thumbnails/' + uuid[:-1] + '.jpg'
 
                             copyfile(thumbnail,'/srv/GAM/gam_app/static/thumbnails/%s' % file)
+
+                            #create dzis for Openseadragon and move to static
+                            dzi_me = pyvips.Image.new_from_file(path)
+                            dzi_me.dzsave('/srv/GAM/gam_app/static/dzi/%s' % file) 
+                            
                 print('To complete and upload to DO Space, run collectstatic')
                 #create DZIs for open sea dragon? 
                 #what to do with METs file

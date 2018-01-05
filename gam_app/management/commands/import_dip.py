@@ -188,8 +188,8 @@ class Command(BaseCommand):
 
                             #create dzis for Openseadragon and move to static
                             dzi_me = pyvips.Image.new_from_file(path)
-                            dzi_me.dzsave('/srv/GAM/gam_app/static/dzi/%s' % file) 
-                            
+                            dzi_me.dzsave('/srv/GAM/gam_app/dzis/%s' % file) 
+
                 print('To complete and upload to DO Space, run collectstatic')
                 #create DZIs for open sea dragon? 
                 #what to do with METs file

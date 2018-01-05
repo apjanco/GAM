@@ -24,6 +24,11 @@ def all_documents(request):
 	context  = {'state':state}
 	return render(request, 'all_documents_page.html', context)
 
+def dzi(request, file):
+	file = open('/srv/GAM/gam_app/dzis/%s.dzi' % file)
+	response = HttpResponse(content=file)
+	return response 
+
 def caso(request):
 	state = Caso.objects.all()
 	context  = {'state':state}

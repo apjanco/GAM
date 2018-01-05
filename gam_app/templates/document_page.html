@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}GAM{% endblock %}
+{% load staticfiles %}
 
 {% block content %}
 {% if state %}
@@ -13,8 +14,15 @@
     <p>Número de páginas: {{ state.page_count }}<br></p>
      <p>Texto:<br> {{ state.ocr_text }}<br></p>
 <hr>
-<p><a href="{{ state.url }}"><img src={{ state.url }} height="200%" width="100%"></a>
+<script type="text/javascript" src="{% static 'js/openseadragon.min.js' %}"></script>
 
+<div id="openseadragon1" style="width: 800px; height: 600px;"></div>
+<script type="text/javascript">
+    var viewer = OpenSeadragon({
+        id: "openseadragon1",
+        tileSources: "{% url 'dzi' state.filename %}.dzi"
+    });
+</script>
 
   </ul>  
     

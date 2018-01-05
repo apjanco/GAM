@@ -153,7 +153,6 @@ class Command(BaseCommand):
                             #url and thumbnail urls (valid after collectstatic)
                             url = 'https://archivo.nyc3.digitaloceanspaces.com/static/documents/' + file
                             thumbnail = 'https://archivo.nyc3.digitaloceanspaces.com/static/thumbnails/' + file
-                            dzi = 'https://archivo.nyc3.digitaloceanspaces.com/static/dzi/' + file
 
                             #create the document in the db
                             Document.objects.update_or_create(
@@ -161,7 +160,6 @@ class Command(BaseCommand):
                             physical_location = physical_location,
                             url = url,
                             thumbnail = thumbnail,
-                            dzi = dzi,
                             archivo = 'Archivo del Grupo de Apoyo Mutuo',
                             collection = collection,
                             box = box,

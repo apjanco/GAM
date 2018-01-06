@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'gam_app',
     'storages',
     'elasticsearch_dsl',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [

@@ -23,6 +23,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('search_results/', views.search, name='search'),
     path('file/<filename>', views.document, name='document'),
+    path('edit/<filename>', views.document_edit, name='document_edit'),
     path('dzi/<file>', views.dzi, name='dzi'),
     path('caso/', views.caso, name='caso'),
     path('advanced_search_submit/', views.advanced_search_submit, name='advanced-search-submit'),

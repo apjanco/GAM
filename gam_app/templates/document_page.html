@@ -12,18 +12,47 @@
       <p>Edad en ese momento:  {{ state.age_at_time }}<br></p>
        <p>Unidad policial o militar involucrada:  {{ state.police_military }}<br></p>
     <p>Número de páginas: {{ state.page_count }}<br></p>
-     <p>Texto:<br> {{ state.ocr_text }}<br></p>
+     <p><a href="{{ state.url }}">Archivo de imagen</a></p>
 <hr>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+</style>
+<div class="row">
+  <div class="column" style="background-color:#aaa;">
 <script type="text/javascript" src="{% static 'js/openseadragon.min.js' %}"></script>
 
-<div id="openseadragon1" style="width: 800px; height: 600px;"></div>
+<div id="openseadragon1" style="width:100%; height: 200%;"></div>
 <script type="text/javascript">
     var viewer = OpenSeadragon({
         id: "openseadragon1",
         tileSources: "{% url 'dzi' state.filename %}.dzi"
     });
 </script>
-
+</div>
+<div class="column">
+<p>Texto:<br> {{ state.ocr_text }}<br></p>
+</div>
   </ul>  
     
 {% else %}

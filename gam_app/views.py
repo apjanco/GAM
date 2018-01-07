@@ -5,7 +5,6 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
 
 
-
 # Create your views here.
 
 def index(request):
@@ -18,6 +17,10 @@ def document(request, filename):
 	state = get_object_or_404(Document, filename=filename)
 	context  = {'state':state}
 	return render(request, 'document_page.html', context)
+
+def document_edit(request, filename):
+	state = get_object_or_404(Document, filename=filename)
+	return render(request, 'document_edit_page.html',{'state':state})
 
 def all_documents(request):
 	state = Document.objects.all()

@@ -1,5 +1,5 @@
 from django.db import models
-
+from ckeditor.fields import RichTextField
 
 
 # Create your models here.
@@ -46,7 +46,7 @@ class Document(models.Model):
 	ngo_involvement = models.CharField(max_length=200, blank=True)
 	political_activities = models.ManyToManyField(Organization, blank=True)
 	profession = models.CharField(max_length=200, blank=True)
-	ocr_text = models.TextField()
+	ocr_text = RichTextField()
 	def __str__(self):
 		return self.physical_location
     

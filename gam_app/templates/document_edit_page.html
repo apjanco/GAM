@@ -51,13 +51,18 @@ body {
 </script>
 </div>
 <div class="column">
-<p>Texto (<a href="/edit/{{ state.filename}}">editar</a>):<br>
+<form action="editar" method="post" id="edit">
+  {% csrf_token %}
+
+<p>Texto (<a href="/file/{{ state.filename}}">volver</a>):<br>
 <textarea rows="30" cols="60" name="ocr_text" form="edit">
-{{ state.ocr_text }}</textarea></p>
+{{ state.ocr_text }}</textarea>
+<input type="submit" value="Enviar" />
+</form>
 </div>
   </ul>  
-    
 {% else %}
     <p>No document with that filename</p>
 {% endif %}
 {% endblock %}
+

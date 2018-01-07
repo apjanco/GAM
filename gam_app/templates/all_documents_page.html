@@ -3,13 +3,20 @@
 
 {% block content %}
 {% if state %}
-  
+ <table class="resource_table">
+  <tr>
+    <th>Location</th>
+    <th>Image</th>
+  </tr>  
     <ul>
 {% for item in state %}
-    <p><a href="/file/{{ item.filename }}"><p>{{ item.physical_location }}</p></a>
-    <p><a href="/file/{{ item.filename }}"><img src={{ item.thumbnail }}></a>
- 	<hr>
+  <tr>
+   <td> <p><a href="/file/{{ item.filename }}"><p>{{ item.physical_location }}</p></a></td>
+   <td> <p><a href="/file/{{ item.filename }}"><img src={{ item.thumbnail }}></a></td>
+</tr>
+
 {% endfor %}
+</table>
 </ul>
     
 

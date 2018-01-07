@@ -1,30 +1,39 @@
 {% extends "base.html" %}
 {% block title %}GAM{% endblock %}
+{% load staticfiles %}
 
 {% block content %}
 {% if state %}
   
 <script type="text/javascript" src="{% static 'js/openseadragon.min.js' %}"></script>
-
+<script type="text/javascript" src="https://cdn.rawgit.com/Pin0/openseadragon-justified-collection/1.0.2/dist/openseadragon-justified-collection.min.js"></script>
 <div id="openseadragon1" style="width:100%; height: 200%;"></div>
 <script type="text/javascript">
     var viewer = OpenSeadragon({
         id: "openseadragon1",
+        crossOriginPolicy: 'Anonymous',
+        viewportMargins: {top:10, left: 10, right: 10, bottom: 10},
+        collectionColumns: 8,
+        collectionMode: true
     });
+
+    viewer.addHandler('open', function() {
+            viewer.world.arrange();
+            viewer.viewport.goHome(true);
+        });
 </script>
 </div>
     <ul>
 {% for item in state %}
 <script type="text/javascript">
-	viewer.addTiledImage({
-    tileSource: '{{ item.dzi }}',
-    x: 5,
-    y: 0,
-    width: 10
+viewer.addTiledImage({
+    tileSource: '{% url 'dzi' item.filename %}.dzi',
 });
-</script>
 
+</script>
 {% endfor %}
+
+
 </ul>
     
 

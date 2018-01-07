@@ -27,6 +27,11 @@ def all_documents(request):
 	context  = {'state':state}
 	return render(request, 'all_documents_page.html', context)
 
+def multi_image(request):
+        state = Document.objects.all()
+        context  = {'state':state}
+        return render(request, 'document_multi_image.html', context)
+
 def dzi(request, file):
 	file = open('/srv/GAM/gam_app/dzis/%s.dzi' % file)
 	response = HttpResponse(content=file)

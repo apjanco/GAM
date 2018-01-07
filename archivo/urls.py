@@ -29,6 +29,7 @@ urlpatterns = [
     path('advanced_search_submit/', views.advanced_search_submit, name='advanced-search-submit'),
     path('sobre/', views.sobre, name='sobre'),
     path('documentos/', views.all_documents, name='all_documents'),
+    path('multi/', views.multi_image, name='multi_image'),
     path('caso/<caso>', views.single_caso, name='single_caso'),
 
     

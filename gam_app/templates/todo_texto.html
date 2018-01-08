@@ -6,8 +6,8 @@
   
     <ul>
 {% for item in state %}
-    <p><a href="/file/{{ item.filename }}"><p>{{ item.physical_location }}</p></a>
-    <p>{{ item.ocr_text }}</p>
+    <p><a href="/file/{{ item.nombre_del_archivo }}"><p>{{ item.localizacion_fisica }}</p></a>
+    <p>{{ item.texto_de_OCR }}</p>
  	<hr>
 {% endfor %}
 </ul>
@@ -16,7 +16,7 @@
 
     
 {% else %}
-    <p>No document with that filename</p>
+    <p>Ningún documento con ese nombre de archivo</p>
 {% endif %}
 {% endblock %}
 

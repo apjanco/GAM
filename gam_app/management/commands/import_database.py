@@ -4,9 +4,9 @@ from gam_app.models import Caso
 
 
 class Command(BaseCommand):
-        help = "Imports data from the Google Drive GAM Database from csv"
+        help = "Importa datos de la base de datos GAM de Google Drive desde csv"
         def handle(self, *args, **options):
-                print ("**Import DB to Django**")
+                print ("**Importar base de datos a Django**")
                 
                 with open('/tmp/gam-loading-data.csv') as f:
                     for row in csv.DictReader(f, skipinitialspace=True):

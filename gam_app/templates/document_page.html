@@ -5,13 +5,13 @@
 {% block content %}
 {% if state %}
   <ul>
-     <p>Nombre: {% for name in state.person.all %}{{ name }}<br></p>{% endfor %}
-    <p>Fecha desaparición: {{ state.date_of_disapearance }}<br></p>
-    <p>Ubicación geográfica: {% for place in state.geographic_location.all %}{{ place }}<br></p>{% endfor %}
-     <p>Número de víctimas: {{ state.no_victims }}<br></p>
-      <p>Edad en ese momento:  {{ state.age_at_time }}<br></p>
-       <p>Unidad policial o militar involucrada:  {{ state.police_military }}<br></p>
-    <p>Número de páginas: {{ state.page_count }}<br></p>
+     <p>Nombre: {% for name in state.persona.all %}{{ name }}<br></p>{% endfor %}
+    <p>Fecha desaparición: {{ state.fecha_desaparicion }}<br></p>
+    <p>Ubicación geográfica: {% for place in state.ubicación_geográfica.all %}{{ place }}<br></p>{% endfor %}
+     <p>Número de víctimas: {{ state.número_de_víctimas }}<br></p>
+      <p>Edad en ese momento:  {{ state.edad_en_el_momento }}<br></p>
+       <p>Unidad policial o militar involucrada:  {{ state.policial_o_militar }}<br></p>
+    <p>Número de páginas: {{ state.conteo_de_páginas }}<br></p>
      <p><a href="{{ state.url }}">Archivo de imagen</a></p>
 <hr>
 <style>
@@ -46,18 +46,18 @@ body {
 <script type="text/javascript">
     var viewer = OpenSeadragon({
         id: "openseadragon1",
-        tileSources: "{% url 'dzi' state.filename %}.dzi"
+        tileSources: "{% url 'dzi' state.nombre_del_archivo %}.dzi"
     });
 </script>
 </div>
 <div class="column">
-<p>Texto (<a href="/edit/{{ state.filename}}">editar</a>):<br>
+<p>Texto (<a href="/edit/{{ state.nombre_del_archivo}}">editar</a>):<br>
 <textarea rows="30" cols="60" name="ocr_text" form="edit">
-{{ state.ocr_text }}</textarea></p>
+{{ state.texto_de_OCR }}</textarea></p>
 </div>
   </ul>  
     
 {% else %}
-    <p>No document with that filename</p>
+    <p>Ningún documento con ese nombre de archivo</p>
 {% endif %}
 {% endblock %}

@@ -2,29 +2,36 @@ from django.contrib import admin
 from gam_app.models import *
 
 # Register your models here.
-class DocumentAdmin(admin.ModelAdmin):
+class ImagenAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(Document, DocumentAdmin) 
+admin.site.register(Imagen, ImagenAdmin) 
 
 
-class PersonAdmin(admin.ModelAdmin):
+class PersonaAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(Person, PersonAdmin) 
+admin.site.register(Persona, PersonaAdmin) 
 
-class PlaceAdmin(admin.ModelAdmin):
+class LugarAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(Place, PlaceAdmin) 
+admin.site.register(Lugar, LugarAdmin) 
 
-class OrganizationAdmin(admin.ModelAdmin):
+class OrganizaciónAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(Organization, OrganizationAdmin) 
+admin.site.register(Organización, OrganizaciónAdmin) 
 
 class CasoAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Caso, CasoAdmin) 
+
+class PortapapelesAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Portapapeles, PortapapelesAdmin)
+
+
 

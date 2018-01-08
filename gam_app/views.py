@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Document, Caso
+from .models import Imagen, Caso
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
@@ -14,26 +14,26 @@ def search(request):
 	return render(request, 'index.html')
 
 def document(request, filename):
-	state = get_object_or_404(Document, filename=filename)
+	state = get_object_or_404(Imagen, filename=nombre_del_archivo)
 	context  = {'state':state}
 	return render(request, 'document_page.html', context)
 
 def document_edit(request, filename):
-	state = get_object_or_404(Document, filename=filename)
+	state = get_object_or_404(Imagen, filename=nombre_del_archivo)
 	return render(request, 'document_edit_page.html',{'state':state})
 
 def all_documents(request):
-	state = Document.objects.all()
+	state = Imagen.objects.all()
 	context  = {'state':state}
 	return render(request, 'all_documents_page.html', context)
 
 def todo_texto(request):
-	state = Document.objects.all()
+	state = Imagen.objects.all()
 	context  = {'state':state}
 	return render(request, 'todo_texto.html', context)
 
 def multi_image(request):
-        state = Document.objects.all()
+        state = Imagen.objects.all()
         context  = {'state':state}
         return render(request, 'document_multi_image.html', context)
 

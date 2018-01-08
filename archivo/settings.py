@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['45.55.221.231']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -111,13 +111,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGES = [
-    ('es-mx', _('Spanish')),
-    ('de', _('German')),
-    ('en', _('English')),
-]
 
-LANGUAGE_CODE = 'es-mex'
+LANGUAGE_CODE = 'es'
+
 
 TIME_ZONE = 'UTC'
 

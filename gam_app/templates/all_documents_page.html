@@ -11,8 +11,8 @@
     <ul>
 {% for item in state %}
   <tr>
-   <td> <p><a href="/file/{{ item.filename }}"><p>{{ item.physical_location }}</p></a></td>
-   <td> <p><a href="/file/{{ item.filename }}"><img src={{ item.thumbnail }}></a></td>
+   <td> <p><a href="/file/{{ item.nombre_del_archivo }}"><p>{{ item.localizacion_fisica }}</p></a></td>
+   <td> <p><a href="/file/{{ item.nombre_del_archivo }}"><img src={{ item.miniatura }}></a></td>
 </tr>
 
 {% endfor %}
@@ -23,6 +23,6 @@
 
     
 {% else %}
-    <p>No document with that filename</p>
+    <p>Ningún documento con ese nombre de archivo</p>
 {% endif %}
 {% endblock %}

@@ -86,6 +86,7 @@ def vision_ocr(dip_name,file):
                 else:
                         text = response['responses'][0]['textAnnotations'][0]['description']
                         text = text.encode('utf-8')
+                        #TODO write entire response to MongoDB
                         return text 
 
 
@@ -114,6 +115,7 @@ class Command(BaseCommand):
 
                 elif collection_choice == '2':
                     collection = 'casos_legales'
+                    #TODO save legal files locally and not in object storage
 
                 else:
                     collection = ''
@@ -155,18 +157,18 @@ class Command(BaseCommand):
                             thumbnail = 'https://archivo.nyc3.digitaloceanspaces.com/static/thumbnails/' + file
 
                             #create the document in the db
-                            Document.objects.update_or_create(
-                            filename = file,
-                            physical_location = physical_location,
+                            Imagen.objects.update_or_create(
+                            nombre_del_archivo = file,
+                            localizacion_fisica = physical_location,
                             url = url,
-                            thumbnail = thumbnail,
+                            miniatura = thumbnail,
                             archivo = 'Archivo del Grupo de Apoyo Mutuo',
-                            collection = collection,
-                            box = box,
-                            bundle = bundle,
-                            folder = folder,
-                            image = image,
-                            ocr_text = ocr_text.decode('utf-8'),
+                            colección = collection,
+                            caja = box,
+                            legajo = bundle,
+                            carpeta = folder,
+                            número_de_imagen = image,
+                            texto_de_OCR = ocr_text.decode('utf-8'),
                             )
                             #move jpg files to static
                             #https://www.digitalocean.com/community/tutorials/how-to-set-up-object-storage-with-django
@@ -189,7 +191,6 @@ class Command(BaseCommand):
                             dzi_me.dzsave('/srv/GAM/gam_app/dzis/%s' % file) 
 
                 print('To complete and upload to DO Space, run collectstatic')
-                #create DZIs for open sea dragon? 
                 #what to do with METs file
                 #what is processing MCP file? 
 

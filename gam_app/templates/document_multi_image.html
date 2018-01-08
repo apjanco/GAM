@@ -27,7 +27,7 @@
 {% for item in state %}
 <script type="text/javascript">
 viewer.addTiledImage({
-    tileSource: '{% url 'dzi' item.filename %}.dzi',
+    tileSource: '{% url 'dzi' item.nombre_del_archivo %}.dzi',
 });
 
 </script>
@@ -40,6 +40,6 @@ viewer.addTiledImage({
 
     
 {% else %}
-    <p>No document with that filename</p>
+    <p>Ningún documento con ese nombre de archivo</p>
 {% endif %}
 {% endblock %}

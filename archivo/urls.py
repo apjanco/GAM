@@ -30,6 +30,7 @@ urlpatterns = [
     path('sobre/', views.sobre, name='sobre'),
     path('documentos/', views.all_documents, name='all_documents'),
     path('multi/', views.multi_image, name='multi_image'),
+    path('texto/', views.todo_texto, name='all_texto'),
     path('caso/<caso>', views.single_caso, name='single_caso'),
 
     

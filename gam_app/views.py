@@ -27,6 +27,11 @@ def all_documents(request):
 	context  = {'state':state}
 	return render(request, 'all_documents_page.html', context)
 
+def todo_texto(request):
+	state = Document.objects.all()
+	context  = {'state':state}
+	return render(request, 'todo_texto.html', context)
+
 def multi_image(request):
         state = Document.objects.all()
         context  = {'state':state}

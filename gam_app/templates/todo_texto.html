@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}GAM{% endblock %}
+
+{% block content %}
+{% if state %}
+  
+    <ul>
+{% for item in state %}
+    <p><a href="/file/{{ item.filename }}"><p>{{ item.physical_location }}</p></a>
+    <p>{{ item.ocr_text }}</p>
+ 	<hr>
+{% endfor %}
+</ul>
+    
+
+
+    
+{% else %}
+    <p>No document with that filename</p>
+{% endif %}
+{% endblock %}
+

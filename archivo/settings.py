@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.241.128.56']
 
 
 # Application definition
@@ -38,11 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mptt',
     'gam_app',
-    'storages',
-    'elasticsearch_dsl',
     'ckeditor',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -78,11 +76,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'archivo.wsgi.application'
 
-ELASTICSEARCH_DSL={
-    'default': {
-        'hosts': 'localhost:9200'
-    },
-}
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases

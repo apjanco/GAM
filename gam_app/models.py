@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
@@ -30,9 +31,9 @@ class Lugar(models.Model):
     
 
 class Organización(models.Model):
-    nombre_de_la_organización = models.CharField(max_length=200, null=True)
-    def __str__(self):
-   		return self.nombre_de_la_organización
+	nombre_de_la_organización = models.CharField(max_length=200, null=True)
+	def __unicode__(self):
+		return unicode(self.nombre_de_la_organización, 'utf-8')
 
 
     

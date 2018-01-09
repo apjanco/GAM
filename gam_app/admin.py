@@ -21,7 +21,7 @@ admin.site.register(Lugar, LugarAdmin)
 class OrganizaciónAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(Organización, OrganizaciónAdmin) 
+admin.site.register(Organización, OrganizaciónAdmin)
 
 class CasoAdmin(admin.ModelAdmin):
     pass

@@ -106,7 +106,15 @@ class Command(BaseCommand):
                 dip = input("Enter the number of the DIP for import: ") 
                 #bag_name = raw_input("Enter the name of the DIP for upload: ")
                 dip_name = project_list[int(dip)]
-                print("Let's import %s" % dip_name) 
+                print("Let's import %s" % dip_name)
+
+                archive_choice = input("Archive -- Enter 1 for Archivo del GAM or enter name here: ") 
+
+                if archive_choice == '1':
+                    archivo_name = 'Archivo del GAM'
+
+                else:
+                    archivo_name = archive_choice 
 
                 collection_choice = input("Collection -- Enter 1 for desaparecidos, 2 for casos legales: ") 
 
@@ -118,7 +126,7 @@ class Command(BaseCommand):
                     #TODO save legal files locally and not in object storage
 
                 else:
-                    collection = ''
+                    collection = collection_choice
 
 
                 for file in os.listdir('/tmp/DIP/' + dip_name + '/objects/'):
@@ -155,6 +163,17 @@ class Command(BaseCommand):
                             #url and thumbnail urls (valid after collectstatic)
                             url = 'https://archivo.nyc3.digitaloceanspaces.com/static/documents/' + file
                             thumbnail = 'https://archivo.nyc3.digitaloceanspaces.com/static/thumbnails/' + file
+                            try:
+                                archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name).id
+                            except:
+                                Archivo(nombre_del_archivo='%s' % archivo_name).save()
+                                archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name).id
+
+                            try:
+                                collection_id = Colección.objects.get(nombre_del_archivo='%s' % collection).id
+                            except:
+                                Archivo(nombre_del_archivo='%s' % archivo_name).save()
+                                collection_id = Colección.objects.get(nombre_del_archivo='%s' % collection).id
 
                             #create the document in the db
                             Imagen.objects.update_or_create(
@@ -162,8 +181,8 @@ class Command(BaseCommand):
                             localizacion_fisica = physical_location,
                             url = url,
                             miniatura = thumbnail,
-                            archivo = 'Archivo del Grupo de Apoyo Mutuo',
-                            colección = collection,
+                            archivo = archivo_id,
+                            colección = collection_id,
                             caja = box,
                             legajo = bundle,
                             carpeta = folder,

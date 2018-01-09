@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.db import models
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
@@ -14,15 +13,6 @@ class Persona(models.Model):
     def __str__(self):
    		return self.nombre_de_la_persona
 
-class Caja(models.Model):
-	numero_de_caja = models.IntegerField(null=True, blank=True)
-
-class Legajo(models.Model):
-	numero_de_legajo = models.IntegerField(null=True, blank=True)
-
-class Carpeta(models.Model):
-	numero_de_carpeta = models.IntegerField(null=True, blank=True)
-
 
 class Lugar(models.Model):
     nombre_del_lugar = models.CharField(max_length=200, null=True)
@@ -33,7 +23,7 @@ class Lugar(models.Model):
 class Organización(models.Model):
 	nombre_de_la_organización = models.CharField(max_length=200, null=True)
 	def __unicode__(self):
-		return unicode(self.nombre_de_la_organización, 'utf-8')
+		return self.nombre_de_la_organización
 
 
     
@@ -47,9 +37,9 @@ class Caso(models.Model):
 	ambiente = models.CharField(max_length=200, blank=True)
 	estanteria_no = models.CharField(max_length=200, blank=True)
 	plato_no = models.CharField(max_length=200, blank=True)
-	caja_no = models.ForeignKey(Caja, on_delete=models.CASCADE)
-	legajo_no = models.CharField(max_length=200, blank=True)
-	carpeta_no = models.CharField(max_length=200, blank=True)
+	caja_no = models.IntegerField(null=True, blank=True)
+	legajo_no = models.IntegerField(null=True, blank=True)
+	carpeta_no = models.IntegerField(null=True, blank=True)
 	descripcion_caso = RichTextField()
 	def __str__(self):
    		return self.caso
@@ -58,13 +48,20 @@ class Portapapeles(models.Model):
 	usuario = models.ManyToManyField(User, blank=True)
 	casos = models.ManyToManyField(Caso, blank=True)
 	imágenes = models.ManyToManyField('Imagen', blank=True)
+	manuscrito = models.ManyToManyField('Manuscrito', blank=True)
+	def __str__(self):
+   		return self.id
 
 class Colección(models.Model):
 	nombre_de_la_colección = models.CharField(max_length=200, blank=True)
+	def __str__(self):
+   		return self.nombre_de_la_colección
 
 class Archivo(models.Model):
 	nombre_del_archivo = models.CharField(max_length=200, blank=True)
-   
+	def __str__(self):
+   		return self.nombre_del_archivo
+   		
 class Imagen(models.Model):
 	persona = models.ManyToManyField('Persona', blank=True)
 	nombre_del_archivo = models.CharField(max_length=200, blank=True)
@@ -73,9 +70,9 @@ class Imagen(models.Model):
 	miniatura = models.URLField(blank=True, null=True)
 	archivo = models.ForeignKey(Archivo, on_delete=models.CASCADE)
 	colección = models.ForeignKey(Colección, on_delete=models.CASCADE)
-	caja = models.ForeignKey(Caja, on_delete=models.CASCADE)
-	legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
-	carpeta = models.ForeignKey(Carpeta, on_delete=models.CASCADE)
+	caja = models.IntegerField(null=True, blank=True)
+	legajo = models.IntegerField(null=True, blank=True)
+	carpeta = models.IntegerField(null=True, blank=True)
 	#note that image number is CharField given use of 001a and 001b.
 	número_de_imagen = models.CharField(max_length=200, blank=True)
 	manuscritos = models.ManyToManyField('Manuscrito', blank=True)
@@ -101,28 +98,3 @@ class Manuscrito(models.Model):
     imágenes = models.ManyToManyField('Imagen', blank=True)
     def __str__(self):
    		return self.nombre_del_manuscrito
-
-
-		
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-

@@ -33,5 +33,8 @@ class PortapapelesAdmin(admin.ModelAdmin):
 
 admin.site.register(Portapapeles, PortapapelesAdmin)
 
+class ArchivoAdmin(admin.ModelAdmin):
+    pass
 
+admin.site.register(Archivo, ArchivoAdmin)
 

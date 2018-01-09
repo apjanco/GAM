@@ -166,14 +166,14 @@ class Command(BaseCommand):
                             try:
                                 archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name).id
                             except:
-                                Archivo(nombre_del_archivo='%s' % archivo_name).save()
+                                Archivo.objects.update_or_create(nombre_del_archivo= archivo_name)
                                 archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name).id
 
                             try:
-                                collection_id = Colección.objects.get(nombre_del_archivo='%s' % collection).id
+                                collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection).id
                             except:
-                                Archivo(nombre_del_archivo='%s' % archivo_name).save()
-                                collection_id = Colección.objects.get(nombre_del_archivo='%s' % collection).id
+                                Colección.objects.update_or_create(nombre_de_la_colección= collection)
+                                collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection).id
 
                             #create the document in the db
                             Imagen.objects.update_or_create(

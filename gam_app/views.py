@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 from django.shortcuts import render
-from .models import Imagen, Caso
+from .models import *
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
@@ -15,12 +14,12 @@ def search(request):
 	return render(request, 'index.html')
 
 def document(request, filename):
-	state = get_object_or_404(Imagen, filename=nombre_del_archivo)
+	state = get_object_or_404(Imagen, nombre_del_archivo=filename)
 	context  = {'state':state}
 	return render(request, 'document_page.html', context)
 
 def document_edit(request, filename):
-	state = get_object_or_404(Imagen, filename=nombre_del_archivo)
+	state = get_object_or_404(Imagen, nombre_del_archivo=filename)
 	return render(request, 'document_edit_page.html',{'state':state})
 
 def all_documents(request):

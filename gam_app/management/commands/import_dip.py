@@ -84,8 +84,12 @@ def vision_ocr(dip_name,file):
                         pass
 
                 else:
-                        text = response['responses'][0]['textAnnotations'][0]['description']
-                        text = text.encode('utf-8')
+                        try:
+                            text = response['responses'][0]['textAnnotations'][0]['description']
+                            text = text.encode('utf-8')
+                        except:
+                            text = ''
+                            text = text.encode('utf-8')
                         #TODO write entire response to MongoDB
                         return text 
 
@@ -145,7 +149,7 @@ class Command(BaseCommand):
                             #send to vision for ocr
                             ocr_text = vision_ocr(dip_name,file)
                             print('File: %s' % file)
-                            print('Text: %s' % ocr_text.decode('utf-8'))
+                            print('Text: %s' % ocr_text.decode('utf8'))
                             
                             
                             location = file.split('-')[-1]
@@ -206,11 +210,16 @@ class Command(BaseCommand):
                             copyfile(thumbnail,'/srv/GAM/gam_app/static/thumbnails/%s' % file)
 
                             #create dzis for Openseadragon and move to static
-                            dzi_me = pyvips.Image.new_from_file(path)
-                            dzi_me.dzsave('/srv/GAM/gam_app/dzis/%s' % file) 
-                            os.system('mv /srv/GAM/gam_app/dzis/%s.dzi /srv/GAM/gam_app/dzis/%s.dzi ' % (file.split('.'[0]), file))
-
-                print('To complete and upload to DO Space, run collectstatic')
+                            try:
+                                print('path is: %s' % path)
+                                print('file is: %s' % file)
+                                dzi_me = pyvips.Image.new_from_file(path)
+                                dzi_me.dzsave('/srv/GAM/gam_app/dzis/%s' % file) 
+                                os.system('mv /srv/GAM/gam_app/dzis/%s.dzi /srv/GAM/gam_app/dzis/%s.dzi ' % (file.split('.')[0], file))
+                                os.system('mv /srv/GAM/gam_app/dzis/%s_files /srv/GAM/gam_app/dzis/%s_files ' %  (file.split('.')[0], file))
+                            except:
+                                print("Noo! exception!")
+                                pass
                 #what to do with METs file
                 #what is processing MCP file? 
 

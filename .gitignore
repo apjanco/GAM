@@ -7,5 +7,5 @@
 index/
 logs
 uwsgi_params
-gam_app/static/dzis
+gam_app/dzis
 gam_app/settings_secret.py

@@ -164,16 +164,16 @@ class Command(BaseCommand):
                             url = 'https://archivo.nyc3.digitaloceanspaces.com/static/documents/' + file
                             thumbnail = 'https://archivo.nyc3.digitaloceanspaces.com/static/thumbnails/' + file
                             try:
-                                archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name).id
+                                archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name)
                             except:
                                 Archivo.objects.update_or_create(nombre_del_archivo= archivo_name)
-                                archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name).id
+                                archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name)
 
                             try:
-                                collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection).id
+                                collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection)
                             except:
                                 Colección.objects.update_or_create(nombre_de_la_colección= collection)
-                                collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection).id
+                                collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection)
 
                             #create the document in the db
                             Imagen.objects.update_or_create(
@@ -208,6 +208,7 @@ class Command(BaseCommand):
                             #create dzis for Openseadragon and move to static
                             dzi_me = pyvips.Image.new_from_file(path)
                             dzi_me.dzsave('/srv/GAM/gam_app/dzis/%s' % file) 
+                            os.system('mv /srv/GAM/gam_app/dzis/%s.dzi /srv/GAM/gam_app/dzis/%s.dzi ' % (file.split('.'[0]), file))
 
                 print('To complete and upload to DO Space, run collectstatic')
                 #what to do with METs file

@@ -63,7 +63,10 @@ def advanced_search_submit(request):
         context = {"failed" : True}
         return render(request, 'index.html', context)
 
-#record/ archive/collection/caja/legajo/carpeta/image_no
+#TODO: this section works, but should be revised by someone with a more-than-basic understanding of Django
+#documento5 is a hack that only works with the desapareccidos collection and GAM archive
+#using a simple get() raises: 'The QuerySet value for an exact lookup must be limited to one result using slicing.'
+#No help on SO or elsewhere (APJ 1/10/18)
 def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_imagen):
 	id = Archivo.objects.filter(nombre_del_archivo=archivo)
 	for a in id:
@@ -72,10 +75,10 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 	id = Colección.objects.filter(nombre_de_la_colección=colección)
 	for b in id:
 		colección5_id = id
-
-	state = Imagen.objects.filter(archivo=archivo5_id, colección=colección5_id, caja=caja, legajo=legajo, carpeta=carpeta, número_de_imagen=número_de_imagen)[:1]	
+	localizacion_fisica = caja +'_'+ legajo +'_'+ carpeta +'_'+ número_de_imagen
+	state = get_object_or_404(Imagen, localizacion_fisica=localizacion_fisica)
 	context = {'state':state}
-	return render(request, 'all_documents_page.html', context)
+	return render(request, 'document_page.html', context)
 
 def documento4(request, archivo, colección, caja, legajo, carpeta):
 

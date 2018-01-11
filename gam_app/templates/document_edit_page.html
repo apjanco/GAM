@@ -4,6 +4,17 @@
 
 {% block content %}
 {% if state %}
+{% if state %}
+Archivo: <a href="/{{ state.archivo }}/">{{ state.archivo }}</a>
+> Colección: <a href="/{{ state.archivo }}/{{ state.colección }}/">{{ state.colección }}</a>
+> Caja: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}">{{ state.caja }}</a>
+
+> Legajo: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/">{{ state.legajo }}</a>
+
+> Carpeta: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/">{{ state.carpeta }}</a>
+
+> Número de imagen: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ state.número_de_imagen }}/">{{ state.número_de_imagen }}</a><br><br>
+
   <ul>
      <p>Nombre: {% for name in state.nombre_de_la_persona.all %}{{ name }}<br></p>{% endfor %}
     <p>Fecha desaparición: {{ state.fecha_desaparicion }}<br></p>

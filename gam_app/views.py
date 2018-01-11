@@ -126,21 +126,29 @@ def documento1(request, archivo, colección):
 	a_id = Archivo.objects.filter(nombre_del_archivo=archivo)
 	for a in a_id:
 		archivo1_id = a.id
-
+	archivo1_id = archivo1_id
+	
 	c_id = Colección.objects.filter(nombre_de_la_colección=colección)
 	for b in c_id:
 		colección1_id = b.id
+	colección1_id = colección1_id
 
+	location = {'archivo':archivo, 'colección':colección}
 	state = Imagen.objects.filter(archivo=archivo1_id, colección=colección1_id)	
 	context = {'state':state}
 	return render(request, 'all_documents_page.html', context)
 
 def documento0(request, archivo):
+	#surely there's an easier way to get the archive id
+#	id = Archivo.objects.raw('SELECT id FROM gam_db.gam_app_archivo WHERE nombre_del_archivo LIKE "%s"' % archivo)
 	id = Archivo.objects.filter(nombre_del_archivo=archivo)
 	for i in id:
 		archivo0_id = i.id
-	state = Imagen.objects.filter(archivo=archivo0_id)	
-	context = {'state':state}
+	#this next line is dumb, but required to work locally for some reason
+	archivo00_id = archivo0_id
+	location = {'archivo':archivo}
+	state = Imagen.objects.filter(archivo=archivo00_id)	
+	context = {'state':state,'location':location}
 	return render(request, 'all_documents_page.html', context)
 
 

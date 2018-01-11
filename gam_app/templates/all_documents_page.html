@@ -2,7 +2,25 @@
 {% block title %}GAM{% endblock %}
 
 {% block content %}
+{% if location %}
+<a href="/{{ location.archivo }}/">{{ location.archivo }}</a>
+<a href="/{{ location.archivo }}/{{ location.colección }}/">{{ location.colección }}</a>
+{% endif %}
+
 {% if state %}
+{{ colección }} >
+{{caja}}
+{{ legajo }}
+{{carpeta }}
+{% if state.manuscritos %}
+{{ state.manuscritos }}
+{% endif %}
+{{ número_de_imagen }}
+{% endif %}
+
+{% if state %}
+
+
  <table class="resource_table">
   <tr>
     <th>Ubicación</th>

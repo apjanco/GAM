@@ -62,3 +62,85 @@ def advanced_search_submit(request):
     else:
         context = {"failed" : True}
         return render(request, 'index.html', context)
+
+#record/ archive/collection/caja/legajo/carpeta/image_no
+def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_imagen):
+	id = Archivo.objects.filter(nombre_del_archivo=archivo)
+	for a in id:
+		archivo5_id = id
+
+	id = Colección.objects.filter(nombre_de_la_colección=colección)
+	for b in id:
+		colección5_id = id
+
+	state = Imagen.objects.filter(archivo=archivo5_id, colección=colección5_id, caja=caja, legajo=legajo, carpeta=carpeta, número_de_imagen=número_de_imagen)	
+	context = {'state':state}
+	return render(request, 'all_documents_page.html', context)
+
+def documento4(request, archivo, colección, caja, legajo, carpeta):
+
+	a_id = Archivo.objects.filter(nombre_del_archivo=archivo)
+	for a in a_id:
+		archivo4_id = a.id
+
+	c_id = Colección.objects.filter(nombre_de_la_colección=colección)
+	for b in c_id:
+		colección4_id = b.id
+
+	state = Imagen.objects.filter(archivo=archivo4_id, colección=colección4_id, caja=caja, legajo=legajo, carpeta=carpeta)	
+	context = {'state':state}
+	return render(request, 'all_documents_page.html', context)
+
+def documento3(request, archivo, colección, caja, legajo):
+	
+	a_id = Archivo.objects.filter(nombre_del_archivo=archivo)
+	for a in a_id:
+		archivo3_id = a.id
+
+	c_id = Colección.objects.filter(nombre_de_la_colección=colección)
+	for b in c_id:
+		colección3_id = b.id
+
+	state = Imagen.objects.filter(archivo=archivo3_id, colección=colección3_id, caja=caja, legajo=legajo)	
+	context = {'state':state}
+	return render(request, 'all_documents_page.html', context)
+
+def documento2(request, archivo, colección, caja):
+	a_id = Archivo.objects.filter(nombre_del_archivo=archivo)
+	for a in a_id:
+		archivo2_id = a.id
+
+	c_id = Colección.objects.filter(nombre_de_la_colección=colección)
+	for b in c_id:
+		colección2_id = b.id
+
+	state = Imagen.objects.filter(archivo=archivo2_id, colección=colección2_id, caja=caja)	
+	context = {'state':state}
+	return render(request, 'all_documents_page.html', context)
+
+def documento1(request, archivo, colección):
+	
+	a_id = Archivo.objects.filter(nombre_del_archivo=archivo)
+	for a in a_id:
+		archivo1_id = a.id
+
+	c_id = Colección.objects.filter(nombre_de_la_colección=colección)
+	for b in c_id:
+		colección1_id = b.id
+
+	state = Imagen.objects.filter(archivo=archivo1_id, colección=colección1_id)	
+	context = {'state':state}
+	return render(request, 'all_documents_page.html', context)
+
+def documento0(request, archivo):
+	id = Archivo.objects.filter(nombre_del_archivo=archivo)
+	for i in id:
+		archivo0_id = i.id
+	state = Imagen.objects.filter(archivo=archivo0_id)	
+	context = {'state':state}
+	return render(request, 'all_documents_page.html', context)
+
+
+	
+
+		

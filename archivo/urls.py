@@ -32,9 +32,16 @@ urlpatterns = [
     path('multi/', views.multi_image, name='multi_image'),
     path('texto/', views.todo_texto, name='all_texto'),
     path('caso/<caso>', views.single_caso, name='single_caso'),
+    #paths for physical location urls
+    path('<archivo>/<colección>/<caja>/<legajo>/<carpeta>/<número_de_imagen>/', views.documento5, name='documento5'),
+    path('<archivo>/<colección>/<caja>/<legajo>/<carpeta>/', views.documento4, name='documento4'),
+    path('<archivo>/<colección>/<caja>/<legajo>/', views.documento3, name='documento3'),
+    path('<archivo>/<colección>/<caja>/', views.documento2, name='documento2'),
+    path('<archivo>/<colección>/', views.documento1, name='documento1'),
+    path('<archivo>/', views.documento0, name='documento0'),
 
-    
 
 
 
-]
+
+        ]

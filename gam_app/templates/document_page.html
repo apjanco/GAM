@@ -12,7 +12,7 @@ Archivo: <a href="/{{ state.archivo }}/">{{ state.archivo }}</a>
 
 > Carpeta: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ state.legajo}}/{{ state.carpeta }}/">{{ state.carpeta }}</a>
 
-> Número de imagen: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ state.legajo}}/{{ state.carpeta }}/{{ state.número_de_imagen }}/">{{ state.número_de_imagen }}</a><br><br>
+> Número de imagen: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ state.número_de_imagen }}/">{{ state.número_de_imagen }}</a><br><br>
 
   <ul>
      <p>Nombre: {% for name in state.persona.all %}{{ name }}<br></p>{% endfor %}

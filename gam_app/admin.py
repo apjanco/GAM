@@ -38,3 +38,7 @@ class ArchivoAdmin(admin.ModelAdmin):
 
 admin.site.register(Archivo, ArchivoAdmin)
 
+class ColecciónAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Colección, ColecciónAdmin)

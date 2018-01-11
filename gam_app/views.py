@@ -73,7 +73,7 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 	for b in id:
 		colección5_id = id
 
-	state = Imagen.objects.filter(archivo=archivo5_id, colección=colección5_id, caja=caja, legajo=legajo, carpeta=carpeta, número_de_imagen=número_de_imagen)	
+	state = Imagen.objects.filter(archivo=archivo5_id, colección=colección5_id, caja=caja, legajo=legajo, carpeta=carpeta, número_de_imagen=número_de_imagen)[:1]	
 	context = {'state':state}
 	return render(request, 'all_documents_page.html', context)
 

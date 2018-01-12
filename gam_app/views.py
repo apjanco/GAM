@@ -18,6 +18,24 @@ def document(request, filename):
 	context  = {'state':state}
 	return render(request, 'document_page.html', context)
 
+def lugar(request, lugar):
+	l_id = Lugar.objects.filter(nombre_del_lugar=lugar)
+	for a in l_id:
+                lugar_id = a.id
+	lugar_id = lugar_id
+	state = Imagen.objects.filter(ubicación_geográfica=lugar_id)
+	context = {'state':state}
+	return render(request, 'all_documents_page.html', context)
+
+def persona(request, nombre):
+	p_id = Persona.objects.filter(nombre_de_la_persona=nombre)
+	for p in p_id:
+		persona_id = p.id
+	persona_id = persona_id
+	state = Imagen.objects.filter(persona=persona_id)
+	context = {'state':state}
+	return render(request, 'all_documents_page.html', context)
+ 
 def document_edit(request, filename):
 	state = get_object_or_404(Imagen, nombre_del_archivo=filename)
 	return render(request, 'document_edit_page.html',{'state':state})

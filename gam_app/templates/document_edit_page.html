@@ -4,7 +4,6 @@
 
 {% block content %}
 {% if state %}
-{% if state %}
 Archivo: <a href="/{{ state.archivo }}/">{{ state.archivo }}</a>
 > Colección: <a href="/{{ state.archivo }}/{{ state.colección }}/">{{ state.colección }}</a>
 > Caja: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}">{{ state.caja }}</a>
@@ -65,7 +64,7 @@ body {
 <form action="editar" method="post" id="edit">
   {% csrf_token %}
 
-<p>Texto (<a href="/file/{{ state.filename}}">volver</a>):<br>
+<p>Texto:<br>
 <textarea rows="30" cols="60" name="ocr_text" form="edit">
 {{ state.texto_de_OCR }}</textarea>
 <input type="submit" value="Enviar" />

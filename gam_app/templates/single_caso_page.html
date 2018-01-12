@@ -5,9 +5,9 @@
 {% if state %}
   <ul>
     
-   <p>Caso:  {{ state.caso }}<br></p>
+   <p>Caso: {{ state.caso }} <br></p>
    <p>Fecha desaparicion: {{ state.fecha_desaparicion }}<br></p> 
-   <p>Departamento: {{ state.departamento }}<br>
+   <p>Departamento: <a href="/lugar/{{ state.departamento }}">{{ state.departamento }}</a><br>
       Local: {{ state.local }} <br>
       Area: {{ state.area }}<br>
       Ambiente: {{ state.ambiente }}<br>

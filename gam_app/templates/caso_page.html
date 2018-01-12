@@ -6,11 +6,8 @@
 <table class="resource_table">
   <tr>
     <th>Caso</th>
-    <th>Fecha desaparicion</th>
+    <th>Fecha de desaparición</th>
     <th>Departamento</th>
-    <th>Caja</th>
-    <th>Legajo</th>
-    <th>Carpeta</th>
   </tr>
     <ul>
 {% for item in state %}
@@ -18,10 +15,7 @@
    <td> <a href="/caso/{{ item.caso }}">{{ item.caso }}</a></td>
    <td> {{ item.fecha_desaparicion }}</td>
    <td> {{ item.departamento }} </td>
-   <td> {{ item.caja_no }} </td>
-   <td> {{ item.legajo_no }} </td>
-   <td> {{ item.carpeta_no }} </td>
-</tr>  
+</tr>   
 {% endfor %}
 </ul>
     

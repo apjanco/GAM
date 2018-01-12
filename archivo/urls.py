@@ -32,6 +32,8 @@ urlpatterns = [
     path('multi/', views.multi_image, name='multi_image'),
     path('texto/', views.todo_texto, name='all_texto'),
     path('caso/<caso>', views.single_caso, name='single_caso'),
+    path('lugar/<lugar>', views.lugar, name='lugar'),
+    path('persona/<persona>', views.persona, name='persona'),
     #paths for physical location urls
     path('<archivo>/<colección>/<caja>/<legajo>/<carpeta>/<número_de_imagen>/', views.documento5, name='documento5'),
     path('<archivo>/<colección>/<caja>/<legajo>/<carpeta>/', views.documento4, name='documento4'),

@@ -13,9 +13,9 @@
       Ambiente: {{ state.ambiente }}<br>
       Estanteria no: {{ state.estanteria_no }}<br>
       Plato no:  {{ state.plato_no }} <br> 
-      Caja no: {{ state.caja_no }}<br>
-      Legajo no: {{ state.legajo_no }} <br>
-      Carpeta no: {{ state.carpeta_no }}<br>
+      Caja no: <a href="/ArchivodelGam/desaparecidos/{{ state.caja_no }}/">{{ state.caja_no }}</a><br>
+      Legajo no: <a href="/ArchivodelGam/desaparecidos/{{ state.caja_no }}/{{ state.legajo_no }}/">{{ state.legajo_no }}</a><br> 
+      Carpeta no: <a href="/ArchivodelGam/desaparecidos/{{ state.caja_no }}/{{ state.legajo_no }}/{{ state.carpeta_no }}/">{{ state.carpeta_no }}</a><br>
       Descripcion caso: {{ state.descripcion_caso }}<br></p>
 
 

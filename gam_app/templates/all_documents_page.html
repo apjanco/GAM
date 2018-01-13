@@ -2,24 +2,30 @@
 {% block title %}GAM{% endblock %}
 
 {% block content %}
-{% if location %}
-<a href="/{{ location.archivo }}/">{{ location.archivo }}</a>
-<a href="/{{ location.archivo }}/{{ location.colección }}/">{{ location.colección }}</a>
-{% endif %}
+
 
 {% if state %}
-{{ colección }} >
-{{caja}}
-{{ legajo }}
-{{carpeta }}
-{% if state.manuscritos %}
-{{ state.manuscritos }}
-{% endif %}
-{{ número_de_imagen }}
+Archivo: <a href="/{{ location.archivo }}/">{{ location.archivo }}</a>
+
+{% if location.colección %}
+> Colección: <a href="/{{ location.archivo }}/{{ location.colección }}/">{{ location.colección }}</a>
 {% endif %}
 
-{% if state %}
+{% if location.caja %}
+> Caja: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/">{{ location.caja }}</a>
+{% endif %}
 
+{% if location.legajo %}
+> Legajo: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/">{{ location.legajo }}</a>
+{% endif %}
+
+{% if location.carpeta %}
+> Carpeta: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ location.carpeta }}/">{{ location.carpeta }}</a>
+{% endif %}
+
+{% if location.número_de_imagen %}
+> Número de imagen: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ location.carpeta}}/{{ location.número_de_imagen }}/">{{ location.número_de_imagen }}</a>
+{% endif %}
 
  <table class="resource_table">
   <tr>

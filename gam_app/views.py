@@ -3,6 +3,7 @@ from .models import *
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
+from gam_app.utils import get_archivo_id, get_colección_id
 
 
 # Create your views here.
@@ -86,86 +87,61 @@ def advanced_search_submit(request):
 #using a simple get() raises: 'The QuerySet value for an exact lookup must be limited to one result using slicing.'
 #No help on SO or elsewhere (APJ 1/10/18)
 def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_imagen):
-	id = Archivo.objects.filter(nombre_del_archivo=archivo)
-	for a in id:
-		archivo5_id = id
-
-	id = Colección.objects.filter(nombre_de_la_colección=colección)
-	for b in id:
-		colección5_id = id
-	localizacion_fisica = caja +'_'+ legajo +'_'+ carpeta +'_'+ número_de_imagen
-	state = get_object_or_404(Imagen, localizacion_fisica=localizacion_fisica)
-	context = {'state':state}
-	return render(request, 'document_page.html', context)
+	archivo5_id = get_archivo_id(archivo)
+	colección5_id = get_colección_id(colección)
+	
+	state = Imagen.objects.filter(archivo=archivo5_id, colección=colección5_id, caja=caja, legajo=legajo, carpeta=carpeta, número_de_imagen=número_de_imagen)	
+	location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo, 'carpeta':carpeta, 'número_de_imagen':número_de_imagen}
+	context = {'state':state, 'location':location}
+	return render(request, 'all_documents_page.html', context)
 
 def documento4(request, archivo, colección, caja, legajo, carpeta):
 
-	a_id = Archivo.objects.filter(nombre_del_archivo=archivo)
-	for a in a_id:
-		archivo4_id = a.id
-
-	c_id = Colección.objects.filter(nombre_de_la_colección=colección)
-	for b in c_id:
-		colección4_id = b.id
+	archivo4_id = get_archivo_id(archivo)
+	colección4_id = get_colección_id(colección)
 
 	state = Imagen.objects.filter(archivo=archivo4_id, colección=colección4_id, caja=caja, legajo=legajo, carpeta=carpeta)	
-	context = {'state':state}
+	location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo, 'carpeta':carpeta}
+	context = {'state':state, 'location':location}
 	return render(request, 'all_documents_page.html', context)
 
 def documento3(request, archivo, colección, caja, legajo):
 	
-	a_id = Archivo.objects.filter(nombre_del_archivo=archivo)
-	for a in a_id:
-		archivo3_id = a.id
+	archivo3_id = get_archivo_id(archivo)
+	colección3_id = get_colección_id(colección)
 
-	c_id = Colección.objects.filter(nombre_de_la_colección=colección)
-	for b in c_id:
-		colección3_id = b.id
 
 	state = Imagen.objects.filter(archivo=archivo3_id, colección=colección3_id, caja=caja, legajo=legajo)	
-	context = {'state':state}
+	location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo}
+	context = {'state':state, 'location':location}
 	return render(request, 'all_documents_page.html', context)
 
 def documento2(request, archivo, colección, caja):
-	a_id = Archivo.objects.filter(nombre_del_archivo=archivo)
-	for a in a_id:
-		archivo2_id = a.id
-
-	c_id = Colección.objects.filter(nombre_de_la_colección=colección)
-	for b in c_id:
-		colección2_id = b.id
+	
+	archivo2_id = get_archivo_id(archivo)
+	colección2_id = get_colección_id(colección)
 
 	state = Imagen.objects.filter(archivo=archivo2_id, colección=colección2_id, caja=caja)	
-	context = {'state':state}
+	location = {'archivo':archivo, 'colección':colección, 'caja':caja}
+	context = {'state':state, 'location':location}
 	return render(request, 'all_documents_page.html', context)
 
 def documento1(request, archivo, colección):
 	
-	a_id = Archivo.objects.filter(nombre_del_archivo=archivo)
-	for a in a_id:
-		archivo1_id = a.id
-	archivo1_id = archivo1_id
-	
-	c_id = Colección.objects.filter(nombre_de_la_colección=colección)
-	for b in c_id:
-		colección1_id = b.id
-	colección1_id = colección1_id
+	archivo1_id = get_archivo_id(archivo)
+	colección1_id = get_colección_id(colección)
 
-	location = {'archivo':archivo, 'colección':colección}
 	state = Imagen.objects.filter(archivo=archivo1_id, colección=colección1_id)	
-	context = {'state':state}
+	location = {'archivo':archivo, 'colección':colección}
+	context = {'state':state, 'location':location}
 	return render(request, 'all_documents_page.html', context)
 
 def documento0(request, archivo):
-	#surely there's an easier way to get the archive id
-#	id = Archivo.objects.raw('SELECT id FROM gam_db.gam_app_archivo WHERE nombre_del_archivo LIKE "%s"' % archivo)
-	id = Archivo.objects.filter(nombre_del_archivo=archivo)
-	for i in id:
-		archivo0_id = i.id
-	#this next line is dumb, but required to work locally for some reason
-	archivo00_id = archivo0_id
+	
+	archivo_id = get_archivo_id(archivo)
+
+	state = Imagen.objects.filter(archivo=archivo_id)
 	location = {'archivo':archivo}
-	state = Imagen.objects.filter(archivo=archivo00_id)	
 	context = {'state':state,'location':location}
 	return render(request, 'all_documents_page.html', context)
 

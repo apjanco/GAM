@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block title %}GAM{% endblock %}
 {% load staticfiles %}
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript" src="{% static "js/ckeditor-init.js" %}"></script>
+<script type="text/javascript" src="{% static "js/ckeditor.js" %}"></script>
 
 {% block content %}
 {% if state %}
@@ -57,11 +60,21 @@ body {
 </script>
 </div>
 <div class="column">
-<p>Texto (<a href="/edit/{{ state.nombre_del_archivo}}">editar</a>):<br>
+<form method="post" action="">
+    {% csrf_token %}
+    <input type="submit" name="submitbutton" value="Guardar los cambios " />
+    o
+    <input type="submit" name="deletebutton" value="    deshacer cambios al texto
+" id="delete-button" />
+<br>
+<form>
 <textarea rows="30" cols="60" name="ocr_text" form="edit">
 {{ state.texto_de_OCR }}</textarea></p>
+</form>
+
 </div>
   </ul>  
+
 {% else %}
     <p>Ningún documento con ese nombre de archivo</p>
 {% endif %}

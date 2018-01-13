@@ -5,10 +5,10 @@
 
 
 {% if state %}
-Archivo: <a href="/{{ location.archivo }}/">{{ location.archivo }}</a>
+<a href="/{{ location.archivo }}/">{{ location.archivo }}</a>
 
 {% if location.colección %}
-> Colección: <a href="/{{ location.archivo }}/{{ location.colección }}/">{{ location.colección }}</a>
+> <a href="/{{ location.archivo }}/{{ location.colección }}/">{{ location.colección }}</a>
 {% endif %}
 
 {% if location.caja %}

@@ -7,7 +7,6 @@ from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 from django.contrib.flatpages.admin import FlatpageForm as FlatpageFormOld
 
 from django import forms
-from django import forms
 from ckeditor.widgets import CKEditorWidget
 
 class FlatpageForm(FlatpageFormOld):

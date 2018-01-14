@@ -5,6 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
 from django.template import RequestContext
 from gam_app.forms import EditForm
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
@@ -77,6 +79,7 @@ def dzi(request, file):
 	response = HttpResponse(content=file)
 	return response 
 
+@login_required
 def caso(request):
 	state = Caso.objects.all()
 	context  = {'state':state}

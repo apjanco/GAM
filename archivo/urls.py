@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from gam_app import views
+from django.contrib.flatpages import views as flat_views
 
 
 urlpatterns = [
@@ -27,7 +28,7 @@ urlpatterns = [
     path('dzi/<file>', views.dzi, name='dzi'),
     path('caso/', views.caso, name='caso'),
     path('advanced_search_submit/', views.advanced_search_submit, name='advanced-search-submit'),
-    path('sobre/', views.sobre, name='sobre'),
+    path('sobre/', flat_views.flatpage, {'url': '/sobre/'}, name='sobre'),
     path('documentos/', views.all_documents, name='all_documents'),
     path('multi/', views.multi_image, name='multi_image'),
     path('texto/', views.todo_texto, name='all_texto'),

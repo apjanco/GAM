@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.241.128.56']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -64,7 +64,7 @@ ROOT_URLCONF = 'archivo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'gam_app/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'gam_app/templates','./templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,6 +79,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'archivo.wsgi.application'
 
+#from https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Authentication
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases

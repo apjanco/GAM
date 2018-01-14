@@ -60,15 +60,14 @@ body {
 </script>
 </div>
 <div class="column">
-<form method="post" action="">
+<form id="edit_form" method="post" action="/file/{{ state.nombre_del_archivo }}" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="submit" name="submitbutton" value="Guardar los cambios " />
     o
-    <input type="submit" name="deletebutton" value="    deshacer cambios al texto
+    <input type="submit" name="deletebutton" value="deshacer cambios al texto
 " id="delete-button" />
 <br>
-<form>
-<textarea rows="30" cols="60" name="ocr_text" form="edit">
+<textarea rows="30" cols="60" name="texto_de_OCR" form="edit_form">
 {{ state.texto_de_OCR }}</textarea></p>
 </form>
 

@@ -79,7 +79,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'archivo.wsgi.application'
 
+#from https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Authentication
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 

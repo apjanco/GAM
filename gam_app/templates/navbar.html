@@ -23,6 +23,12 @@
             <li><a href="/ArchivodelGAM/">Documentos</a></li>
             <li><a href="/multi/">Portapapeles</a></li>
             <li><a href="/texto/">Sin imágenes</a></li>
+            {% if not user.is_authenticated %}
+            <li><a href="/cuentas/login/">Iniciar sesión
+</a></li>
+            {% else %}
+            <li><a href="/cuentas/logout/">Cerrar sesión</a></li>
+            {% endif %} 
             
 
 

@@ -3,7 +3,8 @@ from .models import *
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
-
+from django.template import RequestContext
+from gam_app.forms import EditForm
 
 # Create your views here.
 
@@ -14,9 +15,28 @@ def search(request):
 	return render(request, 'index.html')
 
 def document(request, filename):
-	state = get_object_or_404(Imagen, nombre_del_archivo=filename)
-	context  = {'state':state}
+	context = RequestContext(request)
+	if request.method == 'POST':
+		form = EditForm(request.POST)
+		if form.is_valid():
+			form.save(commit=True)
+
+			state = get_object_or_404(Imagen, nombre_del_archivo=filename)
+			id = state.id
+			context  = {'state':state, 'form':form, 'id':id}
+			return render(request, 'document_page.html', context)
+		else:
+			print(form.errors)
+	else:
+		form = EditForm()
+		state = get_object_or_404(Imagen, nombre_del_archivo=filename)
+		id = state.id
+		context  = {'state':state, 'form':form,'id':id}		
 	return render(request, 'document_page.html', context)
+
+def document_edit(request, filename):
+	state = get_object_or_404(Imagen, nombre_del_archivo=filename)
+	return render(request, 'document_edit_page.html',{'state':state})
 
 def lugar(request, lugar):
 	l_id = Lugar.objects.filter(nombre_del_lugar=lugar)
@@ -36,9 +56,6 @@ def persona(request, nombre):
 	context = {'state':state}
 	return render(request, 'all_documents_page.html', context)
  
-def document_edit(request, filename):
-	state = get_object_or_404(Imagen, nombre_del_archivo=filename)
-	return render(request, 'document_edit_page.html',{'state':state})
 
 def all_documents(request):
 	state = Imagen.objects.all()

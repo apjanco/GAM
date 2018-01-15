@@ -23,6 +23,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('search_results/', views.search, name='search'),
     path('cuentas/', include('django.contrib.auth.urls')),
+    path('crear_usuario/', include('registration.backends.simple.urls')),
     path('file/<filename>', views.document, name='document'),
     path('editar/<filename>', views.document_edit, name='document_edit'),
     path('dzi/<file>', views.dzi, name='dzi'),

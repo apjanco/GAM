@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
 from django.template import RequestContext
-from gam_app.forms import EditForm
+from gam_app.forms import EditForm, crear_usuario
 from django.contrib.auth.decorators import login_required
 
 
@@ -146,6 +146,5 @@ def documento0(request, archivo):
 	return render(request, 'all_documents_page.html', context)
 
 
-	
 
 		

@@ -134,3 +134,16 @@ STATICFILES_DIRS = [
 
 ACCOUNT_ACTIVATION_DAYS = 30
 REGISTRATION_OPEN = True
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'height': 600,
+        'width': 600,
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline', 'SpecialChar'],
+            ['Copy','Styles', 'Format', 'Scayt'],
+            ['language','RemoveFormat', 'Source']
+        ]
+    }
+}

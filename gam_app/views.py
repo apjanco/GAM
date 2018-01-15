@@ -17,15 +17,22 @@ def search(request):
 	return render(request, 'index.html')
 
 def document(request, filename):
-	context = RequestContext(request)
 	if request.method == 'POST':
 		form = EditForm(request.POST)
 		if form.is_valid():
-			form.save(commit=True)
+			print(request.POST)
+			texto_de_OCR = request.POST['texto_de_OCR']
+			file = request.POST.get('nombre_del_archivo', None)
+
+			#form.archivo = 4
+			#form.save(commit=True)
+			Imagen.objects.update_or_create(
+                            nombre_del_archivo = file,
+                            texto_de_OCR = texto_de_OCR,
+                            )
 
 			state = get_object_or_404(Imagen, nombre_del_archivo=filename)
-			id = state.id
-			context  = {'state':state, 'form':form, 'id':id}
+			context  = {'state':state, 'form':form}
 			return render(request, 'document_page.html', context)
 		else:
 			print(form.errors)
@@ -34,7 +41,7 @@ def document(request, filename):
 		id = state.id
 		form = EditForm(initial={'texto_de_OCR':state.texto_de_OCR})
 		context  = {'state':state, 'form':form,'id':id}		
-	return render(request, 'document_page.html', context)
+		return render(request, 'document_page.html', context)
 
 def document_edit(request, filename):
 	state = get_object_or_404(Imagen, nombre_del_archivo=filename)

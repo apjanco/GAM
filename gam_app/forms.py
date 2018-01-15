@@ -15,5 +15,5 @@ from gam_app.models import Imagen
 class EditForm(forms.ModelForm):
     texto_de_OCR = forms.CharField(widget=CKEditorWidget())
     class Meta:
-    	fields = ['texto_de_OCR']
+    	fields = ['texto_de_OCR', 'nombre_del_archivo']
     	model = Imagen

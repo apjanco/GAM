@@ -6,6 +6,8 @@ from gam_app import advanced_search
 from django.template import RequestContext
 from gam_app.forms import EditForm
 from django.contrib.auth.decorators import login_required
+import datetime
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -21,15 +23,27 @@ def document(request, filename):
 		form = EditForm(request.POST)
 		if form.is_valid():
 			print(request.POST)
+			print(request.user.username)
 			texto_de_OCR = request.POST['texto_de_OCR']
 			file = request.POST.get('nombre_del_archivo', None)
+			archivo = get_object_or_404(Archivo, nombre_del_archivo=request.POST.get('archivo', None))	
+			archivo_id = archivo.id
+			collection = get_object_or_404(Colección, nombre_de_la_colección=request.POST.get('colección', None))
+			box = request.POST.get('caja', None)
+			bundle = request.POST.get('legajo', None)
+			folder = request.POST.get('carpeta', None)
+			old_text = request.POST.get('old_text', None)
+			time = datetime.datetime.now()
+			usuario_id = User.objects.get(username=request.user).pk
+			#save previous text 
+			transcription = Transcrito(usuario_id=usuario_id, nombre_del_archivo=file, tiempo_modificado=time, texto_transcrito=old_text) 
+			transcription.save()
 
-			#form.archivo = 4
-			#form.save(commit=True)
-			Imagen.objects.update_or_create(
-                            nombre_del_archivo = file,
-                            texto_de_OCR = texto_de_OCR,
-                            )
+			#save with the new data
+			image = Imagen.objects.get(nombre_del_archivo = file)
+			image.texto_de_OCR = texto_de_OCR
+			image.save() 
+			
 
 			state = get_object_or_404(Imagen, nombre_del_archivo=filename)
 			context  = {'state':state, 'form':form}

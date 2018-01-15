@@ -66,6 +66,13 @@ body {
         {{ form.texto_de_OCR }}
         
         <input type="hidden" value="{{ state.nombre_del_archivo }}" name="nombre_del_archivo" />
+        <input type="hidden" value="{{ state.archivo }}" name="archivo" />
+        <input type="hidden" value="{{ state.colección }}" name="colección" />
+        <input type="hidden" value="{{ state.caja }}" name="caja" />
+        <input type="hidden" value="{{ state.legajo }}" name="legajo" />
+        <input type="hidden" value="{{ state.carpeta }}" name="carpeta" />
+        <input type="hidden" value="{{ state.texto_de_OCR }}" name="old_text" />
+        
 
         <input type="submit" value="Submit" />
     </form>

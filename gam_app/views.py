@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
 from django.template import RequestContext
-from gam_app.forms import EditForm, crear_usuario
+from gam_app.forms import EditForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -30,9 +30,9 @@ def document(request, filename):
 		else:
 			print(form.errors)
 	else:
-		form = EditForm()
 		state = get_object_or_404(Imagen, nombre_del_archivo=filename)
 		id = state.id
+		form = EditForm(initial={'texto_de_OCR':state.texto_de_OCR})
 		context  = {'state':state, 'form':form,'id':id}		
 	return render(request, 'document_page.html', context)
 

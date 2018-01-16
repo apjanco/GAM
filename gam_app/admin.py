@@ -69,3 +69,8 @@ class ManuscritoAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Manuscrito, ManuscritoAdmin)
+
+class TranscritoAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Transcrito, TranscritoAdmin)

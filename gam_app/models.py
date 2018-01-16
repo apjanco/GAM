@@ -38,9 +38,9 @@ class Caso(models.Model):
 	ambiente = models.CharField(max_length=200, blank=True)
 	estanteria_no = models.CharField(max_length=200, blank=True)
 	plato_no = models.CharField(max_length=200, blank=True)
-	caja_no = models.IntegerField(null=True, blank=True)
-	legajo_no = models.IntegerField(null=True, blank=True)
-	carpeta_no = models.IntegerField(null=True, blank=True)
+	caja_no = models.CharField(max_length=200, blank=True)
+	legajo_no = models.CharField(max_length=200, blank=True)
+	carpeta_no = models.CharField(max_length=200, blank=True)
 	descripcion_caso = RichTextField()
 	def __str__(self):
    		return self.caso
@@ -71,9 +71,9 @@ class Imagen(models.Model):
 	miniatura = models.URLField(blank=True, null=True)
 	archivo = models.ForeignKey(Archivo, on_delete=models.CASCADE)
 	colección = models.ForeignKey(Colección, on_delete=models.CASCADE)
-	caja = models.IntegerField(null=True, blank=True)
-	legajo = models.IntegerField(null=True, blank=True)
-	carpeta = models.IntegerField(null=True, blank=True)
+	caja = models.CharField(max_length=200, blank=True)
+	legajo = models.CharField(max_length=200, blank=True)
+	carpeta = models.CharField(max_length=200, blank=True)
 	#note that image number is CharField given use of 001a and 001b.
 	número_de_imagen = models.CharField(max_length=200, blank=True)
 	manuscritos = models.ManyToManyField('Manuscrito', blank=True)
@@ -104,4 +104,4 @@ class Transcrito(models.Model):
 	nombre_del_archivo = models.CharField(max_length=200, blank=False)
 	usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 	tiempo_modificado = DateTimeField()
-	texto_transcrito = RichTextField() 
+	texto_transcrito = RichTextField()

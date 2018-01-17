@@ -18,6 +18,7 @@ def index(request):
 def search(request):
 	return render(request, 'index.html')
 
+@login_required
 def document(request, filename):
 	if request.method == 'POST':
 		form = EditForm(request.POST)
@@ -90,6 +91,7 @@ def todo_texto(request):
 	context  = {'state':state}
 	return render(request, 'todo_texto.html', context)
 
+@login_required
 def multi_image(request):
         state = Imagen.objects.all()
         context  = {'state':state}
@@ -159,6 +161,7 @@ def documento1(request, archivo, colección):
 	context = {'state':state, 'location':location}
 	return render(request, 'all_documents_page.html', context)
 
+@login_required
 def documento0(request, archivo):
 	
 	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo)

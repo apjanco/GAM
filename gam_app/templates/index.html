@@ -10,11 +10,18 @@
        <span>Error Message</span>
     {% endif %}
  
-
-<form action="/buscar/" method="put" accept-charset="utf-8">
-<input type="text" value="" name="" />
-<input type="submit" value="submit" />
+<form  action="/buscar/" method="get" accept-charset="utf-8" onsubmit="yourFunction()">
+<input id = "search" name="query" type="text" value="" onsubmit="yourFunction()" />
+<input type="submit" value="Buscar" />
 </form>
 
+
+<script>
+function yourFunction(){
+    var action_src = "http://localhost/buscar/" + document.getElementsByName("query")[0].value;
+    var your_form = document.getElementById('search');
+    your_form.action = action_src ;
+}
+</script>
 
 {% endblock  %}

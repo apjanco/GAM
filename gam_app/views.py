@@ -9,14 +9,28 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from django.contrib.auth.models import User
 
+#search engine dependencies 
+from elasticsearch_django.settings import get_client
+from elasticsearch_django.models import SearchQuery
+from elasticsearch_dsl import Search
 
 # Create your views here.
 
 def index(request):
     return render(request, 'index.html')
 
-def search(request):
-	return render(request, 'index.html')
+def search(request, query):
+	state = Imagen.objects.filter(texto_de_OCR__icontains=query)
+	context  = {'state':state}
+	return render(request, 'all_documents_page.html', context)
+
+def elasticsearch(request, query):
+	search = Search(using=get_client(), index='gam')
+	state = SearchQuery.execute(search)
+	for obj in Imagen.objects.from_search_query(sq):
+		print(obj.search_score, obj.search_rank)
+		context  = {'state':state}
+	return render(request, 'all_documents_page.html', context)
 
 @login_required
 def document(request, filename):

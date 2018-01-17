@@ -17,3 +17,6 @@ class EditForm(forms.ModelForm):
     class Meta:
     	fields = ['texto_de_OCR', 'nombre_del_archivo']
     	model = Imagen
+
+class SearchForm(forms.Form):
+	search = forms.CharField(label='search', max_length=100)

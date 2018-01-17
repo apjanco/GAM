@@ -116,8 +116,20 @@ def persona(request, nombre):
  
 
 def all_documents(request):
-	state = Imagen.objects.all()
-	context  = {'state':state}
+	if request.method == 'POST':
+		form = SearchForm(request.POST)
+		query = request.POST.get('search', None)
+		if form.is_valid():
+			state = Imagen.objects.filter(texto_de_OCR__icontains=query)
+			context  = {'state':state, 'form':form}
+			return render(request, 'all_documents_page.html', context)
+		else:
+			print(form.errors)
+	else:
+		state = Imagen.objects.all()
+		search = ""
+		form = SearchForm(initial={'search': search })
+		context = {'state':state,'form':form }
 	return render(request, 'all_documents_page.html', context)
 
 def todo_texto(request):
@@ -195,11 +207,23 @@ def documento1(request, archivo, colección):
 	return render(request, 'all_documents_page.html', context)
 
 def documento0(request, archivo):
-	
-	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo)
-	location = {'archivo':archivo}
-	context = {'state':state,'location':location}
-	return render(request, 'all_documents_page.html', context)
+	if request.method == 'POST':
+		form = SearchForm(request.POST)
+		query = request.POST.get('search', None)
+		if form.is_valid():
+			state = Imagen.objects.filter(texto_de_OCR__icontains=query)
+			context  = {'state':state, 'form':form}
+			return render(request, 'all_documents_page.html', context)
+		else:
+			print(form.errors)
+	else:
+		search = ""
+		form = SearchForm(initial={'search': search })
+		state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo)
+		location = {'archivo':archivo}
+		context = {'state':state,'form':form, 'location':location }
+		
+		return render(request, 'all_documents_page.html', context)
 
 
 

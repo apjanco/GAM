@@ -21,7 +21,7 @@ from django.contrib.flatpages import views as flat_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('buscar/<query>/', views.search, name='search'),
+    path('buscar/?query=<query>/', views.search, name='search'),
     path('cuentas/', include('django.contrib.auth.urls')),
     path('crear_usuario/', include('registration.backends.simple.urls')),
     path('file/<filename>', views.document, name='document'),

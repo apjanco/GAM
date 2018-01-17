@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
 from django.template import RequestContext
-from gam_app.forms import EditForm
+from gam_app.forms import EditForm, SearchForm
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.contrib.auth.models import User
@@ -12,17 +12,38 @@ from django.contrib.auth.models import User
 #search engine dependencies 
 from elasticsearch_django.settings import get_client
 from elasticsearch_django.models import SearchQuery
-from elasticsearch_dsl import Search
+#from elasticsearch_dsl import Search
 
 # Create your views here.
 
 def index(request):
-    return render(request, 'index.html')
+	if request.method == 'POST':
+		form = SearchForm(request.POST)
+		query = request.POST.get('search', None)
+		if form.is_valid():
+			state = Imagen.objects.filter(texto_de_OCR__icontains=query)
+			context  = {'state':state, 'form':form}
+			return render(request, 'all_documents_page.html', context)
+		else:
+			print(form.errors)
+	else:
+		search = ""
+		form = SearchForm(initial={'search': search })
+	return render(request, 'index.html', {'form':form})
 
 def search(request, query):
-	state = Imagen.objects.filter(texto_de_OCR__icontains=query)
-	context  = {'state':state}
-	return render(request, 'all_documents_page.html', context)
+	if request.method == 'POST':
+		form = SearchForm(request.POST)
+		if form.is_valid():
+			state = Imagen.objects.filter(texto_de_OCR__icontains=query)
+			context  = {'state':state, 'form':form}
+			return render(request, 'all_documents_page.html', context)
+		else:
+			print(form.errors)
+	else:
+		search = "Buscar..."
+		form = SearchForm(initial={'search': search })
+	return render(request, 'index.html', {'form':form})
 
 def elasticsearch(request, query):
 	search = Search(using=get_client(), index='gam')

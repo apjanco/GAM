@@ -7,6 +7,7 @@
 
 {% block content %}
 {% if state %}
+
 <a href="/{{ state.archivo }}/">{{ state.archivo }}</a>
 > <a href="/{{ state.archivo }}/{{ state.colección }}/">{{ state.colección }}</a>
 > Caja: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}">{{ state.caja }}</a>
@@ -21,6 +22,13 @@
 <p>Fecha desaparición: {{ state.fecha_desaparicion }}<br></p>
     <p>Ubicación geográfica: {% for place in state.ubicación_geográfica.all %}<a href="/lugar/{{ place }}">{{ place }}</a><br></p>{% endfor %}
      <p><a href="{{ state.url }}">Archivo de imagen</a></p>
+
+  <form action="" method="post">
+        {% csrf_token %}
+        {{ clipboard.list_name }}
+        <input type="hidden" value="clipboard" name="input" />
+        <input type="submit" value="Salvar" />   
+  </form>
 <hr>
 <style>
 * {
@@ -73,10 +81,13 @@ body {
         <input type="hidden" value="{{ state.legajo }}" name="legajo" />
         <input type="hidden" value="{{ state.carpeta }}" name="carpeta" />
         <input type="hidden" value="{{ state.texto_de_OCR }}" name="old_text" />
-        
+        <input type="hidden" value="text_edit" name="input" />
 
     </form>
+
+
 </div>
+
   </ul>  
 
 {% else %}

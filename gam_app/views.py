@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
 from django.template import RequestContext
-from gam_app.forms import EditForm, SearchForm
+from gam_app.forms import EditForm, SearchForm, PortapapelesForm
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.contrib.auth.models import User
@@ -54,42 +54,53 @@ def elasticsearch(request, query):
 	return render(request, 'all_documents_page.html', context)
 
 def document(request, filename):
+	
 	if request.method == 'POST':
-		form = EditForm(request.POST)
-		if form.is_valid():
-			print(request.POST)
-			print(request.user.username)
-			texto_de_OCR = request.POST['texto_de_OCR']
-			file = request.POST.get('nombre_del_archivo', None)
-			archivo = get_object_or_404(Archivo, nombre_del_archivo=request.POST.get('archivo', None))	
-			archivo_id = archivo.id
-			collection = get_object_or_404(Colección, nombre_de_la_colección=request.POST.get('colección', None))
-			box = request.POST.get('caja', None)
-			bundle = request.POST.get('legajo', None)
-			folder = request.POST.get('carpeta', None)
-			old_text = request.POST.get('old_text', None)
-			time = datetime.datetime.now()
-			usuario_id = User.objects.get(username=request.user).pk
-			#save previous text 
-			transcription = Transcrito(usuario_id=usuario_id, nombre_del_archivo=file, tiempo_modificado=time, texto_transcrito=old_text) 
-			transcription.save()
+		if request.POST['input'] == 'text_edit':
+			edit_form = EditForm(request.POST)
+			if edit_form.is_valid():
+				texto_de_OCR = request.POST['texto_de_OCR']
+				file = request.POST.get('nombre_del_archivo', None)
+				archivo = get_object_or_404(Archivo, nombre_del_archivo=request.POST.get('archivo', None))	
+				archivo_id = archivo.id
+				collection = get_object_or_404(Colección, nombre_de_la_colección=request.POST.get('colección', None))
+				box = request.POST.get('caja', None)
+				bundle = request.POST.get('legajo', None)
+				folder = request.POST.get('carpeta', None)
+				old_text = request.POST.get('old_text', None)
+				time = datetime.datetime.now()
+				usuario_id = User.objects.get(username=request.user).pk
+				#save previous text 
+				transcription = Transcrito(usuario_id=usuario_id, nombre_del_archivo=file, tiempo_modificado=time, texto_transcrito=old_text) 
+				transcription.save()
 
-			#save with the new data
-			image = Imagen.objects.get(nombre_del_archivo = file)
-			image.texto_de_OCR = texto_de_OCR
-			image.save() 
+				#save with the new data
+				image = Imagen.objects.get(nombre_del_archivo = file)
+				image.texto_de_OCR = texto_de_OCR
+				image.save() 
+				
+				state = get_object_or_404(Imagen, nombre_del_archivo=filename)
+				context  = {'state':state, 'form':edit_form}
+				return render(request, 'document_page.html', context)
 			
+			else:
+				print(form.errors)
 
-			state = get_object_or_404(Imagen, nombre_del_archivo=filename)
-			context  = {'state':state, 'form':form}
-			return render(request, 'document_page.html', context)
-		else:
-			print(form.errors)
+		if request.POST['input'] == 'clipboard':
+			clip_form = PortapapelesForm(request.POST)
+			if clip_form.is_valid():
+				print ('Clipboard!')
+				state = get_object_or_404(Imagen, nombre_del_archivo=filename)
+				id = state.id
+				context  = {'state':state, 'clipboard':clip_form,'id':id}		
+				return render(request, 'document_page.html', context)
+
 	else:
 		state = get_object_or_404(Imagen, nombre_del_archivo=filename)
 		id = state.id
 		form = EditForm(initial={'texto_de_OCR':state.texto_de_OCR})
-		context  = {'state':state, 'form':form,'id':id}		
+		clip_form = PortapapelesForm(request.POST)
+		context  = {'state':state, 'form':form, 'clipboard':clip_form, 'id':id}		
 		return render(request, 'document_page.html', context)
 
 def document_edit(request, filename):

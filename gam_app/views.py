@@ -106,12 +106,8 @@ def lugar(request, lugar):
 	context = {'state':state}
 	return render(request, 'all_documents_page.html', context)
 
-def persona(request, nombre):
-	p_id = Persona.objects.filter(nombre_de_la_persona=nombre)
-	for p in p_id:
-		persona_id = p.id
-	persona_id = persona_id
-	state = Imagen.objects.filter(persona=persona_id)
+def persona(request, persona):
+	state = Imagen.objects.filter(persona__nombre_de_la_persona=persona)
 	context = {'state':state}
 	return render(request, 'all_documents_page.html', context)
  

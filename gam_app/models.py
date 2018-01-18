@@ -52,12 +52,13 @@ class Caso(models.Model):
 #For example, a member of the legal team may want to include all the documents they have come across that relate to 
 #a current case. 
 class Portapapeles(models.Model):
+	nombre_del_portapapeles = models.CharField(max_length=200, blank=True)
 	usuario = models.ManyToManyField(User, blank=True)
 	casos = models.ManyToManyField(Caso, blank=True)
 	imágenes = models.ManyToManyField('Imagen', blank=True)
 	manuscrito = models.ManyToManyField('Manuscrito', blank=True)
 	def __str__(self):
-   		return self.id
+   		return self.nombre_del_portapapeles
 
 #This is an archival collection  
 class Colección(models.Model):

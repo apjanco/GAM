@@ -59,6 +59,7 @@ def document(request, filename):
 		if request.POST['input'] == 'text_edit':
 			edit_form = EditForm(request.POST)
 			if edit_form.is_valid():
+				print('this is the request',request)
 				texto_de_OCR = request.POST['texto_de_OCR']
 				file = request.POST.get('nombre_del_archivo', None)
 				archivo = get_object_or_404(Archivo, nombre_del_archivo=request.POST.get('archivo', None))	
@@ -78,29 +79,48 @@ def document(request, filename):
 				image = Imagen.objects.get(nombre_del_archivo = file)
 				image.texto_de_OCR = texto_de_OCR
 				image.save() 
+
+				clipboard = PortapapelesForm(request.POST)
+				 
 				
 				state = get_object_or_404(Imagen, nombre_del_archivo=filename)
-				context  = {'state':state, 'form':edit_form}
+				context  = {'state':state, 'form':edit_form, 'clipboard':clipboard}
 				return render(request, 'document_page.html', context)
 			
 			else:
 				print(form.errors)
 
 		if request.POST['input'] == 'clipboard':
-			clip_form = PortapapelesForm(request.POST)
-			if clip_form.is_valid():
-				print ('Clipboard!')
+			clipboard = PortapapelesForm(request.POST)
+			if clipboard.is_valid():
+				response = dict(clipboard.data)
+				choice = response.get('list_name', None)
+				print('choice',choice)
+				clipboards = Portapapeles.objects.all()
+				print('clipboards',clipboards)
+				chosen = clipboards[int(choice[0])-1]
+				#print(chosen)
+				user = response.get('user', None)
+				file = response.get('filename', None)
+				print ('Clipboard!', dict(clipboard.data))
+				user_id = User.objects.get(username=user[0]).pk
+				clip = Portapapeles.objects.get(nombre_del_portapapeles=chosen, usuario=user_id)
+				clip.imágenes.add(Imagen.objects.get(nombre_del_archivo=file[0]).pk) 
+				clip.save()
+
 				state = get_object_or_404(Imagen, nombre_del_archivo=filename)
 				id = state.id
-				context  = {'state':state, 'clipboard':clip_form,'id':id}		
+				form = EditForm(initial={'texto_de_OCR':state.texto_de_OCR})
+
+				context  = {'state':state,'form':form,'clipboard':clipboard,'id':id}		
 				return render(request, 'document_page.html', context)
 
 	else:
 		state = get_object_or_404(Imagen, nombre_del_archivo=filename)
 		id = state.id
 		form = EditForm(initial={'texto_de_OCR':state.texto_de_OCR})
-		clip_form = PortapapelesForm(request.POST)
-		context  = {'state':state, 'form':form, 'clipboard':clip_form, 'id':id}		
+		clipboard = PortapapelesForm(request.POST)
+		context  = {'state':state, 'form':form, 'clipboard':clipboard, 'id':id}		
 		return render(request, 'document_page.html', context)
 
 def document_edit(request, filename):

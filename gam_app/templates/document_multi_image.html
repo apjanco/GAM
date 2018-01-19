@@ -4,6 +4,7 @@
 
 {% block content %}
 {% if clipboards %}
+<strong>Portapapeles:</strong><br>
 {% for board in clipboards %}
 <a href="/portapapeles/{{ board }}">{{ board }}</a><br>
 {% endfor %}
@@ -18,7 +19,6 @@
     var viewer = OpenSeadragon({
         id: "openseadragon1",
         crossOriginPolicy: 'Anonymous',
-        viewportMargins: {top:10, left: 10, right: 10, bottom: 10},
         collectionColumns: 8,
         collectionMode: true,
         showRotationControl: true
@@ -26,7 +26,6 @@
 
     viewer.addHandler('open', function() {
             viewer.world.arrange();
-            viewer.viewport.goHome(true);
         });
 </script>
 </div>

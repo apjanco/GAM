@@ -142,7 +142,7 @@ def persona(request, persona):
 	context = {'state':state}
 	return render(request, 'all_documents_page.html', context)
  
-
+@login_required
 def all_documents(request):
 	if request.method == 'POST':
 		form = SearchForm(request.POST)
@@ -160,6 +160,7 @@ def all_documents(request):
 		context = {'state':state,'form':form }
 	return render(request, 'all_documents_page.html', context)
 
+@login_required
 def todo_texto(request):
 	state = Imagen.objects.all()
 	context  = {'state':state}
@@ -174,6 +175,7 @@ def espacio_de_trabajo(request, portapapeles):
 	return render(request, 'document_multi_image.html', context)
 
 #This one renders a list of all clipboards.  Note that both views share the same template. 
+@login_required
 def portapapeles(request):
 	clipboards = Portapapeles.objects.all()
 	state = Imagen.objects.all()

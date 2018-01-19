@@ -22,7 +22,7 @@ class SearchForm(forms.Form):
 	search = forms.CharField(label='search', max_length=100)
 
 clipboards = Portapapeles.objects.all()
-CHOICES = [('0','Agregar este documento al portapapeles:')]
+CHOICES = []
 count = 0
 for item in clipboards:
 	count += 1

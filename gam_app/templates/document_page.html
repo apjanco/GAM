@@ -26,7 +26,7 @@
   <form action="" method="post">
         {% csrf_token %}
 {% for value in clipboard %}
-{{ value }}
+<p>Agregar al portapapeles:</p>{{ value }}
 {% endfor %}
         <input type="submit" value="Salvar" />  
                 <input type="hidden" value="clipboard" name="input" />

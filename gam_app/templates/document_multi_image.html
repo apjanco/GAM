@@ -3,6 +3,12 @@
 {% load staticfiles %}
 
 {% block content %}
+{% if clipboards %}
+{% for board in clipboards %}
+<a href="/portapapeles/{{ board }}">{{ board }}</a><br>
+{% endfor %}
+{% endif %}
+<hr>
 {% if state %}
 
 <script type="text/javascript" src="{% static 'js/openseadragon.min.js' %}"></script>

@@ -24,20 +24,23 @@
             <li><a href="/Archivo del GAM/">{% trans "Documentos" %}</a></li>
             <li><a href="/portapapeles/">{% trans "Portapapeles" %}</a></li>
             <li><a href="/texto/">{% trans "Sin imágenes" %}</a></li>
+          </ul>
+          <ul class="nav navbar-nav" style="float: right;">
             {% if not user.is_authenticated %}
             <li><a href="/cuentas/login/">{% trans "Iniciar sesión" %}</a></li>
             {% else %}
             <li><a href="/cuentas/logout/">{% trans "Cerrar sesión" %}</a></li>
             {% endif %} 
+            <li>
+              <form style="margin-top: 5px;" action="{% url 'set_language' %}" method="post">
+                {% get_current_language as LANG %}
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}">
+                <input name="language" type="hidden" value="{% if LANG == 'es' %}en{% else %}es{%endif %}">
+                <input class="btn btn-default" type="submit" value="{% if LANG == 'es' %}English{% else %}Español{% endif %}">
+              </form>
+            </li>
           </ul>
-          <form style="float: right; margin-top: 5px;" action="{% url 'set_language' %}" method="post">
-            {% get_current_language as LANG %}
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}">
-            <input name="language" type="hidden" value="{% if LANG == 'es' %}en{% else %}es{%endif %}">
-            <input class="btn btn-default" type="submit" value="{% if LANG == 'es' %}English{% else %}Español{% endif %}">
-          </form>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-

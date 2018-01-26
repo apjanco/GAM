@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/local/lib/python-virtualenv/gam_env/bin/python
 import os
 import sys
 

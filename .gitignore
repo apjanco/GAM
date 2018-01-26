@@ -10,3 +10,4 @@ uwsgi_params
 gam_app/dzis
 gam_app/static
 gam_app/settings_secret.py
+*.mo

@@ -20,15 +20,14 @@
 
           <ul class="nav navbar-nav">
             <li><a href="/sobre/">{% trans "Sobre" %}</a></li>
-            <li><a href="/caso/">Casos</a></li>
-            <li><a href="/Archivo del GAM/">Documentos</a></li>
-            <li><a href="/portapapeles/">Portapapeles</a></li>
-            <li><a href="/texto/">Sin imágenes</a></li>
+            <li><a href="/caso/">{% trans "Casos" %}</a></li>
+            <li><a href="/Archivo del GAM/">{% trans "Documentos" %}</a></li>
+            <li><a href="/portapapeles/">{% trans "Portapapeles" %}</a></li>
+            <li><a href="/texto/">{% trans "Sin imágenes" %}</a></li>
             {% if not user.is_authenticated %}
-            <li><a href="/cuentas/login/">Iniciar sesión
-</a></li>
+            <li><a href="/cuentas/login/">{% trans "Iniciar sesión" %}</a></li>
             {% else %}
-            <li><a href="/cuentas/logout/">Cerrar sesión</a></li>
+            <li><a href="/cuentas/logout/">{% trans "Cerrar sesión" %}</a></li>
             {% endif %} 
           </ul>
           <form style="float: right; margin-top: 5px;" action="{% url 'set_language' %}" method="post">

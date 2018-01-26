@@ -1,21 +1,21 @@
 {% extends "base.html" %}
+
+{% load i18n %}
+
+
 {% block title %}GAM{% endblock %}
 
 {% block content %}
 
 {% if form %}
-
-           <form action="" method="post">
-        {% csrf_token %}
-        <table>
+   <form action="" method="post">
+    {% csrf_token %}
+      <table>
         {{ form.search }} 
         <input type="submit" value="Buscar" /> 
-        </table>
+      </table>
     </form>
    </div>
- 
-
-
 {% endif %}
 
 
@@ -29,25 +29,25 @@
 {% endif %}
 
 {% if location.caja %}
-> Caja: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/">{{ location.caja }}</a>
+> {% trans "Caja" %}: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/">{{ location.caja }}</a>
 {% endif %}
 
 {% if location.legajo %}
-> Legajo: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/">{{ location.legajo }}</a>
+> {% trans "Legajo" %}: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/">{{ location.legajo }}</a>
 {% endif %}
 
 {% if location.carpeta %}
-> Carpeta: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ location.carpeta }}/">{{ location.carpeta }}</a>
+> {% trans "Carpeta" %}: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ location.carpeta }}/">{{ location.carpeta }}</a>
 {% endif %}
 
 {% if location.número_de_imagen %}
-> Número de imagen: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ location.carpeta}}/{{ location.número_de_imagen }}/">{{ location.número_de_imagen }}</a>
+> {% trans "Número de imagen" %}: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ location.carpeta}}/{{ location.número_de_imagen }}/">{{ location.número_de_imagen }}</a>
 {% endif %}
 
  <table class="resource_table">
   <tr>
-    <th>Ubicación</th>
-    <th>Imagen</th>
+    <th>{% trans "Ubicación" %}</th>
+    <th>{% trans "Imagen" %}</th>
   </tr>  
     <ul>
 {% for item in state %}
@@ -85,6 +85,6 @@ function myFunction() {
 
     
 {% else %}
-    <p>Inicia sesión para ver este contenido</p>
+  <p>{% trans "Inicia sesión para ver este contenido" %}</p>
 {% endif %}
 {% endblock %}

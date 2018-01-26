@@ -4,7 +4,7 @@
 
 {% block content %}
 {% if clipboards %}
-<strong>Portapapeles:</strong><br>
+<strong>{% trans "Portapapeles" %}:</strong><br>
 {% for board in clipboards %}
 <a href="/portapapeles/{{ board }}">{{ board }}</a><br>
 {% endfor %}
@@ -46,6 +46,6 @@ viewer.addTiledImage({
 
     
 {% else %}
-    <p>Ningún documento con ese nombre de archivo</p>
+<p>{% trans "Ningún documento con ese nombre de archivo" %}</p>
 {% endif %}
 {% endblock %}

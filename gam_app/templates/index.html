@@ -2,6 +2,7 @@
 {% block title %}GAM{% endblock %}
 
 {% load staticfiles %}
+{% load i18n %}
 
 {% block content %}
 
@@ -16,7 +17,7 @@
         {% csrf_token %}
         <table>
         {{ form.search }} 
-        <input type="submit" value="Buscar" /> 
+        <input type="submit" value="{% trans "Buscar" %}" /> 
         </table>
     </form>
    </div>

@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block title %}GAM{% endblock %}
 {% load staticfiles %}
+{% load i18n %}
+
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script type="text/javascript" src="{% static "js/ckeditor-init.js" %}"></script>
 <script type="text/javascript" src="{% static "js/ckeditor.js" %}"></script>
@@ -10,25 +12,25 @@
 
 <a href="/{{ state.archivo }}/">{{ state.archivo }}</a>
 > <a href="/{{ state.archivo }}/{{ state.colección }}/">{{ state.colección }}</a>
-> Caja: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}">{{ state.caja }}</a>
+> {% trans "Caja" %}: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}">{{ state.caja }}</a>
 
-> Legajo: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/">{{ state.legajo }}</a>
+> {% trans "Legajo" %}: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/">{{ state.legajo }}</a>
 
-> Carpeta: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/">{{ state.carpeta }}</a>
+> {% trans "Carpeta" %}: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/">{{ state.carpeta }}</a>
 
-> Número de imagen: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ state.número_de_imagen }}/">{{ state.número_de_imagen }}</a><br><br>
+> {% trans "Número de imagen" %}: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ state.número_de_imagen }}/">{{ state.número_de_imagen }}</a><br><br>
 
-<p>Nombre: {% for name in state.persona.all %}<a href="/persona/{{ name }}">{{ name }}</a><br></p>{% endfor %}
-<p>Fecha desaparición: {{ state.fecha_desaparicion }}<br></p>
-    <p>Ubicación geográfica: {% for place in state.ubicación_geográfica.all %}<a href="/lugar/{{ place }}">{{ place }}</a><br></p>{% endfor %}
+<p>{% trans "Nombre" %}: {% for name in state.persona.all %}<a href="/persona/{{ name }}">{{ name }}</a><br></p>{% endfor %}
+<p>{% trans "Fecha desaparición" %}: {{ state.fecha_desaparicion }}<br></p>
+<p>{% trans "Ubicación geográfica" %}: {% for place in state.ubicación_geográfica.all %}<a href="/lugar/{{ place }}">{{ place }}</a><br></p>{% endfor %}
      <p><a href="{{ state.url }}">Archivo de imagen</a></p>
 
   <form action="" method="post">
         {% csrf_token %}
 {% for value in clipboard %}
-<p>Agregar al portapapeles:</p>{{ value }}
+<p>{% trans "Agregar al portapapeles" %}:</p>{{ value }}
 {% endfor %}
-        <input type="submit" value="Salvar" />  
+<input type="submit" value="{% trans "Salvar" %}" />  
                 <input type="hidden" value="clipboard" name="input" />
                 <input type="hidden" value="{{ user }}" name="user" />
                 <input type="hidden" value="{{ state.nombre_del_archivo }}" name="filename" />
@@ -79,7 +81,7 @@ body {
 <form action="" method="post">
         {% csrf_token %}
         {{ form.media }}
-        <input type="submit" value="Guardar cambios de texto" />
+        <input type="submit" value="{% trans "Guardar cambios de texto" %}" />
         {{ form.texto_de_OCR|linebreaksbr }}
         
         <input type="hidden" value="{{ state.nombre_del_archivo }}" name="nombre_del_archivo" />
@@ -99,6 +101,6 @@ body {
   </ul>  
 
 {% else %}
-    <p>Ningún documento con ese nombre de archivo</p>
+<p>{% trans "Ningún documento con ese nombre de archivo" %}</p>
 {% endif %}
 {% endblock %}

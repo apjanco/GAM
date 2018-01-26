@@ -1,28 +1,27 @@
 {% extends "base.html" %}
+
+{% load i18n %}
+
 {% block title %}GAM{% endblock %}
 
 {% block content %}
 {% if state %}
 <table class="resource_table">
   <tr>
-    <th>Caso</th>
-    <th>Fecha de desaparición</th>
-    <th>Departamento</th>
+    <th>{% trans "Caso" %}</th>
+    <th>{% trans "Fecha de desaparición" %}</th>
+    <th>{% trans "Departamento" %}</th>
   </tr>
-    <ul>
-{% for item in state %}
-  <tr>
-   <td> <a href="/caso/{{ item.caso }}">{{ item.caso }}</a></td>
-   <td> {{ item.fecha_desaparicion }}</td>
-   <td> {{ item.departamento }} </td>
-</tr>   
-{% endfor %}
-</ul>
-    
-
-
-    
+  <ul>
+    {% for item in state %}
+      <tr>
+        <td> <a href="/caso/{{ item.caso }}">{{ item.caso }}</a></td>
+        <td> {{ item.fecha_desaparicion }}</td>
+        <td> {{ item.departamento }} </td>
+      </tr>   
+    {% endfor %}
+  </ul>
 {% else %}
-    <p>Inicia sesión para ver este contenido</p>
+  <p>{% trans "Inicia sesión para ver este contenido" %}</p>
 {% endif %}
 {% endblock %}

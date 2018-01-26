@@ -1,22 +1,24 @@
 {% extends "base.html" %}
 {% block title %}GAM{% endblock %}
 
+{% load i18n %}
+
 {% block content %}
 {% if state %}
   <ul>
     
-   <p>Caso: {{ state.caso }} <br></p>
-   <p>Fecha desaparicion: {{ state.fecha_desaparicion }}<br></p> 
-   <p>Departamento: <a href="/lugar/{{ state.departamento }}">{{ state.departamento }}</a><br>
+    <p>{% trans "Caso" %}: {{ state.caso }} <br></p>
+    <p>{% trans "Fecha desaparicion" %}: {{ state.fecha_desaparicion }}<br></p> 
+    <p>{% trans "Departamento" %}: <a href="/lugar/{{ state.departamento }}">{{ state.departamento }}</a><br>
       Local: {{ state.local }} <br>
       Area: {{ state.area }}<br>
-      Ambiente: {{ state.ambiente }}<br>
-      Estanteria no: {{ state.estanteria_no }}<br>
-      Plato no:  {{ state.plato_no }} <br> 
-      Caja no: <a href="/ArchivodelGam/desaparecidos/{{ state.caja_no }}/">{{ state.caja_no }}</a><br>
-      Legajo no: <a href="/ArchivodelGam/desaparecidos/{{ state.caja_no }}/{{ state.legajo_no }}/">{{ state.legajo_no }}</a><br> 
-      Carpeta no: <a href="/ArchivodelGam/desaparecidos/{{ state.caja_no }}/{{ state.legajo_no }}/{{ state.carpeta_no }}/">{{ state.carpeta_no }}</a><br>
-      Descripcion caso: {{ state.descripcion_caso }}<br></p>
+      {% trans "Ambiente" %}: {{ state.ambiente }}<br>
+      {% trans "Estanteria no" %}: {{ state.estanteria_no }}<br>
+      {% trans "Plato no" %}:  {{ state.plato_no }} <br> 
+      {% trans "Caja no" %}: <a href="/ArchivodelGam/desaparecidos/{{ state.caja_no }}/">{{ state.caja_no }}</a><br>
+      {% trans "Legajo no" %}: <a href="/ArchivodelGam/desaparecidos/{{ state.caja_no }}/{{ state.legajo_no }}/">{{ state.legajo_no }}</a><br> 
+      {% trans "Carpeta no" %}: <a href="/ArchivodelGam/desaparecidos/{{ state.caja_no }}/{{ state.legajo_no }}/{{ state.carpeta_no }}/">{{ state.carpeta_no }}</a><br>
+      {% trans "Descripcion caso" %}: {{ state.descripcion_caso }}<br></p>
 
 
 
@@ -24,6 +26,6 @@
   </ul>  
     
 {% else %}
-    <p>Ningún documento con ese nombre de archivo</p>
+<p>{% trans "Ningún documento con ese nombre de archivo" %}</p>
 {% endif %}
 {% endblock %}

@@ -15,11 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.i18n import i18n_patterns
 from gam_app import views
 from django.contrib.flatpages import views as flat_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('i18n/', include('django.conf.urls.i18n')),
+]
+
+urlpatterns += i18n_patterns(
     path('', views.index, name='index'),
     path('buscar/', views.search, name='search'),
     path('cuentas/', include('django.contrib.auth.urls')),
@@ -44,9 +49,4 @@ urlpatterns = [
     path('<archivo>/<colección>/<caja>/', views.documento2, name='documento2'),
     path('<archivo>/<colección>/', views.documento1, name='documento1'),
     path('<archivo>/', views.documento0, name='documento0'),
-
-
-
-
-
-        ]
+)

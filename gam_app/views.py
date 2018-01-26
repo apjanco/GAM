@@ -219,21 +219,21 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 
 def documento4(request, archivo, colección, caja, legajo, carpeta):
 
-	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta)	
+	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')	
 	location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo, 'carpeta':carpeta}
 	context = {'state':state, 'location':location}
 	return render(request, 'all_documents_page.html', context)
 
 def documento3(request, archivo, colección, caja, legajo):
 	
-	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo)	
+	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo).order_by('carpeta')	
 	location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo}
 	context = {'state':state, 'location':location}
 	return render(request, 'all_documents_page.html', context)
 
 def documento2(request, archivo, colección, caja):
 	
-	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja)	
+	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja).order_by('legajo')	
 	location = {'archivo':archivo, 'colección':colección, 'caja':caja}
 	context = {'state':state, 'location':location}
 	return render(request, 'all_documents_page.html', context)
@@ -241,7 +241,7 @@ def documento2(request, archivo, colección, caja):
 def documento1(request, archivo, colección):
 	
 
-	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección)	
+	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección).order_by('caja')	
 	location = {'archivo':archivo, 'colección':colección}
 	context = {'state':state, 'location':location}
 	return render(request, 'all_documents_page.html', context)
@@ -252,7 +252,7 @@ def documento0(request, archivo):
 		form = SearchForm(request.POST)
 		query = request.POST.get('search', None)
 		if form.is_valid():
-			state = Imagen.objects.filter(texto_de_OCR__icontains=query)
+			state = Imagen.objects.filter(texto_de_OCR__icontains=query).order_by('colección')
 			context  = {'state':state, 'form':form}
 			return render(request, 'all_documents_page.html', context)
 		else:
@@ -260,7 +260,7 @@ def documento0(request, archivo):
 	else:
 		search = ""
 		form = SearchForm(initial={'search': search })
-		state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo)
+		state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo).order_by('número_de_imagen')
 		location = {'archivo':archivo}
 		context = {'state':state,'form':form, 'location':location }
 		

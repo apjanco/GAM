@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load i18n %}
 
 <header>
 <a href="/"><img src="{% static 'Logo_01.png' %}" height="15%" width="10%"/>     </a>
@@ -29,9 +30,15 @@
             {% else %}
             <li><a href="/cuentas/logout/">Cerrar sesión</a></li>
             {% endif %} 
-            
-
-
+            <li>
+              <form action="{% url 'set_language' %}" method="post">
+                {% get_current_language as LANG %}
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}">
+                <input name="language" type="hidden" value="{% if LANG == 'es' %}en{% else %}es{%endif %}">
+                <input class="btn btn-default" type="submit" value="{% if LANG == 'es' %}English{% else %}Español{% endif %}">
+              </form>
+            </li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

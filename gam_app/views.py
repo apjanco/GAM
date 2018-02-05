@@ -204,7 +204,8 @@ def sobre(request):
 def advanced_search_submit(request):
     context = advanced_search.advanced_search(request)
     if context:
-        return render(request, 'search.html', context)
+        context['state'] = context['results']
+        return render(request, 'all_documents_page.html', context)
     else:
         context = {"failed" : True}
         return render(request, 'index.html', context)

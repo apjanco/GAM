@@ -28,7 +28,7 @@ def advanced_search(request):
             ticker = 0 # set to zero since we are going inc after
         ticker += 1
 
-    query = []
+    query = False
     for request_part in formatted_request_list:
         search_string = request_part["search_string"]
         logic         = request_part["logic"]
@@ -45,19 +45,19 @@ def advanced_search(request):
             query = query_part
         else:
             return False
-    statement_list = Statement.objects.all()
-    print ("Here is your query"), query
-    statement_list = statement_list.filter(query).distinct()
-    print ("generating statement_list took %s seconds" % time.time() - start)
+    
+    # may want to add more than Imagen at some point
+    result_list = Imagen.objects.all()
 
-    # now generate the list of keywords
-    # This is a little slow
-    start = time.time()
-    keywords_and_counts = generate_keywords_from_statement_list.generate_top_n_keywords(statement_list, 20)
-    keywords = [key_count[0] for key_count in keywords_and_counts]
-    print ("generating keywords took %s seconds" % time.time() - start)
-
-    context = {'results' : statement_list, 'keywords' : keywords, 'keywords_and_counts' : keywords_and_counts, 'search' : search_string, 'full_info' : request.GET["full_info"], 'num_results' : len(statement_list)}
+    print ("Here is your query", query)
+    result_list = result_list.filter(query).distinct()
+    q_time = time.time() - start
+    print ("generating result_list took %s seconds" % q_time)
+    print(result_list)
+    print("testo", Imagen.objects.filter(persona__nombre_de_la_persona__icontains="Manuel"))
+    for i in Imagen.objects.all():
+        print(i.persona.all())
+    context = {'results' : result_list, 'search' : search_string, 'full_info' : request.GET["full_info"], 'num_results' : len(result_list)}
     return context
 
 
@@ -65,37 +65,24 @@ def make_query_part(search_string, field):
     print (field)
     if field == "Any field":
         query_part = Q( 
-            Q(title__icontains=search_string) |
-                 Q(statement_id__icontains=search_string) |
-                 Q(author__person_name__icontains=search_string) |
-                 Q(released_by__org_name__icontains=search_string) 
-                 # these two lines seems to be the problem
-                 #Q(keywords__main_keyword__word=search_string)
-                 #Q(keywords__context__word=search_string)
+            Q(persona__nombre_de_la_persona__icontains=search_string) |
+            Q(nombre_del_archivo__icontains=search_string) |
+            Q(localizacion_fisica__icontains=search_string) |
+            Q(texto_de_OCR__icontains=search_string)
         ) 
-    elif field == 'Title':
-        query_part = Q(title__icontains=search_string)
-    elif field == 'Statement ID':
-        query_part = Q(statement_id__icontains=search_string)
-    elif field == 'Author':
-        query_part = Q(author__person_name__icontains=search_string)
-    elif field == 'Organization':
-        query_part = Q(released_by__org_name__icontains=search_string)
-    elif field == 'Keyword':
-        query_part = Q(keywords__main_keyword__word=search_string)
-    elif field == 'Context':
-        query_part = Q(keywords__context__word=search_string)
-    elif field == 'Keyword in Context':
-        # at this point, I assume the user separates it with '->'
-        # this may not be what we want 
-        try:
-            keyword, context = search_string.split('->')
-        except ValueError:
-            print ("Keyword in Context should be in the form 'keyword->Context'")
-            return False 
-        keyword = keyword.strip()
-        context = context.strip()
-        query_part = Q(keywords__main_keyword__word=keyword) & Q(keywords__context__word=context)
+    elif field == 'Persona':
+        query_part = Q(persona__nombre_de_la_persona__icontains=search_string)
+    elif field == 'Nombre del Archivo':
+        query_part = Q(nombre_del_archivo__icontains=search_string)
+    elif field == 'Localizacion Fisica':
+        query_part = Q(localizacion_fisica__person_name__icontains=search_string)
+    elif field == 'Text Contains':
+        query_part = Q(texto_de_OCR__icontains=search_string)
+    else:
+        print("Found an invalid field.")
+        print("If you've just updated the field options dropdown,")
+        print("go and update 'make_query_part' in 'advanced_search.py'")
+        return False
     return query_part
 
 # used for filtering

@@ -19,11 +19,11 @@
         <div id="navbar" class="collapse navbar-collapse">
 
           <ul class="nav navbar-nav">
-            <li><a href="/sobre/">{% trans "Sobre" %}</a></li>
-            <li><a href="/caso/">{% trans "Casos" %}</a></li>
+            <li><a href="{% url 'sobre' %}">{% trans "Sobre" %}</a></li>
+            <li><a href="{% url 'caso' %}">{% trans "Casos" %}</a></li>
             <li><a href="/Archivo del GAM/">{% trans "Documentos" %}</a></li>
-            <li><a href="/portapapeles/">{% trans "Portapapeles" %}</a></li>
-            <li><a href="/texto/">{% trans "Sin imágenes" %}</a></li>
+            <li><a href="{% url 'portapapeles' %}">{% trans "Portapapeles" %}</a></li>
+            <li><a href="{% url 'all_texto' %}">{% trans "Sin imágenes" %}</a></li>
           </ul>
           <ul class="nav navbar-nav" style="float: right;">
             {% if not user.is_authenticated %}
@@ -37,7 +37,7 @@
                 {% csrf_token %}
                 <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}">
                 <input name="language" type="hidden" value="{% if LANG == 'es' %}en{% else %}es{%endif %}">
-                <input class="btn btn-default" type="submit" value="{% if LANG == 'es' %}English{% else %}Español{% endif %}">
+                <input class="btn" type="submit" value="{% if LANG == 'es' %}English{% else %}Español{% endif %}">
               </form>
             </li>
           </ul>

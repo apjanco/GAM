@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% block title %}GAM{% endblock %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block content %}
 {% if clipboards %}
-<strong>{% trans "Portapapeles" %}:</strong><br>
+<strong>{% trans  "Portapapeles" %}:</strong><br>
 {% for board in clipboards %}
 <a href="/portapapeles/{{ board }}">{{ board }}</a><br>
 {% endfor %}
@@ -33,7 +34,7 @@
 {% for item in state %}
 <script type="text/javascript">
 viewer.addTiledImage({
-    tileSource: '{% url 'dzi' item.nombre_del_archivo %}.dzi',
+    tileSource: '/dzi/{{ item.nombre_del_archivo }}.dzi',
 });
 
 </script>

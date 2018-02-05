@@ -72,7 +72,7 @@ body {
 <script type="text/javascript">
     var viewer = OpenSeadragon({
         id: "openseadragon1",
-        tileSources: "{% url 'dzi' state.nombre_del_archivo %}.dzi",
+        tileSources: "/dzi/{{ state.nombre_del_archivo }}.dzi",
         showRotationControl: true
     });
 </script>

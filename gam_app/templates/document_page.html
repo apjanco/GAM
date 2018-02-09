@@ -18,8 +18,20 @@
 
 > {% trans "Carpeta" %}: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/">{{ state.carpeta }}</a>
 
-> {% trans "Número de imagen" %}: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ state.número_de_imagen }}/">{{ state.número_de_imagen }}</a><br><br>
+> :{% trans "Número de imagen" %} <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ state.número_de_imagen }}/">{{ state.número_de_imagen }}</a>
 
+
+{% if previous %}
+<div align="right">
+<a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ previous }}/"> < Espalda :</a>
+
+{% endif %}
+{% if next_one %}
+<a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ next_one }}/">Adelante ></a>
+</div>
+{% endif %}
+
+<br><br>
 <p>{% trans "Nombre" %}: {% for name in state.persona.all %}<a href="/persona/{{ name }}">{{ name }}</a><br></p>{% endfor %}
 <p>{% trans "Fecha desaparición" %}: {{ state.fecha_desaparicion }}<br></p>
 <p>{% trans "Ubicación geográfica" %}: {% for place in state.ubicación_geográfica.all %}<a href="/lugar/{{ place }}">{{ place }}</a><br></p>{% endfor %}
@@ -37,7 +49,7 @@
 
   </form>
 
-  
+
 </div>
 <hr>
 <style>

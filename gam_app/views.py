@@ -118,10 +118,38 @@ def document(request, filename):
 
 	else:
 		state = get_object_or_404(Imagen, nombre_del_archivo=filename)
+		#TODO add forward + backward buttons
+		possible_pages = Imagen.objects.filter(archivo__nombre_del_archivo=state.archivo, colección__nombre_de_la_colección=state.colección, caja=state.caja, legajo=state.legajo, carpeta=state.carpeta).order_by('número_de_imagen')	
+		pages_list = []
+		for index, page in enumerate(possible_pages):
+			pages_list.append(page)
+
+			#print(index, page)
+			if page == state:
+				print('current= ', page.número_de_imagen, index)
+				current = int(index)
+		previous = pages_list[current-1].número_de_imagen
+		try:
+			next_one = pages_list[current+1].número_de_imagen
+		except:
+			next_one = pages_list[current].número_de_imagen
+
+		print('previous= ', previous)
+		print('next= ', next_one)
+		#next_one = pages_list[int(current)+1]
+		#print(current, next_one, previous)
+			#print(index, page)
+			#if page == state:
+			#	print('this is it', page.número_de_imagen, index)
+		#		current = index
+		#	next_one = current + 1, page
+		#	print(next_one) 
+			#print (possible_pages)
+
 		id = state.id
 		form = EditForm(initial={'texto_de_OCR':state.texto_de_OCR})
 		clipboard = PortapapelesForm(request.POST)
-		context  = {'state':state, 'form':form, 'clipboard':clipboard, 'id':id}		
+		context  = {'state':state, 'form':form, 'clipboard':clipboard, 'id':id, 'previous':previous, 'next_one':next_one}		
 		return render(request, 'document_page.html', context)
 
 def document_edit(request, filename):

@@ -52,8 +52,8 @@
     <ul>
 {% for item in state %}
   <tr>
-   <td> <p><a href="/file/{{ item.nombre_del_archivo }}"><p>{{ item.localizacion_fisica }}</p></a></td>
-   <td> <p><a href="/file/{{ item.nombre_del_archivo }}"><img src={{ item.miniatura }}></a></td>
+   <td> <p><a href="/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"><p>{{ item.localizacion_fisica }}</p></a></td>
+   <td> <p><a href="/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"><img src={{ item.miniatura }}></a></td>
 </tr>
 
 {% endfor %}

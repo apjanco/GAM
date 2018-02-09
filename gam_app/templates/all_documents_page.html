@@ -29,19 +29,19 @@
 {% endif %}
 
 {% if location.caja %}
-> {% trans "Caja" %}: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/">{{ location.caja }}</a>
+> <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/">{% trans "Caja" %}: {{ location.caja }}</a>
 {% endif %}
 
 {% if location.legajo %}
-> {% trans "Legajo" %}: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/">{{ location.legajo }}</a>
+> <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/">{% trans "Legajo" %}: {{ location.legajo }}</a>
 {% endif %}
 
 {% if location.carpeta %}
-> {% trans "Carpeta" %}: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ location.carpeta }}/">{{ location.carpeta }}</a>
+> <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ location.carpeta }}/">{% trans "Carpeta" %}: {{ location.carpeta }}</a>
 {% endif %}
 
 {% if location.número_de_imagen %}
-> {% trans "Número de imagen" %}: <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ location.carpeta}}/{{ location.número_de_imagen }}/">{{ location.número_de_imagen }}</a>
+> <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ location.carpeta}}/{{ location.número_de_imagen }}/">{% trans "Número de imagen" %}: {{ location.número_de_imagen }}</a>
 {% endif %}
 
  <table class="resource_table">

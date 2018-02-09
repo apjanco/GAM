@@ -12,13 +12,13 @@
 
 <a href="/{{ state.archivo }}/">{{ state.archivo }}</a>
 > <a href="/{{ state.archivo }}/{{ state.colección }}/">{{ state.colección }}</a>
-> {% trans "Caja" %}: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}">{{ state.caja }}</a>
+> <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}">{% trans "Caja" %}: {{ state.caja }}</a>
 
-> {% trans "Legajo" %}: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/">{{ state.legajo }}</a>
+> <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/">{% trans "Legajo" %}: {{ state.legajo }}</a>
 
-> {% trans "Carpeta" %}: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/">{{ state.carpeta }}</a>
+> <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/">{% trans "Carpeta" %}: {{ state.carpeta }}</a>
 
-> :{% trans "Número de imagen" %} <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ state.número_de_imagen }}/">{{ state.número_de_imagen }}</a>
+> <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ state.número_de_imagen }}/">{% trans "Número de imagen" %}: {{ state.número_de_imagen }}</a>
 
 
 {% if previous %}

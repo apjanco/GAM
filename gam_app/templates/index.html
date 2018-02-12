@@ -11,20 +11,8 @@
        <span>Error Message</span>
     {% endif %}
 
-{% if form %}
-
-           <form action="" method="post">
-        {% csrf_token %}
-        <table>
-        {{ form.search }} 
-        <input type="submit" value="{% trans "Buscar" %}" /> 
-        </table>
-    </form>
-   </div>
+{% if user.is_authenticated %}
  
-
-
-
     <!--  url 'GAM:search' %} -->
     <form id="searchers_form"  action="advanced_search_submit" method="GET">
        <div class="form-group" id="searchers">
@@ -34,11 +22,11 @@
     </form>
 
     
-    <span> Add a search term </span>
+    <span> Agregar un término de búsqueda </span>
     <input type="hidden" id="searcher_counter" name="seacher_count" value="1">
-    <button type="button" id="OR_search" class="btn btn-primary">OR</button>
-    <button type="button" id="AND_search" class="btn btn-primary">AND</button>
-    <button type="button" id="NOT_search" class="btn btn-primary">NOT</button>
+    <button type="button" id="OR_search" class="btn btn-primary">Y</button>
+    <button type="button" id="AND_search" class="btn btn-primary">O</button>
+    <button type="button" id="NOT_search" class="btn btn-primary">NO</button>
     <script src="{% static 'gam_site/jquery.js' %}"></script>
     <script src="{% static 'gam_site/jquery-ui.js' %}"></script>
     <script src="{% static 'gam_site/jQDateRangeSlider-min.js' %}"></script>
@@ -49,22 +37,22 @@
 	$("#searcher_counter").val("1");
 	});
       // These long lines are just html we will be using and reusing
-      var select_fields = "<select class='form-control field_option'> <option>Any field</option> <option>Persona</option>  <option>Nombre del Archivo</option>  <option>Localizacion Fisica</option> </select>";
+      var select_fields = "<select class='form-control field_option'> <option>cualquier campo</option> <option>Persona</option>  <option>Nombre del Archivo</option>  <option>Localizacion Fisica</option> </select>";
        var delete_button = "<button class='delete_searcher' type='button'><span class='glyphicon glyphicon-remove delete_searcher'></span><button>"; 
       
       function createLogicDropdown(operator) {
         if(operator=="AND") {
-            return  "<select class='form-control logic_option'> <option value='OR'>OR</option> <option value='AND' selected='selected'>AND</option> <option value='NOT'>NOT</option></select>";
+            return  "<select class='form-control logic_option'> <option value='OR'>O</option> <option value='AND' selected='selected'>Y</option> <option value='NOT'>NO</option></select>";
         }
 	else if (operator=="OR") {
             return  "<select class='form-control logic_option'> <option selected='selected' value='OR'>OR</option> <option value='AND'>AND</option> <option value='NOT'>NOT</option></select>";
         }
 	else {
-            return  "<select class='form-control logic_option'> <option value='OR'>OR</option> <option value='AND'>AND</option> <option selected='selected' value='NOT'>NOT</option></select>";
+            return  "<select class='form-control logic_option'> <option value='OR'>O</option> <option value='AND'>Y</option> <option selected='selected' value='NOT'>NO</option></select>";
         }
       }
       // make first search bar. This one can't be deleted
-      $("#searcher1").append("<span><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='search' placeholder='Search...'><span class='input-group-addon'><button type='submit'><span class='glyphicon glyphicon-search'></span></button></span></div> in " + select_fields + "</span>");
+      $("#searcher1").append("<span><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='search' placeholder='Buscar...'><span class='input-group-addon'><button type='submit'><span class='glyphicon glyphicon-search'></span></button></span></div> en " + select_fields + "</span>");
 
 
       // what happens when you click AND
@@ -74,7 +62,7 @@
 	  $("#searcher_counter").val(+$("#searcher_counter").val() + 1);
 	  var id_num = $("#searcher_counter").val();
           $("#searchers").append("<div id='searcher"+ id_num +"' class='form-group'></div>");
-	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("AND") + "<br/><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='AND_search' placeholder='Search...'><span class='input-group-addon'>" + delete_button + "</span></div> in " + select_fields + "</span>");
+	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("AND") + "<br/><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='AND_search' placeholder='Buscar...'><span class='input-group-addon'>" + delete_button + "</span></div> en " + select_fields + "</span>");
 	}
       });
       // what happens when you click OR
@@ -84,7 +72,7 @@
 	  $("#searcher_counter").val(+$("#searcher_counter").val() + 1);
 	  var id_num = $("#searcher_counter").val();
           $("#searchers").append("<div id='searcher"+ id_num +"'></div>");
-	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("OR") + "<br/><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='OR_search' placeholder='Search...'><span class='input-group-addon'>" + delete_button + "</span></div> in " + select_fields + "</span>");
+	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("OR") + "<br/><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='OR_search' placeholder='Buscar...'><span class='input-group-addon'>" + delete_button + "</span></div> en " + select_fields + "</span>");
 	}
       });
       // what happens when you click NOT
@@ -94,7 +82,7 @@
 	  $("#searcher_counter").val(+$("#searcher_counter").val() + 1);
 	  var id_num = $("#searcher_counter").val();
           $("#searchers").append("<div id='searcher"+ id_num +"'></div>");
-	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("NOT") + "<br/><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='NOT_search' placeholder='Search...'><span class='input-group-addon'>" + delete_button + "</span></div> in " + select_fields + "</div>");
+	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("NOT") + "<br/><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='NOT_search' placeholder='Buscar...'><span class='input-group-addon'>" + delete_button + "</span></div> en " + select_fields + "</div>");
 	}
       });
       // what happens when you click Delete
@@ -125,8 +113,8 @@
         $("#full_info").val(the_request);
       });
     </script>
-
-
+{% else %}
+<a href="/cuentas/login/">Por favor inicie sesión para buscar en la colección</a>
 {% endif %}
 
 

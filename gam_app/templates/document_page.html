@@ -10,6 +10,7 @@
 {% block content %}
 {% if state %}
 
+ <div class="row">
 <a href="/{{ state.archivo }}/">{{ state.archivo }}</a>
 > <a href="/{{ state.archivo }}/{{ state.colección }}/">{{ state.colección }}</a>
 > <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}">{% trans "Caja" %}: {{ state.caja }}</a>
@@ -22,7 +23,7 @@
 
 
 {% if previous %}
-<div align="right">
+  <div class="col-sm-2">
 <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ previous }}/"> < Espalda :</a>
 
 {% endif %}
@@ -30,8 +31,19 @@
 <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ next_one }}/">Adelante ></a>
 </div>
 {% endif %}
-
-<br><br>
+<div align="right">
+     <form action="" method="post">
+         {% csrf_token %}
+         {% for value in clipboard %}
+            <p>{% trans "Agregar al portapapeles" %}:</p>{{ value }}
+         {% endfor %}
+         <input type="submit" value="{% trans "Salvar" %}" />  
+         <input type="hidden" value="clipboard" name="input" />
+         <input type="hidden" value="{{ user }}" name="user" />
+         <input type="hidden" value="{{ state.nombre_del_archivo }}" name="filename" />
+      </form>
+  </div>
+</div>
 <hr>
 <style>
 * {
@@ -74,13 +86,13 @@ body {
 <div class="column">
    <ul id="tabs" class="nav nav-pills" data-tabs="tabs">
       <li class="pills tabs-small active"><a data-toggle="tab" href="#tab1-slug">
-         Text</a>
+         Texto</a>
       </li>
       <li class="pills tabs-small"><a data-toggle="tab" href="#tab2-slug">
          Metadata</a>
       </li>
       <li class="pills tabs-small"><a data-toggle="tab" href="#tab3-slug">
-         Notes</a>
+         Notas</a>
       </li>
    </ul>
 
@@ -113,16 +125,7 @@ body {
       <p>{% trans "Ubicación geográfica" %}: {% for place in state.ubicación_geográfica.all %}<a href="/lugar/{{ place }}">{{ place }}</a><br></p>{% endfor %}
       <p><a href="{{ state.url }}">Archivo de imagen</a></p>
 
-      <form action="" method="post">
-         {% csrf_token %}
-         {% for value in clipboard %}
-            <p>{% trans "Agregar al portapapeles" %}:</p>{{ value }}
-         {% endfor %}
-         <input type="submit" value="{% trans "Salvar" %}" />  
-         <input type="hidden" value="clipboard" name="input" />
-         <input type="hidden" value="{{ user }}" name="user" />
-         <input type="hidden" value="{{ state.nombre_del_archivo }}" name="filename" />
-      </form>
+      
 
     </div>
 

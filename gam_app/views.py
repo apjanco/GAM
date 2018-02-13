@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 from elasticsearch_django.settings import get_client
 from elasticsearch_django.models import SearchQuery
 #from elasticsearch_dsl import Search
+from dal import autocomplete
 
 # Create your views here.
 
@@ -164,6 +165,19 @@ def lugar(request, lugar):
 	state = Imagen.objects.filter(ubicación_geográfica=lugar_id)
 	context = {'state':state}
 	return render(request, 'all_documents_page.html', context)
+
+class autocompletar(autocomplete.Select2QuerySetView):
+	def get_queryset(self):
+		# Don't forget to filter out results depending on the visitor !
+		if not self.request.user.is_authenticated():
+			return Imagen.objects.none()
+		
+		qs = Imagen.objects.all()
+
+		if self.q:
+			qs = qs.filter(name__istartswith=self.q)
+		
+		return qs
 
 def persona(request, persona):
 	state = Imagen.objects.filter(persona__nombre_de_la_persona=persona)

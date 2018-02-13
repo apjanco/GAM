@@ -102,7 +102,7 @@ body {
       <form action="" method="post">
         {% csrf_token %}
         {{ form.media }}
-        <input type="submit" value="{% trans "Guardar cambios de texto" %}" />
+        <input type="submit" value="{% trans "Guardar cambios" %}" />
         {{ form.texto_de_OCR|linebreaksbr }}
         
         <input type="hidden" value="{{ state.nombre_del_archivo }}" name="nombre_del_archivo" />
@@ -120,7 +120,9 @@ body {
 
     <!-- METADATA -->
     <div id="tab2-slug" class="tab-pane">
+      <input type="submit" value="{% trans "Guardar cambios" %}" /><br>
       <p>{% trans "Nombre" %}: {% for name in state.persona.all %}<a href="/persona/{{ name }}">{{ name }}</a><br></p>{% endfor %}
+      {{ form.persona }}
       <p>{% trans "Fecha desaparición" %}: {{ state.fecha_desaparicion }}<br></p>
       <p>{% trans "Ubicación geográfica" %}: {% for place in state.ubicación_geográfica.all %}<a href="/lugar/{{ place }}">{{ place }}</a><br></p>{% endfor %}
       <p><a href="{{ state.url }}">Archivo de imagen</a></p>
@@ -131,6 +133,7 @@ body {
 
     <!-- Notes -->
     <div id="tab3-slug" class="tab-pane">
+       <input type="submit" value="{% trans "Guardar cambios" %}" /><br>
        Record some Notes
     </div>
    </div>

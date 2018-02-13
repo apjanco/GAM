@@ -2,11 +2,12 @@
 from django import forms
 from ckeditor.fields import RichTextField
 from ckeditor.widgets import CKEditorWidget
+from dal import autocomplete
 
 
 from django.db import models
 from django.core.files.storage import FileSystemStorage
-from gam_app.models import Imagen, Portapapeles
+from gam_app.models import *
 
 
 
@@ -14,10 +15,20 @@ from gam_app.models import Imagen, Portapapeles
 
 class EditForm(forms.ModelForm):
     texto_de_OCR = forms.CharField(widget=CKEditorWidget())
-    class Meta:
-    	fields = ['texto_de_OCR', 'nombre_del_archivo']
-    	model = Imagen
+    persona = forms.ModelChoiceField(queryset=Persona.objects.all())
 
+    #forms.ModelMultipleChoiceField(queryset=Persona.objects.all())
+    
+    fecha_desaparicion = forms.CharField()
+    ubicación_geográfica = forms.ModelMultipleChoiceField(queryset=Lugar.objects.all())
+    actividades_políticas = forms.ModelMultipleChoiceField(queryset=Organización.objects.all())
+     
+    class Meta:
+    	fields = ['texto_de_OCR', 'nombre_del_archivo', 'persona']
+    	model = Imagen
+    	widgets = {'persona': autocomplete.ModelSelect2Multiple(url='autocompletar')
+}
+    	
 class SearchForm(forms.Form):
 	search = forms.CharField(label='search', max_length=100)
 

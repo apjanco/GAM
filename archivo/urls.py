@@ -18,6 +18,8 @@ from django.urls import path, include
 from django.conf.urls.i18n import i18n_patterns
 from gam_app import views
 from django.contrib.flatpages import views as flat_views
+from dal import autocomplete
+from gam_app.views import autocompletar
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,7 +30,9 @@ urlpatterns += i18n_patterns(
     path('', views.index, name='index'),
     path('buscar/', views.search, name='search'),
     path('cuentas/', include('django.contrib.auth.urls')),
-    path('autocompletar/', views.autocompletar, name='autocompletar'),
+    #path('autocompletar/', views.autocompletar, name='autocompletar'),
+    path('autocompletar/', autocompletar.as_view(), name='autocompletar'),
+  
     path('crear_usuario/', include('registration.backends.simple.urls')),
     path('file/<filename>', views.document, name='document'),
     path('editar/<filename>', views.document_edit, name='document_edit'),

@@ -101,6 +101,8 @@ body {
     <div id="tab1-slug" class="tab-pane active">
       <form action="" method="post">
         {% csrf_token %}
+
+
         {{ form.media }}
         <input type="submit" value="{% trans "Guardar cambios" %}" />
         {{ form.texto_de_OCR|linebreaksbr }}
@@ -114,7 +116,7 @@ body {
         <input type="hidden" value="{{ state.texto_de_OCR }}" name="old_text" />
         <input type="hidden" value="text_edit" name="input" />
 
-      </form>
+      
 
     </div>
 
@@ -135,6 +137,7 @@ body {
     <div id="tab3-slug" class="tab-pane">
        <input type="submit" value="{% trans "Guardar cambios" %}" /><br>
        Record some Notes
+       </form>
     </div>
    </div>
 

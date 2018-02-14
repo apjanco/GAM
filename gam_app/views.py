@@ -168,14 +168,14 @@ def lugar(request, lugar):
 
 class autocompletar(autocomplete.Select2QuerySetView):
 	def get_queryset(self):
-		# Don't forget to filter out results depending on the visitor !
-		if not self.request.user.is_authenticated():
-			return Imagen.objects.none()
+		#TODO Get working with user authentication
+		#if not self.request.user.is_authenticated():
+	#		return Imagen.objects.none()
 		
-		qs = Imagen.objects.all()
+		qs = Persona.objects.all()
 
 		if self.q:
-			qs = qs.filter(name__istartswith=self.q)
+			qs = qs.filter(nombre_de_la_persona__istartswith=self.q)
 		
 		return qs
 
@@ -288,7 +288,7 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 				return render(request, 'document_page.html', context)
 			
 			else:
-				print(form.errors)
+				print(edit_form.errors)
 
 		if request.POST['input'] == 'clipboard':
 			clipboard = PortapapelesForm(request.POST)

@@ -82,6 +82,7 @@ def document(request, filename):
 				image.texto_de_OCR = texto_de_OCR
 				image.save() 
 
+
 				clipboard = PortapapelesForm(request.POST)
 				 
 				
@@ -262,6 +263,7 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 				print('this is the request',request)
 				texto_de_OCR = request.POST['texto_de_OCR']
 				file = request.POST.get('nombre_del_archivo', None)
+				persona = request.POST.get('persona', None)
 				archivo = get_object_or_404(Archivo, nombre_del_archivo=request.POST.get('archivo', None))	
 				archivo_id = archivo.id
 				collection = get_object_or_404(Colección, nombre_de_la_colección=request.POST.get('colección', None))
@@ -278,6 +280,7 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 				#save with the new data
 				image = Imagen.objects.get(nombre_del_archivo = file)
 				image.texto_de_OCR = texto_de_OCR
+				image.persona.set(persona)
 				image.save() 
 
 				clipboard = PortapapelesForm(request.POST)

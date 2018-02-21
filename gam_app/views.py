@@ -253,7 +253,7 @@ def advanced_search_submit(request):
         context = {"failed" : True}
         return render(request, 'index.html', context)
 
-
+#image view
 def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_imagen):
 	
 	if request.method == 'POST':
@@ -354,6 +354,7 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 		context  = {'state':state, 'form':form, 'clipboard':clipboard, 'id':id, 'previous':previous, 'next_one':next_one}		
 		return render(request, 'document_page.html', context)
 
+#carpeta view
 def documento4(request, archivo, colección, caja, legajo, carpeta):
 
 	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')	
@@ -379,6 +380,7 @@ def documento4(request, archivo, colección, caja, legajo, carpeta):
 	context = {'state':state, 'location':location, 'previous_carpeta':previous_carpeta, 'next_carpeta':next_carpeta}
 	return render(request, 'all_documents_page.html', context)
 
+#legajo view
 def documento3(request, archivo, colección, caja, legajo):
 	
 	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo).order_by('carpeta')	
@@ -392,16 +394,18 @@ def documento3(request, archivo, colección, caja, legajo):
 	for item in legajo_list:
 		if item == legajo:
 			current = item
-		else:
-			current = legajo_list[0] 
+	print(legajo_list, current, legajo_list.index(current))
+		
 	#find index in list for current
 	index_current= legajo_list.index(current)
 	previous_legajo = legajo_list[index_current-1]
 	try:
 		next_legajo = legajo_list[index_current+1]
+		print(next_legajo)
 	except:
 		next_legajo = legajo_list[0]
-	context = {'state':state, 'location':location, 'previous_legajo':previous_legajo, 'next_carpeta':next_legajo}
+		print(next_legajo)
+	context = {'state':state, 'location':location, 'previous_legajo':previous_legajo, 'next_legajo':next_legajo}
 	return render(request, 'all_documents_page.html', context)
 
 def documento2(request, archivo, colección, caja):
@@ -426,7 +430,7 @@ def documento2(request, archivo, colección, caja):
 		next_caja = caja_list[index_current+1]
 	except:
 		next_caja = caja_list[0]
-	context = {'state':state, 'location':location, 'previous_caja':previous_caja, 'next_carpeta':next_caja}
+	context = {'state':state, 'location':location, 'previous_caja':previous_caja, 'next_caja':next_caja}
 	return render(request, 'all_documents_page.html', context)
 
 def documento1(request, archivo, colección):
@@ -434,7 +438,27 @@ def documento1(request, archivo, colección):
 
 	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección).order_by('caja')	
 	location = {'archivo':archivo, 'colección':colección}
-	context = {'state':state, 'location':location}
+	possible_colección = Imagen.objects.filter(archivo__nombre_del_archivo=archivo).order_by('colección')
+	colección_list = []
+	#make a list of the possible carpetas with index values
+	for index, page in enumerate(possible_colección):
+		if page.colección not in colección_list:
+			colección_list.append(page.colección)
+	print(colección_list,'this is the collection list')
+	for item in colección_list:
+		if item == colección:
+			current = item
+		else:
+			current = colección_list[0]
+	#find index in list for current
+	index_current= colección_list.index(current)
+	previous_colección = colección_list[index_current-1]
+	try:
+		next_colección = colección_list[index_current+1]
+	except:
+		next_colección = colección_list[0]
+	#TODO fix this. Backward working fine. Forward not working.  Gives UnboundLocalError: local variable 'current' referenced before assignment
+	context = {'state':state, 'location':location, 'previous_colección':previous_colección, 'next_colección':next_colección}
 	return render(request, 'all_documents_page.html', context)
 
 @login_required

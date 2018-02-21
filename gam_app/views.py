@@ -334,7 +334,7 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 		try:
 			next_one = pages_list[current+1].número_de_imagen
 		except:
-			next_one = pages_list[current].número_de_imagen
+			next_one = pages_list[0].número_de_imagen
 
 		print('previous= ', previous)
 		print('next= ', next_one)
@@ -358,7 +358,25 @@ def documento4(request, archivo, colección, caja, legajo, carpeta):
 
 	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')	
 	location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo, 'carpeta':carpeta}
-	context = {'state':state, 'location':location}
+	possible_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo).order_by('número_de_imagen')	
+	carpeta_list = []
+	#make a list of the possible carpetas with index values
+	for index, page in enumerate(possible_carpeta):
+		if page.carpeta not in carpeta_list:
+			carpeta_list.append(page.carpeta)
+	for item in carpeta_list:
+		if item == carpeta:
+			current = item
+			print('current is',current)
+	#find index in list for current
+	index_current= carpeta_list.index(current)
+	previous_carpeta = carpeta_list[index_current-1]
+	try:
+		next_carpeta = carpeta_list[index_current+1]
+	except:
+		next_carpeta = carpeta_list[0]
+
+	context = {'state':state, 'location':location, 'previous_carpeta':previous_carpeta, 'next_carpeta':next_carpeta}
 	return render(request, 'all_documents_page.html', context)
 
 def documento3(request, archivo, colección, caja, legajo):

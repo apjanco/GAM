@@ -20,7 +20,15 @@
 
 
 {% if state %}
-  
+{% if previous_carpeta %}
+  <div class="col-sm-2">
+<a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ previous_carpeta }}/"> < Espalda :</a>
+
+{% endif %}
+{% if next_carpeta %}
+<a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ next_carpeta }}/">Adelante ></a>
+</div>
+{% endif %}  
 
 <a href="/{{ location.archivo }}/">{{ location.archivo }}</a>
 

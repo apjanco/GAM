@@ -438,27 +438,7 @@ def documento1(request, archivo, colección):
 
 	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección).order_by('caja')	
 	location = {'archivo':archivo, 'colección':colección}
-	possible_colección = Imagen.objects.filter(archivo__nombre_del_archivo=archivo).order_by('colección')
-	colección_list = []
-	#make a list of the possible carpetas with index values
-	for index, page in enumerate(possible_colección):
-		if page.colección not in colección_list:
-			colección_list.append(page.colección)
-	print(colección_list,'this is the collection list')
-	for item in colección_list:
-		if item == colección:
-			current = item
-		else:
-			current = colección_list[0]
-	#find index in list for current
-	index_current= colección_list.index(current)
-	previous_colección = colección_list[index_current-1]
-	try:
-		next_colección = colección_list[index_current+1]
-	except:
-		next_colección = colección_list[0]
-	#TODO fix this. Backward working fine. Forward not working.  Gives UnboundLocalError: local variable 'current' referenced before assignment
-	context = {'state':state, 'location':location, 'previous_colección':previous_colección, 'next_colección':next_colección}
+	context = {'state':state, 'location':location}
 	return render(request, 'all_documents_page.html', context)
 
 @login_required

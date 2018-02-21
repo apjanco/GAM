@@ -280,7 +280,10 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 				#save with the new data
 				image = Imagen.objects.get(nombre_del_archivo = file)
 				image.texto_de_OCR = texto_de_OCR
-				image.persona.set(persona)
+				try:
+					image.persona.set(persona)
+				except:
+					pass
 				image.save() 
 
 				clipboard = PortapapelesForm(request.POST)

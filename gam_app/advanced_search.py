@@ -63,7 +63,7 @@ def advanced_search(request):
 
 def make_query_part(search_string, field):
     print (field)
-    if field == "Any field":
+    if field == "cualquier campo":
         query_part = Q( 
             Q(persona__nombre_de_la_persona__icontains=search_string) |
             Q(nombre_del_archivo__icontains=search_string) |

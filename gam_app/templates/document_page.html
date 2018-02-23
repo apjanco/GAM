@@ -24,11 +24,11 @@
 
 {% if previous %}
   <div class="col-sm-2">
-<a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ previous }}/"> < Espalda :</a>
+<a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ previous }}/"> < Atrás :</a>
 
 {% endif %}
 {% if next_one %}
-<a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ next_one }}/">Adelante ></a>
+<a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ next_one }}/">Siguente ></a>
 </div>
 {% endif %}
 <div align="right">
@@ -105,7 +105,7 @@ body {
 
         {{ form.media }}
         <input type="submit" value="{% trans "Guardar cambios" %}" />
-        {{ form.texto_de_OCR|linebreaksbr }}
+        {{ form.texto_de_OCR }}
         
         <input type="hidden" value="{{ state.nombre_del_archivo }}" name="nombre_del_archivo" />
         <input type="hidden" value="{{ state.archivo }}" name="archivo" />
@@ -136,7 +136,7 @@ body {
     <!-- Notes -->
     <div id="tab3-slug" class="tab-pane">
        <input type="submit" value="{% trans "Guardar cambios" %}" /><br>
-       Record some Notes
+       {{ form.notas }}
        </form>
     </div>
    </div>

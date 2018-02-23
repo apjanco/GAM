@@ -71,6 +71,7 @@ def document(request, filename):
 				bundle = request.POST.get('legajo', None)
 				folder = request.POST.get('carpeta', None)
 				old_text = request.POST.get('old_text', None)
+				notas = request.POST.get('notas', None)
 				time = datetime.datetime.now()
 				usuario_id = User.objects.get(username=request.user).pk
 				#save previous text 
@@ -80,6 +81,7 @@ def document(request, filename):
 				#save with the new data
 				image = Imagen.objects.get(nombre_del_archivo = file)
 				image.texto_de_OCR = texto_de_OCR
+				image.notas = notas
 				image.save() 
 
 

@@ -17,13 +17,13 @@ class EditForm(forms.ModelForm):
     #persona = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False)
 
     #forms.ModelMultipleChoiceField(queryset=Persona.objects.all())
-    
+    notas = forms.CharField(widget=CKEditorWidget(), required=False)
     fecha_desaparicion = forms.CharField(required=False)
     ubicación_geográfica = forms.ModelMultipleChoiceField(queryset=Lugar.objects.all(), required=False)
     actividades_políticas = forms.ModelMultipleChoiceField(queryset=Organización.objects.all(), required=False)
      
     class Meta:
-    	fields = ['texto_de_OCR', 'nombre_del_archivo', 'persona']
+    	fields = ['texto_de_OCR', 'nombre_del_archivo', 'persona','notas']
     	model = Imagen
     	widgets = {'persona': autocomplete.ModelSelect2Multiple(url='autocompletar', forward=['nombre_de_la_persona'])
 }

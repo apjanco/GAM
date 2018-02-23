@@ -102,6 +102,7 @@ class Imagen(models.Model):
 	actividades_políticas = models.ManyToManyField(Organización, blank=True)
 	profesión = models.CharField(max_length=200, blank=True)
 	texto_de_OCR = RichTextField()
+	notas = RichTextField()
 	def __str__(self):
 		return self.localizacion_fisica
 

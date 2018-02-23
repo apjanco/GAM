@@ -72,8 +72,15 @@
 > <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ location.carpeta}}/{{ location.número_de_imagen }}/">{% trans "Número de imagen" %}: {{ location.número_de_imagen }}</a>
 {% endif %}
 
-<center>
+
  <div class="row">
+{% if carpeta_descripción %}
+<div align="left">
+<br>{% for item in carpeta_descripción %}<p>{{ item.descripcion_caso }}</p>{% endfor %}
+<hr>
+</div>
+{% endif %}
+<center>
 {% for item in state %}
  <div class="col-md-2"><p><a href="/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"><img src={{ item.miniatura }}></a>
   <p><a href="/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"><p>{{ item.localizacion_fisica }}</p></a> ***   

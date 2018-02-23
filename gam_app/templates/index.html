@@ -24,8 +24,8 @@
     
     <span> Agregar un término de búsqueda </span>
     <input type="hidden" id="searcher_counter" name="seacher_count" value="1">
-    <button type="button" id="OR_search" class="btn btn-primary">Y</button>
-    <button type="button" id="AND_search" class="btn btn-primary">O</button>
+    <button type="button" id="OR_search" class="btn btn-primary">O</button>
+    <button type="button" id="AND_search" class="btn btn-primary">Y</button>
     <button type="button" id="NOT_search" class="btn btn-primary">NO</button>
     <script src="{% static 'gam_site/jquery.js' %}"></script>
     <script src="{% static 'gam_site/jquery-ui.js' %}"></script>
@@ -45,7 +45,7 @@
             return  "<select class='form-control logic_option'> <option value='OR'>O</option> <option value='AND' selected='selected'>Y</option> <option value='NOT'>NO</option></select>";
         }
 	else if (operator=="OR") {
-            return  "<select class='form-control logic_option'> <option selected='selected' value='OR'>OR</option> <option value='AND'>AND</option> <option value='NOT'>NOT</option></select>";
+            return  "<select class='form-control logic_option'> <option selected='selected' value='OR'>O</option> <option value='AND'>Y</option> <option value='NOT'>NO</option></select>";
         }
 	else {
             return  "<select class='form-control logic_option'> <option value='OR'>O</option> <option value='AND'>Y</option> <option selected='selected' value='NOT'>NO</option></select>";

@@ -71,6 +71,7 @@ def document(request, filename):
 				bundle = request.POST.get('legajo', None)
 				folder = request.POST.get('carpeta', None)
 				old_text = request.POST.get('old_text', None)
+				notas = request.POST.get('notas', None)
 				time = datetime.datetime.now()
 				usuario_id = User.objects.get(username=request.user).pk
 				#save previous text 
@@ -80,6 +81,7 @@ def document(request, filename):
 				#save with the new data
 				image = Imagen.objects.get(nombre_del_archivo = file)
 				image.texto_de_OCR = texto_de_OCR
+				image.notas = notas
 				image.save() 
 
 
@@ -253,7 +255,7 @@ def advanced_search_submit(request):
         context = {"failed" : True}
         return render(request, 'index.html', context)
 
-
+#image view
 def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_imagen):
 	
 	if request.method == 'POST':
@@ -280,7 +282,10 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 				#save with the new data
 				image = Imagen.objects.get(nombre_del_archivo = file)
 				image.texto_de_OCR = texto_de_OCR
-				image.persona.set(persona)
+				try:
+					image.persona.set(persona)
+				except:
+					pass
 				image.save() 
 
 				clipboard = PortapapelesForm(request.POST)
@@ -354,11 +359,12 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 		context  = {'state':state, 'form':form, 'clipboard':clipboard, 'id':id, 'previous':previous, 'next_one':next_one}		
 		return render(request, 'document_page.html', context)
 
+#carpeta view
 def documento4(request, archivo, colección, caja, legajo, carpeta):
 
 	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')	
 	location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo, 'carpeta':carpeta}
-	possible_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo).order_by('número_de_imagen')	
+	possible_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo).order_by('carpeta')	
 	carpeta_list = []
 	#make a list of the possible carpetas with index values
 	for index, page in enumerate(possible_carpeta):
@@ -379,18 +385,57 @@ def documento4(request, archivo, colección, caja, legajo, carpeta):
 	context = {'state':state, 'location':location, 'previous_carpeta':previous_carpeta, 'next_carpeta':next_carpeta}
 	return render(request, 'all_documents_page.html', context)
 
+#legajo view
 def documento3(request, archivo, colección, caja, legajo):
 	
 	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo).order_by('carpeta')	
 	location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo}
-	context = {'state':state, 'location':location}
+	possible_legajo = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja).order_by('legajo')
+	legajo_list = []
+	#make a list of the possible carpetas with index values
+	for index, page in enumerate(possible_legajo):
+		if page.legajo not in legajo_list:
+			legajo_list.append(page.legajo)
+	for item in legajo_list:
+		if item == legajo:
+			current = item
+	print(legajo_list, current, legajo_list.index(current))
+		
+	#find index in list for current
+	index_current= legajo_list.index(current)
+	previous_legajo = legajo_list[index_current-1]
+	try:
+		next_legajo = legajo_list[index_current+1]
+		print(next_legajo)
+	except:
+		next_legajo = legajo_list[0]
+		print(next_legajo)
+	context = {'state':state, 'location':location, 'previous_legajo':previous_legajo, 'next_legajo':next_legajo}
 	return render(request, 'all_documents_page.html', context)
 
 def documento2(request, archivo, colección, caja):
 	
 	state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja).order_by('legajo')	
 	location = {'archivo':archivo, 'colección':colección, 'caja':caja}
-	context = {'state':state, 'location':location}
+	possible_caja = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección).order_by('caja')
+	caja_list = []
+	#make a list of the possible carpetas with index values
+	for index, page in enumerate(possible_caja):
+		if page.caja not in caja_list:
+			caja_list.append(page.caja)
+	for item in caja_list:
+		if item == caja:
+			current = item
+		else:
+			current = caja_list[0]
+	#find index in list for current
+	index_current= caja_list.index(current)
+	previous_caja = caja_list[index_current-1]
+	try:
+		next_caja = caja_list[index_current+1]
+	except:
+		next_caja = caja_list[0]
+	context = {'state':state, 'location':location, 'previous_caja':previous_caja, 'next_caja':next_caja}
 	return render(request, 'all_documents_page.html', context)
 
 def documento1(request, archivo, colección):

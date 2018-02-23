@@ -10,9 +10,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='portapapeles',
-            name='nombre_del_portapapeles',
-            field=models.CharField(blank=True, max_length=200),
-        ),
+#        migrations.AddField(
+#            model_name='portapapeles',
+#            name='nombre_del_portapapeles',
+#            field=models.CharField(blank=True, max_length=200),
+#        ),
     ]

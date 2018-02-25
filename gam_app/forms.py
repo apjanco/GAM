@@ -30,8 +30,11 @@ class EditForm(forms.ModelForm):
     	count += 1
     	MANUSCRIPT_CHOICES.append((str(count),item.nombre_del_manuscrito))
     manuscripts = forms.ChoiceField(choices=MANUSCRIPT_CHOICES, required=False)
+    
+    STATUS_CHOICES = [('NONE','Sin correcciones'),('IN','En progreso'),('DONE','Compitió'),('FINAL','Competido y verificado')]
+    status = forms.ChoiceField(choices=STATUS_CHOICES, required=False)
     class Meta:
-    	fields = ['texto_de_OCR', 'nombre_del_archivo', 'persona','ubicación_geográfica','actividades_políticas','fecha_desaparicion','genero','manuscripts','notas']
+    	fields = ['texto_de_OCR', 'nombre_del_archivo', 'persona','ubicación_geográfica','actividades_políticas','fecha_desaparicion','genero','manuscripts','status','notas']
     	model = Imagen
     	widgets = {
     		'persona': autocomplete.ModelSelect2Multiple(url='autocompletar', forward=['nombre_de_la_persona']), 

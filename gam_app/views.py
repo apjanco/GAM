@@ -169,6 +169,7 @@ def lugar(request, lugar):
 	context = {'state':state}
 	return render(request, 'all_documents_page.html', context)
 
+#These are the views for the autocomplete fields in document_page.html 
 class autocompletar(autocomplete.Select2QuerySetView):
 	def get_queryset(self):
 		#TODO Get working with user authentication
@@ -179,6 +180,32 @@ class autocompletar(autocomplete.Select2QuerySetView):
 
 		if self.q:
 			qs = qs.filter(nombre_de_la_persona__istartswith=self.q)
+		
+		return qs
+
+class autocompletar_lugar(autocomplete.Select2QuerySetView):
+	def get_queryset(self):
+		#TODO Get working with user authentication
+		#if not self.request.user.is_authenticated():
+	#		return Imagen.objects.none()
+		
+		qs = Lugar.objects.all()
+
+		if self.q:
+			qs = qs.filter(nombre_del_lugar__istartswith=self.q)
+		
+		return qs
+
+class autocompletar_organización(autocomplete.Select2QuerySetView):
+	def get_queryset(self):
+		#TODO Get working with user authentication
+		#if not self.request.user.is_authenticated():
+	#		return Imagen.objects.none()
+		
+		qs = Organización.objects.all()#.values_list('nombre_de_la_organización', flat=True)
+		
+		if self.q:
+			qs = qs.filter(nombre_de_la_organización__istartswith=self.q)
 		
 		return qs
 

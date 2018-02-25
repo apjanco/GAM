@@ -19,7 +19,7 @@ from django.conf.urls.i18n import i18n_patterns
 from gam_app import views
 from django.contrib.flatpages import views as flat_views
 from dal import autocomplete
-from gam_app.views import autocompletar
+from gam_app.views import autocompletar, autocompletar_lugar, autocompletar_organización
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,11 +32,13 @@ urlpatterns += i18n_patterns(
     path('cuentas/', include('django.contrib.auth.urls')),
     #path('autocompletar/', views.autocompletar, name='autocompletar'),
     path('autocompletar/', autocompletar.as_view(), name='autocompletar'),
-  
+    path('autocompletar_lugar/', autocompletar_lugar.as_view(), name='autocompletar_lugar'),
+    path('autocompletar_organización/', autocompletar_organización.as_view(), name='autocompletar_organización'),
+
     path('crear_usuario/', include('registration.backends.simple.urls')),
     path('file/<filename>', views.document, name='document'),
     path('editar/<filename>', views.document_edit, name='document_edit'),
-    path('/dzi/<file>', views.dzi, name='dzi'),
+    path('dzi/<file>', views.dzi, name='dzi'),
     path('caso/', views.caso, name='caso'),
     path('advanced_search_submit/', views.advanced_search_submit, name='advanced-search-submit'),
     path('sobre/', flat_views.flatpage, {'url': '/es/sobre/'}, name='sobre'),

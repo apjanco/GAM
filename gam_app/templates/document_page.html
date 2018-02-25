@@ -125,8 +125,7 @@ body {
     <div id="tab2-slug" class="tab-pane">
       <div class="col-md-4">
       <input type="submit" value="{% trans "Guardar cambios" %}" /><br>
-      <p>{% trans "Nombre(s)" %}: {% for name in state.persona.all %}<a href="/persona/{{ name }}">{{ name }}</a><br></p>{% endfor %}
-      {{ form.persona }}
+      <p>{% trans "Nombre(s)" %}: {{ form.persona }} </p>
       <p>{% trans "Lugar" %}: {{ form.ubicación_geográfica }} </p>
       <p>{% trans "Actividades políticas" %}: {{ form.actividades_políticas }} </p>
       <p>{% trans "Fecha desaparición" %}: {{ form.fecha_desaparicion }}<br></p>

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 {% load i18n %}
 
 
@@ -78,14 +78,41 @@
 <div align="left">
 <br>{% for item in carpeta_descripción %}<p>{{ item.descripcion_caso }}</p>{% endfor %}
 <hr>
-</div>
-{% endif %}
+</div> {% endif %}
+
 <center>
 {% for item in state %}
  <div class="col-md-2"><p><a href="/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"><img src={{ item.miniatura }}></a>
   <p><a href="/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"><p>{{ item.localizacion_fisica }}</p></a> ***   
-</div> 
+</div>
+ {% endfor %}
+</center>
+<script type="text/javascript" src="{% static 'js/openseadragon.min.js' %}"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/Pin0/openseadragon-justified-collection/1.0.2/dist/openseadragon-justified-collection.min.js"></script>
+<div id="openseadragon1" style="width:50%; height: 50%;"></div>
+<script type="text/javascript">
+    var viewer = OpenSeadragon({
+        id: "openseadragon1",
+        crossOriginPolicy: 'Anonymous',
+        collectionColumns: 8,
+        collectionMode: true,
+        showRotationControl: true
+    });
 
+    viewer.addHandler('open', function() {
+            viewer.world.arrange();
+        });
+</script>
+</div>
+{% for item in state %}
+  <script type="text/javascript">
+viewer.addTiledImage({
+    tileSource: '/dzi/{{ item.nombre_del_archivo }}.dzi',
+});
+
+</script>
+
+</div> 
 {% endfor %}
 
 </center>

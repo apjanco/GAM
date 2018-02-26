@@ -85,7 +85,6 @@ body {
 .column {
     float: left;
     padding: 10px;
-    height: 300px; /* Should be removed. Only for demonstration */
 }
 
 .left {
@@ -115,7 +114,7 @@ body {
   <div class="column left" style="background-color:#bbb;">
 <center>
 {% for item in state %}
- <div class="col-sm-5"><p><a href="/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"><img src={{ item.miniatura }}></a>
+ <div class="col-sm-6"><p><a href="/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"><img src={{ item.miniatura }}></a>
   <p><a href="/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"><p>{{ item.localizacion_fisica }}</p></a> ***   
 </div>
  {% endfor %}
@@ -125,7 +124,7 @@ body {
 <div class="column right">
 <script type="text/javascript" src="{% static 'js/openseadragon.min.js' %}"></script>
 <script type="text/javascript" src="https://cdn.rawgit.com/Pin0/openseadragon-justified-collection/1.0.2/dist/openseadragon-justified-collection.min.js"></script>
-<div id="openseadragon1" style="width:50%; height: 50%;"></div>
+<div id="openseadragon1" style="width:100%; height: 200%;"></div>
 <script type="text/javascript">
     var viewer = OpenSeadragon({
         id: "openseadragon1",

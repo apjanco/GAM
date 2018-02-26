@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.i18n import i18n_patterns
+from django.conf.urls import include, url
 from gam_app import views
 from django.contrib.flatpages import views as flat_views
 from dal import autocomplete
@@ -23,6 +24,7 @@ from gam_app.views import autocompletar, autocompletar_lugar, autocompletar_orga
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^accounts/', include('registration.backends.hmac.urls')),
     path('i18n/', include('django.conf.urls.i18n')),
 ]
 

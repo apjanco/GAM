@@ -72,6 +72,37 @@
 > <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ location.carpeta}}/{{ location.número_de_imagen }}/">{% trans "Número de imagen" %}: {{ location.número_de_imagen }}</a>
 {% endif %}
 
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+/* Create two unequal columns that floats next to each other */
+.column {
+    float: left;
+    padding: 10px;
+    height: 300px; /* Should be removed. Only for demonstration */
+}
+
+.left {
+  width: 25%;
+}
+
+.right {
+  width: 75%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+</style>
 
  <div class="row">
 {% if carpeta_descripción %}
@@ -80,13 +111,18 @@
 <hr>
 </div> {% endif %}
 
+<div class="row">
+  <div class="column left" style="background-color:#bbb;">
 <center>
 {% for item in state %}
- <div class="col-md-2"><p><a href="/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"><img src={{ item.miniatura }}></a>
+ <div class="col-sm-5"><p><a href="/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"><img src={{ item.miniatura }}></a>
   <p><a href="/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"><p>{{ item.localizacion_fisica }}</p></a> ***   
 </div>
  {% endfor %}
 </center>
+</div>
+
+<div class="column right">
 <script type="text/javascript" src="{% static 'js/openseadragon.min.js' %}"></script>
 <script type="text/javascript" src="https://cdn.rawgit.com/Pin0/openseadragon-justified-collection/1.0.2/dist/openseadragon-justified-collection.min.js"></script>
 <div id="openseadragon1" style="width:50%; height: 50%;"></div>
@@ -111,7 +147,7 @@ viewer.addTiledImage({
 });
 
 </script>
-
+</div>
 </div> 
 {% endfor %}
 

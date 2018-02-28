@@ -408,8 +408,9 @@ def documento4(request, archivo, colección, caja, legajo, carpeta):
 		next_carpeta = carpeta_list[index_current+1]
 	except:
 		next_carpeta = carpeta_list[0]
+	carpeta_info = Caso.objects.filter(caja_no=caja, legajo_no=legajo, carpeta_no=carpeta)
 
-	context = {'state':state, 'location':location, 'previous_carpeta':previous_carpeta, 'next_carpeta':next_carpeta}
+	context = {'state':state, 'location':location, 'previous_carpeta':previous_carpeta, 'next_carpeta':next_carpeta, 'carpeta_info':carpeta_info}
 	return render(request, 'all_documents_page.html', context)
 
 #legajo view

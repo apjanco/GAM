@@ -1,4 +1,1 @@
-Hi, 
-THis is me and I really need to change this.
-Best,
-  Andy
+{% load i18n %}{% trans "Hello, " %}{{ user }}{% trans ", you have an account activation on" %} {{ site.name }}

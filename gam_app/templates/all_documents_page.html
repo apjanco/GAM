@@ -118,14 +118,6 @@ body {
 }
 </style>
 
-<style>
-#image-ruler{
-  background-color:red;
- width: 50px;
-  height: 50px;
-}
-</style>
-<div id="image-ruler"> </div>
 
 <div class="row">
   <div class="column left" style="background-color:#bbb;">
@@ -172,18 +164,47 @@ viewer.addHandler('open', function() {
             viewer.viewport.goHome(true);
         });
 
-var IMAGE_RULER_HIGHLIGHT = "image-ruler";
-
-var IMAGE_RULER_DEFAULT_POSITION =      new OpenSeadragon.Point(0.5, 0);
-
-var overlay = viewer.addOverlay(IMAGE_RULER_HIGHLIGHT, IMAGE_RULER_DEFAULT_POSITION, OpenSeadragon.Placement.CENTER);
 </script>
 </div>
+<script src="http://msalsbery.github.io/builds/openseadragonimaging/openseadragon-viewerinputhook.min.js"></script>
+
 {% for item in state %}
-  <script type="text/javascript">
+<script type="text/javascript">
 viewer.addTiledImage({
     tileSource: '/dzi/{{ item.nombre_del_archivo }}.dzi',
 });
+
+var rect = new OpenSeadragon.Rect(0.5, 0.2, 0.1, 0.1);
+var link = "{{ item.url }}";
+
+viewer.addViewerInputHook({
+    hooks: [{
+        tracker: "viewer",
+        handler: "clickHandler",
+        hookHandler: onViewerClick
+    }]
+});
+viewer.addHandler("open", function () {
+    var buttonElement = document.createElement("a");
+    buttonElement.target = "_blank";
+    buttonElement.href = link;
+    buttonElement.className = "header";
+
+    viewer.addOverlay(buttonElement, rect, OpenSeadragon.OverlayPlacement.CENTER);
+});
+
+function isPointInsideRect(point, rect) {
+    return point.x > rect.x && point.x < rect.x + rect.width && point.y > rect.y && point.y < rect.y + rect.height;
+}
+
+function onViewerClick(event) {
+    var pos = viewer.viewport.viewerElementToViewportCoordinates(event.position);
+    if (isPointInsideRect(pos, rect)) {
+        event.preventDefaultAction = true;
+        window.open(link, '_blank');
+    }
+}
+
 </script>
 
 </div>

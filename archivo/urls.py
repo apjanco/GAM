@@ -24,7 +24,7 @@ from gam_app.views import autocompletar, autocompletar_lugar, autocompletar_orga
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^accounts/', include('registration.backends.hmac.urls')),
+    path('accounts/', include('registration.backends.hmac.urls')),
     path('i18n/', include('django.conf.urls.i18n')),
 ]
 

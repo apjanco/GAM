@@ -22,7 +22,7 @@ class Lugar(models.Model):
 # An organization entity.  Typically refers to a political organziation that a person was affiliated with. 
 class Organización(models.Model):
 	nombre_de_la_organización = models.CharField(max_length=200, null=True)
-	def __unicode__(self):
+	def __str__(self):
 		return self.nombre_de_la_organización
 
 

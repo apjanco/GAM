@@ -87,58 +87,16 @@
 <br>{% for item in carpeta_info %}<p>{{ item.descripcion_caso }}</p>{% endfor %}
 <hr>
 </div> {% endif %}
-<style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-}
-
-/* Create two unequal columns that floats next to each other */
-.column {
-    float: left;
-    padding: 10px;
-}
-
-.left {
-  width: 25%;
-}
-
-.right {
-  width: 75%;
-}
-
-/* Clear floats after the columns */
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-</style>
-
-
-<div class="row">
-  <div class="column left" style="background-color:#bbb;">
-<center>
-{% for item in state %}
- <div class="col-sm-6"><p><a href="/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"><img src={{ item.miniatura }}></a>
-  <p><a href="/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"><p>{{ item.localizacion_fisica }}</p></a> ***   
-</div>
- {% endfor %}
-</center>
-</div>
-
-<div class="column right">
+<br>
+<hr>
 <style>
 
 .highlight {
     opacity: 0.4;
     filter: alpha(opacity=40);
-    border: 2px solid #0A7EbE;
-    outline: 10px auto #0A7EbE;
-    background-color: white;
+    border: 3px solid #fae746;
+    outline: 4px auto #fae746;
+    background-color: black;
 }
 </style>
 
@@ -159,7 +117,7 @@ body {
 var items = [];
 var srcs = [];
 {% for item in state %}
-items.push(["{{ item.nombre_del_archivo }}", "{{ item.url }}"]);
+items.push(["{{ item.nombre_del_archivo }}", "/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"]);
 srcs.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
 {% endfor %}
 var viewer = OpenSeadragon({
@@ -207,11 +165,10 @@ async function addLinkOverlays() {
 
 function addOneLinkOverlay(image, link) {
     var imageRect = image.getBounds();
-    var rect = new OpenSeadragon.Rect(imageRect.x, imageRect.y, 0.1, 0.1);
+    var rect = new OpenSeadragon.Rect(imageRect.x, imageRect.y, 0.05, 0.05);
     console.log(rect);
 
     var buttonElement = document.createElement("a");
-    buttonElement.target = "_blank";
     buttonElement.href = link;
     buttonElement.className = "highlight";
     viewer.addOverlay(buttonElement, rect, OpenSeadragon.OverlayPlacement.CENTER);
@@ -224,7 +181,7 @@ function addOneLinkOverlay(image, link) {
               event.preventDefaultAction = true;
               var pos = viewer.viewport.viewerElementToViewportCoordinates(event.position);
               if (isPointInsideRect(pos, rect.clone())) {
-                  window.open(link, '_blank');
+                  window.open(link);
               }
             },
         }]
@@ -239,7 +196,6 @@ function isPointInsideRect(point, rect) {
 </div>
 
 
-</div>
 </div> 
 </center>
     

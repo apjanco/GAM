@@ -181,7 +181,7 @@ function addOneLinkOverlay(image, link) {
               event.preventDefaultAction = true;
               var pos = viewer.viewport.viewerElementToViewportCoordinates(event.position);
               if (isPointInsideRect(pos, rect.clone())) {
-                  window.open(link);
+                  window.location.href = link;
               }
             },
         }]

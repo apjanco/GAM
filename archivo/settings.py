@@ -32,6 +32,8 @@ ALLOWED_HOSTS = ['192.241.128.56']
 # Application definition
 
 INSTALLED_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

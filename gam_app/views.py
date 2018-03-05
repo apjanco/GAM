@@ -61,7 +61,7 @@ def document(request, filename):
 		if request.POST['input'] == 'text_edit':
 			edit_form = EditForm(request.POST)
 			if edit_form.is_valid():
-				print('this is the request',request)
+				#print('this is the request',request)
 				texto_de_OCR = request.POST['texto_de_OCR']
 				file = request.POST.get('nombre_del_archivo', None)
 				archivo = get_object_or_404(Archivo, nombre_del_archivo=request.POST.get('archivo', None))	
@@ -72,6 +72,16 @@ def document(request, filename):
 				folder = request.POST.get('carpeta', None)
 				old_text = request.POST.get('old_text', None)
 				notas = request.POST.get('notas', None)
+				persona = request.POST.get('persona', None)
+				print('here is the person')
+				print(persona)
+
+				lugar = request.POST.get('ubicación_geográfica', None)
+				actividades_políticas = request.POST.get('actividades_políticas', None)
+				fecha_desaparicion = request.POST.get('fecha_desaparicion', None)
+				genero = request.POST.get('genero', None)
+				manuscritos = request.POST.get('manuscripts', None)
+				
 				time = datetime.datetime.now()
 				usuario_id = User.objects.get(username=request.user).pk
 				#save previous text 
@@ -82,6 +92,11 @@ def document(request, filename):
 				image = Imagen.objects.get(nombre_del_archivo = file)
 				image.texto_de_OCR = texto_de_OCR
 				image.notas = notas
+				image.persona = persona
+				image.ubicación_geográfica.add(lugar)
+				image.actividades_políticas.add(actividades_políticas)
+				image.género.add(genero)
+				image.manuscritos.add(manuscritos)
 				image.save() 
 
 
@@ -179,7 +194,7 @@ class autocompletar(autocomplete.Select2QuerySetView):
 		qs = Persona.objects.all()
 
 		if self.q:
-			qs = qs.filter(nombre_de_la_persona__istartswith=self.q)
+			qs = qs.filter(nombre_de_la_persona__icontains=self.q)
 		
 		return qs
 
@@ -192,7 +207,7 @@ class autocompletar_lugar(autocomplete.Select2QuerySetView):
 		qs = Lugar.objects.all()
 
 		if self.q:
-			qs = qs.filter(nombre_del_lugar__istartswith=self.q)
+			qs = qs.filter(nombre_del_lugar__icontains=self.q)
 		
 		return qs
 
@@ -205,9 +220,16 @@ class autocompletar_organización(autocomplete.Select2QuerySetView):
 		qs = Organización.objects.all()#.values_list('nombre_de_la_organización', flat=True)
 		
 		if self.q:
-			qs = qs.filter(nombre_de_la_organización__istartswith=self.q)
+			qs = qs.filter(nombre_de_la_organización__icontains=self.q)
 		
 		return qs
+
+class autocompletar_manuscrito(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = Manuscrito.objects.all()
+        if self.q:
+            qs = qs.filter(nombre_del_manuscrito__icontains=self.q)
+        return qs
 
 def persona(request, persona):
 	state = Imagen.objects.filter(persona__nombre_de_la_persona=persona)
@@ -293,6 +315,8 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 				texto_de_OCR = request.POST['texto_de_OCR']
 				file = request.POST.get('nombre_del_archivo', None)
 				persona = request.POST.get('persona', None)
+				print('here is the persona')
+				print(persona)
 				archivo = get_object_or_404(Archivo, nombre_del_archivo=request.POST.get('archivo', None))	
 				archivo_id = archivo.id
 				collection = get_object_or_404(Colección, nombre_de_la_colección=request.POST.get('colección', None))
@@ -306,13 +330,30 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 				transcription = Transcrito(usuario_id=usuario_id, nombre_del_archivo=file, tiempo_modificado=time, texto_transcrito=old_text) 
 				transcription.save()
 
+				lugar = request.POST.get('ubicación_geográfica', None)
+				actividades_políticas = request.POST.get('actividades_políticas', None)
+				fecha_desaparicion = request.POST.get('fecha_desaparicion', None)
+				genero = request.POST.get('genero', None)
+				manuscritos = request.POST.get('manuscripts', None)
 				#save with the new data
 				image = Imagen.objects.get(nombre_del_archivo = file)
 				image.texto_de_OCR = texto_de_OCR
+
 				try:
-					image.persona.set(persona)
+					image.persona.add(persona)
 				except:
 					pass
+
+				try:
+					image.ubicación_geográfica.add(lugar)
+				except:
+					pass
+
+				try:
+					image.actividades_políticas.add(actividades_políticas)
+				except:
+					pass
+
 				image.save() 
 
 				clipboard = PortapapelesForm(request.POST)

@@ -101,8 +101,8 @@ class Imagen(models.Model):
 	participación_de_ONG = models.CharField(max_length=200, blank=True)
 	actividades_políticas = models.ManyToManyField(Organización, blank=True)
 	profesión = models.CharField(max_length=200, blank=True)
-	texto_de_OCR = RichTextField()
-	notas = RichTextField()
+	texto_de_OCR = RichTextField(blank=True)
+	notas = RichTextField(blank=True)
 	def __str__(self):
 		return self.localizacion_fisica
 

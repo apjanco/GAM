@@ -169,8 +169,11 @@ function addOneLinkOverlay(image, link) {
     console.log(rect);
 
     var buttonElement = document.createElement("a");
-    buttonElement.href = link;
-    buttonElement.className = "highlight";
+    var imgElement = document.createElement("img");
+    imgElement.src = '{% static 'edit_button.png' %}';
+    imgElement.href = link;
+    buttonElement.appendChild(imgElement);
+    //buttonElement.className = "highlight";
     viewer.addOverlay(buttonElement, rect, OpenSeadragon.OverlayPlacement.CENTER);
 
     viewer.addViewerInputHook({

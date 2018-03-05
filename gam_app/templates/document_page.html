@@ -152,13 +152,13 @@ body {
     <div id="tab2-slug" class="tab-pane">
       <div class="col-md-4">
       <input type="submit" value="{% trans "Guardar cambios" %}" /><br>
-      <p>{% trans "Nombre(s)" %}: {{ form.persona }} </p>
-      <a href="/admin/gam_app/persona/add/" class="addlink">Añadir</a>
-      <p>{% trans "Lugar" %}: {{ form.ubicación_geográfica }} </p>
-      <p>{% trans "Actividades políticas" %}: {{ form.actividades_políticas }} </p>
+      <p>{% trans "Persona(s)" %}:<br> {% for name in state.persona.all %}<a href="/persona/{{ name }}">{{ name }}</a><br></p>{% endfor %} {{ form.persona }} </p>
+      <a href="/admin/gam_app/persona/add/?_to_field=id&_popup=1" class="addlink">Añadir otro persona</a>
+      <p>{% trans "Lugar" %}:<br> {% for place in state.ubicación_geográfica.all %}<a href="/lugar/{{ place }}">{{ place }}</a><br></p>{% endfor %} {{ form.ubicación_geográfica }} </p>
+      <p>{% trans "Actividades políticas" %}:<br> {% for org in state.actividades_políticas.all %}<a href="/lugar/{{ org }}">{{ org }}</a><br></p>{% endfor %} {{ form.actividades_políticas }} </p>
       <p>{% trans "Fecha desaparición" %}: {{ form.fecha_desaparicion }}<br></p>
       <p>{% trans "Genero" %}: {{ form.genero }}<br></p>
-      <p>{% trans "Manuscrito" %}: {{ form.manuscripts }}<br></p>
+      <p>{% trans "Manuscrito" %}: {{ form.manuscritos }}<br></p>
       <p>{% trans "Estado de la transcripción" %}: {{ form.status }}<br></p>
       </div>
 
@@ -175,6 +175,21 @@ body {
    </div>
 
 </div>
+
+<script>
+var personas = [{% for p in state.persona.all %}"{{ p }}",{% endfor %}];
+
+$(document).ready(function () {
+  var ul = $("select#id_persona").next().find('ul');
+  var children = ul.children().detach();
+  ul.append('<span class="select2-selection__clear">×</span>');
+  for (var i = 0; i < personas.length; i++) {
+    console.log(personas[i]);
+    ul.append('<li class="select2-selection__choice" title="' + personas[i] + '"><span class="select2-selection__choice__remove" role="presentation">×</span>' + personas[i] + '</li>');
+  }
+  ul.append(children);
+});
+</script>
 
 {% else %}
 <p>{% trans "Ningún documento con ese nombre de archivo" %}</p>

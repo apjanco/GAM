@@ -21,25 +21,17 @@ class EditForm(forms.ModelForm):
     fecha_desaparicion = forms.DateField(initial=datetime.date.today, required=False)
     CHOICES = [('HOMBRE','Hombre'), ('MUJER','Mujer'), ('OTRO','Otro')] 
     genero = forms.ChoiceField(choices=CHOICES, required=False)
-    #ubicación_geográfica = forms.ModelMultipleChoiceField(queryset=Lugar.objects.all(), required=False)
-    #actividades_políticas = forms.ModelMultipleChoiceField(queryset=Organización.objects.all(), required=False)
-    manuscritos = Manuscrito.objects.all()
-    MANUSCRIPT_CHOICES = []
-    count = 0
-    for item in manuscritos:
-    	count += 1
-    	MANUSCRIPT_CHOICES.append((str(count),item.nombre_del_manuscrito))
-    manuscripts = forms.ChoiceField(choices=MANUSCRIPT_CHOICES, required=False)
-    
+   
     STATUS_CHOICES = [('NONE','Sin correcciones'),('IN','En progreso'),('DONE','Compitió'),('FINAL','Competido y verificado')]
     status = forms.ChoiceField(choices=STATUS_CHOICES, required=False)
     class Meta:
-    	fields = ['texto_de_OCR', 'nombre_del_archivo', 'persona','ubicación_geográfica','actividades_políticas','fecha_desaparicion','genero','manuscripts','status','notas']
+    	fields = ['texto_de_OCR', 'nombre_del_archivo', 'persona','ubicación_geográfica','actividades_políticas','fecha_desaparicion','genero','manuscritos','status','notas']
     	model = Imagen
     	widgets = {
     		'persona': autocomplete.ModelSelect2Multiple(url='autocompletar', forward=['nombre_de_la_persona']), 
     		'ubicación_geográfica': autocomplete.ModelSelect2Multiple(url='autocompletar_lugar', forward=['nombre_del_lugar']),
-    		'actividades_políticas': autocomplete.ModelSelect2Multiple(url='autocompletar_organización', forward=['nombre_de_la_organización'])
+    		'actividades_políticas': autocomplete.ModelSelect2Multiple(url='autocompletar_organización', forward=['nombre_de_la_organización']),
+            'manuscritos': autocomplete.ModelSelect2Multiple(url='autocompletar_manuscrito')
 		}
     	
 class SearchForm(forms.Form):

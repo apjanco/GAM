@@ -20,7 +20,7 @@ from django.conf.urls import include, url
 from gam_app import views
 from django.contrib.flatpages import views as flat_views
 from dal import autocomplete
-from gam_app.views import autocompletar, autocompletar_lugar, autocompletar_organización
+from gam_app.views import autocompletar, autocompletar_lugar, autocompletar_organización, autocompletar_manuscrito
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,6 +36,7 @@ urlpatterns += i18n_patterns(
     path('autocompletar/', autocompletar.as_view(), name='autocompletar'),
     path('autocompletar_lugar/', autocompletar_lugar.as_view(), name='autocompletar_lugar'),
     path('autocompletar_organización/', autocompletar_organización.as_view(), name='autocompletar_organización'),
+    path('autocompletar_manuscrito/', autocompletar_manuscrito.as_view(), name='autocompletar_manuscrito'),
 
     path('crear_usuario/', include('registration.backends.simple.urls')),
     path('file/<filename>', views.document, name='document'),

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block extra_static %}
+<style>
+.sea-icon{
+  height: 30px;
+  width: 30px;
+}
+</style>
+{% endblock %}
+
+
+{% load staticfiles %}
+{% load i18n %}
+
+
+{% block title %}GAM{% endblock %}
+
+{% block content %}
+
+{% if state %}
+<h3>Archivos</h3>
+<table class="resource_table">
+  <tr>
+    <th>{% trans "Nombre" %}</th>
+    
+    <th><div align="left">{% trans "Descripción" %}</div></th>
+  </tr>
+  <ul>
+{% for archive in archives %}
+      <tr>
+        <td> <a href="{% url 'documento0' archive.nombre_del_archivo %}">{{ archive.nombre_del_archivo }} </a></td>
+       
+        <td><div align="left"> {{ archive.descripción }} </div></td>
+      
+      </tr>   
+    {% endfor %}
+     </ul>
+   </table>
+<br>   
+<h3>Colecciónes</h3><table class="resource_table">
+  <tr>
+    <th>{% trans "Nombre" %}</th>
+    <th><div align="left">{% trans "Descripción" %}</div></th>
+  </tr>
+  <ul>
+{% for collection in collections %}
+      <tr>
+        <td> <a href="/{% url 'documento1' collection.archivo__nombre_del_archivo collection.colección__nombre_de_la_colección %}">{{ collection.colección__nombre_de_la_colección }}</a></td>
+        <td><div align="left"> {{ collection.descripción }} </div></td>
+      </tr>   
+    {% endfor %}
+     </ul>
+   </table>
+<br>
+<h3>Carpetas</h3>
+<table class="resource_table">
+  <tr>
+    <th>{% trans "Nombre" %}</th>
+    <th><div align="left">{% trans "Descripción" %}</div></th>
+  </tr>
+  <ul>
+{% for carpeta in carpetas %}
+      <tr>
+        <td><a href="{% url 'documento4' carpeta.archivo__nombre_del_archivo carpeta.colección__nombre_de_la_colección carpeta.caja carpeta.legajo carpeta.carpeta %}">{{ carpeta.colección__nombre_de_la_colección }} {{ carpeta.caja }}/{{carpeta.legajo }}/{{ carpeta.carpeta }}</a></td>
+        <td><div align="left"> {{ carpeta }} </div></td>
+      </tr>   
+    {% endfor %}
+     </ul>
+   </table>
+<hr>
+
+
+
+    
+
+
+    
+{% else %}
+  <p>{% trans "Inicia sesión para ver este contenido" %}</p>
+{% endif %}
+{% endblock %}

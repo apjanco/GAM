@@ -282,6 +282,23 @@ def dzi(request, file):
 	return response 
 
 @login_required
+def explorar(request):
+	state = Imagen.objects.all()
+	archives = Archivo.objects.all()
+	collections = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección').distinct()
+	for collection in collections:
+		collection['descripción'] = get_object_or_404(Colección, nombre_de_la_colección= collection['colección__nombre_de_la_colección']).descripción
+	
+	carpetas = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección', 'caja', 'legajo', 'carpeta').distinct()
+	#for carpeta in carpetas:
+	#	print(carpeta)
+#		carpeta['descripción'] = get_object_or_404(Carpeta, archivo=carpeta['archivo__nombre_del_archivo'], carpeta_no= carpeta['carpeta']).descripcion_caso
+
+	context  = {'state':state, 'archives':archives, 'collections':collections, 'carpetas':carpetas}
+	return render(request, 'explorar.html', context)
+
+
+@login_required
 def caso(request):
 	state = Caso.objects.all()
 	context  = {'state':state}

@@ -10,6 +10,7 @@ class Persona(models.Model):
     nombre = models.CharField(max_length=200, null=True)
     apellido_paterno = models.CharField(max_length=200, null=True)
     apellido_materno = models.CharField(max_length=200, null=True)
+    descripción = RichTextField(blank=True)
     def __str__(self):
    		return self.nombre_de_la_persona
 
@@ -60,9 +61,20 @@ class Portapapeles(models.Model):
 	def __str__(self):
    		return self.nombre_del_portapapeles
 
+class Carpeta(models.Model):
+	carpeta_titulo = models.CharField(max_length=200, blank=True)
+	nombre_de_la_carpeta = models.CharField(max_length=200, blank=True)
+	descripción = RichTextField(blank=True)
+	descripción_generada_automaticamente = RichTextField(blank=True)
+
+	def __str__(self):
+   		return self.nombre_de_la_carpeta
+
 #This is an archival collection  
 class Colección(models.Model):
+	archivo = models.ForeignKey('Archivo', on_delete=models.CASCADE)
 	nombre_de_la_colección = models.CharField(max_length=200, blank=True)
+	descripción = RichTextField(blank=True)
 	def __str__(self):
    		return self.nombre_de_la_colección
 
@@ -70,6 +82,7 @@ class Colección(models.Model):
 # The Internet Archive
 class Archivo(models.Model):
 	nombre_del_archivo = models.CharField(max_length=200, blank=True)
+	descripción = RichTextField(blank=True)
 	def __str__(self):
    		return self.nombre_del_archivo
 
@@ -103,6 +116,7 @@ class Imagen(models.Model):
 	profesión = models.CharField(max_length=200, blank=True)
 	texto_de_OCR = RichTextField(blank=True)
 	notas = RichTextField(blank=True)
+	descripción = RichTextField(blank=True)
 	def __str__(self):
 		return self.localizacion_fisica
 

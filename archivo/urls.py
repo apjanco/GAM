@@ -49,6 +49,7 @@ urlpatterns += i18n_patterns(
     path('portapapeles/<portapapeles>', views.espacio_de_trabajo, name='espacio_de_trabajo'),
     path('portapapeles/', views.portapapeles, name='portapapeles'),
     path('texto/', views.todo_texto, name='all_texto'),
+    path('explorar/', views.explorar, name='explorar'),
     path('caso/<caso>', views.single_caso, name='single_caso'),
     path('lugar/<lugar>', views.lugar, name='lugar'),
     path('persona/<persona>', views.persona, name='persona'),

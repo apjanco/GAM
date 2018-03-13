@@ -29,6 +29,10 @@ class ImagenAdmin(admin.ModelAdmin):
 
 admin.site.register(Imagen, ImagenAdmin) 
 
+class CarpetaAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Carpeta, CarpetaAdmin)
 
 class PersonaAdmin(admin.ModelAdmin):
     pass

@@ -46,7 +46,7 @@
   <ul>
 {% for collection in collections %}
       <tr>
-        <td> <a href="/{% url 'documento1' collection.archivo__nombre_del_archivo collection.colección__nombre_de_la_colección %}">{{ collection.colección__nombre_de_la_colección }}</a></td>
+        <td> <a href="{% url 'documento1' collection.archivo__nombre_del_archivo collection.colección__nombre_de_la_colección %}">{{ collection.colección__nombre_de_la_colección }}</a></td>
         <td><div align="left"> {{ collection.descripción }} </div></td>
       </tr>   
     {% endfor %}

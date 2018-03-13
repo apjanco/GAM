@@ -174,12 +174,23 @@ body {
     </div>
    </div>
 
+   <select class="helpme" multiple="multiple"></select>
+
 </div>
 
 <script>
 var personas = [{% for p in state.persona.all %}"{{ p }}",{% endfor %}];
 
 $(document).ready(function () {
+  $(".helpme").select2({
+    ajax: {
+      url: '/en/autocompletar',
+      dataType: 'json'
+    },
+    val: ["1"], // I think this is supposed to refer to the ID of the option in the list?
+  });
+  //$("select#id_persona").select2('data', personas);
+  /*
   var ul = $("select#id_persona").next().find('ul');
   var children = ul.children().detach();
   ul.append('<span class="select2-selection__clear">×</span>');
@@ -188,6 +199,7 @@ $(document).ready(function () {
     ul.append('<li class="select2-selection__choice" title="' + personas[i] + '"><span class="select2-selection__choice__remove" role="presentation">×</span>' + personas[i] + '</li>');
   }
   ul.append(children);
+  */
 });
 </script>
 

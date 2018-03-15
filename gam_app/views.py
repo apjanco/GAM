@@ -289,7 +289,9 @@ def explorar(request):
 	for collection in collections:
 		collection['descripción'] = get_object_or_404(Colección, nombre_de_la_colección= collection['colección__nombre_de_la_colección']).descripción
 	
-	carpetas = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección', 'caja', 'legajo', 'carpeta').distinct()
+	#carpetas = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección', 'caja', 'legajo', 'carpeta').distinct()
+	carpetas  = Carpeta.objects.all()
+	print(carpetas)
 	#for carpeta in carpetas:
 	#	print(carpeta)
 #		carpeta['descripción'] = get_object_or_404(Carpeta, archivo=carpeta['archivo__nombre_del_archivo'], carpeta_no= carpeta['carpeta']).descripcion_caso

@@ -64,11 +64,16 @@ class Portapapeles(models.Model):
 class Carpeta(models.Model):
 	carpeta_titulo = models.CharField(max_length=200, blank=True)
 	nombre_de_la_carpeta = models.CharField(max_length=200, blank=True)
+	archivo = models.ForeignKey('Archivo', on_delete=models.CASCADE)
+	colección = models.ForeignKey('Colección', on_delete=models.CASCADE)
+	caja = models.CharField(max_length=200, blank=True)
+	legajo = models.CharField(max_length=200, blank=True)
+	carpeta = models.CharField(max_length=200, blank=True)
 	descripción = RichTextField(blank=True)
 	descripción_generada_automaticamente = RichTextField(blank=True)
 
 	def __str__(self):
-   		return self.nombre_de_la_carpeta
+   		return '%s/%s/%s' % (self.caja,self.legajo,self.carpeta)
 
 #This is an archival collection  
 class Colección(models.Model):

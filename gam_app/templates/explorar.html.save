@@ -62,7 +62,7 @@
   <ul>
 {% for carpeta in carpetas %}
       <tr>
-        <td><a href="{% url 'documento4' carpeta.archivo carpeta.colección carpeta.caja carpeta.legajo carpeta.carpeta %}">{{ carpeta.colección }} {{ carpeta.caja }}/{{carpeta.legajo }}/{{ carpeta.carpeta }}</a></td>
+        <td><a href="{% url 'documento4' carpeta.archivo__nombre_del_archivo carpeta.colección__nombre_de_la_colección carpeta.caja carpeta.legajo carpeta.carpeta %}">{{ carpeta.colección__nombre_de_la_colección }} {{ carpeta.caja }}/{{carpeta.legajo }}/{{ carpeta.carpeta }}</a></td>
 	{% if carpeta.descripción %}
 	<td><div align="left"> {{ carpeta.descripción }} </div></td>
 	{% endif %}

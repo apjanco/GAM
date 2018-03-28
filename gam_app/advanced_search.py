@@ -63,20 +63,23 @@ def advanced_search(request):
 
 def make_query_part(search_string, field):
     print (field)
-    if field == "cualquier campo":
+    if field == "Cualquier Campo":
         query_part = Q( 
             Q(persona__nombre_de_la_persona__icontains=search_string) |
-            Q(nombre_del_archivo__icontains=search_string) |
-            Q(localizacion_fisica__icontains=search_string) |
+            Q(ubicación_geográfica__nombre_del_lugar__icontains=search_string) |
+            Q(género__icontains=search_string) |
+            Q(etnicidad__icontains=search_string) |
             Q(texto_de_OCR__icontains=search_string)
         ) 
     elif field == 'Persona':
         query_part = Q(persona__nombre_de_la_persona__icontains=search_string)
-    elif field == 'Nombre del Archivo':
-        query_part = Q(nombre_del_archivo__icontains=search_string)
-    elif field == 'Localizacion Fisica':
-        query_part = Q(localizacion_fisica__person_name__icontains=search_string)
-    elif field == 'Text Contains':
+    elif field == 'Ubicación Geográfica':
+        query_part = Q(ubicación_geográfica__nombre_del_lugar__icontains=search_string)
+    elif field == 'Género':
+        query_part = Q(género__icontains=search_string)
+    elif field == 'Etnicidad':
+        query_part = Q(etnicidad__icontains=search_string)
+    elif field == 'Texto':
         query_part = Q(texto_de_OCR__icontains=search_string)
     else:
         print("Found an invalid field.")

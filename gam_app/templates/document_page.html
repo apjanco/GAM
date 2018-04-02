@@ -3,9 +3,15 @@
 
 {% block extra_static %}
 <style>
-.sea-icon{
+.sea-icon {
   height: 30px;
   width: 30px;
+}
+
+#other-docs-h {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: -50px;
 }
 </style>
 {% endblock %}
@@ -48,7 +54,7 @@
          {% for value in clipboard %}
             <p>{% trans "Agregar al portapapeles" %}:</p>{{ value }}
          {% endfor %}
-         <input type="submit" value="{% trans "Salvar" %}" />  
+         <input type="submit" value="{% trans "Salvar" %}" />
          <p><a href="{{ state.url }}">URL de la imagen</a></p>
          <input type="hidden" value="clipboard" name="input" />
          <input type="hidden" value="{{ user }}" name="user" />
@@ -98,18 +104,20 @@ body {
 <script type="text/javascript">
     var viewer = OpenSeadragon({
         id: "openseadragon1",
-        
+
         zoomInButton: "zoom-in",
         zoomOutButton: "zoom-out",
         homeButton: "home",
         fullPageButton: "full-page",
         previousButton: "previous",
-        rotateRightButton: "right-rotate", 
-        rotateLeftButton: "left-rotate", 
+        rotateRightButton: "right-rotate",
+        rotateLeftButton: "left-rotate",
         tileSources: "/dzi/{{ state.nombre_del_archivo }}.dzi",
         showRotationControl: true,
     });
 </script>
+<h2 id="other-docs-h">Other documents in this folder</h2>
+<div id="openseadragon2"></div>
 </div>
 <div class="column">
    <ul id="tabs" class="nav nav-pills" data-tabs="tabs">
@@ -134,7 +142,7 @@ body {
         {{ form.media }}
         <input type="submit" value="{% trans "Guardar cambios" %}" />
         {{ form.texto_de_OCR }}
-        
+
         <input type="hidden" value="{{ state.nombre_del_archivo }}" name="nombre_del_archivo" />
         <input type="hidden" value="{{ state.archivo }}" name="archivo" />
         <input type="hidden" value="{{ state.colección }}" name="colección" />
@@ -144,7 +152,7 @@ body {
         <input type="hidden" value="{{ state.texto_de_OCR }}" name="old_text" />
         <input type="hidden" value="text_edit" name="input" />
 
-      
+
 
     </div>
 
@@ -162,7 +170,7 @@ body {
       <p>{% trans "Estado de la transcripción" %}: {{ form.status }}<br></p>
       </div>
 
-      
+
 
     </div>
 
@@ -202,7 +210,83 @@ $(document).ready(function () {
   */
 });
 </script>
+<div class="row">
+  <script src="http://msalsbery.github.io/builds/openseadragonimaging/openseadragon-viewerinputhook.min.js"></script>
+  <script type="text/javascript">
+    var items = [];
+    var srcs = [];
+    {% for item in images_in_carpeta %}
+    items.push(["{{ item.nombre_del_archivo }}", "/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"]);
+      srcs.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
+    {% endfor %}
+    var viewer = OpenSeadragon({
+      id: "openseadragon2",
+      crossOriginPolicy: 'Anonymous',
+      collectionMode: true,
+      collectionRows: 1,
+      showNavigationControl: false
+    });
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+
+  var images = [];
+  for (var i = 0; i < srcs.length; i++) {
+    viewer.addTiledImage({
+      tileSource: srcs[i],
+      success: function (event) {
+        images.push(event.item);
+      }
+  });
+}
+
+addLinkOverlays()
+
+async function addLinkOverlays() {
+  // Wait until OSD is finished arranging the images so that the coordinates are accurate.
+  await sleep(2000);
+
+  for (var i = 0; i < images.length; i++) {
+    addOneLinkOverlay(images[i], items[i][1]);
+  }
+  viewer.viewport.goHome();
+}
+
+function addOneLinkOverlay(image, link) {
+    var imageRect = image.getBounds();
+    var rect = new OpenSeadragon.Rect(imageRect.x, imageRect.y, 0.05, 0.05);
+
+    var buttonElement = document.createElement("a");
+    var imgElement = document.createElement("img");
+    imgElement.src = '{% static 'edit_button.png' %}';
+    imgElement.href = link;
+    buttonElement.appendChild(imgElement);
+    //buttonElement.className = "highlight";
+    viewer.addOverlay(buttonElement, rect, OpenSeadragon.OverlayPlacement.CENTER);
+
+    viewer.addViewerInputHook({
+        hooks: [{
+            tracker: "viewer",
+            handler: "clickHandler",
+            hookHandler: function (event) {
+              event.preventDefaultAction = true;
+              var pos = viewer.viewport.viewerElementToViewportCoordinates(event.position);
+              if (isPointInsideRect(pos, rect.clone())) {
+                  window.location.href = link;
+              }
+            },
+        }]
+    });
+}
+
+
+function isPointInsideRect(point, rect) {
+    return point.x > rect.x && point.x < rect.x + rect.width && point.y > rect.y && point.y < rect.y + rect.height;
+}
+</script>
+</div>
 {% else %}
 <p>{% trans "Ningún documento con ese nombre de archivo" %}</p>
 {% endif %}

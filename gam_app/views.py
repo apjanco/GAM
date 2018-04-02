@@ -443,7 +443,8 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 		id = state.id
 		form = EditForm(initial={'texto_de_OCR':state.texto_de_OCR})
 		clipboard = PortapapelesForm(request.POST)
-		context  = {'state':state, 'form':form, 'clipboard':clipboard, 'id':id, 'previous':previous, 'next_one':next_one}		
+		images_in_carpeta = Imagen.objects.all().filter(caja=caja, legajo=legajo, carpeta=carpeta)
+		context  = {'state':state, 'form':form, 'clipboard':clipboard, 'id':id, 'previous':previous, 'next_one':next_one, 'images_in_carpeta': images_in_carpeta}		
 		return render(request, 'document_page.html', context)
 
 #carpeta view
@@ -470,7 +471,14 @@ def documento4(request, archivo, colección, caja, legajo, carpeta):
 		next_carpeta = carpeta_list[0]
 	carpeta_info = Caso.objects.filter(caja_no=caja, legajo_no=legajo, carpeta_no=carpeta)
 
-	context = {'state':state, 'location':location, 'previous_carpeta':previous_carpeta, 'next_carpeta':next_carpeta, 'carpeta_info':carpeta_info}
+	images_in_carpeta = Imagen.objects.all().filter(caja=caja, legajo=legajo, carpeta=carpeta)
+
+	context = {'state':state,
+                   'location':location,
+                   'previous_carpeta':previous_carpeta,
+                   'next_carpeta':next_carpeta,
+                   'carpeta_info':carpeta_info,
+                   'images_in_carpeta' : images_in_carpeta}
 	return render(request, 'all_documents_page.html', context)
 
 #legajo view

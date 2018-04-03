@@ -121,7 +121,7 @@ class Imagen(models.Model):
 	profesión = models.CharField(max_length=200, blank=True)
 	texto_de_OCR = RichTextField(blank=True)
 	notas = RichTextField(blank=True)
-	descripción = RichTextField(blank=True)
+	traducción = RichTextField(blank=True)
 	def __str__(self):
 		return self.localizacion_fisica
 

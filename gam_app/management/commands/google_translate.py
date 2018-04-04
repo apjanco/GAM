@@ -3,7 +3,7 @@
 #from datetime import datetime
 from django.core.management.base import BaseCommand, CommandError
 from gam_app.models import *
-#import googlieapiclient.discovery
+import googleapiclient.discovery
 from google.cloud import translate
 #import base64
 #import io
@@ -19,13 +19,18 @@ from gam_app.settings_secret import API_KEY
 
 def get_translation(rich_text):
 	translate_client = translate.Client()
-	translation = translate_client.translate(rich_text,target_language='en')
-	return translation
+	translation = translate_client.translate(rich_text,target_language='en',source_language='es')
+	return translation['translatedText']
 
 class Command(BaseCommand):
 	help = "Imports translations from the google translate API into the database"
 	def handle(self, *args, **options):
+		i = 0
 		for imagen in Imagen.objects.all():
-			texto = imagen.texto_de_OCR
-			imagen.traducción = get_translation(texto)
-			imagen.save()
+			if i%10 == 0:
+				print(i)
+			if not imagen.traducción:
+				texto = imagen.texto_de_OCR
+				imagen.traducción = get_translation(texto)
+				imagen.save()
+			i += 1

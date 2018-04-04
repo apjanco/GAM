@@ -427,7 +427,8 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 			next_one = pages_list[current+1].número_de_imagen
 		except:
 			next_one = pages_list[0].número_de_imagen
-
+		total = len(possible_pages)
+		current = current + 1
 		print('previous= ', previous)
 		print('next= ', next_one)
 		#next_one = pages_list[int(current)+1]
@@ -444,7 +445,7 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 		form = EditForm(initial={'texto_de_OCR':state.texto_de_OCR})
 		clipboard = PortapapelesForm(request.POST)
 		images_in_carpeta = Imagen.objects.all().filter(caja=caja, legajo=legajo, carpeta=carpeta)
-		context  = {'state':state, 'form':form, 'clipboard':clipboard, 'id':id, 'previous':previous, 'next_one':next_one, 'images_in_carpeta': images_in_carpeta}		
+		context  = {'state':state, 'form':form, 'clipboard':clipboard, 'id':id,'current':current,'total':total, 'previous':previous, 'next_one':next_one, 'images_in_carpeta': images_in_carpeta}		
 		return render(request, 'document_page.html', context)
 
 #carpeta view

@@ -28,7 +28,7 @@ class EditForm(forms.ModelForm):
     	fields = ['texto_de_OCR', 'nombre_del_archivo', 'persona','ubicación_geográfica','actividades_políticas','fecha_desaparicion','genero','manuscritos','status','notas']
     	model = Imagen
     	widgets = {
-    		'persona': autocomplete.ModelSelect2Multiple(url='autocompletar', forward=['nombre_de_la_persona']), 
+		'persona': autocomplete.ModelSelect2Multiple(url='autocompletar', forward=['nombre_de_la_persona']),
     		'ubicación_geográfica': autocomplete.ModelSelect2Multiple(url='autocompletar_lugar', forward=['nombre_del_lugar']),
     		'actividades_políticas': autocomplete.ModelSelect2Multiple(url='autocompletar_organización', forward=['nombre_de_la_organización']),
             'manuscritos': autocomplete.ModelSelect2Multiple(url='autocompletar_manuscrito')

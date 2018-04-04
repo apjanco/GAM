@@ -37,7 +37,7 @@
 > <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/">{% trans "Carpeta" %}: {{ state.carpeta }}</a>
 
 > <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ state.número_de_imagen }}/">{% trans "Número de imagen" %}: {{ state.número_de_imagen }}</a>
-
+({{ current}} {% trans "de" %} {{ total }})
 
 {% if previous %}
   <div class="col-sm-2">
@@ -116,25 +116,27 @@ body {
         showRotationControl: true,
     });
 </script>
-<h2 id="other-docs-h">Other documents in this folder</h2>
+<h3 id="other-docs-h">otros documentos en la carpeta {{ state.carpeta }}</h3>
 <div id="openseadragon2"></div>
 </div>
 <div class="column">
-   <ul id="tabs" class="nav nav-pills" data-tabs="tabs">
+   <ul id="tabs" class="nav nav-tabs nav-justified" data-tabs="tabs">
       <li class="pills tabs-small active"><a data-toggle="tab" href="#tab1-slug">
-         Texto</a>
+         {% trans "Texto" %}</a>
       </li>
       <li class="pills tabs-small"><a data-toggle="tab" href="#tab2-slug">
-         Metadata</a>
+         {% trans "Metadata" %}</a>
       </li>
       <li class="pills tabs-small"><a data-toggle="tab" href="#tab3-slug">
-         Notas</a>
+         {% trans "Carpeta" %} {{ state.carpeta }}</a>
       </li>
    </ul>
 
    <div class="tab-content text-left">
     <!-- Text -->
     <div id="tab1-slug" class="tab-pane active">
+      <p>{% trans "Estado de la transcripción" %}: {{ form.status }}<br></p>
+
       <form action="" method="post">
         {% csrf_token %}
 
@@ -160,32 +162,33 @@ body {
     <div id="tab2-slug" class="tab-pane">
       <div class="col-md-4">
       <input type="submit" value="{% trans "Guardar cambios" %}" /><br>
-      <p>{% trans "Persona(s)" %}:<br> {% for name in state.persona.all %}<a href="/persona/{{ name }}">{{ name }}</a><br></p>{% endfor %} {{ form.persona }} </p>
-      <a href="/admin/gam_app/persona/add/?_to_field=id&_popup=1" class="addlink">Añadir otro persona</a>
-      <p>{% trans "Lugar" %}:<br> {% for place in state.ubicación_geográfica.all %}<a href="/lugar/{{ place }}">{{ place }}</a><br></p>{% endfor %} {{ form.ubicación_geográfica }} </p>
-      <p>{% trans "Actividades políticas" %}:<br> {% for org in state.actividades_políticas.all %}<a href="/lugar/{{ org }}">{{ org }}</a><br></p>{% endfor %} {{ form.actividades_políticas }} </p>
-      <p>{% trans "Fecha desaparición" %}: {{ form.fecha_desaparicion }}<br></p>
-      <p>{% trans "Genero" %}: {{ form.genero }}<br></p>
-      <p>{% trans "Manuscrito" %}: {{ form.manuscritos }}<br></p>
-      <p>{% trans "Estado de la transcripción" %}: {{ form.status }}<br></p>
+      <p>{% trans "Item" %}: {{ form.manuscritos }}<br></p>
+      <p>{% trans "Persona(s)" %}:<br> {{ form.persona }}<br> </p>
+      <p>{% trans "Lugar" %}:<br>{{ form.ubicación_geográfica }} </p>
+      <p>{% trans "Organizaciones" %}:<br>{{ form.actividades_políticas }} </p>
+      <p>{% trans "Notas" %}:<br> {{ form.notas }}<br></p>
       </div>
 
 
 
     </div>
 
-    <!-- Notes -->
+    <!-- Carpeta -->
     <div id="tab3-slug" class="tab-pane">
        <input type="submit" value="{% trans "Guardar cambios" %}" /><br>
-       {{ form.notas }}
-       </form>
+     <div class="row">
+      <div class="col-md-4">{% trans "Titulo de la carpeta" %}: {{ carpeta_form.carpeta_titulo }}</div>
+      <div class="col-md-4">{% trans "Archivo" %}: {{ carpeta_form.archivo }}</div>
+      <div class="col-md-4">{% trans "Colección" %}: {{ carpeta_form.colección }}</div>
+    </div>   
+     
     </div>
    </div>
 
    <select class="helpme" multiple="multiple"></select>
 
-</div>
 
+</div>
 <script>
 var personas = [{% for p in state.persona.all %}"{{ p }}",{% endfor %}];
 

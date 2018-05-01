@@ -1,17 +1,18 @@
+import html
 from django.core.management.base import BaseCommand, CommandError
 from gam_app.models import Imagen 
+from django.utils.html import strip_tags
 
 
 class Command(BaseCommand):
-        help = "Importa datos de la base de datos GAM de Google Drive desde csv"
+        help = "This will save all of the image transcriptions to a txt file"
         def handle(self, *args, **options):
-                print ("**Importar base de datos a Django**")
+                print ("**Transcription2txt**")
                 
                 images = Imagen.objects.all()
                 text = ''
                 for image in images:
-                     text += image.texto_de_OCR
+                    text += strip_tags(html.unescape(image.texto_de_OCR))
 
-                with open('/tmp/gam_text.txt') as f:
+                with open('/tmp/gam_text.txt', 'w') as f:
                         f.write(text)
-                        f.save()

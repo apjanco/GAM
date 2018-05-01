@@ -7,7 +7,12 @@
 index/
 logs
 uwsgi_params
+
 gam_app/dzis
-gam_app/static
-gam_app/settings_secret.py
+gam_app/static/thumbnails
+gam_app/static/documents
+gam_app/static/*.png
+gam_app/static/openseadragon-flat-toolbar-icons
+
+archivo/settings_secret.py
 *.mo

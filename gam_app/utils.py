@@ -1,4 +1,5 @@
 from gam_app.models import *
+import googleapiclient.discovery
 
 def get_archivo_id(archivo):
 	try:
@@ -19,3 +20,15 @@ def get_colección_id(colección):
 	except:
 		colección_id = 1
 		return colección_id
+
+def get_entities(text, encoding='UTF32'):
+	body = { 'document': {'type': 'PLAIN_TEXT','content': text,}, 'encoding_type': encoding,}
+	
+	service = googleapiclient.discovery.build('language', 'v1')
+	
+	request = service.documents().analyzeEntities(body=body)
+	
+	response = request.execute()
+	#type = response['entities'][0]['type']
+
+	return response

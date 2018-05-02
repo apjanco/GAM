@@ -21,6 +21,9 @@ def get_colección_id(colección):
 		colección_id = 1
 		return colección_id
 
+#A function using the Google Natural Language API to identify entites (such as PERSON) in text.
+# may require $ export GOOGLE_APPLICATION_CREDENTIALS='/home/ajanco/DS-GAM-7fa5231f373f.json'
+#source: https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/language/api/analyze.py
 def get_entities(text, encoding='UTF32'):
 	body = { 'document': {'type': 'PLAIN_TEXT','content': text,}, 'encoding_type': encoding,}
 	

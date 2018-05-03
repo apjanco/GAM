@@ -1,42 +1,82 @@
 {% load staticfiles %}
 {% load i18n %}
 
-<header>
-<a href="/"><img src="{% static 'Logo_01.png' %}" height="15%" width="10%"/>     </a>
-</header>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container">
-          <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav" aria-expanded="false" aria-controls="navbarNav" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          
-        <div id="navbarNav" class="collapse navbar-collapse">
+<header class="qodef-page-header">
+        <div class="qodef-menu-area" >
+                    <div class="qodef-grid">
+              <form action="http://grupodeapoyomutuo.org.gt/" class="qodef-search-cover" method="get">
+    <div class="qodef-container">
+    <div class="qodef-container-inner clearfix">
+            <div class="qodef-form-holder-outer">
+        <div class="qodef-form-holder">
+          <div class="qodef-form-holder-inner">
+            <input type="text" placeholder="Search" name="s" class="qode_search_field" autocomplete="off" />
+            <div class="qodef-search-close">
+              <a href="#">
+                <i class="qodef-icon-font-awesome fa fa-times " ></i>             </a>
+            </div>
+          </div>
+        </div>
+      </div>
+          </div>
+  </div>
+  </form>            <div class="qodef-vertical-align-containers">
+                <div class="qodef-position-left">
+                    <div class="qodef-position-left-inner">
+                   
 
-          <ul class="nav navbar-nav">
-            <li><a href="{% url 'sobre' %}">{% trans "Sobre" %}</a></li>
-            <li><a href="/">{% trans "Buscar" %}</a></li>	
-            <li><a href="{% url 'explorar' %}">{% trans "Explorar" %}</a></li>
-            <li><a href="{% url 'portapapeles' %}">{% trans "Portapapeles" %}</a></li>
-            <li><a href="{% url 'caso' %}">{% trans "Casos" %}</a></li>
-            <li><a href="{% url 'all_texto' %}">{% trans "Sin imágenes" %}</a></li>
-          </ul>
-          <ul class="nav navbar-nav" style="float: right;">
+<div class="qodef-logo-wrapper">
+    <a href="/" style="height: 400px;">
+        <img class="qodef-normal-logo" src="{% static 'Logo_01.png' %}" alt="logo"/>
+        <img class="qodef-dark-logo" src="{% static 'Logo_01.png' %}" alt="dark logo"/>        <img class="qodef-light-logo" src="{% static 'Logo_01.png' %}" alt="light logo"/>    </a>
+</div>
+
+                    </div>
+                </div>
+                <div class="qodef-position-right">
+                    <div class="qodef-position-right-inner">
+                        
+<nav class="qodef-main-menu qodef-drop-down qodef-default-nav">
+    <ul id="menu-main-menu" class="clearfix">
+
+<li id="nav-menu-item-3282" class="menu-item menu-item-type-custom menu-item-object-custom  narrow"><a href="{% url 'sobre' %}" class=""><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon blank fa"></i></span><span class="item_text">{% trans "Sobre" %}</span></span><span class="plus"></span></span></a></li>
+
+<li id="nav-menu-item-3282" class="menu-item menu-item-type-custom menu-item-object-custom  narrow"><a href="/" class=""><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon blank fa"></i></span><span class="item_text">{% trans "Buscar" %}</span></span><span class="plus"></span></span></a></li>
+
+<li id="nav-menu-item-3276" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item anchor-item  narrow"><a href="{% url 'explorar' %}" class=" current "><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">{% trans "Explorar" %}</span></span><span class="plus"></span></span></a></li>
+
+
             {% if not user.is_authenticated %}
-            <li><a href="/cuentas/login/">{% trans "Iniciar sesión" %}</a></li>
+            <li id="nav-menu-item-3296" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item anchor-item  narrow"><a href="/cuentas/login/" class=" current "><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">{% trans "Iniciar sesión" %}</span></span><span class="plus"></span></span></a></li>
+            
             {% else %}
-            <li><a href="/cuentas/logout/">{% trans "Cerrar sesión" %}</a></li>
+            <li id="nav-menu-item-3226" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item anchor-item  narrow">
+              <a href="/cuentas/logout/" class=" current "><span class="item_outer">
+
+                <span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">{% trans "Cerrar sesión" %}</span></span><span class="plus"></span></span></a></li>
+            
             {% endif %} 
-            <li>
-              <form style="margin-top: 5px;" action="{% url 'set_language' %}" method="post">
+        <li>
+         
+              <form style="margin-top: 15px;" action="{% url 'set_language' %}" method="post">
                 {% get_current_language as LANG %}
                 {% csrf_token %}
                 <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}">
+  
                 <input name="language" type="hidden" value="{% if LANG == 'es' %}en{% else %}es{%endif %}">
-                <input class="btn" type="submit" value="{% if LANG == 'es' %}English{% else %}Español{% endif %}">
+  
+                <b><input style="background-color: transparent; border-color: #000000;" class="navbar-btn" type="submit" value="{% if LANG == 'es' %}English{% else %}Español{% endif %}"></b>
+
+  
+        
               </form>
-            </li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+           
+            </li>    
+        
+</ul></nav>
+
+        </div>
+
+</header>
+

@@ -14,7 +14,7 @@
 {% if user.is_authenticated %}
  
     <!--  url 'GAM:search' %} -->
-    <form id="searchers_form"  action="advanced_search_submit" method="GET">
+    <form id="searchers_form"  action="advanced_search_submit" method="GET" style="padding-top: 10px;">
        <div class="form-group" id="searchers">
           <div id="searcher1"></div>
        </div>
@@ -24,9 +24,9 @@
     
     <span> Agregar un término de búsqueda </span>
     <input type="hidden" id="searcher_counter" name="seacher_count" value="1">
-    <button type="button" id="OR_search" class="btn btn-primary">O</button>
-    <button type="button" id="AND_search" class="btn btn-primary">Y</button>
-    <button type="button" id="NOT_search" class="btn btn-primary">NO</button>
+    <button type="button" style="border-color: #000000;" id="OR_search" class="btn">O</button>
+    <button type="button" style="border-color: #000000;" id="AND_search" class="btn">Y</button>
+    <button type="button" style="border-color: #000000;" id="NOT_search" class="btn">NO</button>
     <script src="{% static 'gam_site/jquery.js' %}"></script>
     <script src="{% static 'gam_site/jquery-ui.js' %}"></script>
     <script src="{% static 'gam_site/jQDateRangeSlider-min.js' %}"></script>

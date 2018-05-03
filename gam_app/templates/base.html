@@ -33,12 +33,16 @@
   <link rel="stylesheet" href="{% static "css/custom.css" %}">
 
   {% block extra_static %}{% endblock %}
+
 </head>
-
 <body>
+  
+      {% include "navbar.html" %}
+   
   <div class="container">
-  {% include "navbar.html" %}
-
+<div class="col-lg">
   {% block content %}{% endblock %}
+    </div>
+</div>
   </div>
 </body>

@@ -39,9 +39,12 @@
                         
 <nav class="qodef-main-menu qodef-drop-down qodef-default-nav">
     <ul id="menu-main-menu" class="clearfix">
+{% if request.session.lang == "en" %}
+<li id="nav-menu-item-3282" class="menu-item menu-item-type-custom menu-item-object-custom  narrow"><a href="{% url 'about' %}" class=""><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon blank fa"></i></span><span class="item_text">{% trans "Sobre" %}</span></span><span class="plus"></span></span></a></li>
 
+{% else %}
 <li id="nav-menu-item-3282" class="menu-item menu-item-type-custom menu-item-object-custom  narrow"><a href="{% url 'sobre' %}" class=""><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon blank fa"></i></span><span class="item_text">{% trans "Sobre" %}</span></span><span class="plus"></span></span></a></li>
-
+{% endif %}
 <li id="nav-menu-item-3282" class="menu-item menu-item-type-custom menu-item-object-custom  narrow"><a href="/" class=""><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon blank fa"></i></span><span class="item_text">{% trans "Buscar" %}</span></span><span class="plus"></span></span></a></li>
 
 <li id="nav-menu-item-3276" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item anchor-item  narrow"><a href="{% url 'explorar' %}" class=" current "><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">{% trans "Explorar" %}</span></span><span class="plus"></span></span></a></li>

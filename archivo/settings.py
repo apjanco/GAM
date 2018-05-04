@@ -140,6 +140,7 @@ REGISTRATION_OPEN = True
 
 CKEDITOR_CONFIGS = {
     'default': {
+	'allowedContent' : True,
         'height': 600,
         'width': 600,
         'toolbar': 'Custom',

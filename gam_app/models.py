@@ -61,11 +61,12 @@ class Portapapeles(models.Model):
     usuario = models.ManyToManyField(User, blank=True)
     casos = models.ManyToManyField(Caso, blank=True)
     imágenes = models.ManyToManyField('Imagen', blank=True)
-    manuscrito = models.ManyToManyField('Manuscrito', blank=True)
+    manuscrito = models.ManyToManyField('Item', blank=True)
 
     def __str__(self):
        return self.nombre_del_portapapeles
 
+#Folder
 class Carpeta(models.Model):
     carpeta_titulo = models.CharField(max_length=200, blank=True)
     nombre_de_la_carpeta = models.CharField(max_length=200, blank=True)
@@ -111,7 +112,7 @@ class Imagen(models.Model):
     carpeta = models.CharField(max_length=200, blank=True)
     #note that image number is CharField given use of 001a and 001b.
     número_de_imagen = models.CharField(max_length=200, blank=True)
-    manuscritos = models.ManyToManyField('Manuscrito', blank=True)
+    manuscritos = models.ManyToManyField('Item', blank=True)
     fecha_desaparicion = models.CharField(max_length=200, blank=True)
     conteo_de_páginas = models.IntegerField(null=True, blank=True)
     número_de_víctimas = models.IntegerField(null=True, blank=True)
@@ -140,12 +141,12 @@ class Imagen(models.Model):
         return '/static/documents/' + self.nombre_del_archivo
 
 # This is an entity to link single-page images together as part of multi-page documents such as a pamphlet or book.
-class Manuscrito(models.Model):
-    nombre_del_manuscrito = models.CharField(max_length=200, null=True)
+class Item(models.Model):
+    nombre_del_item = models.CharField(max_length=200, null=True)
     imágenes = models.ManyToManyField('Imagen', blank=True)
 
     def __str__(self):
-       return self.nombre_del_manuscrito
+       return self.nombre_del_item
 
 # Transcriptions, these work with the machine readable text associated with an image.  The text is initially ocr'd with Google Vision.
 # When a user maker a correction, the previous version is saved here.

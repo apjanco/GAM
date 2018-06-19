@@ -18,7 +18,6 @@ import pyvips
 from archivo.settings_secret import API_KEY
 import re
 
-
 #ocr_text = 'testing ocr test'
 #This section changes the size of an image file if it is larger than 4MB
 #https://stackoverflow.com/questions/13407717/python-image-library-pil-how-to-compress-image-into-desired-file-size
@@ -176,13 +175,14 @@ class Command(BaseCommand):
                             #create the document in the db
                             Imagen.objects.update_or_create(
 	                        localizacion_fisica = physical_location,
-        	                archivo = archivo_id,
-                	        colección = collection_id,
+        	                archivo_id = archivo_id.pk,
+                	        colección_id = collection_id.pk,
                                 caja = box,
                                 legajo = bundle,
                                 carpeta = folder,
                                 número_de_imagen = image,
                                 texto_de_OCR = ocr_text,
+                                #defaults = {'caja': box, 'legajo': bundle, 'archivo_id': archivo_id.pk, 'colección_id': collection_id.pk, 'carpeta': folder, 'número_de_imagen': image, 'texto_de_OCR': ocr_text, }
                             )
 
                             #move jpg files to static
@@ -230,21 +230,24 @@ class Command(BaseCommand):
                                 letters = ''.join([i for i in image if not i.isdigit()])
                                 
                                 # Find the first entry for that letter in the same folder
-                                print('is this the problem?')
-                                folder_images = Imagen.objects.filter(archivo=archivo_id, colección=collection_id, caja=box, legajo=bundle, carpeta=folder).order_by('número_de_imagen')
+                                #print('Create list of images in the folder')
+                                folder_images = Imagen.objects.filter(archivo__id=archivo_id.pk, colección__id=collection_id.pk, caja=str(box), legajo=str(bundle), carpeta=str(folder)).order_by('número_de_imagen')
+                                #print('folder_images= ',folder_images)
                                 for image in folder_images:
                                     image_letters = ''.join([i for i in image.número_de_imagen if not i.isdigit()])
                                     image_numbers = ''.join([i for i in image.número_de_imagen if i.isdigit()])  
                                     
-                                    image_id = Imagen.objects.get(nombre_del_archivo= file)
-
+                                    image_id = Imagen.objects.get(localizacion_fisica= physical_location)
+                                    #print(image_id)
                                     # Folder images are sorted, so the first result with the same letter will be the item number.
                                     if letters == image_letters:
                                         
                                         Item.objects.update_or_create(
                                         nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+image_numbers,
-                                        imágenes = image_id,
                                         )
+
+                                        my_item = Item.objects.get(nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+image_numbers)
+                                        my_item.imágenes.add(image_id)
                                         # either of these should work, not sure which is better                                       
                                         #defaults= {'imágenes': image_id}
                                         #obj = Item.objects.get(nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+item_number,)
@@ -253,20 +256,23 @@ class Command(BaseCommand):
                                         #    obj.save()
                                     
                                     else:
-                                        #if this is the first time that the letter occurs in the folder
                                         Item.objects.update_or_create(
                                         nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+numbers,
-                                        imágenes = image_id,
                                         )
+
+                                        my_item = Item.objects.get(nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+numbers)
+                                        my_item.imágenes.add(image_id)
+                                        #if this is the first time that the letter occurs in the folder
                                         
                             # Otherwise create a single-image item
                             else:
-                                image_id = Imagen.objects.get(nombre_del_archivo= file).pk
+                                image_id = Imagen.objects.get(nombre_del_archivo= file)
 
                                 Item.objects.update_or_create(
                                 nombre_del_item = physical_location,
-                                imágenes = image_id,
                                 )
+                                my_item = Item.objects.get(nombre_del_item = physical_location)
+                                my_item.imágenes.add(image_id)
                 #what to do with METs file
                 #what is processing MCP file? 
 

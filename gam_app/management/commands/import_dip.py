@@ -16,6 +16,7 @@ from PIL import Image
 from shutil import copyfile
 import pyvips
 from gam_app.settings_secret import API_KEY
+import re
 
 
 #ocr_text = 'testing ocr test'
@@ -98,7 +99,6 @@ class Command(BaseCommand):
         help = "Imports data from an Archivematica DIP in tmp/DIP into the database"
         def handle(self, *args, **options):
                 print ("**Import DIP to Django**")
-
                 project_list = os.listdir('/tmp/DIP/') #change to '/tmp/DIP'
 
                 for project in project_list:
@@ -112,27 +112,6 @@ class Command(BaseCommand):
                 dip_name = project_list[int(dip)]
                 print("Let's import %s" % dip_name)
 
-                archive_choice = input("Archive -- Enter 1 for Archivo del GAM or enter name here: ") 
-
-                if archive_choice == '1':
-                    archivo_name = 'Archivo del GAM'
-
-                else:
-                    archivo_name = archive_choice 
-
-                collection_choice = input("Collection -- Enter 1 for desaparecidos, 2 for casos legales: ") 
-
-                if collection_choice == '1':
-                    collection = 'desaparecidos'
-
-                elif collection_choice == '2':
-                    collection = 'casos_legales'
-                    #TODO save legal files locally and not in object storage
-
-                else:
-                    collection = collection_choice
-
-
                 for file in os.listdir('/tmp/DIP/' + dip_name + '/objects/'):
                         #skip the csv file made for DIP upload
                         if file.split('.')[1] != 'jpg':
@@ -145,46 +124,47 @@ class Command(BaseCommand):
 
                             
 
-
+                
                             #send to vision for ocr
                             ocr_text = vision_ocr(dip_name,file)
-                            print('File: %s' % file)
-                            print('Text: %s' % ocr_text.decode('utf8'))
+                            #print('File: %s' % file)
+                            #print('Text: %s' % ocr_text.decode('utf8'))
                             
-                            
+                            # remove uuid
                             location = file.split('-')[-1]
+                            # remove .jpg
                             location = location.split('.')[0]
                             physical_location = location
                             #print(physical_location)
                             #print(location)
                             parts = location.split('_')
                             #print(parts)
-                            box = parts[0]
-                            bundle = parts[1]
-                            folder = parts[2]
-                            image = parts[3]
+                            archive = parts[0].lower()
+                            collection = parts[1].lower()
+                            box = parts[2]
+                            bundle = parts[3]
+                            folder = parts[4]
+                            image = parts[5]
 
-                            #url and thumbnail urls (valid after collectstatic)
-                            url = 'https://archivo.nyc3.digitaloceanspaces.com/static/documents/' + file
-                            thumbnail = 'https://archivo.nyc3.digitaloceanspaces.com/static/thumbnails/' + file
-                            try:
-                                archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name)
-                            except:
-                                Archivo.objects.update_or_create(nombre_del_archivo= archivo_name)
-                                archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name)
+                            if archive == 'gam':
 
-                            try:
-                                collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection)
-                            except:
-                                Colección.objects.update_or_create(nombre_de_la_colección= collection)
-                                collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection)
+                                archivo_id = Archivo.objects.get(nombre_del_archivo='Archivo del GAM').pk
+                            else:
+                                archivo_name = input("That archive does not exist, please enter a new archive name: ")
+                                Archivo.objects.get_or_create(nombre_del_archivo= archivo_name)
+                                archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name).pk
+                            
+                            if collection == 'des':
+                                collection_id = Colección.objects.get(nombre_de_la_colección='Desaparecidos').pk
+                            
+                            else:
+                                archivo_name = input("That collection does not exist, please enter a new archive name: ")
+                                Colección.objects.get_or_create(nombre_de_la_colección= collection)
+                                collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection).pk
 
                             #create the document in the db
                             Imagen.objects.update_or_create(
-                            nombre_del_archivo = file,
                             localizacion_fisica = physical_location,
-                            url = url,
-                            miniatura = thumbnail,
                             archivo = archivo_id,
                             colección = collection_id,
                             caja = box,
@@ -220,6 +200,60 @@ class Command(BaseCommand):
                             except:
                                 print("Noo! exception!")
                                 pass
+
+                            #If letter at end of filename
+
+                            '''
+                               image= gam_des_001_001_004_001a  item = gam_des_001_001_004_001
+                                      gam_des_001_001_004_002a         "
+                                      gam_des_001_001_004_003          gam_des_001_001_004_003
+                                      gam_des_001_001_004_004b         gam_des_001_001_004_004
+                                      gam_des_001_001_004_005b         "
+                                      gam_des_001_001_004_006b         "
+                            '''
+
+                            if re.search('[a-zA-Z]', image):
+                                #Separate the numbers and letters in the filename
+                                numbers = ''.join([i for i in image if i.isdigit()])
+                                letters = ''.join([i for i in image if not i.isdigit()])
+                                
+                                # Find the first entry for that letter in the same folder
+                                folder_images = Imagen.objects.filter(archivo=archivo_id, colección=collection_id, caja=box, legajo=bundle, carpeta=folder).order_by('número_de_imagen')
+                                for image in folder_images:
+                                    image_letters = ''.join([i for i in image.número_de_imagen if not i.isdigit()])
+                                    image_numbers = ''.join([i for i in image.número_de_imagen if i.isdigit()])  
+                                    
+                                    image_id = Imagen.objects.get(nombre_del_archivo= file).pk
+
+                                    # Folder images are sorted, so the first result with the same letter will be the item number.
+                                    if letters == image_letters:
+                                        
+                                        Item.objects.update_or_create(
+                                        nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+image_numbers,
+                                        defaults={'imágenes': image_id},
+                                        )
+                                        # either of these should work, not sure which is better                                       
+                                        #defaults= {'imágenes': image_id}
+                                        #obj = Item.objects.get(nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+item_number,)
+                                        #for key, value in defaults.items():
+                                        #    setattr(obj, key, value)
+                                        #    obj.save()
+                                    
+                                    else:
+                                        #if this is the first time that the letter occurs in the folder
+                                        Item.objects.update_or_create(
+                                        nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+numbers,
+                                        defaults={'imágenes': image_id},
+                                        )
+                                        
+                            # Otherwise create a single-image item
+                            else:
+                                image_id = Imagen.objects.get(nombre_del_archivo= file).pk
+
+                                Item.objects.update_or_create(
+                                nombre_del_item = physical_location,
+                                imágenes = image_id,
+                                )
                 #what to do with METs file
                 #what is processing MCP file? 
 

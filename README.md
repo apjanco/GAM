@@ -17,5 +17,15 @@
 - When you see a little green checkmark next to the bag name, the processing is complete.
 
 #
+TODO instructions for upload_dip script
 
+# The DIP is now on the server. 
+- Type `sudo su -`
+- Start the applications virtual enviornment by typing `cd /usr/local/lib/python-virtualenv/gam_env/`
+- Now type `source bin/activate`
+- or `source /usr/local/lib/python-virtualenv/gam_env/bin/activate`
+- Now move to the project directory: `/srv/GAM`
+-To activate the import script, type: `python manage.py import_dip`
+- Enter the number of the DIP you would like to import 
+- Cross your fingers 
  

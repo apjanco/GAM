@@ -15,7 +15,7 @@ from PIL import Image
 #s3 = boto3.resource('s3')
 from shutil import copyfile
 import pyvips
-from gam_app.settings_secret import API_KEY
+from archivo.settings_secret import API_KEY
 import re
 
 
@@ -127,6 +127,10 @@ class Command(BaseCommand):
                 
                             #send to vision for ocr
                             ocr_text = vision_ocr(dip_name,file)
+                            if ocr_text == None:
+                                ocr_text = ''
+                            else:
+                                ocr_text.decode('utf-8')
                             #print('File: %s' % file)
                             #print('Text: %s' % ocr_text.decode('utf8'))
                             
@@ -148,31 +152,39 @@ class Command(BaseCommand):
 
                             if archive == 'gam':
 
-                                archivo_id = Archivo.objects.get(nombre_del_archivo='Archivo del GAM').pk
+                                archivo_id = Archivo.objects.get(nombre_del_archivo='Archivo del GAM')
                             else:
                                 archivo_name = input("That archive does not exist, please enter a new archive name: ")
                                 Archivo.objects.get_or_create(nombre_del_archivo= archivo_name)
-                                archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name).pk
+                                archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name)
                             
                             if collection == 'des':
-                                collection_id = Colección.objects.get(nombre_de_la_colección='Desaparecidos').pk
+                                collection_id = Colección.objects.get(nombre_de_la_colección='Desaparecidos')
                             
                             else:
                                 archivo_name = input("That collection does not exist, please enter a new archive name: ")
                                 Colección.objects.get_or_create(nombre_de_la_colección= collection)
-                                collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection).pk
-
+                                collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection)
+                            print('I am at line 168')
+                            print('localizacion_fisica= ',physical_location)
+                            print('archivo= ',archivo_id.nombre_del_archivo)
+                            print('colección= ', collection_id.nombre_de_la_colección)
+                            print('caja= ', box)
+                            print('legajo= ', bundle)
+                            print('carpeta= ', folder)
+                            print('image= ', image)
                             #create the document in the db
                             Imagen.objects.update_or_create(
-                            localizacion_fisica = physical_location,
-                            archivo = archivo_id,
-                            colección = collection_id,
-                            caja = box,
-                            legajo = bundle,
-                            carpeta = folder,
-                            número_de_imagen = image,
-                            texto_de_OCR = ocr_text.decode('utf-8'),
+	                        localizacion_fisica = physical_location,
+        	                archivo = archivo_id,
+                	        colección = collection_id,
+                                caja = box,
+                                legajo = bundle,
+                                carpeta = folder,
+                                número_de_imagen = image,
+                                texto_de_OCR = ocr_text,
                             )
+
                             #move jpg files to static
                             #https://www.digitalocean.com/community/tutorials/how-to-set-up-object-storage-with-django
                             #https://boto3.readthedocs.io/en/latest/guide/migrations3.html#storing-data
@@ -218,19 +230,20 @@ class Command(BaseCommand):
                                 letters = ''.join([i for i in image if not i.isdigit()])
                                 
                                 # Find the first entry for that letter in the same folder
+                                print('is this the problem?')
                                 folder_images = Imagen.objects.filter(archivo=archivo_id, colección=collection_id, caja=box, legajo=bundle, carpeta=folder).order_by('número_de_imagen')
                                 for image in folder_images:
                                     image_letters = ''.join([i for i in image.número_de_imagen if not i.isdigit()])
                                     image_numbers = ''.join([i for i in image.número_de_imagen if i.isdigit()])  
                                     
-                                    image_id = Imagen.objects.get(nombre_del_archivo= file).pk
+                                    image_id = Imagen.objects.get(nombre_del_archivo= file)
 
                                     # Folder images are sorted, so the first result with the same letter will be the item number.
                                     if letters == image_letters:
                                         
                                         Item.objects.update_or_create(
                                         nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+image_numbers,
-                                        defaults={'imágenes': image_id},
+                                        imágenes = image_id,
                                         )
                                         # either of these should work, not sure which is better                                       
                                         #defaults= {'imágenes': image_id}
@@ -243,7 +256,7 @@ class Command(BaseCommand):
                                         #if this is the first time that the letter occurs in the folder
                                         Item.objects.update_or_create(
                                         nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+numbers,
-                                        defaults={'imágenes': image_id},
+                                        imágenes = image_id,
                                         )
                                         
                             # Otherwise create a single-image item

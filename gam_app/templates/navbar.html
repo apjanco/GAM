@@ -1,6 +1,6 @@
 {% load staticfiles %}
 {% load i18n %}
-
+{% get_current_language as LANGUAGE_CODE %}
 
 <header class="qodef-page-header">
         <div class="qodef-menu-area" >
@@ -39,9 +39,8 @@
                         
 <nav class="qodef-main-menu qodef-drop-down qodef-default-nav">
     <ul id="menu-main-menu" class="clearfix">
-{% if request.session.lang == "en" %}
+{% if LANGUAGE_CODE == 'en' %}
 <li id="nav-menu-item-3282" class="menu-item menu-item-type-custom menu-item-object-custom  narrow"><a href="{% url 'about' %}" class=""><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon blank fa"></i></span><span class="item_text">{% trans "Sobre" %}</span></span><span class="plus"></span></span></a></li>
-
 {% else %}
 <li id="nav-menu-item-3282" class="menu-item menu-item-type-custom menu-item-object-custom  narrow"><a href="{% url 'sobre' %}" class=""><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon blank fa"></i></span><span class="item_text">{% trans "Sobre" %}</span></span><span class="plus"></span></span></a></li>
 {% endif %}

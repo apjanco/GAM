@@ -27,6 +27,7 @@
 <script src="{% static "js/document_page.js" %}"></script>
 {% endblock %}
 
+
 {% block content %}
 {% if state %}
 
@@ -42,15 +43,18 @@
 {% if previous %}
   <div class="col-sm-2">
     <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ previous }}/"> &lt; Atrás :</a>
-{% endif %}
 
 {% if next_one %}
   <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ next_one }}/">Siguente &gt;</a>
-{% endif %}
-</div>
+  </div>
+      <input type="submit" value="{% trans "Salvar" %}" />
+      <p><a href="{{ state.get_image_url }}">URL de la imagen</a></p>
       <input type="hidden" value="clipboard" name="input" />
       <input type="hidden" value="{{ user }}" name="user" />
       <input type="hidden" value="{{ state.nombre_del_archivo }}" name="filename" />
+    </form>
+  </div>
+</div>
 <hr>
 
 <div class="row">
@@ -73,13 +77,17 @@
           {% trans "Texto" %}</a>
         </li>
         <li class="pills tabs-small"><a data-toggle="tab" href="#tab2-slug">
-          {% trans "Carpeta" %}</a>
+          {% trans "Metadata" %}</a>
+        </li>
+        <li class="pills tabs-small"><a data-toggle="tab" href="#tab3-slug">
+          {% trans "Carpeta" %} {{ state.carpeta }}</a>
         </li>
       </ul>
 
    <div class="tab-content text-left">
      <!-- Text -->
      <div id="tab1-slug" class="tab-pane active">
+       <p>{% trans "Estado de la transcripción" %}: {{ form.status }}<br></p>
 
        <!-- This form is never closed, but I can't close it because I don't know where it's
             supposed to be closed -->
@@ -87,7 +95,6 @@
          {% csrf_token %}
          {{ form.media }}
          <input type="submit" value="{% trans "Guardar cambios" %}" />
-         <p>{% trans "Estado de la transcripción" %}: {{ form.status }}<br></p>
          {{ form.texto_de_OCR }}
 
          <input type="hidden" value="{{ state.nombre_del_archivo }}" name="nombre_del_archivo" />
@@ -98,24 +105,31 @@
          <input type="hidden" value="{{ state.carpeta }}" name="carpeta" />
          <input type="hidden" value="{{ state.texto_de_OCR }}" name="old_text" />
          <input type="hidden" value="text_edit" name="input" />
-         {% trans "Notas" %}:<br> {{ form.notas }}
+    </div>
+
+    <!-- METADATA -->
+    <div id="tab2-slug" class="tab-pane">
+      <div class="col-md-4">
+        <input type="submit" value="{% trans "Guardar cambios" %}" /><br>
+        <p>{% trans "Notas" %}:<br> {{ form.notas }}<br></p>
+      </div>
     </div>
 
     <!-- Carpeta -->
-    <div id="tab2-slug" class="tab-pane">
-        <input type="submit" value="{% trans "Guardar cambios" %}" /><br>
-   
-         {% trans "Carpeta titulo" %}:<br> {{ carpeta_form.carpeta_titulo }} <br>
-         {% trans "Descripción" %}:<br> {{ carpeta_form.descripción }}
+    <div id="tab3-slug" class="tab-pane">
+      <input type="submit" value="{% trans "Guardar cambios" %}" /><br>
+      <div class="row">
+        <div class="col-md-4">{% trans "Titulo de la carpeta" %}: {{ carpeta_form.carpeta_titulo }}</div>
+        <div class="col-md-4">{% trans "Archivo" %}: {{ carpeta_form.archivo }}</div>
+        <div class="col-md-4">{% trans "Colección" %}: {{ carpeta_form.colección }}</div>
       </div>
     </div>
-  
+   </div>
    <select class="helpme" multiple="multiple"></select>
   </div>
   <div class="row">
 </div>
 {% else %}
   <p>{% trans "Ningún documento con ese nombre de archivo" %}</p>
-
 {% endif %}
 {% endblock %}

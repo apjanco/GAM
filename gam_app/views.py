@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
 from django.template import RequestContext
-from gam_app.forms import EditForm, SearchForm, PortapapelesForm
+from gam_app.forms import EditForm, SearchForm, PortapapelesForm, CarpetaForm
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.contrib.auth.models import User
@@ -323,6 +323,43 @@ def advanced_search_submit(request):
         context = {"failed" : True}
         return render(request, 'index.html', context)
 
+@login_required
+def procesamiento(request, archivo, colección, caja, legajo, carpeta):
+
+    state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
+    location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo, 'carpeta':carpeta}
+    possible_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo).order_by('carpeta')
+    carpeta_list = []
+
+    #make a list of the possible carpetas with index values
+    for index, page in enumerate(possible_carpeta):
+        if page.carpeta not in carpeta_list:
+            carpeta_list.append(page.carpeta)
+    for item in carpeta_list:
+        if item == carpeta:
+            current = item
+            print('current is',current)
+    #find index in list for current
+    index_current= carpeta_list.index(current)
+    previous_carpeta = carpeta_list[index_current-1]
+    try:
+        next_carpeta = carpeta_list[index_current+1]
+    except:
+        next_carpeta = carpeta_list[0]
+
+    carpeta_info = Caso.objects.filter(caja_no=caja, legajo_no=legajo, carpeta_no=carpeta)
+
+    images_in_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
+
+    context = {'state':state,
+                   'location':location,
+                   'previous_carpeta':previous_carpeta,
+                   'next_carpeta':next_carpeta,
+                   'carpeta_info':carpeta_info,
+                   'images_in_carpeta' : images_in_carpeta}
+    return render(request, 'procesamiento.html', context)
+
+
 #image view
 def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_imagen):
 
@@ -345,6 +382,9 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
                 old_text = request.POST.get('old_text', None)
                 time = datetime.datetime.now()
                 usuario_id = User.objects.get(username=request.user).pk
+                carpeta_titulo = request.POST.get('carpeta_titulo', None)
+                carpeta_descripción = request.POST.get('descripción', None)
+                print(carpeta_titulo, carpeta_descripción)
                 #save previous text
                 transcription = Transcrito(usuario_id=usuario_id, nombre_del_archivo=file, tiempo_modificado=time, texto_transcrito=old_text)
                 transcription.save()
@@ -357,61 +397,30 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
                 #save with the new data
                 image = Imagen.objects.get(nombre_del_archivo = file)
                 image.texto_de_OCR = texto_de_OCR
+                carpeta_query = Carpeta.objects.get(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta)
+                carpeta_query.carpeta_titulo =  carpeta_titulo
+                carpeta_query.descripción = carpeta_descripción
+                carpeta_query.save()
 
                 try:
-                    image.persona.add(persona)
+                    carpeta_form = CarpetaForm(initial={'descripción': carpeta_query.descripción,'carpeta_titulo':carpeta_query.carpeta_titulo})
                 except:
-                    pass
+                    carpeta_form = ''
 
-                try:
-                    image.ubicación_geográfica.add(lugar)
-                except:
-                    pass
-
-                try:
-                    image.actividades_políticas.add(actividades_políticas)
-                except:
-                    pass
 
                 image.save()
 
-                clipboard = PortapapelesForm(request.POST)
-
 
                 state = Imagen.objects.get(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta, número_de_imagen=número_de_imagen)
-                context  = {'state':state, 'form':edit_form, 'clipboard':clipboard}
+                context  = {'state':state, 'form':edit_form, 'carpeta_form':carpeta_form}
                 return render(request, 'document_page.html', context)
 
             else:
                 print(edit_form.errors)
 
-        if request.POST['input'] == 'clipboard':
-            clipboard = PortapapelesForm(request.POST)
-            if clipboard.is_valid():
-                response = dict(clipboard.data)
-                choice = response.get('list_name', None)
-                print('choice',choice)
-                clipboards = Portapapeles.objects.all()
-                print('clipboards',clipboards)
-                chosen = clipboards[int(choice[0])-1]
-                #print(chosen)
-                user = response.get('user', None)
-                file = response.get('filename', None)
-                print ('Clipboard!', dict(clipboard.data))
-                user_id = User.objects.get(username=user[0]).pk
-                clip = Portapapeles.objects.get(nombre_del_portapapeles=chosen, usuario=user_id)
-                clip.imágenes.add(Imagen.objects.get(nombre_del_archivo=file[0]).pk)
-                clip.save()
-
-                state = Imagen.objects.get(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta, número_de_imagen=número_de_imagen)
-                id = state.id
-                form = EditForm(initial={'texto_de_OCR':state.texto_de_OCR})
-
-                context  = {'state':state,'form':form,'clipboard':clipboard,'id':id}
-                return render(request, 'document_page.html', context)
-
     else:
         state = Imagen.objects.get(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta, número_de_imagen=número_de_imagen)
+        print(state.texto_de_OCR)
         #TODO add forward + backward buttons
         possible_pages = Imagen.objects.filter(archivo__nombre_del_archivo=state.archivo, colección__nombre_de_la_colección=state.colección, caja=state.caja, legajo=state.legajo, carpeta=state.carpeta).order_by('número_de_imagen')
         pages_list = []
@@ -443,9 +452,14 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 
         id = state.id
         form = EditForm(initial={'texto_de_OCR':state.texto_de_OCR})
-        clipboard = PortapapelesForm(request.POST)
         images_in_carpeta = Imagen.objects.all().filter(caja=caja, legajo=legajo, carpeta=carpeta)
-        context  = {'state':state, 'form':form, 'clipboard':clipboard, 'id':id,'current':current,'total':total, 'previous':previous, 'next_one':next_one, 'images_in_carpeta': images_in_carpeta}
+
+        carpeta_query = Carpeta.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta) 
+        try:
+            carpeta_form = CarpetaForm(initial={'descripción': carpeta_query[0].descripción,'carpeta_titulo':carpeta_query[0].carpeta_titulo})
+        except:
+            carpeta_form = ''
+        context  = {'carpeta_form':carpeta_form, 'state':state,'form':form,'id':id,'current':current,'total':total, 'previous':previous, 'next_one':next_one, 'images_in_carpeta': images_in_carpeta}
         return render(request, 'document_page.html', context)
 
 #carpeta view

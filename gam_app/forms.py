@@ -10,30 +10,26 @@ from django.core.files.storage import FileSystemStorage
 from gam_app.models import *
 
 
-		
-
 class EditForm(forms.ModelForm):
     texto_de_OCR = forms.CharField(widget=CKEditorWidget())
-    #persona = forms.ModelChoiceField(queryset=Persona.objects.all(), required=False)
-
-    #lugar = forms.ModelMultipleChoiceField(queryset=Lugar.objects.all())
+    #titulo_de_carpeta = forms.ModelMultipleChoiceField(queryset=Carpeta.objects.all())
+    #This is the notes field for the folder
     notas = forms.CharField(widget=CKEditorWidget(), required=False)
-    fecha_desaparicion = forms.DateField(initial=datetime.date.today, required=False)
-    CHOICES = [('HOMBRE','Hombre'), ('MUJER','Mujer'), ('OTRO','Otro')] 
-    genero = forms.ChoiceField(choices=CHOICES, required=False)
-   
+
     STATUS_CHOICES = [('NONE','Sin correcciones'),('IN','En progreso'),('DONE','Compitió'),('FINAL','Competido y verificado')]
     status = forms.ChoiceField(choices=STATUS_CHOICES, required=False)
     class Meta:
-    	fields = ['texto_de_OCR', 'nombre_del_archivo', 'persona','ubicación_geográfica','actividades_políticas','fecha_desaparicion','genero','manuscritos','status','notas']
-    	model = Imagen
-    	widgets = {
-		'persona': autocomplete.ModelSelect2Multiple(url='autocompletar', forward=['nombre_de_la_persona']),
-    		'ubicación_geográfica': autocomplete.ModelSelect2Multiple(url='autocompletar_lugar', forward=['nombre_del_lugar']),
-    		'actividades_políticas': autocomplete.ModelSelect2Multiple(url='autocompletar_organización', forward=['nombre_de_la_organización']),
-            'manuscritos': autocomplete.ModelSelect2Multiple(url='autocompletar_manuscrito')
-		}
-    	
+        fields = ['texto_de_OCR', 'nombre_del_archivo','manuscritos','status','notas',]
+        model = Imagen
+
+
+class CarpetaForm(forms.ModelForm):
+    class Meta:
+        fields = ['carpeta_titulo', 'descripción']
+        model = Carpeta
+        widgets = { 'carpeta_titulo': forms.TextInput(attrs= {'size': 84 }),
+                  }
+
 class SearchForm(forms.Form):
 	search = forms.CharField(label='search', max_length=100)
 

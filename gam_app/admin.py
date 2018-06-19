@@ -69,10 +69,10 @@ class ColecciónAdmin(admin.ModelAdmin):
 
 admin.site.register(Colección, ColecciónAdmin)
 
-class ManuscritoAdmin(admin.ModelAdmin):
+class ItemAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(Manuscrito, ManuscritoAdmin)
+admin.site.register(Item, ItemAdmin)
 
 class TranscritoAdmin(admin.ModelAdmin):
     pass

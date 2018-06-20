@@ -15,7 +15,7 @@
 - Find Job: Approve normalization > Approve
 - Job Upload DIP > Do not upload DIP 
 - When you see a little green checkmark next to the bag name, the processing is complete.
-
+- Find the DIP in the DIPstore.  Open the objects folder and manually inspect each image.  All images should be oriented vertically.  If some are horizontal, double-click on the image.  When you hover over the image, two arrow will appear at the bottom.  Use the buttons to change the orientation and ctrl-s to save. 
 #
 TODO instructions for upload_dip script
 

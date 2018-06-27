@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
 from django.template import RequestContext
-from gam_app.forms import EditForm, SearchForm, PortapapelesForm, CarpetaForm
+from gam_app.forms import EditForm, SearchForm, PortapapelesForm, CarpetaForm, PersonaForm
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.contrib.auth.models import User
@@ -45,6 +45,11 @@ def search(request, query):
         search = "Buscar..."
         form = SearchForm(initial={'search': search })
     return render(request, 'index.html', {'form':form})
+
+def necisita_transcripción(request):
+    state = Imagen.objects.all()
+    context = {'state':state}
+    return render(request, 'all_documents_page.html', context)
 
 def elasticsearch(request, query):
     search = Search(using=get_client(), index='gam')
@@ -350,8 +355,9 @@ def procesamiento(request, archivo, colección, caja, legajo, carpeta):
     carpeta_info = Caso.objects.filter(caja_no=caja, legajo_no=legajo, carpeta_no=carpeta)
 
     images_in_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
-
+    persona_form = PersonaForm()
     context = {'state':state,
+               'persona_form':persona_form,
                    'location':location,
                    'previous_carpeta':previous_carpeta,
                    'next_carpeta':next_carpeta,
@@ -409,10 +415,31 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
 
 
                 image.save()
-
-
                 state = Imagen.objects.get(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta, número_de_imagen=número_de_imagen)
-                context  = {'state':state, 'form':edit_form, 'carpeta_form':carpeta_form}
+                id = state.id
+                possible_pages = Imagen.objects.filter(archivo__nombre_del_archivo=state.archivo, colección__nombre_de_la_colección=state.colección, caja=state.caja, legajo=state.legajo, carpeta=state.carpeta).order_by('número_de_imagen')
+                pages_list = []
+                for index, page in enumerate(possible_pages):
+                    pages_list.append(page)
+
+                #print(index, page)
+                if page == state:
+                    print('current= ', page.número_de_imagen, index)
+                    current = int(index)
+                previous = pages_list[current-1].número_de_imagen
+                try:
+                    next_one = pages_list[current+1].número_de_imagen
+                except:
+                    next_one = pages_list[0].número_de_imagen
+                total = len(possible_pages)
+                current = current + 1
+                print('previous= ', previous)
+                print('next= ', next_one)
+                images_in_carpeta = Imagen.objects.all().filter(caja=caja, legajo=legajo, carpeta=carpeta)
+                #state = Imagen.objects.get(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta, número_de_imagen=número_de_imagen)
+                #context  = {'state':state, 'form':edit_form, 'carpeta_form':carpeta_form}
+                context  = {'carpeta_form':carpeta_form, 'state':state,'form':edit_form,'id':id,'current':current,'total':total, 'previous':previous, 'next_one':next_one, 'images_in_carpeta': images_in_carpeta}
+
                 return render(request, 'document_page.html', context)
 
             else:

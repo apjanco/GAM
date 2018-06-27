@@ -25,7 +25,9 @@ admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
 # Register your models here.
 class ImagenAdmin(admin.ModelAdmin):
-    pass
+    search_fields = [ 'localizacion_fisica', 'texto_de_OCR', ]
+    list_display = ['colección', 'caja', 'legajo', 'carpeta', 'número_de_imagen']
+    list_filter = ['persona']
 
 admin.site.register(Imagen, ImagenAdmin) 
 

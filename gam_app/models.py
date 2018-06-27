@@ -11,7 +11,7 @@ class Persona(models.Model):
     nombre = models.CharField(max_length=200, null=True)
     apellido_paterno = models.CharField(max_length=200, null=True)
     apellido_materno = models.CharField(max_length=200, null=True)
-    descripción = RichTextField(blank=True)
+    #descripción = RichTextField(blank=True)
 
     def __str__(self):
        return self.nombre_de_la_persona
@@ -75,7 +75,7 @@ class Carpeta(models.Model):
     caja = models.CharField(max_length=200, blank=True)
     legajo = models.CharField(max_length=200, blank=True)
     carpeta = models.CharField(max_length=200, blank=True)
-    descripción = RichTextField(blank=True)
+    descripción = RichTextField(blank=True, default='')
     descripción_generada_automaticamente = RichTextField(blank=True)
 
     def __str__(self):
@@ -85,7 +85,7 @@ class Carpeta(models.Model):
 class Colección(models.Model):
     archivo = models.ForeignKey('Archivo', on_delete=models.CASCADE)
     nombre_de_la_colección = models.CharField(max_length=200, blank=True)
-    descripción = RichTextField(blank=True)
+    descripción = RichTextField(blank=True, default='')
 
     def __str__(self):
        return self.nombre_de_la_colección
@@ -94,10 +94,16 @@ class Colección(models.Model):
 # The Internet Archive
 class Archivo(models.Model):
     nombre_del_archivo = models.CharField(max_length=200, blank=True)
-    descripción = RichTextField(blank=True)
+    descripción = RichTextField(blank=True, default='')
     def __str__(self):
        return self.nombre_del_archivo
 
+STATUS_CHOICES = (
+        ('NONE','Sin correcciones'),
+        ('IN','En progreso'),
+        ('DONE','Compitió'),
+        ('FINAL','Competido y verificado')
+)
 # This is the model for an image in the archive.  It's the core entity in the data model.
 class Imagen(models.Model):
     persona = models.ManyToManyField('Persona', blank=True)
@@ -105,8 +111,8 @@ class Imagen(models.Model):
     localizacion_fisica = models.CharField(max_length=200, blank=True)
     url = models.URLField(blank=True, null=True)
     miniatura = models.URLField(blank=True, null=True)
-    archivo = models.ForeignKey(Archivo, on_delete=models.CASCADE)
-    colección = models.ForeignKey(Colección, on_delete=models.CASCADE)
+    archivo = models.ForeignKey(Archivo, on_delete=models.CASCADE, default=1)
+    colección = models.ForeignKey(Colección, on_delete=models.CASCADE, default=1)
     caja = models.CharField(max_length=200, blank=True)
     legajo = models.CharField(max_length=200, blank=True)
     carpeta = models.CharField(max_length=200, blank=True)
@@ -129,6 +135,7 @@ class Imagen(models.Model):
     texto_de_OCR = RichTextField(blank=True)
     notas = RichTextField(blank=True)
     traducción = RichTextField(blank=True)
+    status = models.CharField(max_length= 20, choices=STATUS_CHOICES, default='NONE')
 
     def __str__(self):
         return self.localizacion_fisica

@@ -16,8 +16,8 @@ class EditForm(forms.ModelForm):
     #This is the notes field for the folder
     notas = forms.CharField(widget=CKEditorWidget(), required=False)
 
-    STATUS_CHOICES = [('NONE','Sin correcciones'),('IN','En progreso'),('DONE','Compitió'),('FINAL','Competido y verificado')]
-    status = forms.ChoiceField(choices=STATUS_CHOICES, required=False)
+    #STATUS_CHOICES = [('NONE','Sin correcciones'),('IN','En progreso'),('DONE','Compitió'),('FINAL','Competido y verificado')]
+    #status = forms.ChoiceField(choices=STATUS_CHOICES, required=False)
     class Meta:
         fields = ['texto_de_OCR', 'nombre_del_archivo','manuscritos','status','notas',]
         model = Imagen
@@ -43,3 +43,18 @@ for item in clipboards:
 class PortapapelesForm(forms.Form):
 	list_name = forms.ChoiceField(choices=CHOICES)
 
+def get_person_list():
+    return [model.nombre_de_la_persona for model in Persona.objects.all()]
+
+class PersonaForm(forms.ModelForm):
+    personas = autocomplete.Select2ListCreateChoiceField(
+        choice_list=get_person_list,
+        required=False,
+        widget=autocomplete.ListSelect2(url='autocompletar')
+    )
+    #personas = forms.ModelChoiceField(queryset=Persona.objects.all(), widget=autocomplete.ModelSelect2(url='autocompletar'))
+    class Meta:
+        fields = ( '__all__')
+        model = Persona
+     #   widgets = {
+     #       'personas': autocomplete.ModelSelect2(url='autocompletar') }

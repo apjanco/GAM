@@ -11,12 +11,39 @@ import pprint
 import shutil
 import subprocess
 from PIL import Image
-#import boto3
-#s3 = boto3.resource('s3')
 from shutil import copyfile
 import pyvips
 from archivo.settings_secret import API_KEY
 import re
+from pathlib import Path
+
+
+
+
+def clean_dzis():
+    '''This function fixes a peculiarity of the dzi making process for openseadragon.
+    '''
+    files = os.listdir('/srv/GAM/gam_app/dzis')
+    for file in files:
+        try:
+            if 'jpg' in file:
+                continue
+
+            elif 'files' in file:
+                front = file[:-6] + '.jpg_files'
+                check_existing = Path('/srv/GAM/gam_app/dzis/{}'.format(front))
+                if check_existing.exists():
+                    continue
+                else:
+                    os.rename('/srv/GAM/gam_app/dzis/{}'.format(file), '/srv/GAM/gam_app/dzis/{}'.format(front))
+
+            else:
+                new = file[:-3] + 'jpg.dzi'
+                os.rename('/srv/GAM/gam_app/dzis/{}'.format(file), '/srv/GAM/gam_app/dzis/{}'.format(new))
+        except:
+            print('exception')
+
+
 
 #ocr_text = 'testing ocr test'
 #This section changes the size of an image file if it is larger than 4MB
@@ -113,6 +140,8 @@ class Command(BaseCommand):
 
                 for file in os.listdir('/tmp/DIP/' + dip_name + '/objects/'):
                         #skip the csv file made for DIP upload
+                        #if file.split('.')[1] == 'txt':
+                        #    resumenes = file.read()
                         if file.split('.')[1] != 'jpg':
                                 pass
                         
@@ -125,11 +154,16 @@ class Command(BaseCommand):
 
                 
                             #send to vision for ocr
-                            ocr_text = vision_ocr(dip_name,file)
-                            if ocr_text == None:
-                                ocr_text = ''
-                            else:
-                                ocr_text.decode('utf-8')
+                            #try:
+                            #    ocr_text = vision_ocr(dip_name,file)
+                            #except:
+                            #    pass
+
+                            #if ocr_text == None:
+                            #    ocr_text = ''
+                            #else:
+                            #    ocr_text.decode('utf-8')
+                            ocr_text = ''
                             #print('File: %s' % file)
                             #print('Text: %s' % ocr_text.decode('utf8'))
                             
@@ -172,8 +206,20 @@ class Command(BaseCommand):
                             print('legajo= ', bundle)
                             print('carpeta= ', folder)
                             print('image= ', image)
+
+                            #if not already in db, create a folder entry (carpeta)
+                            Carpeta.objects.update_or_create(
+                                archivo_id = archivo_id.pk,
+                                colección_id = collection_id.pk,
+                                caja = box,
+                                legajo = bundle,
+                                carpeta = folder,
+                            ) 
+
+
                             #create the document in the db
                             Imagen.objects.update_or_create(
+                                nombre_del_archivo= file,
 	                        localizacion_fisica = physical_location,
         	                archivo_id = archivo_id.pk,
                 	        colección_id = collection_id.pk,
@@ -207,8 +253,8 @@ class Command(BaseCommand):
                                 print('file is: %s' % file)
                                 dzi_me = pyvips.Image.new_from_file(path)
                                 dzi_me.dzsave('/srv/GAM/gam_app/dzis/%s' % file) 
-                                os.system('mv /srv/GAM/gam_app/dzis/%s.dzi /srv/GAM/gam_app/dzis/%s.dzi ' % (file.split('.')[0], file))
-                                os.system('mv /srv/GAM/gam_app/dzis/%s_files /srv/GAM/gam_app/dzis/%s_files ' %  (file.split('.')[0], file))
+                                subprocess.call('mv /srv/GAM/gam_app/dzis/%s.dzi /srv/GAM/gam_app/dzis/%s.dzi' % (file.split('.')[0], file))
+                                subprocess.call('mv /srv/GAM/gam_app/dzis/%s_files /srv/GAM/gam_app/dzis/%s_files' %  (file.split('.')[0], file))
                             except:
                                 print("Noo! exception!")
                                 pass
@@ -266,7 +312,12 @@ class Command(BaseCommand):
                                         
                             # Otherwise create a single-image item
                             else:
-                                image_id = Imagen.objects.get(nombre_del_archivo= file)
+                                try:
+                                    image_id = Imagen.objects.get(nombre_del_archivo= file)
+                                except:
+                                    image_id = Imagen.objects.filter(nombre_del_archivo= file)
+                                    for image in image_id[1:]:
+                                        image.delete()
 
                                 Item.objects.update_or_create(
                                 nombre_del_item = physical_location,
@@ -275,6 +326,6 @@ class Command(BaseCommand):
                                 my_item.imágenes.add(image_id)
                 #what to do with METs file
                 #what is processing MCP file? 
-
+                clean_dzis()
 
 

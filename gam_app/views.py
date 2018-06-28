@@ -366,6 +366,8 @@ def procesamiento(request, archivo, colección, caja, legajo, carpeta):
     return render(request, 'procesamiento.html', context)
 
 
+
+
 #image view
 def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_imagen):
 
@@ -402,7 +404,10 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
                 manuscritos = request.POST.get('manuscripts', None)
                 #save with the new data
                 image = Imagen.objects.get(nombre_del_archivo = file)
-                image.texto_de_OCR = texto_de_OCR
+                try:
+                    image.texto_de_OCR = texto_de_OCR
+                except:
+                    image.text_de_OCR = texto_de_OCR
                 carpeta_query = Carpeta.objects.get(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta)
                 carpeta_query.carpeta_titulo =  carpeta_titulo
                 carpeta_query.descripción = carpeta_descripción
@@ -423,9 +428,9 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
                     pages_list.append(page)
 
                 #print(index, page)
-                if page == state:
-                    print('current= ', page.número_de_imagen, index)
-                    current = int(index)
+                    if page == state:
+                        print('current= ', page.número_de_imagen, index)
+                        current = int(index)
                 previous = pages_list[current-1].número_de_imagen
                 try:
                     next_one = pages_list[current+1].número_de_imagen

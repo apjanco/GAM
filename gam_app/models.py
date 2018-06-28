@@ -156,7 +156,7 @@ class Imagen(models.Model):
     texto_de_OCR = RichTextField(blank=True)
     notas = RichTextField(blank=True)
     traducción = RichTextField(blank=True)
-    status = models.CharField(max_length= 20, choices=STATUS_CHOICES, default='NONE')
+    status = models.CharField(max_length= 20, choices=STATUS_CHOICES)
 
     def __str__(self):
         return self.localizacion_fisica

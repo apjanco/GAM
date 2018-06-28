@@ -37,7 +37,7 @@ urlpatterns += i18n_patterns(
     path('autocompletar_lugar/', autocompletar_lugar.as_view(), name='autocompletar_lugar'),
     path('autocompletar_organización/', autocompletar_organización.as_view(), name='autocompletar_organización'),
     path('autocompletar_manuscrito/', autocompletar_manuscrito.as_view(), name='autocompletar_manuscrito'),
-
+    path('necisita_transcripción', views.necisita_transcripción, name='necisita_transcripción'),
     path('crear_usuario/', include('registration.backends.simple.urls')),
     path('file/<filename>', views.document, name='document'),
     path('editar/<filename>', views.document_edit, name='document_edit'),
@@ -45,6 +45,7 @@ urlpatterns += i18n_patterns(
     path('caso/', views.caso, name='caso'),
     path('advanced_search_submit/', views.advanced_search_submit, name='advanced-search-submit'),
     path('sobre/', flat_views.flatpage, {'url': '/es/sobre/'}, name='sobre'),
+    path('about/', flat_views.flatpage, {'url': '/en/about/'}, name='about'),
     path('documentos/', views.all_documents, name='all_documents'),
     path('portapapeles/<portapapeles>', views.espacio_de_trabajo, name='espacio_de_trabajo'),
     path('portapapeles/', views.portapapeles, name='portapapeles'),
@@ -53,6 +54,7 @@ urlpatterns += i18n_patterns(
     path('caso/<caso>', views.single_caso, name='single_caso'),
     path('lugar/<lugar>', views.lugar, name='lugar'),
     path('persona/<persona>', views.persona, name='persona'),
+    path('procesamiento/<archivo>/<colección>/<caja>/<legajo>/<carpeta>/', views.procesamiento, name='procesamiento'),
     #paths for physical location urls
     path('<archivo>/<colección>/<caja>/<legajo>/<carpeta>/<número_de_imagen>/', views.documento5, name='documento5'),
     path('<archivo>/<colección>/<caja>/<legajo>/<carpeta>/', views.documento4, name='documento4'),

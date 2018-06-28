@@ -81,6 +81,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'archivo.wsgi.application'
 
+SITE_ID = 1
 #from https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Authentication
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -145,9 +146,9 @@ CKEDITOR_CONFIGS = {
         'width': 600,
         'toolbar': 'Custom',
         'toolbar_Custom': [
-            ['Bold', 'Italic', 'Underline', 'SpecialChar'],
-            ['Copy','Styles', 'Format', 'Scayt'],
-            ['language','RemoveFormat', 'Source']
+            ['Bold', 'Italic', 'Underline'],
+            ['Copy','Styles'],
+            ['language','Source']
         ]
     }
 }

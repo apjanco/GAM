@@ -3,18 +3,36 @@ from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
 from django.db.models import DateTimeField
 from django.urls import reverse
-
+from django.contrib.sites.models import Site
 
 #This is a person.
 class Persona(models.Model):
     nombre_de_la_persona = models.CharField(max_length=200, null=True)
     nombre = models.CharField(max_length=200, null=True)
+    segundos_nombre = models.CharField(max_length=200, null=True)
     apellido_paterno = models.CharField(max_length=200, null=True)
     apellido_materno = models.CharField(max_length=200, null=True)
-    #descripción = RichTextField(blank=True)
+    fecha_de_nacimiento = models.CharField(max_length=200, null=True)
+    fecha_desaparicion = models.CharField(max_length=200, blank=True)
+    edad_en_el_momento = models.CharField(max_length=200, blank=True)
+    género = models.CharField(max_length=200, blank=True)
+    etnicidad = models.CharField(max_length=200, blank=True)
+    profesión = models.CharField(max_length=200, blank=True)
+    actividades_políticas = models.ManyToManyField('Organización', blank=True)
+    #relaciones = models.ManyToManyField('Relación', blank=True)
+    notas = RichTextField(blank=True)
 
     def __str__(self):
        return self.nombre_de_la_persona
+
+#relationships 
+class Relación(models.Model):
+    #personA = models.ManyToManyField(Persona, blank=True)
+    #personB = models.ManyToManyField(Persona, blank=True)
+    relationship = models.CharField(max_length=200, choices=(('s', 'esposa'),
+                                             ('c', 'niño'),
+                                             ('p', 'padre')),
+                                              default='s')
 
 #This is a place.
 class Lugar(models.Model):
@@ -75,6 +93,9 @@ class Carpeta(models.Model):
     caja = models.CharField(max_length=200, blank=True)
     legajo = models.CharField(max_length=200, blank=True)
     carpeta = models.CharField(max_length=200, blank=True)
+    número_de_víctimas = models.IntegerField(null=True, blank=True)
+    ubicación_geográfica = models.ManyToManyField('Lugar', blank=True)
+    tipo_de_violencia= models.CharField(max_length=200, blank=True)
     descripción = RichTextField(blank=True, default='')
     descripción_generada_automaticamente = RichTextField(blank=True)
 
@@ -151,6 +172,7 @@ class Imagen(models.Model):
 class Item(models.Model):
     nombre_del_item = models.CharField(max_length=200, null=True)
     imágenes = models.ManyToManyField('Imagen', blank=True)
+    sites = models.ManyToManyField(Site)
 
     def __str__(self):
        return self.nombre_del_item

@@ -43,18 +43,26 @@ for item in clipboards:
 class PortapapelesForm(forms.Form):
 	list_name = forms.ChoiceField(choices=CHOICES)
 
-def get_person_list():
-    return [model.nombre_de_la_persona for model in Persona.objects.all()]
+def get_choice_list():
+    return [Persona.nombre_de_la_persona for Persona in Persona.objects.all()]
+
+
+class PersonaAutoForm(forms.ModelForm):
+    nombre_de_la_persona = autocomplete.Select2ListCreateChoiceField(
+        choice_list=get_choice_list,
+        required=False,
+        widget=autocomplete.ListSelect2(url='persona_name_lookup')
+    )
+    class Meta:
+        fields = ['nombre_de_la_persona',]
+        model = Persona
 
 class PersonaForm(forms.ModelForm):
-    personas = autocomplete.Select2ListCreateChoiceField(
-        choice_list=get_person_list,
-        required=False,
-        widget=autocomplete.ListSelect2(url='autocompletar')
-    )
-    #personas = forms.ModelChoiceField(queryset=Persona.objects.all(), widget=autocomplete.ModelSelect2(url='autocompletar'))
+#    nombre_de_la_persona = autocomplete.Select2ListCreateChoiceField(
+#        choice_list=get_choice_list,
+#        required=False,
+#        widget=autocomplete.ListSelect2(url='persona_name_lookup')
+#    )
     class Meta:
-        fields = ( '__all__')
+        fields = ('__all__')
         model = Persona
-     #   widgets = {
-     #       'personas': autocomplete.ModelSelect2(url='autocompletar') }

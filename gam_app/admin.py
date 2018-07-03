@@ -2,12 +2,14 @@ from django.contrib import admin
 from gam_app.models import *
 from django.contrib.flatpages.models import FlatPage
 
+
 # Note: we are renaming the original Admin and Form as we import them!
 from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 from django.contrib.flatpages.admin import FlatpageForm as FlatpageFormOld
 
 from django import forms
 from ckeditor.widgets import CKEditorWidget
+from gam_app.forms import *
 
 class FlatpageForm(FlatpageFormOld):
     content = forms.CharField(widget=CKEditorWidget())
@@ -28,7 +30,6 @@ class ImagenAdmin(admin.ModelAdmin):
     search_fields = [ 'localizacion_fisica', 'texto_de_OCR', ]
     list_display = ['colección', 'caja', 'legajo', 'carpeta', 'número_de_imagen']
     list_filter = ['persona']
-
 admin.site.register(Imagen, ImagenAdmin) 
 
 class CarpetaAdmin(admin.ModelAdmin):
@@ -36,9 +37,10 @@ class CarpetaAdmin(admin.ModelAdmin):
 
 admin.site.register(Carpeta, CarpetaAdmin)
 
+
+
 class PersonaAdmin(admin.ModelAdmin):
     pass
-
 admin.site.register(Persona, PersonaAdmin) 
 
 class LugarAdmin(admin.ModelAdmin):

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load static %}
 {% load i18n %}
 
 {% block extra_static %}
@@ -9,6 +10,7 @@
 <script src="{% static "js/ckeditor.js" %}"></script>
 <script src="{% static "js/openseadragon.min.js" %}"></script>
 <script src="http://msalsbery.github.io/builds/openseadragonimaging/openseadragon-viewerinputhook.min.js"></script>
+
 {% endblock %}
 
 
@@ -71,6 +73,7 @@
 {% endif %}
 </div>
 
+
 <span>
    <img src={% static 'openseadragon-flat-toolbar-icons/images/zoomin_rest.png' %}   id='zoom-in' class='sea-icon'>
    <img src={% static 'openseadragon-flat-toolbar-icons/images/zoomout_rest.png' %}  id='zoom-out' class='sea-icon'>
@@ -110,7 +113,6 @@
        <form action="" method="post">
          {% csrf_token %}
          {{ form.media }}
-         <input type="submit" value="{% trans "Guardar cambios" %}" />
          <h4>{% trans "Personas en la Carpeta" %} {{ location.carpeta }}:</h4>
          <table>
          {% for persons in images_in_carpeta %}
@@ -118,9 +120,21 @@
             <td> {{ person }}</td>
          {% endfor %}{% endfor %}
          </table>
-       
+     <hr>         
+     <!-- persona_autocompletar -->
+     <div>
+       <form action="" method="post" target="_blank">
+         {% csrf_token %}
+         <table>
+         {{ persona_auto_form.as_table }}
+         </table>
+         {{ persona_auto_form.media }}
+
+         <input type="submit" />
+       </form>
+
+     </div>       
          <hr>
-       <!--  {{ persona_form }} -->
          <input type="hidden" value="{{ state.nombre_del_archivo }}" name="nombre_del_archivo" />
          <input type="hidden" value="{{ state.archivo }}" name="archivo" />
          <input type="hidden" value="{{ state.colección }}" name="colección" />
@@ -147,8 +161,7 @@
       </div>
     </div>
 
-
-
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
 <script src="http://msalsbery.github.io/builds/openseadragonimaging/openseadragon-viewerinputhook.min.js"></script>
 <script type="text/javascript">
 var items = [];
@@ -240,6 +253,8 @@ function isPointInsideRect(point, rect) {
 {% else %}
   <p>{% trans "Error" %}</p>
 {% endif %}
+
+
 
 
 {% endblock %}

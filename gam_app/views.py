@@ -1,10 +1,9 @@
-from django.shortcuts import render
 from .models import *
-from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
 from django.template import RequestContext
-from gam_app.forms import EditForm, SearchForm, PortapapelesForm, CarpetaForm, PersonaForm
+from gam_app.forms import EditForm, SearchForm, PortapapelesForm, CarpetaForm, PersonaAutoForm, PersonaForm
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.contrib.auth.models import User
@@ -15,6 +14,9 @@ from elasticsearch_django.models import SearchQuery
 #from elasticsearch_dsl import Search
 from dal import autocomplete
 
+#For CRUD
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 # Create your views here.
 
 def index(request):
@@ -189,12 +191,26 @@ def lugar(request, lugar):
     context = {'state':state}
     return render(request, 'all_documents_page.html', context)
 
+
+#For CRUD Persona
+class PersonaCreate(CreateView):
+    model = Persona
+    fields = '__all__'
+
+class PersonaUpdate(UpdateView):
+    model = Persona
+    fields = '__all__'
+
+class PersonaDelete(DeleteView):
+    model = Persona
+    success_url = reverse_lazy('persona')
+
 #These are the views for the autocomplete fields in document_page.html
 class autocompletar(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         #TODO Get working with user authentication
         #if not self.request.user.is_authenticated():
-    #        return Imagen.objects.none()
+        #    return Persona.objects.none() #Imagen.objects.none()
 
         qs = Persona.objects.all()
 
@@ -202,6 +218,19 @@ class autocompletar(autocomplete.Select2QuerySetView):
             qs = qs.filter(nombre_de_la_persona__icontains=self.q)
 
         return qs
+
+class PersonaNameLookup(autocomplete.Select2ListView):
+    def create(self, text):
+        return text
+
+    def get_list(self):
+        result_list = [model.nombre_de_la_persona for model in Persona.objects.all()]
+        if self.q:
+            data = Persona.objects.all().filter(nombre_de_la_persona__icontains=self.q)
+            result_list = [model.nombre_de_la_persona for model in data]
+        return result_list
+
+
 
 class autocompletar_lugar(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -330,41 +359,52 @@ def advanced_search_submit(request):
 
 @login_required
 def procesamiento(request, archivo, colección, caja, legajo, carpeta):
+    if request.method == 'POST':
+        form = PersonaAutoForm(request.POST)
+        print(request.POST)
+        person_name = request.POST.get('nombre_de_la_persona', None)
+        if form.is_valid():
+            persona = Persona.objects.get_or_create(nombre_de_la_persona=person_name)[0].pk
+            return redirect('/persona/{}/update/'.format(persona))
+        else:
+            print(form.errors)
+    else:
+        state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
+        location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo, 'carpeta':carpeta}
+        possible_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo).order_by('carpeta')
+        carpeta_list = []
 
-    state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
-    location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo, 'carpeta':carpeta}
-    possible_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo).order_by('carpeta')
-    carpeta_list = []
+        #make a list of the possible carpetas with index values
+        for index, page in enumerate(possible_carpeta):
+            if page.carpeta not in carpeta_list:
+                carpeta_list.append(page.carpeta)
+        for item in carpeta_list:
+            if item == carpeta:
+                current = item
+                print('current is',current)
 
-    #make a list of the possible carpetas with index values
-    for index, page in enumerate(possible_carpeta):
-        if page.carpeta not in carpeta_list:
-            carpeta_list.append(page.carpeta)
-    for item in carpeta_list:
-        if item == carpeta:
-            current = item
-            print('current is',current)
-    #find index in list for current
-    index_current= carpeta_list.index(current)
-    previous_carpeta = carpeta_list[index_current-1]
-    try:
-        next_carpeta = carpeta_list[index_current+1]
-    except:
-        next_carpeta = carpeta_list[0]
+	#find index in list for current
+        index_current= carpeta_list.index(current)
+        previous_carpeta = carpeta_list[index_current-1]
+        try:
+             next_carpeta = carpeta_list[index_current+1]
+        except:
+             next_carpeta = carpeta_list[0]
 
-    carpeta_info = Caso.objects.filter(caja_no=caja, legajo_no=legajo, carpeta_no=carpeta)
+        carpeta_info = Caso.objects.filter(caja_no=caja, legajo_no=legajo, carpeta_no=carpeta)
 
-    images_in_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
-    persona_form = PersonaForm()
-    context = {'state':state,
-               'persona_form':persona_form,
+        images_in_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
+        persona_form = PersonaForm()
+        persona_auto_form = PersonaAutoForm()
+        context = {'state':state,
+                   'persona_form':persona_form,
+                   'persona_auto_form':persona_auto_form,
                    'location':location,
                    'previous_carpeta':previous_carpeta,
                    'next_carpeta':next_carpeta,
                    'carpeta_info':carpeta_info,
                    'images_in_carpeta' : images_in_carpeta}
-    return render(request, 'procesamiento.html', context)
-
+        return render(request, 'procesamiento.html', context)
 
 
 

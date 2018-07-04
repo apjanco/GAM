@@ -46,7 +46,7 @@ class Command(BaseCommand):
                            carpeta_descripcion = {}
                            keys = []
                            for i in range(len(content)):
-                               if re.search('^[gam]', content[i]):
+                               if re.search('^gam_', content[i]):
                                    keys.append(i)
                            
                            for i in range(len(keys)):

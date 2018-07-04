@@ -326,38 +326,42 @@ class Command(BaseCommand):
                                 )
                                 my_item = Item.objects.get(nombre_del_item = physical_location)
                                 my_item.imágenes.add(image_id)
+                      
                        if file.split('.')[1] == 'txt':
-                           print('txt!')
-
-                           with open(file, encoding='ISO-8859-1') as fp:
+                           path = '/tmp/DIP/' + dip_name + '/objects/' + file
+                           with open(path, encoding='UTF-8') as fp:
                                content = fp.readlines()
                                content = [x.strip() for x in content]
 
                            # Gets rid of empty strings (white spaces in this case) from the list  
                            while '' in content:
                                content.remove('')
-  
                            # Dictionary containing bag name as key and bag date and description as value
                            carpeta_descripcion = {}
+                           keys = []
                            for i in range(len(content)):
-                               if re.search('[..._..._...]', content[i]):
-                               #if content[i][0:3] == 'gam':
-                                   carpeta_descripcion[content[i]] = content[i+1:i+3]
-                               else:
-                                   pass
-
-                           for carpeta in carpeta_descripcion:
                                
+                               if re.search('^\w{3}_\w{3}_\d{3}', content[i]):
+                                   keys.append(i)
+                           
+                           for i in range(len(keys)):
+                               try:
+                                   carpeta_descripcion[content[keys[i]]] = content[(keys[i]+1):keys[i+1]]
+                               except IndexError:
+                                   carpeta_descripcion[content[keys[i]]] = content[(keys[i]+1):]
+
+                           #print(carpeta_descripcion)
+                           for carpeta in carpeta_descripcion:
+                               print('[*]', carpeta)
                                parts = carpeta.split('_')
                                archive = parts[0].lower()
                                collection = parts[1].lower()
                                box = parts[2]
                                bundle = parts[3]
                                folder = parts[4]
-			       descripción = carpeta_descripcion[carpeta]
+                               descripción = carpeta_descripcion[carpeta]
                                descripción = '\n'.join(descripción)
-
-
+                               
                                if archive == 'gam':
                                    archivo_id = Archivo.objects.get(nombre_del_archivo='Archivo del GAM')
                                else:

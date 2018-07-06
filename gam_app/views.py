@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
 from django.template import RequestContext
-from gam_app.forms import EditForm, SearchForm, PortapapelesForm, CarpetaForm, PersonaAutoForm, PersonaForm
+from gam_app.forms import EditForm, SearchForm, PortapapelesForm, CarpetaForm, PersonaAutoForm, LugarAutoForm, OrganizacionAutoForm
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.contrib.auth.models import User
@@ -192,7 +192,7 @@ def lugar(request, lugar):
     return render(request, 'all_documents_page.html', context)
 
 
-#For CRUD Persona
+#For CRUDs
 class PersonaCreate(CreateView):
     model = Persona
     fields = '__all__'
@@ -205,20 +205,33 @@ class PersonaDelete(DeleteView):
     model = Persona
     success_url = reverse_lazy('persona')
 
+
+class LugarCreate(CreateView):
+    model = Lugar
+    fields = '__all__'
+
+class LugarUpdate(UpdateView):
+    model = Lugar
+    fields = '__all__'
+
+class LugarDelete(DeleteView):
+    model = Lugar
+    success_url = reverse_lazy('lugar')
+
+class OrganizacionCreate(CreateView):
+    model = Organización
+    fields = '__all__'
+
+class OrganizacionUpdate(UpdateView):
+    model = Organización
+    fields = '__all__'
+
+class OrganizacionDelete(DeleteView):
+    model = Organización
+    success_url = reverse_lazy('organizacion')
+
+
 #These are the views for the autocomplete fields in document_page.html
-class autocompletar(autocomplete.Select2QuerySetView):
-    def get_queryset(self):
-        #TODO Get working with user authentication
-        #if not self.request.user.is_authenticated():
-        #    return Persona.objects.none() #Imagen.objects.none()
-
-        qs = Persona.objects.all()
-
-        if self.q:
-            qs = qs.filter(nombre_de_la_persona__icontains=self.q)
-
-        return qs
-
 class PersonaNameLookup(autocomplete.Select2ListView):
     def create(self, text):
         return text
@@ -231,32 +244,29 @@ class PersonaNameLookup(autocomplete.Select2ListView):
         return result_list
 
 
+class LugarNameLookup(autocomplete.Select2ListView):
+    def create(self, text):
+        return text
 
-class autocompletar_lugar(autocomplete.Select2QuerySetView):
-    def get_queryset(self):
-        #TODO Get working with user authentication
-        #if not self.request.user.is_authenticated():
-    #        return Imagen.objects.none()
-
-        qs = Lugar.objects.all()
-
+    def get_list(self):
+        result_list = [model.nombre_del_lugar for model in Lugar.objects.all()]
         if self.q:
-            qs = qs.filter(nombre_del_lugar__icontains=self.q)
+            data = Lugar.objects.all().filter(nombre_del_lugar__icontains=self.q)
+            result_list = [model.nombre_del_lugar for model in data]
+        return result_list
 
-        return qs
 
-class autocompletar_organización(autocomplete.Select2QuerySetView):
-    def get_queryset(self):
-        #TODO Get working with user authentication
-        #if not self.request.user.is_authenticated():
-    #        return Imagen.objects.none()
+class OrganizacionNameLookup(autocomplete.Select2ListView):
+    def create(self, text):
+        return text
 
-        qs = Organización.objects.all()#.values_list('nombre_de_la_organización', flat=True)
-
+    def get_list(self):
+        result_list = [model.nombre_de_la_organización for model in Organización.objects.all()]
         if self.q:
-            qs = qs.filter(nombre_de_la_organización__icontains=self.q)
+            data = Organización.objects.all().filter(nombre_de_la_organización__icontains=self.q)
+            result_list = [model.nombre_de_la_organización for model in data]
+        return result_list
 
-        return qs
 
 class autocompletar_manuscrito(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -359,22 +369,6 @@ def advanced_search_submit(request):
 
 @login_required
 def procesamiento(request, archivo, colección, caja, legajo, carpeta):
-    '''
-    if request.method == 'POST':
-        persona_auto_form = PersonaAutoForm(request.POST)
-        person_name = request.POST.get('nombre_de_la_persona', None)
-
-        if persona_auto_form.is_valid():
-            persona = Persona.objects.get_or_create(nombre_de_la_persona=person_name)[0].pk
-            context += {'persona':persona}
-
-            return render(request, 'gam_app/persona_form.html', context)
-#            return redirect('/persona/{}/update/'.format(persona), target="_blank")
-#            return HttpResponseRedirect(reverse('persona_update',args=(persona,)))
-        else:
-            print(form.errors)
-    else:
-    '''
     state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
     location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo, 'carpeta':carpeta}
     possible_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo).order_by('carpeta')
@@ -401,8 +395,12 @@ def procesamiento(request, archivo, colección, caja, legajo, carpeta):
 
     images_in_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
     persona_auto_form = PersonaAutoForm()
+    lugar_auto_form = LugarAutoForm()
+    organizacion_auto_form = OrganizacionAutoForm()
     context = {'state':state,
                'persona_auto_form':persona_auto_form,
+               'lugar_auto_form':lugar_auto_form,
+               'organizacion_auto_form':organizacion_auto_form,
                'location':location,
                'previous_carpeta':previous_carpeta,
                'next_carpeta':next_carpeta,
@@ -410,21 +408,32 @@ def procesamiento(request, archivo, colección, caja, legajo, carpeta):
                'images_in_carpeta' : images_in_carpeta}
 
     if request.method == 'POST':
-        persona_auto_form = PersonaAutoForm(request.POST)
-        person_name = request.POST.get('nombre_de_la_persona', None)
-
-        if persona_auto_form.is_valid():
-            persona = Persona.objects.get_or_create(nombre_de_la_persona=person_name)[0].pk
-            context.update( {'persona':persona} )
-
-            return render(request, 'procesamiento.html', context)
+        if 'persona' in request.POST:
+            persona_auto_form = PersonaAutoForm(request.POST)
+            person_name = request.POST.get('nombre_de_la_persona', None)
+            if persona_auto_form.is_valid():
+                persona = Persona.objects.get_or_create(nombre_de_la_persona=person_name)[0].pk
+                context.update( {'persona':persona} )
 #            return redirect('/persona/{}/update/'.format(persona), target="_blank")
 #            return HttpResponseRedirect(reverse('persona_update',args=(persona,)))
+
+        elif 'lugar' in request.POST:
+            lugar_auto_form = LugarAutoForm(request.POST)
+            place_name = request.POST.get('nombre_del_lugar', None)
+            if lugar_auto_form.is_valid():
+                lugar = Lugar.objects.get_or_create(nombre_del_lugar=place_name)[0].pk
+                context.update( {'lugar':lugar} )
+
+        elif 'organizacion' in request.POST:
+            organizacion_auto_form = OrganizacionAutoForm(request.POST)
+            organization_name = request.POST.get('nombre_de_la_organización', None)
+            if organizacion_auto_form.is_valid():
+                organizacion = Organización.objects.get_or_create(nombre_de_la_organización=organization_name)[0].pk
+                context.update( {'organizacion':organizacion} )
         else:
             print(form.errors)
-    else:
 
-        return render(request, 'procesamiento.html', context)
+    return render(request, 'procesamiento.html', context)
 
 
 

@@ -36,8 +36,13 @@
   {% block extra_static %}{% endblock %}
 
 </head>
+
 {% if persona %}
 <body onload="myFunction()">
+{% elif lugar %}
+<body onload="myFunctionLugar()">
+{% elif organizacion %}
+<body onload="myFunctionOrganizacion()">
 {% else %}
 <body>
 {% endif %}

@@ -26,7 +26,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('registration.backends.hmac.urls')),
     path('i18n/', include('django.conf.urls.i18n')),
-    path(r'^autocompletar/$', autocompletar.as_view(), name='autocompletar'),
 ]
 
 urlpatterns += i18n_patterns(
@@ -35,11 +34,13 @@ urlpatterns += i18n_patterns(
     path('cuentas/', include('django.contrib.auth.urls')),
     path('persona/create/', PersonaCreate.as_view(), name='persona_create'),
     path('persona/<int:pk>/update/', PersonaUpdate.as_view(), name='persona_update'),
-    #path('autocompletar/', views.autocompletar, name='autocompletar'),
     path('personalookup/', PersonaNameLookup.as_view(), name='persona_name_lookup'),
-    path('autocompletar/', autocompletar.as_view(), name='autocompletar'),
-    path('autocompletar_lugar/', autocompletar_lugar.as_view(), name='autocompletar_lugar'),
-    path('autocompletar_organización/', autocompletar_organización.as_view(), name='autocompletar_organización'),
+    path('lugar/create/', LugarCreate.as_view(), name='lugar_create'),
+    path('lugar/<int:pk>/update/', LugarUpdate.as_view(), name='lugar_update'),
+    path('lugarlookup/', LugarNameLookup.as_view(), name='lugar_name_lookup'),
+    path('organizacion/create/', OrganizacionCreate.as_view(), name='organizacion_create'),
+    path('organizacion/<int:pk>/update/', OrganizacionUpdate.as_view(), name='organizacion_update'),
+    path('organizacionlookup/', OrganizacionNameLookup.as_view(), name='organizacion_name_lookup'),
     path('autocompletar_manuscrito/', autocompletar_manuscrito.as_view(), name='autocompletar_manuscrito'),
     path('necisita_transcripción', views.necisita_transcripción, name='necisita_transcripción'),
     path('crear_usuario/', include('registration.backends.simple.urls')),

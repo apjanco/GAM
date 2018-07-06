@@ -66,3 +66,33 @@ class PersonaForm(forms.ModelForm):
     class Meta:
         fields = ('__all__')
         model = Persona
+
+
+def get_choice_list_lugar():
+    return [Lugar.nombre_del_lugar for Lugar in Lugar.objects.all()]
+
+
+class LugarAutoForm(forms.ModelForm):
+    nombre_del_lugar = autocomplete.Select2ListCreateChoiceField(
+        choice_list=get_choice_list_lugar,
+        required=False,
+        widget=autocomplete.ListSelect2(url='lugar_name_lookup')
+    )
+    class Meta:
+        fields = ['nombre_del_lugar',]
+        model = Lugar
+
+
+def get_choice_list_organizacion():
+    return [Organización.nombre_de_la_organización for Organización in Organización.objects.all()]
+
+
+class OrganizacionAutoForm(forms.ModelForm):
+    nombre_de_la_organización = autocomplete.Select2ListCreateChoiceField(
+        choice_list=get_choice_list_organizacion,
+        required=False,
+        widget=autocomplete.ListSelect2(url='organizacion_name_lookup')
+    )
+    class Meta:
+        fields = ['nombre_de_la_organización',]
+        model = Organización

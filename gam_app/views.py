@@ -359,51 +359,71 @@ def advanced_search_submit(request):
 
 @login_required
 def procesamiento(request, archivo, colección, caja, legajo, carpeta):
+    '''
     if request.method == 'POST':
-        form = PersonaAutoForm(request.POST)
-        print(request.POST)
+        persona_auto_form = PersonaAutoForm(request.POST)
         person_name = request.POST.get('nombre_de_la_persona', None)
-        if form.is_valid():
+
+        if persona_auto_form.is_valid():
             persona = Persona.objects.get_or_create(nombre_de_la_persona=person_name)[0].pk
-            return redirect('/persona/{}/update/'.format(persona))
+            context += {'persona':persona}
+
+            return render(request, 'gam_app/persona_form.html', context)
+#            return redirect('/persona/{}/update/'.format(persona), target="_blank")
+#            return HttpResponseRedirect(reverse('persona_update',args=(persona,)))
         else:
             print(form.errors)
     else:
-        state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
-        location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo, 'carpeta':carpeta}
-        possible_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo).order_by('carpeta')
-        carpeta_list = []
+    '''
+    state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
+    location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo, 'carpeta':carpeta}
+    possible_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo).order_by('carpeta')
+    carpeta_list = []
 
-        #make a list of the possible carpetas with index values
-        for index, page in enumerate(possible_carpeta):
-            if page.carpeta not in carpeta_list:
-                carpeta_list.append(page.carpeta)
-        for item in carpeta_list:
-            if item == carpeta:
-                current = item
-                print('current is',current)
+    #make a list of the possible carpetas with index values
+    for index, page in enumerate(possible_carpeta):
+        if page.carpeta not in carpeta_list:
+            carpeta_list.append(page.carpeta)
+    for item in carpeta_list:
+        if item == carpeta:
+            current = item
+            print('current is',current)
 
-	#find index in list for current
-        index_current= carpeta_list.index(current)
-        previous_carpeta = carpeta_list[index_current-1]
-        try:
-             next_carpeta = carpeta_list[index_current+1]
-        except:
-             next_carpeta = carpeta_list[0]
+    #find index in list for current
+    index_current= carpeta_list.index(current)
+    previous_carpeta = carpeta_list[index_current-1]
+    try:
+        next_carpeta = carpeta_list[index_current+1]
+    except:
+        next_carpeta = carpeta_list[0]
 
-        carpeta_info = Caso.objects.filter(caja_no=caja, legajo_no=legajo, carpeta_no=carpeta)
+    carpeta_info = Caso.objects.filter(caja_no=caja, legajo_no=legajo, carpeta_no=carpeta)
 
-        images_in_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
-        persona_form = PersonaForm()
-        persona_auto_form = PersonaAutoForm()
-        context = {'state':state,
-                   'persona_form':persona_form,
-                   'persona_auto_form':persona_auto_form,
-                   'location':location,
-                   'previous_carpeta':previous_carpeta,
-                   'next_carpeta':next_carpeta,
-                   'carpeta_info':carpeta_info,
-                   'images_in_carpeta' : images_in_carpeta}
+    images_in_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
+    persona_auto_form = PersonaAutoForm()
+    context = {'state':state,
+               'persona_auto_form':persona_auto_form,
+               'location':location,
+               'previous_carpeta':previous_carpeta,
+               'next_carpeta':next_carpeta,
+               'carpeta_info':carpeta_info,
+               'images_in_carpeta' : images_in_carpeta}
+
+    if request.method == 'POST':
+        persona_auto_form = PersonaAutoForm(request.POST)
+        person_name = request.POST.get('nombre_de_la_persona', None)
+
+        if persona_auto_form.is_valid():
+            persona = Persona.objects.get_or_create(nombre_de_la_persona=person_name)[0].pk
+            context.update( {'persona':persona} )
+
+            return render(request, 'procesamiento.html', context)
+#            return redirect('/persona/{}/update/'.format(persona), target="_blank")
+#            return HttpResponseRedirect(reverse('persona_update',args=(persona,)))
+        else:
+            print(form.errors)
+    else:
+
         return render(request, 'procesamiento.html', context)
 
 

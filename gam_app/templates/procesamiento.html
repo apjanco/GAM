@@ -18,6 +18,9 @@
 
 {% block content %}
 
+
+
+
 <hr>
 {% if state %}
 <div>
@@ -123,17 +126,24 @@
      <hr>         
      <!-- persona_autocompletar -->
      <div>
-       <form action="" method="post" target="_blank">
+       <form action="" target="_blank"  method="post">
          {% csrf_token %}
          <table>
          {{ persona_auto_form.as_table }}
          </table>
          {{ persona_auto_form.media }}
 
-         <input type="submit" />
+         <input type="submit"/>
        </form>
-
-     </div>       
+       {% if persona %}
+         <script>
+         function myFunction() {
+             window.open("{% url 'persona_update' persona %}", "_blank", "location=yes,height=570,width=520,scrollbars=yes,status=yes");
+         }
+         </script>
+       {% endif %}
+     </div>
+       
          <hr>
          <input type="hidden" value="{{ state.nombre_del_archivo }}" name="nombre_del_archivo" />
          <input type="hidden" value="{{ state.archivo }}" name="archivo" />
@@ -164,6 +174,7 @@
 <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
 <script src="http://msalsbery.github.io/builds/openseadragonimaging/openseadragon-viewerinputhook.min.js"></script>
 <script type="text/javascript">
+
 var items = [];
 var srcs = [];
 {% for item in images_in_carpeta %}
@@ -245,6 +256,8 @@ function addOneLinkOverlay(image, link) {
 function isPointInsideRect(point, rect) {
     return point.x > rect.x && point.x < rect.x + rect.width && point.y > rect.y && point.y < rect.y + rect.height;
 }
+
+
 </script>
 
 
@@ -253,7 +266,6 @@ function isPointInsideRect(point, rect) {
 {% else %}
   <p>{% trans "Error" %}</p>
 {% endif %}
-
 
 
 

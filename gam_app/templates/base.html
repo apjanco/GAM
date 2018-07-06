@@ -36,7 +36,11 @@
   {% block extra_static %}{% endblock %}
 
 </head>
+{% if persona %}
+<body onload="myFunction()">
+{% else %}
 <body>
+{% endif %}
   
       {% include "navbar.html" %}
    

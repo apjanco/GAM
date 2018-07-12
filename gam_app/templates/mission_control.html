@@ -114,20 +114,6 @@ $(document).ready(function() {
             return true;
         }
     });
-
-    function makeCallback(typeString) {
-        function checkboxCallback() {
-            if (this.checked) {
-                checked.push(typeString);
-            } else {
-                var i = checked.indexOf(typeString);
-                checked.splice(i, 1);
-                console.log(checked);
-            }
-            table.draw();
-        }
-        return checkboxCallback;
-    }
 });
 
 </script>

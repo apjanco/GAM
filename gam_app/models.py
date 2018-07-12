@@ -29,13 +29,13 @@ class Persona(models.Model):
         return "/persona/%i/" % self.id
 
 #relationships 
-class Relación(models.Model):
+#class Relación(models.Model):
     #personA = models.ManyToManyField(Persona, blank=True)
     #personB = models.ManyToManyField(Persona, blank=True)
-    relationship = models.CharField(max_length=200, choices=(('s', 'esposa'),
-                                             ('c', 'niño'),
-                                             ('p', 'padre')),
-                                              default='s')
+ #   relationship = models.CharField(max_length=200, choices=(('s', 'esposa'),
+  #                                           ('c', 'niño'),
+   #                                          ('p', 'padre')),
+    #                                          default='s')
 
 #This is a place.
 class Lugar(models.Model):
@@ -109,6 +109,7 @@ ORGANIZATION_STATUS_CHOICES = (
 #Folder
 class Carpeta(models.Model):
     carpeta_titulo = models.CharField(max_length=200, blank=True)
+    personas = models.ManyToManyField('Persona', blank=True)
     nombre_de_la_carpeta = models.CharField(max_length=200, blank=True)
     archivo = models.ForeignKey('Archivo', on_delete=models.CASCADE)
     colección = models.ForeignKey('Colección', on_delete=models.CASCADE)
@@ -151,7 +152,7 @@ STATUS_CHOICES = (
 )
 # This is the model for an image in the archive.  It's the core entity in the data model.
 class Imagen(models.Model):
-    persona = models.ManyToManyField('Persona', blank=True)
+    #persona = models.ManyToManyField('Persona', blank=True)
     nombre_del_archivo = models.CharField(max_length=200, blank=True)
     localizacion_fisica = models.CharField(max_length=200, blank=True)
     url = models.URLField(blank=True, null=True)
@@ -180,7 +181,7 @@ class Imagen(models.Model):
     texto_de_OCR = RichTextField(blank=True)
     notas = RichTextField(blank=True)
     traducción = RichTextField(blank=True)
-    status = models.CharField(max_length= 20, choices=STATUS_CHOICES, default='NONE')
+    status = models.CharField(max_length= 20, choices=STATUS_CHOICES)
     bag_name = models.CharField(max_length=200, blank=True)
 
     def __str__(self):

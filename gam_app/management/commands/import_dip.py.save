@@ -23,7 +23,7 @@ from pathlib import Path
 def clean_dzis():
     '''This function fixes a peculiarity of the dzi making process for openseadragon.
     '''
-    files = os.listdir('/mnt/gam-dzis/')
+    files = os.listdir('/srv/GAM/gam_app/dzis')
     for file in files:
         try:
             if 'jpg' in file:
@@ -31,15 +31,15 @@ def clean_dzis():
 
             elif 'files' in file:
                 front = file[:-6] + '.jpg_files'
-                check_existing = Path('/mnt/gam-dzis/{}'.format(front))
+                check_existing = Path('/srv/GAM/gam_app/dzis/{}'.format(front))
                 if check_existing.exists():
                     continue
                 else:
-                    os.rename('/mnt/gam-dzis/{}'.format(file), '/mnt/gam-dzis/{}'.format(front))
+                    os.rename('/srv/GAM/gam_app/dzis/{}'.format(file), '/srv/GAM/gam_app/dzis/{}'.format(front))
 
             else:
                 new = file[:-3] + 'jpg.dzi'
-                os.rename('/mnt/gam-dzis/{}'.format(file), '/mnt/gam-dzis/{}'.format(new))
+                os.rename('/srv/GAM/gam_app/dzis/{}'.format(file), '/srv/GAM/gam_app/dzis/{}'.format(new))
         except:
             print('exception')
 
@@ -208,13 +208,13 @@ class Command(BaseCommand):
                             #print('image= ', image)
 
                             #if not already in db, create a folder entry (carpeta)
-                            #Carpeta.objects.update_or_create(
-                            #    archivo_id = archivo_id.pk,
-                            #    colección_id = collection_id.pk,
-                            #    caja = box,
-                            #    legajo = bundle,
-                            #    carpeta = folder,
-                            #)
+                            Carpeta.objects.update_or_create(
+                                archivo_id = archivo_id.pk,
+                                colección_id = collection_id.pk,
+                                caja = box,
+                                legajo = bundle,
+                                carpeta = folder,
+                            ) 
 
 
                             #create the document in the db
@@ -228,7 +228,6 @@ class Command(BaseCommand):
                                 carpeta = folder,
                                 número_de_imagen = image,
                                 texto_de_OCR = ocr_text,
-                                bag_name = dip_name,
                                 #defaults = {'caja': box, 'legajo': bundle, 'archivo_id': archivo_id.pk, 'colección_id': collection_id.pk, 'carpeta': folder, 'número_de_imagen': image, 'texto_de_OCR': ocr_text, }
                             )
 
@@ -253,7 +252,7 @@ class Command(BaseCommand):
                                 print('path is: %s' % path)
                                 print('file is: %s' % file)
                                 dzi_me = pyvips.Image.new_from_file(path)
-                                dzi_me.dzsave('/mnt/gam-dzis/%s' % file) 
+                                dzi_me.dzsave('/srv/GAM/gam_app/dzis/%s' % file) 
                                 #subprocess.call('mv /srv/GAM/gam_app/dzis/%s.dzi /srv/GAM/gam_app/dzis/%s.dzi' % (file.split('.')[0], file))
                                 #subprocess.call('mv /srv/GAM/gam_app/dzis/%s_files /srv/GAM/gam_app/dzis/%s_files' %  (file.split('.')[0], file))
                             except:
@@ -327,65 +326,55 @@ class Command(BaseCommand):
                                 )
                                 my_item = Item.objects.get(nombre_del_item = physical_location)
                                 my_item.imágenes.add(image_id)
-                      
-                        if file.split('.')[1] == 'txt':
-                           path = '/tmp/DIP/' + dip_name + '/objects/' + file
-                           with open(path, encoding='ISO-8859-1') as fp:
+                       if file.split('.')[1] == 'txt':
+                           print('txt!')
+
+                           with open('text_file.txt', encoding='ISO-8859-1') as fp:
                                content = fp.readlines()
                                content = [x.strip() for x in content]
 
                            # Gets rid of empty strings (white spaces in this case) from the list  
                            while '' in content:
                                content.remove('')
+  
                            # Dictionary containing bag name as key and bag date and description as value
                            carpeta_descripcion = {}
-                           keys = []
                            for i in range(len(content)):
-                               
-                               if re.search('^\w{3}_\w{3}_\d{3}', content[i]):
-                                   keys.append(i)
-                           
-                           for i in range(len(keys)):
-                               try:
-                                   carpeta_descripcion[content[keys[i]]] = content[(keys[i]+1):keys[i+1]]
-                               except IndexError:
-                                   carpeta_descripcion[content[keys[i]]] = content[(keys[i]+1):]
+                               carpeta_descripcion[content[i]] = content[i+1:i+3]
 
-                           #print(carpeta_descripcion)
-                           for carpeta in carpeta_descripcion:
-                               print('[*]', carpeta)
-                               parts = carpeta.split('_')
-                               archive = parts[0].lower()
-                               collection = parts[1].lower()
-                               box = parts[2]
-                               bundle = parts[3]
-                               folder = parts[4]
-                               descripción = carpeta_descripcion[carpeta]
-                               descripción = '\n'.join(descripción)
-                               
-                               if archive == 'gam':
-                                   archivo_id = Archivo.objects.get(nombre_del_archivo='Archivo del GAM')
-                               else:
-                                   archivo_name = input("That archive does not exist, please enter a new archive name: ")
-                                   Archivo.objects.get_or_create(nombre_del_archivo= archivo_name)
-                                   archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name)
 
-                               if collection == 'des':
-                                   collection_id = Colección.objects.get(nombre_de_la_colección='Desaparecidos')
+                           location = file.split('-')[-1]
+                           location = location.split('.')[0]
+                           parts = location.split('_')
+                           archive = parts[0].lower()
+                           collection = parts[1].lower()
+                           box = parts[2]
+                           bundle = parts[3]
+                           folder = parts[4]
 
-                               else:
-                                   archivo_name = input("That collection does not exist, please enter a new archive name: ")
-                                   Colección.objects.get_or_create(nombre_de_la_colección= collection)
-                                   collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection)
 
-                               Carpeta.objects.update_or_create(
-                                    archivo_id = archivo_id.pk,
-                                    colección_id = collection_id.pk,
-                                    caja = box,
-                                    legajo = bundle,
-                                    carpeta = folder,
-                                    descripción = descripción
-                               )
+                           if archive == 'gam':
+                               archivo_id = Archivo.objects.get(nombre_del_archivo='Archivo del GAM')
+                           else:
+                               archivo_name = input("That archive does not exist, please enter a new archive name: ")
+                               Archivo.objects.get_or_create(nombre_del_archivo= archivo_name)
+                               archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name)
+
+                           if collection == 'des':
+                               collection_id = Colección.objects.get(nombre_de_la_colección='Desaparecidos')
+
+                           else:
+                               archivo_name = input("That collection does not exist, please enter a new archive name: ")
+                               Colección.objects.get_or_create(nombre_de_la_colección= collection)
+                               collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection)
+
+                           Carpeta.objects.update_or_create(
+                                archivo_id = archivo_id.pk,
+                                colección_id = collection_id.pk,
+                                caja = box,
+                                legajo = bundle,
+                                carpeta = folder,
+                            )
                 #what to do with METs file
                 #what is processing MCP file? 
                 clean_dzis()

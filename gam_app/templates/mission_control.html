@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load static %}
+{% load i18n %}
+
+
+{% block extra_static %}
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<br>
+<h2>Mission Control </h2>
+<br>
+<ul id="myTab" class="nav nav-tabs nav-justified">
+  <li class="active"><a data-toggle="tab" href="#tab1-slug">
+    {% trans "One" %}</a>
+  </li>
+  <li><a data-toggle="tab" href="#tab2-slug">
+    {% trans "Two" %}</a>
+  </li>
+  <li><a data-toggle="tab" href="#tab3-slug">
+    {% trans "Three" %}</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+  <div id="tab1-slug" class="tab-pane fade in active">
+    <br>
+    <table class="resourceTable">
+      <thead>
+      <tr>
+        <th onclick="sortTable(0)">Bag</th>
+        <th onclick="sortTable(1)">Proccess</th>
+      </tr> 
+      </thead>
+      <tbody>
+      {% for bag in bags %}
+      <tr>
+        <td>{{ bag }}</td>
+        {% if bag in imported_bags %}
+          <td>yes</td>
+        {% else %}
+          <td>not yet</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div id="tab2-slug" class="tab-pane fade">
+    <br>
+    <table class="resourceTable">
+    <thead>
+      <tr>
+        <th>imagen</th>
+        <th>transcription status</th>
+        <th>translation status</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for image in imagen %}
+      <tr>
+        <td>{{ image.nombre_del_archivo}}</td>
+        <td>{{ image.status }}</td>
+        {% if image.traducción == '' %}
+          <td>not yet</td>
+        {% else %}
+          <td>yes</td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+  </div>
+
+
+  <div id="tab3-slug" class="tab-pane fade">
+    <br>
+    <table class="resourceTable">
+    <thead>
+      <tr>
+        <th>Carpeta</th>
+        <th>person status</th>
+        <th>place status</th>
+        <th>organization status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for folder in carpeta %}
+      <tr>
+        <td>{{ folder.archivo }}/{{ folder.colección }}</td>
+        <td>{{ folder.person_status }}</td>
+        <td>{{ folder.place_status }}</td>
+        <td>{{ folder.organization_status }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </div>
+
+</div>
+<script>
+$(document).ready(function() {
+    var table = $(".resourceTable").DataTable({ pageLength: 50 });
+    var checked = [];
+
+    /*  Inspired by stackoverflow.com/questions/30086341/  */
+    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        if (checked.length > 0) {
+            return checked.includes(data[3]);
+        } else {
+            return true;
+        }
+    });
+
+    function makeCallback(typeString) {
+        function checkboxCallback() {
+            if (this.checked) {
+                checked.push(typeString);
+            } else {
+                var i = checked.indexOf(typeString);
+                checked.splice(i, 1);
+                console.log(checked);
+            }
+            table.draw();
+        }
+        return checkboxCallback;
+    }
+});
+
+</script>
+{% endblock %}
+

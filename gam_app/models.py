@@ -25,6 +25,9 @@ class Persona(models.Model):
     def __str__(self):
        return self.nombre_de_la_persona
 
+    def get_absolute_url(self):
+        return "/persona/%i/" % self.id
+
 #relationships 
 class Relación(models.Model):
     #personA = models.ManyToManyField(Persona, blank=True)
@@ -84,6 +87,25 @@ class Portapapeles(models.Model):
     def __str__(self):
        return self.nombre_del_portapapeles
 
+
+PERSON_STATUS_CHOICES = (
+        ('NONE','Sin correcciones'),
+        ('IN','En progreso'),
+        ('DONE','Compitió'),
+        ('FINAL','Competido y verificado')
+)
+PLACE_STATUS_CHOICES = (
+        ('NONE','Sin correcciones'),
+        ('IN','En progreso'),
+        ('DONE','Compitió'),
+        ('FINAL','Competido y verificado')
+)
+ORGANIZATION_STATUS_CHOICES = (
+        ('NONE','Sin correcciones'),
+        ('IN','En progreso'),
+        ('DONE','Compitió'),
+        ('FINAL','Competido y verificado')
+)
 #Folder
 class Carpeta(models.Model):
     carpeta_titulo = models.CharField(max_length=200, blank=True)
@@ -98,7 +120,9 @@ class Carpeta(models.Model):
     tipo_de_violencia= models.CharField(max_length=200, blank=True)
     descripción = RichTextField(blank=True, default='')
     descripción_generada_automaticamente = RichTextField(blank=True)
-
+    person_status = models.CharField(max_length= 20, choices=PERSON_STATUS_CHOICES, default='NONE')
+    place_status = models.CharField(max_length= 20, choices=PLACE_STATUS_CHOICES, default='NONE')
+    organization_status = models.CharField(max_length= 20, choices=ORGANIZATION_STATUS_CHOICES, default='NONE')
     def __str__(self):
        return '%s/%s/%s' % (self.caja,self.legajo,self.carpeta)
 
@@ -156,10 +180,11 @@ class Imagen(models.Model):
     texto_de_OCR = RichTextField(blank=True)
     notas = RichTextField(blank=True)
     traducción = RichTextField(blank=True)
-    status = models.CharField(max_length= 20, choices=STATUS_CHOICES)
+    status = models.CharField(max_length= 20, choices=STATUS_CHOICES, default='NONE')
+    bag_name = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
-        return self.localizacion_fisica
+        return self.nombre_del_archivo
 
     def get_absolute_url(self):
         return reverse('documento5', args=[self.archivo, self.colección, self.caja, self.legajo,

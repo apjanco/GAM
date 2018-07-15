@@ -14,6 +14,9 @@ from elasticsearch_django.models import SearchQuery
 #from elasticsearch_dsl import Search
 from dal import autocomplete
 
+#For Mission Control
+from gam_app.tracking import getBags, getImportedBags
+
 #For CRUD
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -60,6 +63,26 @@ def elasticsearch(request, query):
         print(obj.search_score, obj.search_rank)
         context  = {'state':state}
     return render(request, 'all_documents_page.html', context)
+
+@login_required
+def mission_control(request):
+    #tab1
+    bags = getBags()
+    imported_bags = getImportedBags()
+
+    #tab2
+    imagen = Imagen.objects.all()
+
+    #tab3
+    carpeta = Carpeta.objects.all()
+
+    context = {'bags': bags,
+               'imported_bags': imported_bags,
+               'imagen': imagen,
+               'carpeta': carpeta,
+              }
+    return render(request, 'mission_control.html', context)
+
 
 @login_required
 def document(request, filename):

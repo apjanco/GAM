@@ -71,10 +71,10 @@ def mission_control(request):
     imported_bags = getImportedBags()
 
     #tab2
-    imagen = Imagen.objects.all()
+    imagen = Imagen.objects.all().order_by('localizacion_fisica')
 
     #tab3
-    carpeta = Carpeta.objects.all()
+    carpeta = Carpeta.objects.all().order_by('carpeta_titulo')
 
     context = {'bags': bags,
                'imported_bags': imported_bags,

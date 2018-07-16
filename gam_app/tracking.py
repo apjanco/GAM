@@ -14,10 +14,10 @@ def getBags():
 
         bags = []
         for thing in client.list_objects(Bucket='ds-gam')['Contents']:
-            if '.' in thing['Key']:
-                bags += [thing['Key'][:-4]]
+            if '.zip' in thing['Key']:
+                bags += [thing['Key'][:-4].replace('Bags/','')]
             else:
-                bags += [thing['Key']]
+                pass
         with open('/tmp/bag_temp.txt', 'w') as f:
             f.write(str(bags))
             f.close()
@@ -27,7 +27,7 @@ def getBags():
         with open('/tmp/bag_temp.txt', 'r') as f:
             bags = f.read()
             bags = ast.literal_eval(bags)
-        return bags
+        return sorted(bags)
 
 def getImportedBags():
     bags = []

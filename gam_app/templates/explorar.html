@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block extra_static %}
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script scr="//code.jquery.com/jquery-3.3.1.js"></script>
+
 <style>
 .sea-icon{
   height: 30px;
@@ -53,14 +57,18 @@
      </ul>
    </table>
 <br>
+
 <h3>Carpetas</h3>
-<table class="resource_table">
-  <tr>
-    <th>{% trans "Nombre" %}</th>
-    <th><div align="left">{% trans "Descripción" %}</div></th>
-  </tr>
-  <ul>
-{% for carpeta in carpetas %}
+<table class="resourceTable">
+  <thead>
+    <tr>
+      <th>{% trans "Nombre" %}</th>
+      <th><div align="left">{% trans "Descripción" %}</div></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for carpeta in carpetas %}
       <tr>
         <td><a href="{% url 'documento4' carpeta.archivo carpeta.colección carpeta.caja carpeta.legajo carpeta.carpeta %}">{{ carpeta.colección }} {{ carpeta.caja }}/{{carpeta.legajo }}/{{ carpeta.carpeta }}</a></td>
 	{% if carpeta.descripción %}
@@ -73,8 +81,8 @@
 	{% endif %}
       </tr>   
     {% endfor %}
-     </ul>
-   </table>
+  </tbody>
+</table>
 <hr>
 
 
@@ -86,4 +94,10 @@
 {% else %}
   <p>{% trans "Inicia sesión para ver este contenido" %}</p>
 {% endif %}
+
+<script>
+$(document).ready( function () {
+    $('.resourceTable').DataTable();
+} );
+</script>
 {% endblock %}

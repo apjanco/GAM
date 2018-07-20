@@ -12,17 +12,17 @@
 
 {% block content %}
 <br>
-<h2>Mission Control </h2>
+<h2>{% trans "Control de Misión" %}</h2>
 <br>
 <ul id="myTab" class="nav nav-tabs nav-justified">
   <li class="active"><a data-toggle="tab" href="#tab1-slug">
-    {% trans "One" %}</a>
+    {% trans "Bolsas" %}</a>
   </li>
   <li><a data-toggle="tab" href="#tab2-slug">
-    {% trans "Two" %}</a>
+    {% trans "Transcripción y traducción" %}</a>
   </li>
   <li><a data-toggle="tab" href="#tab3-slug">
-    {% trans "Three" %}</a>
+    {% trans "Procesamiento secundario" %}</a>
   </li>
 </ul>
 
@@ -34,16 +34,18 @@
       <tr>
         <th>Bag</th>
         <th class="select">Proccess</th>
+        <th>{% trans "número de bolso" %}</th>
+        <th>{% trans "status" %}</th>
       </tr> 
       </thead>
       <tbody>
       {% for bag in bags %}
       <tr>
-        <td>{{ bag }}</td>
+        <td>{{ bag|slice:"-5:" }}</td>
         {% if bag in imported_bags %}
-          <td>yes</td>
+          <td>{% trans "importado"%}</td>
         {% else %}
-          <td>not yet</td>
+          <td>{% trans "no importado"%}</td>
         {% endif %}
       </tr>
       {% endfor %}
@@ -64,12 +66,12 @@
     <tbody>
     {% for image in imagen %}
       <tr>
-        <td>{{ image.nombre_del_archivo}}</td>
+        <td><a target="_blank" href="{% url 'documento5' image.archivo image.colección image.caja image.legajo image.carpeta image.número_de_imagen %}">{{ image.localizacion_fisica }}</a></td>
         <td>{{ image.status }}</td>
         {% if image.traducción == '' %}
-          <td>not yet</td>
+          <td>{% trans "sin traducción" %}</td>
         {% else %}
-          <td>yes</td>
+          <td>{% trans "traducido" %}</td>
         {% endif %}
       </tr>
     {% endfor %}
@@ -84,15 +86,15 @@
     <thead>
       <tr>
         <th>Carpeta</th>
-        <th class="select">person status</th>
-        <th class="select">place status</th>
-        <th class="select">organization status</th>
+        <th class="select">{% trans "Registros de persona" %}</th>
+        <th class="select">{% trans "Registros de lugar" %}</th>
+        <th class="select">{% trans "Registros de organizaciones" %}</th>
       </tr>
     </thead>
     <tbody>
       {% for folder in carpeta %}
       <tr>
-        <td>{{ folder.archivo }}/{{ folder.colección }}</td>
+        <td><a target="_blank" href="{% url 'procesamiento' folder.archivo folder.colección folder.caja folder.legajo folder.carpeta %}">{{ folder.colección }}/{{ folder.caja }}/{{ folder.legajo }}/{{ folder.carpeta}}</a></td>
         <td>{{ folder.person_status }}</td>
         <td>{{ folder.place_status }}</td>
         <td>{{ folder.organization_status }}</td>

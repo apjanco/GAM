@@ -32,6 +32,7 @@ urlpatterns += i18n_patterns(
     path('', views.index, name='index'),
     path('buscar/', views.search, name='search'),
     path('cuentas/', include('django.contrib.auth.urls')),
+    path('control-de-misión/', views.mission_control, name='mission_control'),
     path('persona/create/', PersonaCreate.as_view(), name='persona_create'),
     path('persona/<int:pk>/update/', PersonaUpdate.as_view(), name='persona_update'),
     path('personalookup/', PersonaNameLookup.as_view(), name='persona_name_lookup'),

@@ -484,6 +484,7 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
                 usuario_id = User.objects.get(username=request.user).pk
                 carpeta_titulo = request.POST.get('carpeta_titulo', None)
                 carpeta_descripción = request.POST.get('descripción', None)
+                status = request.POST.get('status', None)
                 print(carpeta_titulo, carpeta_descripción)
                 #save previous text
                 transcription = Transcrito(usuario_id=usuario_id, nombre_del_archivo=file, tiempo_modificado=time, texto_transcrito=old_text)
@@ -510,7 +511,7 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
                 except:
                     carpeta_form = ''
 
-
+                image.status = status
                 image.save()
                 state = Imagen.objects.get(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta, número_de_imagen=número_de_imagen)
                 id = state.id

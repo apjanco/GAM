@@ -29,7 +29,7 @@ admin.site.register(FlatPage, FlatPageAdmin)
 class ImagenAdmin(admin.ModelAdmin):
     search_fields = [ 'localizacion_fisica', 'texto_de_OCR', ]
     list_display = ['colección', 'caja', 'legajo', 'carpeta', 'número_de_imagen']
-    list_filter = ['status']
+    list_filter = ['status', 'bag_name',]
 admin.site.register(Imagen, ImagenAdmin) 
 
 class CarpetaAdmin(admin.ModelAdmin):

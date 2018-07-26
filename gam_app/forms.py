@@ -11,7 +11,7 @@ from gam_app.models import *
 
 
 class EditForm(forms.ModelForm):
-    texto_de_OCR = forms.CharField(widget=CKEditorWidget())
+    texto_de_OCR = forms.CharField(widget=CKEditorWidget(), required=False)
     #titulo_de_carpeta = forms.ModelMultipleChoiceField(queryset=Carpeta.objects.all())
     #This is the notes field for the folder
     notas = forms.CharField(widget=CKEditorWidget(), required=False)

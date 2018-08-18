@@ -4,15 +4,15 @@ from django.contrib.auth.models import User
 from django.db.models import DateTimeField
 from django.urls import reverse
 from django.contrib.sites.models import Site
-
+from django.utils.html import format_html
 #This is a person.
 class Persona(models.Model):
     nombre_de_la_persona = models.CharField(max_length=200, null=True)
-    nombre = models.CharField(max_length=200, null=True)
-    segundos_nombre = models.CharField(max_length=200, null=True)
-    apellido_paterno = models.CharField(max_length=200, null=True)
-    apellido_materno = models.CharField(max_length=200, null=True)
-    fecha_de_nacimiento = models.CharField(max_length=200, null=True)
+    nombre = models.CharField(max_length=200, blank=True)
+    segundo = models.CharField(max_length=200, blank=True)
+    apellido_paterno = models.CharField(max_length=200, blank=True)
+    apellido_materno = models.CharField(max_length=200, blank=True)
+    fecha_de_nacimiento = models.CharField(max_length=200, blank=True)
     fecha_desaparicion = models.CharField(max_length=200, blank=True)
     edad_en_el_momento = models.CharField(max_length=200, blank=True)
     género = models.CharField(max_length=200, blank=True)
@@ -109,7 +109,8 @@ ORGANIZATION_STATUS_CHOICES = (
 #Folder
 class Carpeta(models.Model):
     carpeta_titulo = models.CharField(max_length=200, blank=True)
-    personas = models.ManyToManyField('Persona', blank=True)
+    persona = models.ManyToManyField('Persona', blank=True)
+    organización = models.ManyToManyField('Organización', blank=True) 
     nombre_de_la_carpeta = models.CharField(max_length=200, blank=True)
     archivo = models.ForeignKey('Archivo', on_delete=models.CASCADE)
     colección = models.ForeignKey('Colección', on_delete=models.CASCADE)
@@ -121,9 +122,9 @@ class Carpeta(models.Model):
     tipo_de_violencia= models.CharField(max_length=200, blank=True)
     descripción = RichTextField(blank=True, default='')
     descripción_generada_automaticamente = RichTextField(blank=True)
-    person_status = models.CharField(max_length= 20, choices=PERSON_STATUS_CHOICES, default='NONE')
-    place_status = models.CharField(max_length= 20, choices=PLACE_STATUS_CHOICES, default='NONE')
-    organization_status = models.CharField(max_length= 20, choices=ORGANIZATION_STATUS_CHOICES, default='NONE')
+    person_status = models.CharField(max_length= 20, choices=PERSON_STATUS_CHOICES)
+    place_status = models.CharField(max_length= 20, choices=PLACE_STATUS_CHOICES)
+    organization_status = models.CharField(max_length= 20, choices=ORGANIZATION_STATUS_CHOICES)
     def __str__(self):
        return '%s/%s/%s' % (self.caja,self.legajo,self.carpeta)
 
@@ -181,7 +182,7 @@ class Imagen(models.Model):
     texto_de_OCR = RichTextField(blank=True)
     notas = RichTextField(blank=True)
     traducción = RichTextField(blank=True)
-    status = models.CharField(max_length= 20, choices=STATUS_CHOICES)
+    status = models.CharField(max_length= 20, choices=STATUS_CHOICES, blank=True)
     bag_name = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
@@ -191,6 +192,10 @@ class Imagen(models.Model):
         return reverse('documento5', args=[self.archivo, self.colección, self.caja, self.legajo,
                                            self.carpeta, self.número_de_imagen])
 
+    def url(self):
+        link = reverse('documento5', args=[self.archivo, self.colección, self.caja, self.legajo,self.carpeta, self.número_de_imagen])
+        return format_html(u'<a target="_blank" href="{}">abierto</a>'.format(link))
+
     def get_image_url(self):
         return '/static/documents/' + self.nombre_del_archivo
 
@@ -198,7 +203,7 @@ class Imagen(models.Model):
 class Item(models.Model):
     nombre_del_item = models.CharField(max_length=200, null=True)
     imágenes = models.ManyToManyField('Imagen', blank=True)
-    sites = models.ManyToManyField(Site)
+    site = models.ManyToManyField(Site)
 
     def __str__(self):
        return self.nombre_del_item

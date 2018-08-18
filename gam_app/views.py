@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from gam_app import advanced_search
 from django.template import RequestContext
-from gam_app.forms import EditForm, SearchForm, PortapapelesForm, CarpetaForm, PersonaAutoForm, LugarAutoForm, OrganizacionAutoForm
+from gam_app.forms import EditForm, SearchForm, PortapapelesForm, CarpetaForm, PersonaAutoForm, LugarAutoForm, OrganizacionAutoForm, CarpetaPersonaForm
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.contrib.auth.models import User
@@ -396,6 +396,8 @@ def procesamiento(request, archivo, colección, caja, legajo, carpeta):
     location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo, 'carpeta':carpeta}
     possible_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo).order_by('carpeta')
     carpeta_list = []
+    current_carpeta = Carpeta.objects.get(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta)
+    carpeta_persona_form = CarpetaPersonaForm()
 
     #make a list of the possible carpetas with index values
     for index, page in enumerate(possible_carpeta):
@@ -417,7 +419,7 @@ def procesamiento(request, archivo, colección, caja, legajo, carpeta):
     carpeta_info = Caso.objects.filter(caja_no=caja, legajo_no=legajo, carpeta_no=carpeta)
 
     images_in_carpeta = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
-    persona_auto_form = PersonaAutoForm()
+    persona_auto_form = PersonaAutoForm(initial={'person_status': current_carpeta.person_status })
     lugar_auto_form = LugarAutoForm()
     organizacion_auto_form = OrganizacionAutoForm()
     context = {'state':state,
@@ -428,6 +430,8 @@ def procesamiento(request, archivo, colección, caja, legajo, carpeta):
                'previous_carpeta':previous_carpeta,
                'next_carpeta':next_carpeta,
                'carpeta_info':carpeta_info,
+               'current_carpeta':current_carpeta,
+               'carpeta_persona_form':carpeta_persona_form,
                'images_in_carpeta' : images_in_carpeta}
 
     if request.method == 'POST':
@@ -453,6 +457,15 @@ def procesamiento(request, archivo, colección, caja, legajo, carpeta):
             if organizacion_auto_form.is_valid():
                 organizacion = Organización.objects.get_or_create(nombre_de_la_organización=organization_name)[0].pk
                 context.update( {'organizacion':organizacion} )
+
+        elif 'carpeta_persona' in request.POST:
+            carpeta_persona_form = CarpetaPersonaForm(request.POST or None, initial={'person_status': current_carpeta.person_status }, instance = current_carpeta)
+            print(current_carpeta.person_status)
+            print(type(current_carpeta.person_status))
+
+            if carpeta_persona_form.is_valid():
+                carpeta_persona_form.save()
+
         else:
             print(form.errors)
 
@@ -469,6 +482,7 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
             if edit_form.is_valid():
                 print('this is the request',request)
                 texto_de_OCR = request.POST['texto_de_OCR']
+                print('*',texto_de_OCR)
                 file = request.POST.get('nombre_del_archivo', None)
                 persona = request.POST.get('persona', None)
                 print('here is the persona')

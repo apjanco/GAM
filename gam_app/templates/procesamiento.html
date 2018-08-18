@@ -120,7 +120,20 @@
             <td> {{ person }}</td>
          {% endfor %}{% endfor %}
          </table>
-     <hr>         
+     <hr> 
+
+     <!-- mission control -->        
+     <div>
+     {{ current_carpeta.carpeta_titulo }}
+     <form action="" method="post>
+       {% csrf_token %}
+       <table>
+       {{ carpeta_persona_form.as_table }}
+       </table>
+       <input type="submit" name="carpeta_persona"/>
+     </form>
+     </div>
+
      <!-- persona_autocompletar -->
      <div>
        <form action="" method="post">

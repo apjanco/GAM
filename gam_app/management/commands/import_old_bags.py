@@ -21,9 +21,9 @@ from pathlib import Path
 
 
 def clean_dzis():
-    """This function fixes a peculiarity of the dzi making process for openseadragon.
-    """
-    files = os.listdir('/mnt/dzis/')
+    '''This function fixes a peculiarity of the dzi making process for openseadragon.
+    '''
+    files = os.listdir('/mnt/gam-dzis/')
     for file in files:
         try:
             if 'jpg' in file:
@@ -31,15 +31,15 @@ def clean_dzis():
 
             elif 'files' in file:
                 front = file[:-6] + '.jpg_files'
-                check_existing = Path('/mnt/dzis/{}'.format(front))
+                check_existing = Path('/mnt/gam-dzis/{}'.format(front))
                 if check_existing.exists():
                     continue
                 else:
-                    os.rename('/mnt/dzis/{}'.format(file), '/mnt/dzis/{}'.format(front))
+                    os.rename('/mnt/gam-dzis/{}'.format(file), '/mnt/gam-dzis/{}'.format(front))
 
             else:
                 new = file[:-3] + 'jpg.dzi'
-                os.rename('/mnt/dzis/{}'.format(file), '/mnt/dzis/{}'.format(new))
+                os.rename('/mnt/gam-dzis/{}'.format(file), '/mnt/gam-dzis/{}'.format(new))
         except:
             print('exception')
 
@@ -120,15 +120,6 @@ def vision_ocr(dip_name,file):
                         #TODO write entire response to MongoDB
                         return text 
 
-def reformat_old_bag(dip_name):
-    """This is a function for re-importing bags that were created before the filenames were changed to include the archive and collection names."""
-    for file in os.listdir('/tmp/DIP/' + dip_name + '/objects/'):
-        filename = file.split('-')[-1]
-        filename = 'gam_des_' + filename
-        uuid = file.split('-')[:-1]
-        uuid = '-'.join(uuid)
-        rejoined = uuid + '-' + filename
-        os.rename('/tmp/DIP/{}/objects/{}'.format(dip_name, file), '/tmp/DIP/{}/objects/{}'.format(dip_name, rejoined))
 
 class Command(BaseCommand):
         help = "Imports data from an Archivematica DIP in tmp/DIP into the database"
@@ -172,7 +163,7 @@ class Command(BaseCommand):
                             #    ocr_text = ''
                             #else:
                             #    ocr_text.decode('utf-8')
-                            #ocr_text = ' '
+                            ocr_text = ' '
                             #print('File: %s' % file)
                             #print('Text: %s' % ocr_text.decode('utf8'))
                             
@@ -180,70 +171,33 @@ class Command(BaseCommand):
                             location = file.split('-')[-1]
                             # remove .jpg
                             location = location.split('.')[0]
-                            physical_location = location
+                           # physical_location = 'gam_des_' + location
                             #print(physical_location)
                             #print(location)
                             parts = location.split('_')
                             #print(parts)
-                            archive = parts[0].lower()
-                            collection = parts[1].lower()
-                            box = parts[2]
-                            bundle = parts[3]
-                            try:
-                               folder = parts[4]
-                            except IndexError:
-                                reformat_old_bag(dip_name)
-                                continue
-                            image = parts[5]
+                            #archive = parts[0].lower()
+                            #collection = parts[1].lower()
+                            box = parts[0]
+                            bundle = parts[1]
+                            folder = parts[2]
+                            image = parts[3]
 
-                            if archive == 'gam':
-                                archivo_id = Archivo.objects.get(nombre_del_archivo='Archivo del GAM')
-                            else:
-                                archivo_name = input("That archive does not exist, please enter a new archive name: ")
-                                Archivo.objects.get_or_create(nombre_del_archivo= archivo_name)
-                                archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name)
+
+                            archivo_id = Archivo.objects.get(nombre_del_archivo='Archivo del GAM')
                             
-                            if collection == 'des':
-                                #print(collection)
-                                collection_id = Colección.objects.get(nombre_de_la_colección='Desaparecidos')
-
-                            elif collection == 'nin':
-                                collection_id = Colección.objects.get(nombre_de_la_colección='Niñez Desparecida')
-
-                            else:
-                                collection_name = input("That collection does not exist, please enter a new collection name: ")
-                                Colección.objects.get_or_create(nombre_de_la_colección=collection_name)
-                                collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection_name)
-                            #print('I am at line 168')
-                            #print('localizacion_fisica= ',physical_location)
-                            #print('archivo= ',archivo_id.nombre_del_archivo)
-                            #print('colección= ', collection_id.nombre_de_la_colección)
-                            #print('caja= ', box)
-                            #print('legajo= ', bundle)
-                            #print('carpeta= ', folder)
-                            #print('image= ', image)
-
-                            #if not already in db, create a folder entry (carpeta)
-                            #Carpeta.objects.update_or_create(
-                            #    archivo_id = archivo_id.pk,
-                            #    colección_id = collection_id.pk,
-                            #    caja = box,
-                            #    legajo = bundle,
-                            #    carpeta = folder,
-                            #)
-
+                            collection_id = Colección.objects.get(nombre_de_la_colección='Desaparecidos')
 
                             #create the document in the db
                             Imagen.objects.update_or_create(
                                 nombre_del_archivo= file,
-	                        localizacion_fisica = physical_location,
+	                        #localizacion_fisica = physical_location,
         	                archivo_id = archivo_id.pk,
                 	        colección_id = collection_id.pk,
                                 caja = box,
                                 legajo = bundle,
                                 carpeta = folder,
                                 número_de_imagen = image,
-                                #texto_de_OCR = ocr_text,
                                 bag_name = dip_name,
                                 #defaults = {'caja': box, 'legajo': bundle, 'archivo_id': archivo_id.pk, 'colección_id': collection_id.pk, 'carpeta': folder, 'número_de_imagen': image, 'texto_de_OCR': ocr_text, }
                             )
@@ -252,28 +206,6 @@ class Command(BaseCommand):
                             #https://www.digitalocean.com/community/tutorials/how-to-set-up-object-storage-with-django
                             #https://boto3.readthedocs.io/en/latest/guide/migrations3.html#storing-data
                             #s3.Object('archivo', file).put(Body=open(path, 'rb'))
-                            copyfile(path, '/mnt/documents/%s' % file)
-                            #copyfile(path, '/mnt/dzis/documents/%s' % file)
-                            #move thumbnail to static folder
-                            parts = file.split('-')[:-1]
-                            uuid = ''
-                            for i in parts:
-                                uuid += i + '-'
-                            #print(uuid[:-1])
-                            thumbnail = '/tmp/DIP/' + dip_name + '/thumbnails/' + uuid[:-1] + '.jpg'
-
-                            copyfile(thumbnail,'/mnt/thumbnails/%s' % file)
-
-                            #create dzis for Openseadragon and move to static
-                            try:
-                                #print('path is: %s' % path)
-                                print('[*] %s' % file)
-                                dzi_me = pyvips.Image.new_from_file(path)
-                                dzi_me.dzsave('/mnt/dzis/%s' % file) 
-                                #subprocess.call('mv /srv/GAM/gam_app/dzis/%s.dzi /srv/GAM/gam_app/dzis/%s.dzi' % (file.split('.')[0], file))
-                                #subprocess.call('mv /srv/GAM/gam_app/dzis/%s_files /srv/GAM/gam_app/dzis/%s_files' %  (file.split('.')[0], file))
-                            except Exception as e:
-                                print(e)
                             #If letter at end of filename
 
                             '''
@@ -304,7 +236,7 @@ class Command(BaseCommand):
                                     if letters == image_letters:
                                         
                                         Item.objects.update_or_create(
-                                        nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+image_numbers,
+                                        nombre_del_item = box+'_'+bundle+'_'+folder+'_'+image_numbers,
                                         )
 
                                         my_item = Item.objects.get(nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+image_numbers)
@@ -386,8 +318,6 @@ class Command(BaseCommand):
 
                                if collection == 'des':
                                    collection_id = Colección.objects.get(nombre_de_la_colección='Desaparecidos')
-                               elif collection == 'nin':
-                                   collection_id = Colección.objects.get(nombre_de_la_colección='Niñez Desparecida')
 
                                else:
                                    archivo_name = input("That collection does not exist, please enter a new archive name: ")

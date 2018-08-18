@@ -33,8 +33,8 @@ class ImagenAdmin(admin.ModelAdmin):
 admin.site.register(Imagen, ImagenAdmin) 
 
 class CarpetaAdmin(admin.ModelAdmin):
-    pass
-
+    search_fields = [ 'carpeta_titulo', ]
+    list_filter = ['colección', 'caja', 'legajo', 'carpeta',]
 admin.site.register(Carpeta, CarpetaAdmin)
 
 

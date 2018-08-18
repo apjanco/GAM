@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.241.128.56']
+ALLOWED_HOSTS = ['192.241.128.56', 'archivogam.haverford.edu',]
 
 
 # Application definition
@@ -81,7 +81,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'archivo.wsgi.application'
 
-SITE_ID = 1
+SITE_ID = 2
 #from https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Authentication
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

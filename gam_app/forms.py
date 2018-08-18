@@ -96,3 +96,9 @@ class OrganizacionAutoForm(forms.ModelForm):
     class Meta:
         fields = ['nombre_de_la_organización',]
         model = Organización
+
+
+class CarpetaPersonaForm(forms.ModelForm):
+    class Meta:
+        fields = ['person_status',]
+        model = Carpeta

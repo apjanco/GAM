@@ -35,7 +35,7 @@
       <tr>
         <td> <a href="{% url 'documento0' archive.nombre_del_archivo %}">{{ archive.nombre_del_archivo }} </a></td>
        
-        <td><div align="left"> {{ archive.descripción|safe }} </div></td>
+        <td><div align="left"> {{ archive.descripción }} </div></td>
       
       </tr>   
     {% endfor %}
@@ -51,7 +51,7 @@
 {% for collection in collections %}
       <tr>
         <td> <a href="{% url 'documento1' collection.archivo__nombre_del_archivo collection.colección__nombre_de_la_colección %}">{{ collection.colección__nombre_de_la_colección }}</a></td>
-        <td><div align="left"> {{ collection.descripción|safe }} </div></td>
+        <td><div align="left"> {{ collection.descripción }} </div></td>
       </tr>   
     {% endfor %}
      </ul>
@@ -71,7 +71,7 @@
       <tr>
         <td><a href="{% url 'documento4' carpeta.archivo carpeta.colección carpeta.caja carpeta.legajo carpeta.carpeta %}">{{ carpeta.colección }} {{ carpeta.caja }}/{{carpeta.legajo }}/{{ carpeta.carpeta }}</a></td>
 	{% if carpeta.descripción %}
-	<td><div align="left"> {{ carpeta.descripción|safe }} </div></td>
+	<td><div align="left"> {{ carpeta.descripción }} </div></td>
 	{% elif carpeta.descripción_generada_automaticamente %}
 	<td><div align="left"> {{ carpeta.descripción_generada_automaticamente }} </div></td>
 	{% else %}

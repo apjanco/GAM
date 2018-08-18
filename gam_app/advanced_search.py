@@ -54,9 +54,7 @@ def advanced_search(request):
     q_time = time.time() - start
     print ("generating result_list took %s seconds" % q_time)
     print(result_list)
-    print("testo", Imagen.objects.filter(persona__nombre_de_la_persona__icontains="Manuel"))
-    for i in Imagen.objects.all():
-        print(i.persona.all())
+    #print("testo", Imagen.objects.filter(persona__nombre_de_la_persona__icontains="Manuel"))
     context = {'results' : result_list, 'search' : search_string, 'full_info' : request.GET["full_info"], 'num_results' : len(result_list)}
     return context
 
@@ -65,7 +63,8 @@ def make_query_part(search_string, field):
     print (field)
     if field == "Cualquier Campo":
         query_part = Q( 
-            Q(persona__nombre_de_la_persona__icontains=search_string) |
+            #Q(persona__nombre_de_la_persona__icontains=search_string) |
+            #Q(carpeta__descripción__icontains=search_string) |
             Q(ubicación_geográfica__nombre_del_lugar__icontains=search_string) |
             Q(género__icontains=search_string) |
             Q(etnicidad__icontains=search_string) |

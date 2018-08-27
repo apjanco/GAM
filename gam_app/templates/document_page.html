@@ -15,6 +15,7 @@
 <script>
   /* Some values that the JS needs that come from the server's database by way of Django. */
   var dziFile = "/dzi/{{ state.nombre_del_archivo }}.dzi";
+  // var dziFile = "https://gam-dzis.nyc3.digitaloceanspaces.com/{{ state.nombre_del_archivo }}.dzi";
   var personas = [{% for p in state.persona.all %}"{{ p }}",{% endfor %}];
   var items = [];
   var srcs = [];

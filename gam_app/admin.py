@@ -28,12 +28,12 @@ admin.site.register(FlatPage, FlatPageAdmin)
 # Register your models here.
 class ImagenAdmin(admin.ModelAdmin):
     search_fields = [ 'localizacion_fisica', 'texto_de_OCR', ]
-    list_display = ['colección', 'caja', 'legajo', 'carpeta', 'número_de_imagen','status','url']
+    list_display = ['localizacion_fisica','colección', 'caja', 'legajo', 'carpeta', 'número_de_imagen','status','url']
     list_filter = ['status', 'bag_name',]
 admin.site.register(Imagen, ImagenAdmin) 
 
 class CarpetaAdmin(admin.ModelAdmin):
-    search_fields = [ 'carpeta_titulo', ]
+    search_fields = [ 'carpeta_titulo','caja', 'legajo', 'carpeta', ]
     list_filter = ['colección', 'caja', 'legajo', 'carpeta',]
 admin.site.register(Carpeta, CarpetaAdmin)
 
@@ -74,7 +74,7 @@ class ColecciónAdmin(admin.ModelAdmin):
 admin.site.register(Colección, ColecciónAdmin)
 
 class ItemAdmin(admin.ModelAdmin):
-    pass
+    search_fields = [ 'nombre_del_item']
 
 admin.site.register(Item, ItemAdmin)
 

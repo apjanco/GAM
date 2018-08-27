@@ -35,3 +35,5 @@ def get_entities(text, encoding='UTF32'):
 	#type = response['entities'][0]['type']
 
 	return response
+
+

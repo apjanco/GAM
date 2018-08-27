@@ -5,7 +5,7 @@ from gam_app.models import *
 class Command(BaseCommand):
         help = "A little script for moving transcriptions"
         def handle(self, *args, **options):
-            images =  Imagen.objects.filter(bag_name='nov13_2017_bag5')
+            images =  Imagen.objects.filter(bag_name='jul04_2018_bag33')
             for image in images:
                 new = Imagen.objects.get(nombre_del_archivo = image)
                 print(new)

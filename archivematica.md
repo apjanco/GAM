@@ -6,7 +6,7 @@
 
 3. Start archivematicaVM, by double-clicking.  
 
-4. In Firefox, go to [archivogam.haverford.edu](http://archivogam.haverford.edu/en/control-de-misi%C3%B3n/).  You'll need to log in and click on mission control. Find if there are bags ready for import (marked 'no importado').
+4. In Firefox, go to <a href="http://archivogam.haverford.edu/en/control-de-misi%C3%B3n/" target="_blank">archivogam.haverford.edu/en/control-de-misi%C3%B3n/</a>.  You'll need to log in and click on mission control. Find if there are bags ready for import (marked 'no importado').
  
 5. Open the terminal. 
 

@@ -52,19 +52,17 @@
 
 23. Now `$ cd /srv/GAM` and type `$ python manage.py import_dip`.
 
-24. 
-## Transfer AIP and DIP to storage 
+24. Select the number next to the bag you'd like to import.  Keep in mind that the server only has 20GB of storage.  It is important to clear out bags once they're imported of you'll get an 'out of storage' message. 
 
+25.  Once the script completes, the files are now ready.  It is good practice to log in to admin and check that images from the bag you just imported are visible on the site. 
 
-Log in to gotita at 192.241.128.56 
-switch to root `sudo su -`
-activate the virtual env `source /usr/local/lib/python-virtualenv/gam_app/bin/activate`
-`cd  /srv/GAM`
-now `python manage.py import_dip`
-Select the bag you just uploaded and wait for the script to complete.
-It is good practice to confirm in the control panel that the bag was upladed.  You can also inspect
-the new files in admin by selecting imagen, filter by the bag, and click the link. 
+--- 
 
+26. The VM on the BADL only has 300GB of space.  Once you're finished processing 2-3 bags, you'll need to move the completed AIPs and DIPs to the 4TB drive.
+
+... to do this ...
+
+---
 Problem cases:
 
 	get() returned more than one Imagen

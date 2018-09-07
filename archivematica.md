@@ -44,14 +44,15 @@
 
 20. Now is a good time to delete the original bag.  `$ cd Downloads` then `$ rm Agos21_2018_bag95.zip`.
 
-go to /home/digitalscholarship and enter
-`sudo python upload_dip.py`
-You should see the bag, enter the number next to it
-You'll then be prompted to enter the password for the compas user, which is `apoyomutuo`
+---
 
-The files will now upload to the GAM server. 
+21. Connect to the GAM server with your username: `$ ssh username@192.241.128.56`
 
-If all went well, delete the zip file from Downloads
+22. Switch to root `$ sudo su -`, activate the GAM virtual enviornment `$ source /usr/local/lib/python-virtualenv/gam_app/bin/activate`.
+
+23. Now `$ cd /srv/GAM` and type `$ python manage.py import_dip`.
+
+24. 
 ## Transfer AIP and DIP to storage 
 
 

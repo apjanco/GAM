@@ -32,7 +32,18 @@
 
 15. Once you see 'Create SIP from Transfer', the process switches over to the Ingest tab.  Just click on 'Ingest' in the navbar.
 
-16. Once Store DIP is complete, you can transfer the files to gotita
+16. Once Store DIP is complete, you can transfer the files to the GAM server.
+
+--- 
+
+17. Type `$ cd` in the terminal.  Then type `$ sudo python upload_dip.py`
+
+18. You will see a list of possible bags to upload.  Type the number to the left of the bag name.  In this case, I see `(5, 'bag95'...)`, so enter 5.
+
+19. Enter the password for the compas user on the server.  You should see the files being uploaded. 
+
+20. Now is a good time to delete the original bag.  `$ cd Downloads` then `$ rm Agos21_2018_bag95.zip`.
+
 go to /home/digitalscholarship and enter
 `sudo python upload_dip.py`
 You should see the bag, enter the number next to it

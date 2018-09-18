@@ -2,6 +2,8 @@ import boto3
 import botocore
 import ast
 from gam_app.models import Imagen
+from archivo.settings_secret import SECRET_ACCESS_KEY, ACCESS_KEY_ID
+
 
 ### from https://stackoverflow.com/questions/25027122/break-the-function-after-certain-time
 ### Handles times when network hangs or no reponse from Digital Ocean
@@ -24,27 +26,33 @@ def getBags():
         session = boto3.session.Session()
         client = session.client('s3',
                                  endpoint_url = 'https://nyc3.digitaloceanspaces.com',
-                                 aws_secret_access_key = '3XN16jEOiOZoJ5b6FRhTwm7dIjJgxqm23wnKlE4+zMs',
-                                 aws_access_key_id = 'K5TVKNCCT3FEU7KK3OJJ')
+                                 aws_secret_access_key = SECRET_ACCESS_KEY, #'siqMTLrCUcjwCXLG3HUa+2CGTuETrQRyiqsfHayHcI',
+                                 aws_access_key_id = ACCESS_KEY_ID) #'XWVILRP2O4XT5WXK6BHK')
 
         bags = []
-        for thing in client.list_objects(Bucket='ds-gam')['Contents']:
+        for thing in client.list_objects(Bucket='bolsas')['Contents']:
             if '.zip' in thing['Key']:
                 bags += [thing['Key'][:-4].replace('Bags/','')]
             else:
                 pass
-        with open('/tmp/bag_temp.txt', 'w') as f:
+        with open('/tmp/bag_temp.txt', 'w+') as f:
             f.write(str(bags))
             f.close()
         return bags
 
     except TimeoutException:
-        with open('/tmp/bag_temp.txt', 'r') as f:
+        with open('/tmp/bag_temp.txt', 'r+') as f:
             bags = f.read()
             bags = ast.literal_eval(bags)
         return sorted(bags)
 
     except botocore.exceptions.ClientError:
+        with open('/tmp/bag_temp.txt', 'r+') as f:
+            bags = f.read()
+            bags = ast.literal_eval(bags)
+        return sorted(bags)
+
+    except KeyError:
         with open('/tmp/bag_temp.txt', 'r') as f:
             bags = f.read()
             bags = ast.literal_eval(bags)

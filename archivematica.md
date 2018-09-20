@@ -48,7 +48,7 @@
 
 21. Connect to the GAM server with your username: `$ ssh username@192.241.128.56`
 
-22. Switch to root `$ sudo su -`, activate the GAM virtual enviornment `$ source /usr/local/lib/python-virtualenv/gam_app/bin/activate`.
+22. Switch to root `$ sudo su -`, activate the GAM virtual enviornment `$ source /usr/local/lib/python-virtualenv/gam_env/bin/activate`.
 
 23. Now `$ cd /srv/GAM` and type `$ python manage.py import_dip`.
 

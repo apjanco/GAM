@@ -39,7 +39,7 @@
       <tbody>
       {% for bag in bags %}
       <tr>
-        <td>{{ bag|slice:"-5:" }}</td>
+        <td>{{ bag }}</td>
         {% if bag in imported_bags %}
           <td>{% trans "importado"%}</td>
         {% else %}

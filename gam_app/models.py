@@ -165,7 +165,7 @@ class Imagen(models.Model):
     carpeta = models.CharField(max_length=200, blank=True)
     #note that image number is CharField given use of 001a and 001b.
     número_de_imagen = models.CharField(max_length=200, blank=True)
-    manuscritos = models.ManyToManyField('Item', blank=True)
+    item = models.ForeignKey('Item', on_delete=models.CASCADE, blank=True)
     fecha_desaparicion = models.CharField(max_length=200, blank=True)
     conteo_de_páginas = models.IntegerField(null=True, blank=True)
     número_de_víctimas = models.IntegerField(null=True, blank=True)
@@ -202,7 +202,6 @@ class Imagen(models.Model):
 # This is an entity to link single-page images together as part of multi-page documents such as a pamphlet or book.
 class Item(models.Model):
     nombre_del_item = models.CharField(max_length=200, null=True)
-    imágenes = models.ManyToManyField('Imagen', blank=True)
     site = models.ManyToManyField(Site)
 
     def __str__(self):

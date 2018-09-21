@@ -19,7 +19,7 @@ class EditForm(forms.ModelForm):
     #STATUS_CHOICES = [('NONE','Sin correcciones'),('IN','En progreso'),('DONE','Compitió'),('FINAL','Competido y verificado')]
     #status = forms.ChoiceField(choices=STATUS_CHOICES, required=False)
     class Meta:
-        fields = ['texto_de_OCR', 'nombre_del_archivo','manuscritos','status','notas',]
+        fields = ['texto_de_OCR', 'nombre_del_archivo','item','status','notas',]
         model = Imagen
 
 

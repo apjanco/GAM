@@ -48,6 +48,7 @@ def advanced_search(request):
     
     # may want to add more than Imagen at some point
     result_list = Imagen.objects.all()
+    #result_list = Persona.objects.all()
 
     print ("Here is your query", query)
     result_list = result_list.filter(query).distinct()

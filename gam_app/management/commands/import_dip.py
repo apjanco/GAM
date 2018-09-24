@@ -308,7 +308,7 @@ class Command(BaseCommand):
                                         )
 
                                         my_item = Item.objects.get(nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+image_numbers)
-                                        my_item.imágenes.add(image_id)
+                                        #my_item.imágenes.add(image_id)
                                         # either of these should work, not sure which is better                                       
                                         #defaults= {'imágenes': image_id}
                                         #obj = Item.objects.get(nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+item_number,)
@@ -322,7 +322,7 @@ class Command(BaseCommand):
                                         )
 
                                         my_item = Item.objects.get(nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+numbers)
-                                        my_item.imágenes.add(image_id)
+                                        #my_item.imágenes.add(image_id)
                                         #if this is the first time that the letter occurs in the folder
                                         
                             # Otherwise create a single-image item
@@ -340,7 +340,7 @@ class Command(BaseCommand):
                                 nombre_del_item = physical_location,
                                 )
                                 my_item = Item.objects.get(nombre_del_item = physical_location)
-                                my_item.imágenes.add(image_id)
+                                #my_item.imágenes.add(image_id)
                       
                         if file.split('.')[1] == 'txt':
                            path = '/tmp/DIP/' + dip_name + '/objects/' + file

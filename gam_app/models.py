@@ -165,7 +165,7 @@ class Imagen(models.Model):
     carpeta = models.CharField(max_length=200, blank=True)
     #note that image number is CharField given use of 001a and 001b.
     número_de_imagen = models.CharField(max_length=200, blank=True)
-    item = models.ForeignKey('Item', on_delete=models.CASCADE, blank=True)
+    item = models.ForeignKey('Item', on_delete=models.CASCADE, blank=True, null=True)
     fecha_desaparicion = models.CharField(max_length=200, blank=True)
     conteo_de_páginas = models.IntegerField(null=True, blank=True)
     número_de_víctimas = models.IntegerField(null=True, blank=True)

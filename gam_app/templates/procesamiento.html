@@ -23,30 +23,30 @@
 <div>
 {% if previous_caja %}
   <div class="col-sm-2">
-<a class="previous" href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ previous_caja }}/"> < Atrás :</a>
+<a class="previous" href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ previous_caja }}/"> < {% trans "Atrás" %} :</a>
 
 {% endif %}
 {% if next_caja %}
-<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ next_caja }}/">Siguente ></a>
+<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ next_caja }}/">{% trans "Siguente" %} ></a>
 </div>
 {% endif %}
 {% if previous_legajo %}
   <div class="col-sm-2">
-<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ previous_legajo }}/"> < Atrás :</a>
+<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ previous_legajo }}/"> < {% trans "Atrás" %} :</a>
 
 {% endif %}
 {% if next_legajo %}
-<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ next_legajo }}/">Siguente ></a>
+<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ next_legajo }}/">{% trans "Siguente" %} ></a>
 </div>
 {% endif %}
 
 {% if previous_carpeta %}
   <div class="col-sm-2">
-<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ previous_carpeta }}/"> < Atrás :</a>
+<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ previous_carpeta }}/"> < {% trans "Atrás" %} :</a>
 
 {% endif %}
 {% if next_carpeta %}
-<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ next_carpeta }}/">Siguente ></a>
+<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ next_carpeta }}/">{% trans "Siguente" %} ></a>
 </div>
 {% endif %}  
 
@@ -83,7 +83,7 @@
    <img src={% static 'openseadragon-flat-toolbar-icons/images/rotateright_rest.png' %}     id='right-rotate' class='sea-icon'>
 </span>
 <div class="row align-items-center">
-<h4>Artículos en la carpeta {{ location.carpeta }}</h4>
+<h4>{% trans "Artículos en la carpeta {{ location.carpeta }}" %}</h4>
 <div class="col" style="background-color:#aaa; height: 400px;">
 <div id="openseadragon1" style="width:100%; height: 100%;"></div>
 </div></div>

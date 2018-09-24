@@ -3,6 +3,8 @@ from django.db.models import Q
 import time
 from gam_app import generate_keywords_from_statement_list
 
+from itertools import chain
+
 def advanced_search(request):
 
     # right now it looks like [Iraq^^Any Field^Iran^OR^Keyword^]
@@ -52,6 +54,7 @@ def advanced_search(request):
 
     print ("Here is your query", query)
     result_list = result_list.filter(query).distinct()
+
     q_time = time.time() - start
     print ("generating result_list took %s seconds" % q_time)
     print(result_list)

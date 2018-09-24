@@ -31,7 +31,8 @@
 12. Click on Browse. You should see a directory tree. Find the Downloads folder and select Agos21_2018_bag95.zip. Click 'Add'.
 
 13. Now click the 'Start transfer' button.  This can take a minute or two.  If nothing happens, check the upper-right-hand corner.  It should say 'Connected' with a green dot.  If it says 'initalizing' 'can't connect to database' or a variety of other beloved messages, go back to the terminal type `$ cd` and then `$ bash restart.sh`.  This will restart and hopefully repair the problem. 
-<aside class="warning">
+
+<aside class="notice">
 While it can be tempting to process more than one bag at a time, Archivematica is a memory and processing hog.  The VM will very likely become unstable if you try to process and download multiple bags at once.  It's not how things should be, but it's our current reality.  
 </aside>
 

@@ -16,7 +16,11 @@
 
 8. You'll need to find the filename for the bag.  To do this, type`$ s3cmd ls s3://bolsas/`.  In the list, find `s3://ds-gam/Bags/Agos21_2018_bag95.zip`.  I typically highlight and copy the name of the file for the next step. 
 
-9. To download the file, type `$ s3cmd get <bag filename>` or in this case `$ s3cmd get s3://bolsas/Agos21_2018_bag95.zip`.  The bags are typically 5-6GB and take 10-15 minutes to download. ```On occasion, the bag name includes spaces. You'll get a S3 Error: 404 (NoSuchKey).  In that case, you can place the filename in quotes: `s3cmd get 's3://bolsas/Agos27_2018_ bag103.zip'`  Note that Archivematica will slugify the bag name (`Agos27_2018_ bag103` becomes `Agos27_2018__bag103`).  Once the import is complete, you'll need to go change the bag name in one of the images to include the space, otherwise, the bag will continue to be marked no importado in mission control. ```
+9. To download the file, type `$ s3cmd get <bag filename>` or in this case `$ s3cmd get s3://bolsas/Agos21_2018_bag95.zip`.  The bags are typically 5-6GB and take 10-15 minutes to download. 
+
+> On occasion, the bag name includes spaces. You'll get a S3 Error: 404 (NoSuchKey).  In that case, you can place the filename in quotes: > `s3cmd get 's3://bolsas/Agos27_2018_ bag103.zip'`  Note that Archivematica will slugify the bag name (`Agos27_2018_ bag103` becomes 
+> `Agos27_2018__bag103`).  Once the import is complete, you'll need to go change the bag name in one of the images to include the space, 
+> otherwise, the bag will continue to be marked no importado in mission control. 
 
 --- 
 

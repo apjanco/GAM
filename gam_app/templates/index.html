@@ -36,22 +36,22 @@
 	$("#searcher_counter").val("1");
 	});
       // These long lines are just html we will be using and reusing
-      var select_fields = "<select class='form-control field_option'> <option>Cualquier Campo</option> <option>Persona</option> <option>Ubicación Geográfica</option> <option>Género</option> <option>Etnicidad</option></select>";
+      var select_fields = "<select class='form-control field_option'> <option>{% trans "Cualquier Campo" %}</option> <option>{% trans "Persona" %}</option> <option>{% trans "Ubicación Geográfica" %}</option> <option>{% trans "Género" %}</option> <option>{% trans "Etnicidad" %}</option></select>";
        var delete_button = "<button class='delete_searcher' type='button'><span class='glyphicon glyphicon-remove delete_searcher'></span></button>"; 
       
       function createLogicDropdown(operator) {
         if(operator=="AND") {
-            return  "<select class='form-control logic_option'> <option value='OR'>O</option> <option value='AND' selected='selected'>Y</option> <option value='NOT'>NO</option></select>";
+            return  "<select class='form-control logic_option'> <option value='OR'>O</option> <option value='AND' selected='selected'>{% trans "Y" %}</option> <option value='NOT'>{% trans "NO" %}</option></select>";
         }
 	else if (operator=="OR") {
-            return  "<select class='form-control logic_option'> <option selected='selected' value='OR'>O</option> <option value='AND'>Y</option> <option value='NOT'>NO</option></select>";
+            return  "<select class='form-control logic_option'> <option selected='selected' value='OR'>O</option> <option value='AND'>{% trans "Y" %}</option> <option value='NOT'>{% trans "NO" %}</option></select>";
         }
 	else {
-            return  "<select class='form-control logic_option'> <option value='OR'>O</option> <option value='AND'>Y</option> <option selected='selected' value='NOT'>NO</option></select>";
+            return  "<select class='form-control logic_option'> <option value='OR'>{% trans "O" %}</option> <option value='AND'>Y</option> <option selected='selected' value='NOT'>{% trans "NO" %}</option></select>";
         }
       }
       // make first search bar. This one can't be deleted
-      $("#searcher1").append("<span><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='search' placeholder='Buscar...'><span class='input-group-addon'><button type='submit'><span class='glyphicon glyphicon-search'></span></button></span></div> en " + select_fields + "</span>");
+      $("#searcher1").append("<span><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='search' placeholder='{% trans "Buscar..." %}'><span class='input-group-addon'><button type='submit'><span class='glyphicon glyphicon-search'></span></button></span></div> en " + select_fields + "</span>");
 
 
       // what happens when you click AND

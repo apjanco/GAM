@@ -1,4 +1,4 @@
-from .models import *
+from gam_app.models import *
 from django.db.models import Q
 import time
 from gam_app import generate_keywords_from_statement_list
@@ -35,25 +35,22 @@ def advanced_search(request):
         search_string = request_part["search_string"]
         logic         = request_part["logic"]
         field         = request_part["field"]
-        query_part = make_query_part(search_string, field)
-        if query and query_part:
-            if   logic == "AND":
-                query = query & query_part
+
+        queryset = make_queryset(search_string, field)
+
+        if query and queryset:
+            if logic == "AND":
+                query = query.intersection(queryset)
             elif logic == "OR":
-                query = query | query_part
+                query = query.union(queryset)
             elif logic == "NOT":
-                query = query & ~query_part 
-        elif query_part:
-            query = query_part
+                query = query.difference(queryset)
+        elif queryset:
+            query = queryset
         else:
             return False
-    
-    # may want to add more than Imagen at some point
-    result_list = Imagen.objects.all()
-    #result_list = Persona.objects.all()
 
-    print ("Here is your query", query)
-    result_list = result_list.filter(query).distinct()
+    result_list = query
 
     q_time = time.time() - start
     print ("generating result_list took %s seconds" % q_time)
@@ -61,6 +58,37 @@ def advanced_search(request):
     #print("testo", Imagen.objects.filter(persona__nombre_de_la_persona__icontains="Manuel"))
     context = {'results' : result_list, 'search' : search_string, 'full_info' : request.GET["full_info"], 'num_results' : len(result_list)}
     return context
+
+
+def make_queryset(search_string, field):
+    if field == "Cualquier Campo":
+        print('I am at field queryset!')
+        queryset = list(chain(
+             Persona.objects.filter(nombre_de_la_persona__icontains=search_string),
+             Lugar.objects.filter(nombre_del_lugar__icontains=search_string),
+             Imagen.objects.filter(género__icontains=search_string),
+             Imagen.objects.filter(etnicidad__icontains=search_string)
+        ))
+        print('queryset', queryset)
+        print('type', type(queryset))
+    elif field == 'Persona':
+        print('I am at field Persona!')
+        print('search_string', search_string)
+        print('type', type(search_string))
+        queryset = Persona.objects.filter(nombre_de_la_persona__icontains=search_string)
+        print('queryset', queryset)
+        print('type',type(queryset))
+    elif field == 'Ubicación Geográfica':
+        queryset = Lugar.objects.filter(nombre_del_lugar__icontains=search_string)
+    elif field == 'Género':
+        queryset = Imagen.objects.filter(género__icontains=search_string)
+    elif field == 'Etnicidad':
+        queryset = Imagen.objects.filter(etnicidad__icontains=search_string) 
+    else:
+        print("Found an invalid field.")
+        print("If you've just updated the field options dropdown,")
+        return False
+    return queryset
 
 
 def make_query_part(search_string, field):

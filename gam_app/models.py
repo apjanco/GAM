@@ -20,6 +20,7 @@ class Persona(models.Model):
     profesión = models.CharField(max_length=200, blank=True)
     actividades_políticas = models.ManyToManyField('Organización', blank=True)
     #relaciones = models.ManyToManyField('Relación', blank=True)
+    image = models.ManyToManyField('Imagen', blank=True)
     notas = RichTextField(blank=True)
 
     def __str__(self):
@@ -40,13 +41,14 @@ class Persona(models.Model):
 #This is a place.
 class Lugar(models.Model):
     nombre_del_lugar = models.CharField(max_length=200, null=True)
-
+    image = models.ManyToManyField('Imagen', blank=True)
     def __str__(self):
        return self.nombre_del_lugar
 
 # An organization entity.  Typically refers to a political organziation that a person was affiliated with.
 class Organización(models.Model):
     nombre_de_la_organización = models.CharField(max_length=200, null=True)
+    image = models.ManyToManyField('Imagen', blank=True)
     def __str__(self):
         return self.nombre_de_la_organización
 
@@ -156,8 +158,6 @@ class Imagen(models.Model):
     #persona = models.ManyToManyField('Persona', blank=True)
     nombre_del_archivo = models.CharField(max_length=200, blank=True)
     localizacion_fisica = models.CharField(max_length=200, blank=True)
-    url = models.URLField(blank=True, null=True)
-    miniatura = models.URLField(blank=True, null=True)
     archivo = models.ForeignKey(Archivo, on_delete=models.CASCADE, default=1)
     colección = models.ForeignKey(Colección, on_delete=models.CASCADE, default=1)
     caja = models.CharField(max_length=200, blank=True)
@@ -166,19 +166,7 @@ class Imagen(models.Model):
     #note that image number is CharField given use of 001a and 001b.
     número_de_imagen = models.CharField(max_length=200, blank=True)
     item = models.ForeignKey('Item', on_delete=models.CASCADE, blank=True, null=True)
-    fecha_desaparicion = models.CharField(max_length=200, blank=True)
-    conteo_de_páginas = models.IntegerField(null=True, blank=True)
-    número_de_víctimas = models.IntegerField(null=True, blank=True)
-    ubicación_geográfica = models.ManyToManyField('Lugar', blank=True)
-    edad_en_el_momento = models.CharField(max_length=200, blank=True)
-    género = models.CharField(max_length=200, blank=True)
-    etnicidad = models.CharField(max_length=200, blank=True)
     forma_de_GAM = models.CharField(max_length=200, blank=True)
-    policial_o_militar = models.CharField(max_length=200, blank=True)
-    tipo_de_violencia= models.CharField(max_length=200, blank=True)
-    participación_de_ONG = models.CharField(max_length=200, blank=True)
-    actividades_políticas = models.ManyToManyField(Organización, blank=True)
-    profesión = models.CharField(max_length=200, blank=True)
     texto_de_OCR = RichTextField(blank=True)
     notas = RichTextField(blank=True)
     traducción = RichTextField(blank=True)

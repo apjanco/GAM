@@ -20,6 +20,7 @@ from gam_app.tracking import getBags, getImportedBags
 #For CRUD
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from gam_app.forms import PersonaForm, LugarForm, OrganizaciónForm
 # Create your views here.
 
 def index(request):
@@ -216,13 +217,26 @@ def lugar(request, lugar):
 
 
 #For CRUDs
+class ImageFieldAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        #if not self.request.user.is_authenticated():
+        #    return Imagen.objects.none()
+
+        qs = Imagen.objects.all()
+
+        if self.q:
+            qs = qs.filter(localizacion_fisica__icontains=self.q)
+
+        return qs
+
 class PersonaCreate(CreateView):
     model = Persona
-    fields = '__all__'
+    form_class = PersonaForm
 
 class PersonaUpdate(UpdateView):
     model = Persona
-    fields = '__all__'
+    form_class = PersonaForm
 
 class PersonaDelete(DeleteView):
     model = Persona
@@ -231,11 +245,11 @@ class PersonaDelete(DeleteView):
 
 class LugarCreate(CreateView):
     model = Lugar
-    fields = '__all__'
+    form_class = LugarForm
 
 class LugarUpdate(UpdateView):
     model = Lugar
-    fields = '__all__'
+    form_class = LugarForm
 
 class LugarDelete(DeleteView):
     model = Lugar
@@ -243,11 +257,11 @@ class LugarDelete(DeleteView):
 
 class OrganizacionCreate(CreateView):
     model = Organización
-    fields = '__all__'
+    form_class = OrganizaciónForm
 
 class OrganizacionUpdate(UpdateView):
     model = Organización
-    fields = '__all__'
+    form_class = OrganizaciónForm
 
 class OrganizacionDelete(DeleteView):
     model = Organización
@@ -383,9 +397,11 @@ def sobre(request):
 
 def advanced_search_submit(request):
     context = advanced_search.advanced_search(request)
+    print ('context', context)
     if context:
         context['state'] = context['results']
-        return render(request, 'all_documents_page.html', context)
+        print ('context after if', context)
+        return render(request, 'search_result_page.html', context)
     else:
         context = {"failed" : True}
         return render(request, 'index.html', context)

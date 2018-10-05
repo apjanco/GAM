@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% load static %}
 {% load i18n %}
 
 {% block extra_static %}
-<link rel="stylesheet" href="{% static "css/document_page.css" %}">
+<link rel="stylesheet" href="{% static 'css/document_page.css' %}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script src="{% static "js/ckeditor-init.js" %}"></script>
-<script src="{% static "js/ckeditor.js" %}"></script>
-<script src="{% static "js/openseadragon.min.js" %}"></script>
+<script src="{% static 'js/ckeditor-init.js' %}"></script>
+<script src="{% static 'js/ckeditor.js' %}"></script>
+<script src="{% static 'js/openseadragon.min.js' %}"></script>
 <script src="http://msalsbery.github.io/builds/openseadragonimaging/openseadragon-viewerinputhook.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/Pin0/openseadragon-justified-collection/1.0.2/dist/openseadragon-justified-collection.min.js"></script>
 
 {% endblock %}
 
@@ -24,17 +24,18 @@
 {% if previous_caja %}
   <div class="col-sm-2">
 <a class="previous" href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ previous_caja }}/"> < {% trans "Atrás" %} :</a>
-
 {% endif %}
+
 {% if next_caja %}
 <a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ next_caja }}/">{% trans "Siguente" %} ></a>
 </div>
 {% endif %}
+
 {% if previous_legajo %}
   <div class="col-sm-2">
 <a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ previous_legajo }}/"> < {% trans "Atrás" %} :</a>
-
 {% endif %}
+
 {% if next_legajo %}
 <a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ next_legajo }}/">{% trans "Siguente" %} ></a>
 </div>
@@ -43,8 +44,8 @@
 {% if previous_carpeta %}
   <div class="col-sm-2">
 <a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ previous_carpeta }}/"> < {% trans "Atrás" %} :</a>
-
 {% endif %}
+
 {% if next_carpeta %}
 <a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ next_carpeta }}/">{% trans "Siguente" %} ></a>
 </div>
@@ -83,8 +84,8 @@
    <img src={% static 'openseadragon-flat-toolbar-icons/images/rotateright_rest.png' %}     id='right-rotate' class='sea-icon'>
 </span>
 <div class="row align-items-center">
-<h4>{% trans "Artículos en la carpeta {{ location.carpeta }}" %}</h4>
-<div class="col" style="background-color:#aaa; height: 400px;">
+<h4>{% trans "Artículos en la carpeta" %} {{ location.carpeta }}</h4>
+<div class="col" style="background-color:#aaa; height: 450px;">
 <div id="openseadragon1" style="width:100%; height: 100%;"></div>
 </div></div>
       <ul id="tabs" class="nav nav-tabs nav-justified" data-tabs="tabs">
@@ -151,7 +152,6 @@
          }
        </script>
        {% endif %}
-
      </div>
        
          <hr>
@@ -214,7 +214,6 @@
 
     </div>
 
-<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
 <script src="http://msalsbery.github.io/builds/openseadragonimaging/openseadragon-viewerinputhook.min.js"></script>
 <script type="text/javascript">
 
@@ -234,9 +233,8 @@ var viewer = OpenSeadragon({
     rotateLeftButton: "left-rotate", 
 
     //tileSources: srcs,
-
     crossOriginPolicy: 'Anonymous',
-    collectionColumns: 10,
+    collectionColumns: 6,
     collectionMode: true,
     showRotationControl: true
 });
@@ -265,6 +263,7 @@ async function addLinkOverlays() {
     addOneLinkOverlay(images[i], items[i][1]);
   }
 }
+
 
 function addOneLinkOverlay(image, link) {
     var imageRect = image.getBounds();

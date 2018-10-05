@@ -58,15 +58,12 @@ class PersonaAutoForm(forms.ModelForm):
         model = Persona
 
 class PersonaForm(forms.ModelForm):
-#    nombre_de_la_persona = autocomplete.Select2ListCreateChoiceField(
-#        choice_list=get_choice_list,
-#        required=False,
-#        widget=autocomplete.ListSelect2(url='persona_name_lookup')
-#    )
     class Meta:
         fields = ('__all__')
         model = Persona
-
+        widgets = {
+            'image': autocomplete.ModelSelect2Multiple(url='autocompletar_imagen')
+        }
 
 def get_choice_list_lugar():
     return [Lugar.nombre_del_lugar for Lugar in Lugar.objects.all()]
@@ -82,6 +79,13 @@ class LugarAutoForm(forms.ModelForm):
         fields = ['nombre_del_lugar',]
         model = Lugar
 
+class LugarForm(forms.ModelForm):
+    class Meta:
+        fields = ('__all__')
+        model = Lugar
+        widgets = {
+            'image': autocomplete.ModelSelect2Multiple(url='autocompletar_imagen')
+        }
 
 def get_choice_list_organizacion():
     return [Organización.nombre_de_la_organización for Organización in Organización.objects.all()]
@@ -97,6 +101,13 @@ class OrganizacionAutoForm(forms.ModelForm):
         fields = ['nombre_de_la_organización',]
         model = Organización
 
+class OrganizaciónForm(forms.ModelForm):
+    class Meta:
+        fields = ('__all__')
+        model = Organización
+        widgets = {
+            'image': autocomplete.ModelSelect2Multiple(url='autocompletar_imagen')
+        }
 
 class CarpetaPersonaForm(forms.ModelForm):
     class Meta:

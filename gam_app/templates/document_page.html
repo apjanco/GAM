@@ -14,14 +14,15 @@
 
 <script>
   /* Some values that the JS needs that come from the server's database by way of Django. */
-  var dziFile = "/dzi/{{ state.nombre_del_archivo }}.dzi";
-  // var dziFile = "https://gam-dzis.nyc3.digitaloceanspaces.com/{{ state.nombre_del_archivo }}.dzi";
+  // var dziFile = "/dzi/{{ state.nombre_del_archivo }}.dzi";
+  var dziFile = "https://dzis.nyc3.digitaloceanspaces.com/{{ state.nombre_del_archivo }}.dzi";
   var personas = [{% for p in state.persona.all %}"{{ p }}",{% endfor %}];
   var items = [];
   var srcs = [];
   {% for item in images_in_carpeta %}
   items.push(["{{ item.nombre_del_archivo }}", "/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"]);
-    srcs.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
+   //  srcs.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
+       srcs.push("https://dzis.nyc3.digitaloceanspaces.com/{{ item.nombre_del_archivo }}.dzi")
   {% endfor %}
   var editButtonURL = '{% static 'edit_button.png' %}';
 </script>

@@ -118,7 +118,8 @@ var items = [];
 var srcs = [];
 {% for item in state %}
 items.push(["{{ item.nombre_del_archivo }}", "/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"]);
-srcs.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
+// srcs.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
+srcs.push("https://dzis.nyc3.digitaloceanspaces.com/{{ item.nombre_del_archivo }}.dzi")
 {% endfor %}
 var viewer = OpenSeadragon({
     id: "openseadragon1",
@@ -145,7 +146,7 @@ function sleep(ms) {
 var images = [];
 for (var i = 0; i < items.length; i++) {
   viewer.addTiledImage({
-      tileSource: '/dzi/' + items[i][0] + '.dzi',
+      tileSource: 'https://dzis.nyc3.digitaloceanspaces.com/' + items[i][0] + '.dzi',
       success: function (event) {
         images.push(event.item);
       }

@@ -220,7 +220,7 @@
 var items = [];
 var srcs = [];
 {% for item in images_in_carpeta %}
-items.push(["{{ item.nombre_del_archivo }}", "/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"]);
+items.push(["{{ item.nombre_del_archivo }}", "/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/", "{{ item.localizacion_fisica }}"]);
 // srcs.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
 srcs.push("https://dzis.nyc3.digitaloceanspaces.com/{{ item.nombre_del_archivo }}.dzi")
 {% endfor %}
@@ -261,24 +261,31 @@ async function addLinkOverlays() {
   // Wait until OSD is finished arranging the images so that the coordinates are accurate.
   await sleep (2000);
   for (var i = 0; images.length; i++) {
-    addOneLinkOverlay(images[i], items[i][1]);
+    addOneLinkOverlay(images[i], items[i][1], items[i][2]);
   }
 }
 
 
-function addOneLinkOverlay(image, link) {
+function addOneLinkOverlay(image, link, name) {
     var imageRect = image.getBounds();
     var rect = new OpenSeadragon.Rect(imageRect.x, imageRect.y, 0.05, 0.05);
     console.log(rect);
 
+    var divElement = document.createElement("div");
     var buttonElement = document.createElement("a");
     var imgElement = document.createElement("img");
     imgElement.src = '{% static 'edit_button.png' %}';
     imgElement.href = link;
     buttonElement.appendChild(imgElement);
-    //buttonElement.className = "highlight";
-    viewer.addOverlay(buttonElement, rect, OpenSeadragon.OverlayPlacement.CENTER);
+    divElement.appendChild(buttonElement);
 
+    var markElement = document.createElement("mark");
+    var textElement = document.createTextNode(name);
+    markElement.appendChild(textElement);
+    divElement.appendChild(markElement);
+    //buttonElement.className = "highlight";
+    viewer.addOverlay(divElement, rect, OpenSeadragon.OverlayPlacement.CENTER);
+ 
     viewer.addViewerInputHook({
         hooks: [{
             tracker: "viewer",

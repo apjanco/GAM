@@ -62,31 +62,21 @@
                 <span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">{% trans "Cerrar sesión" %}</span></span><span class="plus"></span></span></a></li>
             
             {% endif %} 
-        <li>
-           <nav id="language_chooser">
-          <ul>
+        <li id="nav-menu-item-3226" class="dropdown"> 
+<!-- https://docs.djangoproject.com/en/2.1/topics/i18n/translation/#set-language-redirect-view -->
+<form style="margin-top: 18px;" action="{% url 'set_language' %}" method="post">{% csrf_token %}
+    <input name="next" type="hidden" value="{{ redirect_to }}">
+    <select style="background-color: #FBE930;t" class="form-control" name="language" onchange="this.form.submit();">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
         {% get_language_info_list for LANGUAGES as languages %}
         {% for language in languages %}
-            <form action="{% url 'set_language' %}" method="post">
-                {% csrf_token %}
-                <input name="next" type="hidden" value="{{ redirect_to }}" />
-                <input name="language" type="hidden" value="{{ language.code }}" />
-                <button type="submit">{{ language.local_name }}"</button>
-            </form>
+            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+               {{ language.name_local }}
+            </option>
         {% endfor %}
-    </ul>         
-              <form style="margin-top: 15px;" action="{% url 'set_language' %}" method="post">
-                {% get_available_languages as LANGUAGES %}
-                {% for lang in LANGUAGES %}
-                {{ lang.0 }}
-                {% endfor %}
-                {% csrf_token %}
-                <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}">
-                  
-                <input name="language" type="hidden" value="{{ LANG.code }}">
-
-              </form>
-           
+    </select>
+</form>   
             </li>    
         
 </ul></nav>

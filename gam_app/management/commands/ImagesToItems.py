@@ -1,14 +1,14 @@
 from django.core.management.base import BaseCommand, CommandError
-from models import *
+from gam_app. models import *
 
 #57 more images than items. Something seems wrong with this.
 
 
-class command(BaseCommand):
+class Command(BaseCommand):
     def handle(self, *args, **options):
         print("Associating images with their host item.")
 
-        allImagens = Imagens.objects.all()
+        allImagens = Imagen.objects.all()
 
         #Getting all bag values
         bagValues = []
@@ -25,28 +25,28 @@ class command(BaseCommand):
         for bag in bagValues:
             if bag is not Null:  #  This is needed because some bag names are not true bags.  They reflect the name as we received it from Guatemala with spaces.
                 if ' ' not in bag:
-                    queryImagens = Imagens.objects.filter(bag_names = bag).order_by("número_de_imagen")
+                    queryImagens = Imagen.objects.filter(bag_name= bag).order_by("número_de_imagen")
                     ### Is this query in order. Are the images in the order listed like in the example below???
                     #The order_by should handle this, but I am unser.
                     
                     #Code adapted from import_dip.py
-                    lastKnownFileName = ""
+                    lastKnownFileName = None
                     for image in queryImagens:
                         #Splitting the image filename. The image filename is similar to the item name. 
                         #From taa1cf992-b86e-4eab-bcb2-5b45958hat, we can call the items by filename.
                         #If it fails, then its item name is the one above it that passed.
                         letters = ''.join([i for i in image.localizacion_fisica[8:] if not i.isdigit()])
+                        letters = letters[3:]
                         imageFile = image.localizacion_fisica[:-len(letters)]
                         #The letters takes into account image files with endings with multiple letters.
-
 
 
                         #Retrieving the item from our information above
                         try:
                             myItem = Item.objects.get(nombre_del_item = imageFile)
                             #If there is no item with that filename, it will raise an error.
-                            image.item =  imageFile
-                            lastKnownFileName = imageFile
+                            image.item =  myItem
+                            lastKnownFileName = myItem
                         except:
                             '''
                             image=  gam_des_001_001_004_001a  item = gam_des_001_001_004_001
@@ -60,4 +60,4 @@ class command(BaseCommand):
                             #It would instead look at the last known image that succeeded.
                             #It would then set its item information to that last known item, its 'host'. 
                             image.item = lastKnownFileName
-                            pass
+                        image.save()

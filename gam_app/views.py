@@ -21,6 +21,7 @@ from gam_app.tracking import getBags, getImportedBags
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from gam_app.forms import PersonaForm, LugarForm, OrganizaciónForm
+from django.views import generic
 # Create your views here.
 
 def index(request):
@@ -66,20 +67,21 @@ def elasticsearch(request, query):
     return render(request, 'all_documents_page.html', context)
 
 @login_required
-def mission_control(request):
-    #tab1
+def track_bags(request):
     bags = getBags()
     imported_bags = getImportedBags()
+    context = {'bags': bags, 'imported_bags': imported_bags,}
+    return render(request, 'track_bags.html', context)
 
-    #tab2
+@login_required
+def mission_control(request):
+    #tab1
     imagen = Imagen.objects.all().order_by('localizacion_fisica')
 
-    #tab3
+    #tab2
     carpeta = Carpeta.objects.all().order_by('carpeta_titulo')
 
-    context = {'bags': bags,
-               'imported_bags': imported_bags,
-               'imagen': imagen,
+    context = {'imagen': imagen,
                'carpeta': carpeta,
               }
     return render(request, 'mission_control.html', context)
@@ -242,6 +244,8 @@ class PersonaDelete(DeleteView):
     model = Persona
     success_url = reverse_lazy('persona')
 
+class PersonaDetailView(generic.DetailView):
+    model = Persona
 
 class LugarCreate(CreateView):
     model = Lugar
@@ -393,6 +397,9 @@ def single_caso(request, caso):
     return render(request, 'single_caso_page.html', context)
 
 def sobre(request):
+    return render(request, 'about.html')
+
+def über(request):
     return render(request, 'about.html')
 
 def advanced_search_submit(request):

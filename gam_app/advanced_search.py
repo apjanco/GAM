@@ -40,18 +40,18 @@ def advanced_search(request):
 
         if query and queryset:
             if logic == "AND":
-                query = query.intersection(queryset)
+                query = list(set(query) + set(queryset))
             elif logic == "OR":
-                query = query.union(queryset)
-            elif logic == "NOT":
-                query = query.difference(queryset)
+                query = query + queryset
+  #          elif logic == "NOT":
+   #             query = query.difference(queryset)
         elif queryset:
             query = queryset
         else:
             return False
 
     result_list = query
-
+    print('result', result_list)
     q_time = time.time() - start
     print ("generating result_list took %s seconds" % q_time)
     print(result_list)
@@ -60,30 +60,27 @@ def advanced_search(request):
     return context
 
 
-def make_queryset(search_string, field):
+def make_queryset(search_string, field):  #this will return queryset in LIST
     if field == "Cualquier Campo":
-        print('I am at field queryset!')
-        queryset = list(chain(
-             Persona.objects.filter(nombre_de_la_persona__icontains=search_string),
-             Lugar.objects.filter(nombre_del_lugar__icontains=search_string),
-             Imagen.objects.filter(género__icontains=search_string),
-             Imagen.objects.filter(etnicidad__icontains=search_string)
-        ))
+        print('I am at field Cualquier Campo!')
+        q1 = list(Persona.objects.filter(nombre_de_la_persona__icontains=search_string))
+        q2 = list(Lugar.objects.filter(nombre_del_lugar__icontains=search_string))
+        q3 = list(Persona.objects.filter(género__icontains=search_string))
+        q4 = list(Persona.objects.filter(etnicidad__icontains=search_string))
+        queryset = q1 + q2 + q3 + q4
         print('queryset', queryset)
-        print('type', type(queryset))
     elif field == 'Persona':
-        print('I am at field Persona!')
-        print('search_string', search_string)
-        print('type', type(search_string))
-        queryset = Persona.objects.filter(nombre_de_la_persona__icontains=search_string)
+        queryset = list(Persona.objects.filter(nombre_de_la_persona__icontains=search_string))
         print('queryset', queryset)
-        print('type',type(queryset))
     elif field == 'Ubicación Geográfica':
-        queryset = Lugar.objects.filter(nombre_del_lugar__icontains=search_string)
+        queryset = list(Lugar.objects.filter(nombre_del_lugar__icontains=search_string))
+        print('queryset', queryset)
     elif field == 'Género':
-        queryset = Imagen.objects.filter(género__icontains=search_string)
+        queryset = list(Persona.objects.filter(género__icontains=search_string))
+        print('queryset', queryset)
     elif field == 'Etnicidad':
-        queryset = Imagen.objects.filter(etnicidad__icontains=search_string) 
+        queryset = list(Persona.objects.filter(etnicidad__icontains=search_string))
+        print('queryset', queryset)
     else:
         print("Found an invalid field.")
         print("If you've just updated the field options dropdown,")

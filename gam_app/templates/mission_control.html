@@ -16,42 +16,15 @@
 <br>
 <ul id="myTab" class="nav nav-tabs nav-justified">
   <li class="active"><a data-toggle="tab" href="#tab1-slug">
-    {% trans "Bolsas" %}</a>
-  </li>
-  <li><a data-toggle="tab" href="#tab2-slug">
     {% trans "Transcripción y traducción" %}</a>
   </li>
-  <li><a data-toggle="tab" href="#tab3-slug">
+  <li><a data-toggle="tab" href="#tab2-slug">
     {% trans "Procesamiento secundario" %}</a>
   </li>
 </ul>
 
 <div class="tab-content">
   <div id="tab1-slug" class="tab-pane fade in active">
-    <br>
-    <table class="resourceTable">
-      <thead>
-      <tr>
-        <th>{% trans "número de bolso" %}</th>
-        <th class="select">{% trans "status" %}</th>
-      </tr> 
-      </thead>
-      <tbody>
-      {% for bag in bags %}
-      <tr>
-        <td>{{ bag }}</td>
-        {% if bag in imported_bags %}
-          <td>{% trans "importado"%}</td>
-        {% else %}
-          <td>{% trans "no importado"%}</td>
-        {% endif %}
-      </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  <div id="tab2-slug" class="tab-pane fade">
     <br>
     <table class="resourceTable">
     <thead>
@@ -78,7 +51,7 @@
   </div>
 
 
-  <div id="tab3-slug" class="tab-pane fade">
+  <div id="tab2-slug" class="tab-pane fade">
     <br>
     <table class="resourceTable">
     <thead>

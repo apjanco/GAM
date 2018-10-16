@@ -20,7 +20,7 @@ from django.conf.urls import include, url
 from gam_app import views
 from django.contrib.flatpages import views as flat_views
 from dal import autocomplete
-from gam_app.views import *
+#from gam_app.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,18 +34,18 @@ urlpatterns += i18n_patterns(
     path('cuentas/', include('django.contrib.auth.urls')),
     path('control-de-misión/', views.mission_control, name='mission_control'),
     path('track-bags/', views.track_bags, name='track_bags'),
-    path('autocompletar_imagen/', ImageFieldAutocomplete.as_view(), name='autocompletar_imagen'),
-    path('persona/create/', PersonaCreate.as_view(), name='persona_create'),
-    path('persona/<int:pk>/update/', PersonaUpdate.as_view(), name='persona_update'),
-    path('persona/<int:pk>', PersonaDetailView.as_view(), name='persona_detail'),
-    path('personalookup/', PersonaNameLookup.as_view(), name='persona_name_lookup'),
-    path('lugar/create/', LugarCreate.as_view(), name='lugar_create'),
-    path('lugar/<int:pk>/update/', LugarUpdate.as_view(), name='lugar_update'),
-    path('lugarlookup/', LugarNameLookup.as_view(), name='lugar_name_lookup'),
-    path('organizacion/create/', OrganizacionCreate.as_view(), name='organizacion_create'),
-    path('organizacion/<int:pk>/update/', OrganizacionUpdate.as_view(), name='organizacion_update'),
-    path('organizacionlookup/', OrganizacionNameLookup.as_view(), name='organizacion_name_lookup'),
-    path('autocompletar_manuscrito/', autocompletar_manuscrito.as_view(), name='autocompletar_manuscrito'),
+    path('autocompletar_imagen/', views.ImageFieldAutocomplete.as_view(), name='autocompletar_imagen'),
+    path('persona/create/', views.PersonaCreate.as_view(), name='persona_create'),
+    path('persona/<int:pk>/update/', views.PersonaUpdate.as_view(), name='persona_update'),
+    path('persona/<int:pk>', views.PersonaDetailView.as_view(), name='persona_detail'),
+    path('personalookup/', views.PersonaNameLookup.as_view(), name='persona_name_lookup'),
+    path('lugar/create/', views.LugarCreate.as_view(), name='lugar_create'),
+    path('lugar/<int:pk>/update/', views.LugarUpdate.as_view(), name='lugar_update'),
+    path('lugarlookup/', views.LugarNameLookup.as_view(), name='lugar_name_lookup'),
+    path('organizacion/create/', views.OrganizacionCreate.as_view(), name='organizacion_create'),
+    path('organizacion/<int:pk>/update/', views.OrganizacionUpdate.as_view(), name='organizacion_update'),
+    path('organizacionlookup/', views.OrganizacionNameLookup.as_view(), name='organizacion_name_lookup'),
+    path('autocompletar_manuscrito/', views.autocompletar_manuscrito.as_view(), name='autocompletar_manuscrito'),
     path('necisita_transcripción', views.necisita_transcripción, name='necisita_transcripción'),
     path('crear_usuario/', include('registration.backends.simple.urls')),
     path('file/<filename>', views.document, name='document'),

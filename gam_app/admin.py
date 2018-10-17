@@ -45,8 +45,7 @@ admin.site.register(Persona, PersonaAdmin)
 
 class LugarAdmin(admin.ModelAdmin):
     pass
-
-admin.site.register(Lugar, LugarAdmin) 
+admin.site.register(Lugar, LugarAdmin)
 
 class OrganizaciónAdmin(admin.ModelAdmin):
     pass

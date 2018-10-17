@@ -40,11 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'gam_app',
     'ckeditor',
     'storages',
     'django.contrib.sites',
     'django.contrib.flatpages',
+#    'django-datatables-view',
 ]
 
 MIDDLEWARE = [

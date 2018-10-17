@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.gis.db import models as geomodels
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
 from django.db.models import DateTimeField
@@ -42,6 +43,7 @@ class Persona(models.Model):
 class Lugar(models.Model):
     nombre_del_lugar = models.CharField(max_length=200, null=True)
     image = models.ManyToManyField('Imagen', blank=True)
+    punto = geomodels.PointField(blank=True, null=True,)
     def __str__(self):
        return self.nombre_del_lugar
 

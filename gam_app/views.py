@@ -89,7 +89,6 @@ def mission_control(request):
 
 @login_required
 def document(request, filename):
-
     if request.method == 'POST':
         if request.POST['input'] == 'text_edit':
             edit_form = EditForm(request.POST)

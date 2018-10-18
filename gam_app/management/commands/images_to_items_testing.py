@@ -36,8 +36,6 @@ class Command(BaseCommand):
         # Variable to keep track of filenames
         bags = {}
         for bag in bag_values:
-            if bag is None:
-                bag = 'pre_bag_names'
             if ' ' not in bag:
                 bags[bag] = {}
                 query_imagens = Imagen.objects.filter(
@@ -90,20 +88,20 @@ class Command(BaseCommand):
                         bags[bag][image.split('.')[0].split('-')[-1]] = []
                         bags[bag][image.split('.')[0].split('-')[-1]].append(image)
 
-    for key, value in bags.items():
-        for value1 in value.items():
+        for key, value in bags.items():
+            for value1 in value.items():
             # get item with name in the list
-            try:
-                item = Item.objects.get(nombre_del_item=value1[0])
-            except:
-                item = Item(nombre_del_item=value1[0])
-                item.save()
+                try:
+                    item = Item.objects.get(nombre_del_item=value1[0])
+                except:
+                    item = Item(nombre_del_item=value1[0])
+                    item.save()
 
-            for file in value1[1]:
-                image = Imagen.objects.get(nombre_del_archivo=file)
-                image.item = item
-                image.save()
-    #  print(bags['agos29_2018_bag106'])
-    #  print(bags['nov9_2017_bag3'])
-    #  print(bags['Agos24_2018_bag101'])
-    #  print(bags['Dic06_17_bag8'])
+                for file in value1[1]:
+                    image = Imagen.objects.get(nombre_del_archivo=file)
+                    image.item = item
+                    image.save()
+    #   print(bags['agos29_2018_bag106'])
+    #   print(bags['nov9_2017_bag3'])
+    #   print(bags['Agos24_2018_bag101'])
+    #   print(bags['Dic06_17_bag8'])

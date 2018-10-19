@@ -222,7 +222,6 @@ def dzi(request, file):
 def explorar(request):
     if request.user.is_staff:
 
-        state = Imagen.objects.all()
         archives = Archivo.objects.all()
         collections = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección').distinct()
         for collection in collections:
@@ -235,11 +234,11 @@ def explorar(request):
         #    print(carpeta)
     #        carpeta['descripción'] = get_object_or_404(Carpeta, archivo=carpeta['archivo__nombre_del_archivo'], carpeta_no= carpeta['carpeta']).descripcion_caso
 
-        context  = {'state':state, 'archives':archives, 'collections':collections, 'carpetas':carpetas}
+        context  = {'archives':archives, 'collections':collections, 'carpetas':carpetas}
         return render(request, 'personal_explorar.html', context)
 
     else:
-        state = Item.objects.all()
+
         archives = Archivo.objects.all()
         collections = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección').distinct()
         for collection in collections:
@@ -249,7 +248,7 @@ def explorar(request):
         carpetas  = Carpeta.objects.all()
         
 
-        context  = {'state':state, 'archives':archives, 'collections':collections, 'carpetas':carpetas}
+        context  = {'archives':archives, 'collections':collections, 'carpetas':carpetas}
         return render(request, 'publico_explorar.html', context)
 
 
@@ -552,7 +551,7 @@ def documento3(request, archivo, colección, caja, legajo):
         next_legajo = legajo_list[0]
         print(next_legajo)
     context = {'state':state, 'location':location, 'previous_legajo':previous_legajo, 'next_legajo':next_legajo}
-    return render(request, 'all_documents_page.html', context)
+    return render(request, 'grandes_colecciones.html', context)
 
 def documento2(request, archivo, colección, caja):
 
@@ -577,35 +576,23 @@ def documento2(request, archivo, colección, caja):
     except:
         next_caja = caja_list[0]
     context = {'state':state, 'location':location, 'previous_caja':previous_caja, 'next_caja':next_caja}
-    return render(request, 'all_documents_page.html', context)
+    return render(request, 'grandes_colecciones.html', context)
 
 def documento1(request, archivo, colección):
-
 
     state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección).order_by('caja')
     location = {'archivo':archivo, 'colección':colección}
     context = {'state':state, 'location':location}
-    return render(request, 'all_documents_page.html', context)
+    return render(request, 'grandes_colecciones.html', context)
 
 @login_required
 def documento0(request, archivo):
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-        query = request.POST.get('search', None)
-        if form.is_valid():
-            state = Imagen.objects.filter(texto_de_OCR__icontains=query).order_by('colección')
-            context  = {'state':state, 'form':form}
-            return render(request, 'all_documents_page.html', context)
-        else:
-            print(form.errors)
-    else:
-        search = ""
-        form = SearchForm(initial={'search': search })
-        state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo).order_by('número_de_imagen')
-        location = {'archivo':archivo}
-        context = {'state':state,'form':form, 'location':location }
+  
+    state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo).order_by('número_de_imagen')
+    location = {'archivo':archivo}
+    context = {'state':state, 'location':location }
 
-        return render(request, 'all_documents_page.html', context)
+    return render(request, 'grandes_colecciones.html', context)
 
 
 

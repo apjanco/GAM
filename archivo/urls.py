@@ -60,7 +60,7 @@ urlpatterns += i18n_patterns(
     path('caso/<caso>', views.single_caso, name='single_caso'),
     path('lugar/<lugar>', views.lugar, name='lugar'),
     path('procesamiento/<archivo>/<colección>/<caja>/<legajo>/<carpeta>/', views.procesamiento, name='procesamiento'),
-    #paths for physical location urls
+    #paths for working with images (personal is 'staff')
     path('<archivo>/<colección>/<caja>/<legajo>/<carpeta>/<número_de_imagen>/', views.documento5, name='documento5'),
     path('<archivo>/<colección>/<caja>/<legajo>/<carpeta>/', views.documento4, name='documento4'),
     path('<archivo>/<colección>/<caja>/<legajo>/', views.documento3, name='documento3'),

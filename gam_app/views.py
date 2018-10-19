@@ -53,11 +53,6 @@ def search(request, query):
         form = SearchForm(initial={'search': search })
     return render(request, 'index.html', {'form':form})
 
-def necisita_transcripción(request):
-    state = Imagen.objects.all()
-    context = {'state':state}
-    return render(request, 'all_documents_page.html', context)
-
 def elasticsearch(request, query):
     search = Search(using=get_client(), index='gam')
     state = SearchQuery.execute(search)
@@ -86,126 +81,6 @@ def mission_control(request):
               }
     return render(request, 'mission_control.html', context)
 
-
-@login_required
-def document(request, filename):
-    if request.method == 'POST':
-        if request.POST['input'] == 'text_edit':
-            edit_form = EditForm(request.POST)
-            if edit_form.is_valid():
-                #print('this is the request',request)
-                texto_de_OCR = request.POST['texto_de_OCR']
-                file = request.POST.get('nombre_del_archivo', None)
-                archivo = get_object_or_404(Archivo, nombre_del_archivo=request.POST.get('archivo', None))
-                archivo_id = archivo.id
-                collection = get_object_or_404(Colección, nombre_de_la_colección=request.POST.get('colección', None))
-                box = request.POST.get('caja', None)
-                bundle = request.POST.get('legajo', None)
-                folder = request.POST.get('carpeta', None)
-                old_text = request.POST.get('old_text', None)
-                notas = request.POST.get('notas', None)
-                persona = request.POST.get('persona', None)
-                print('here is the person')
-                print(persona)
-
-                lugar = request.POST.get('ubicación_geográfica', None)
-                actividades_políticas = request.POST.get('actividades_políticas', None)
-                fecha_desaparicion = request.POST.get('fecha_desaparicion', None)
-                genero = request.POST.get('genero', None)
-                manuscritos = request.POST.get('manuscripts', None)
-
-                time = datetime.datetime.now()
-                usuario_id = User.objects.get(username=request.user).pk
-                #save previous text
-                transcription = Transcrito(usuario_id=usuario_id, nombre_del_archivo=file, tiempo_modificado=time, texto_transcrito=old_text)
-                transcription.save()
-
-                #save with the new data
-                image = Imagen.objects.get(nombre_del_archivo = file)
-                image.texto_de_OCR = texto_de_OCR
-                image.notas = notas
-                image.persona = persona
-                image.ubicación_geográfica.add(lugar)
-                image.actividades_políticas.add(actividades_políticas)
-                image.género.add(genero)
-                image.manuscritos.add(manuscritos)
-                image.save()
-
-
-                clipboard = PortapapelesForm(request.POST)
-
-
-                state = get_object_or_404(Imagen, nombre_del_archivo=filename)
-                context  = {'state':state, 'form':edit_form, 'clipboard':clipboard}
-                return render(request, 'document_page.html', context)
-
-            else:
-                print(form.errors)
-
-        if request.POST['input'] == 'clipboard':
-            clipboard = PortapapelesForm(request.POST)
-            if clipboard.is_valid():
-                response = dict(clipboard.data)
-                choice = response.get('list_name', None)
-                print('choice',choice)
-                clipboards = Portapapeles.objects.all()
-                print('clipboards',clipboards)
-                chosen = clipboards[int(choice[0])-1]
-                #print(chosen)
-                user = response.get('user', None)
-                file = response.get('filename', None)
-                print ('Clipboard!', dict(clipboard.data))
-                user_id = User.objects.get(username=user[0]).pk
-                clip = Portapapeles.objects.get(nombre_del_portapapeles=chosen, usuario=user_id)
-                clip.imágenes.add(Imagen.objects.get(nombre_del_archivo=file[0]).pk)
-                clip.save()
-
-                state = get_object_or_404(Imagen, nombre_del_archivo=filename)
-                id = state.id
-                form = EditForm(initial={'texto_de_OCR':state.texto_de_OCR})
-
-                context  = {'state':state,'form':form,'clipboard':clipboard,'id':id}
-                return render(request, 'document_page.html', context)
-
-    else:
-        state = get_object_or_404(Imagen, nombre_del_archivo=filename)
-        #TODO add forward + backward buttons
-        possible_pages = Imagen.objects.filter(archivo__nombre_del_archivo=state.archivo, colección__nombre_de_la_colección=state.colección, caja=state.caja, legajo=state.legajo, carpeta=state.carpeta).order_by('número_de_imagen')
-        pages_list = []
-        for index, page in enumerate(possible_pages):
-            pages_list.append(page)
-
-            #print(index, page)
-            if page == state:
-                print('current= ', page.número_de_imagen, index)
-                current = int(index)
-        previous = pages_list[current-1].número_de_imagen
-        try:
-            next_one = pages_list[current+1].número_de_imagen
-        except:
-            next_one = pages_list[current].número_de_imagen
-
-        print('previous= ', previous)
-        print('next= ', next_one)
-        #next_one = pages_list[int(current)+1]
-        #print(current, next_one, previous)
-            #print(index, page)
-            #if page == state:
-            #    print('this is it', page.número_de_imagen, index)
-        #        current = index
-        #    next_one = current + 1, page
-        #    print(next_one)
-            #print (possible_pages)
-
-        id = state.id
-        form = EditForm(initial={'texto_de_OCR':state.texto_de_OCR})
-        clipboard = PortapapelesForm(request.POST)
-        context  = {'state':state, 'form':form, 'clipboard':clipboard, 'id':id, 'previous':previous, 'next_one':next_one}
-        return render(request, 'document_page.html', context)
-
-def document_edit(request, filename):
-    state = get_object_or_404(Imagen, nombre_del_archivo=filename)
-    return render(request, 'document_edit_page.html',{'state':state})
 
 def lugar(request, lugar):
     l_id = Lugar.objects.filter(nombre_del_lugar=lugar)
@@ -315,28 +190,6 @@ class autocompletar_manuscrito(autocomplete.Select2QuerySetView):
             qs = qs.filter(nombre_del_manuscrito__icontains=self.q)
         return qs
 
-def persona(request, persona):
-    state = Imagen.objects.filter(persona__nombre_de_la_persona=persona)
-    context = {'state':state}
-    return render(request, 'all_documents_page.html', context)
-
-@login_required
-def all_documents(request):
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-        query = request.POST.get('search', None)
-        if form.is_valid():
-            state = Imagen.objects.filter(texto_de_OCR__icontains=query)
-            context  = {'state':state, 'form':form}
-            return render(request, 'all_documents_page.html', context)
-        else:
-            print(form.errors)
-    else:
-        state = Imagen.objects.all()
-        search = ""
-        form = SearchForm(initial={'search': search })
-        context = {'state':state,'form':form }
-    return render(request, 'all_documents_page.html', context)
 
 @login_required
 def todo_texto(request):
@@ -367,21 +220,37 @@ def dzi(request, file):
 
 @login_required
 def explorar(request):
-    state = Imagen.objects.all()
-    archives = Archivo.objects.all()
-    collections = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección').distinct()
-    for collection in collections:
-        collection['descripción'] = get_object_or_404(Colección, nombre_de_la_colección= collection['colección__nombre_de_la_colección']).descripción
+    if request.user.is_staff:
 
-    #carpetas = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección', 'caja', 'legajo', 'carpeta').distinct()
-    carpetas  = Carpeta.objects.all()
-    print(carpetas)
-    #for carpeta in carpetas:
-    #    print(carpeta)
-#        carpeta['descripción'] = get_object_or_404(Carpeta, archivo=carpeta['archivo__nombre_del_archivo'], carpeta_no= carpeta['carpeta']).descripcion_caso
+        state = Imagen.objects.all()
+        archives = Archivo.objects.all()
+        collections = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección').distinct()
+        for collection in collections:
+            collection['descripción'] = get_object_or_404(Colección, nombre_de_la_colección= collection['colección__nombre_de_la_colección']).descripción
 
-    context  = {'state':state, 'archives':archives, 'collections':collections, 'carpetas':carpetas}
-    return render(request, 'explorar.html', context)
+        #carpetas = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección', 'caja', 'legajo', 'carpeta').distinct()
+        carpetas  = Carpeta.objects.all()
+        print(carpetas)
+        #for carpeta in carpetas:
+        #    print(carpeta)
+    #        carpeta['descripción'] = get_object_or_404(Carpeta, archivo=carpeta['archivo__nombre_del_archivo'], carpeta_no= carpeta['carpeta']).descripcion_caso
+
+        context  = {'state':state, 'archives':archives, 'collections':collections, 'carpetas':carpetas}
+        return render(request, 'personal_explorar.html', context)
+
+    else:
+        state = Item.objects.all()
+        archives = Archivo.objects.all()
+        collections = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección').distinct()
+        for collection in collections:
+            collection['descripción'] = get_object_or_404(Colección, nombre_de_la_colección= collection['colección__nombre_de_la_colección']).descripción
+
+        #carpetas = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección', 'caja', 'legajo', 'carpeta').distinct()
+        carpetas  = Carpeta.objects.all()
+        
+
+        context  = {'state':state, 'archives':archives, 'collections':collections, 'carpetas':carpetas}
+        return render(request, 'publico_explorar.html', context)
 
 
 @login_required

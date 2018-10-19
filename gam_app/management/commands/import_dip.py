@@ -142,6 +142,7 @@ class Command(BaseCommand):
         help = "Imports data from an Archivematica DIP in tmp/DIP into the database"
         def handle(self, *args, **options):
                 print ("**Import DIP to Django**")
+                current_item = CurrentItem
                 project_list = os.listdir('/tmp/DIP/') #change to '/tmp/DIP'
 
                 for project in project_list:

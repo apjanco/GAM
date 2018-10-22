@@ -1,3 +1,5 @@
+### Please review this script.  Thank you!! ###
+
 from django.core.management.base import BaseCommand, CommandError
 from gam_app.models import Imagen, Item
 import re

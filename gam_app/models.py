@@ -111,6 +111,29 @@ ORGANIZATION_STATUS_CHOICES = (
         ('FINAL','Competido y verificado')
 )
 #Folder
+class Caja(models.Model):
+    archivo = models.ForeignKey('Archivo', on_delete=models.CASCADE, default=1)
+    colección = models.ForeignKey('Colección', on_delete=models.CASCADE, default=1)
+    número_de_caja= models.CharField(max_length=200, blank=True) 
+    departamento= models.ManyToManyField(Lugar, blank=True)
+    municipios= models.CharField(max_length=200, blank=True)
+    letras= models.CharField(max_length=200, blank=True)
+    legajos= models.CharField(max_length=200, blank=True)
+    fechas_extremas= models.CharField(max_length=200, blank=True)
+    volumen_en_metros_lineales= models.CharField(max_length=200, blank=True) 
+    sistema_digital= models.CharField(max_length=200, blank=True)
+
+    def carpetas(self):
+        archivo = self.archivo
+        colección= self.colección
+        caja= self.número_de_caja
+        legajos = self.legajos.split(',')
+        carpetas= []
+        for legajo in legajos:
+            carpeta= Carpeta.objects.filter(archivo=archivo, colección=colección, caja=caja, legajo=legajo)
+            carpetas.append(carpeta)
+        return carpetas
+
 class Carpeta(models.Model):
     carpeta_titulo = models.CharField(max_length=200, blank=True)
     persona = models.ManyToManyField('Persona', blank=True)
@@ -195,7 +218,32 @@ class Item(models.Model):
     site = models.ManyToManyField(Site)
 
     def __str__(self):
-       return self.nombre_del_item
+        return self.nombre_del_item
+
+    def archivo(self):
+        if self.nombre_del_item.split('_')[0] == 'gam':
+            archivo = Archivo.objects.get(nombre_del_archivo='Archivo del GAM')
+            return archivo
+
+    def colección(self):
+        if self.nombre_del_item.split('_')[1] == 'des':
+            colección = Colección.objects.get(nombre_de_la_colección='Desaparecidos')
+            return colección
+
+        if self.nombre_del_item.split('_')[1] == 'nin':
+            colección = Colección.objects.get(nombre_de_la_colección='Niñez Desparecida')
+            return colección
+
+    def caja(self):
+        return self.nombre_del_item.split('_')[2]
+
+    def legajo(self):
+        return self.nombre_del_item.split('_')[3]
+
+    def carpeta(self):
+        return self.nombre_del_item.split('_')[4]
+
+
 
 # Transcriptions, these work with the machine readable text associated with an image.  The text is initially ocr'd with Google Vision.
 # When a user maker a correction, the previous version is saved here.

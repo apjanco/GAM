@@ -594,6 +594,51 @@ def documento0(request, archivo):
 
     return render(request, 'grandes_colecciones.html', context)
 
+@login_required
+def item(request, nombre_del_item):
+
+    state = Imagen.objects.filter(item__nombre_del_item=nombre_del_item)
+
+    archivo= state[0].archivo
+    colección= state[0].colección
+    caja= state[0].caja
+    legajo= state[0].legajo
+    carpeta= state[0].carpeta
+
+
+    possible_items= Item.objects.filter(nombre_del_item__icontains=nombre_del_item[:-3])
+    item_list = []
+    #make a list of the possible items with index values
+    for index, item in enumerate(possible_items):
+        if item not in item_list:
+            item_list.append(item)
+    print(item_list)
+    for item in item_list:
+        if str(item) == state[0].localizacion_fisica:
+            current = item
+            print('current is',current)
+    #find index in list for current
+    index_current= item_list.index(current)
+    previous_carpeta = item_list[index_current-1]
+    try:
+        next_carpeta = item_list[index_current+1]
+    except:
+        next_carpeta = item_list[0]
+
+    carpeta_info = Caso.objects.filter(caja_no=caja, legajo_no=legajo, carpeta_no=carpeta)
+
+    images_in_carpeta = Imagen.objects.all().filter(caja=caja, legajo=legajo, carpeta=carpeta)
+
+    location = {'archivo':archivo, 'colección':colección, 'caja':caja, 'legajo':legajo, 'carpeta':carpeta, 'item': nombre_del_item.split('_')[-1]}
+
+    context = {'state':state,
+                   'location':location,
+                   'previous_carpeta':previous_carpeta,
+                   'next_carpeta':next_carpeta,
+                   'carpeta_info':carpeta_info,
+                   'images_in_carpeta' : images_in_carpeta}
+
+    return render(request, 'item.html', context)
 
 
 

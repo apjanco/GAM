@@ -33,6 +33,7 @@ urlpatterns += i18n_patterns(
     path('buscar/', views.search, name='search'),
     path('cuentas/', include('django.contrib.auth.urls')),
     path('control-de-misión/', views.mission_control, name='mission_control'),
+    path('item/<nombre_del_item>/', views.item, name='item'),
     path('track-bags/', views.track_bags, name='track_bags'),
     path('autocompletar_imagen/', views.ImageFieldAutocomplete.as_view(), name='autocompletar_imagen'),
     path('persona/create/', views.PersonaCreate.as_view(), name='persona_create'),

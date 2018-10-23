@@ -20,6 +20,7 @@ from django.conf.urls import include, url
 from gam_app import views
 from django.contrib.flatpages import views as flat_views
 from dal import autocomplete
+from django.contrib.auth.decorators import login_required
 #from gam_app.views import *
 
 urlpatterns = [
@@ -35,6 +36,8 @@ urlpatterns += i18n_patterns(
     path('control-de-misión/', views.mission_control, name='mission_control'),
     path('item/<nombre_del_item>/', views.item, name='item'),
     path('track-bags/', views.track_bags, name='track_bags'),
+    path('datatable/imagen', login_required(views.ImagenListJson.as_view()), name='imagen_list_json'),
+    path('datatable/carpeta', login_required(views.CarpetaListJson.as_view()), name='carpeta_list_json'),
     path('autocompletar_imagen/', views.ImageFieldAutocomplete.as_view(), name='autocompletar_imagen'),
     path('persona/create/', views.PersonaCreate.as_view(), name='persona_create'),
     path('persona/<int:pk>/update/', views.PersonaUpdate.as_view(), name='persona_update'),

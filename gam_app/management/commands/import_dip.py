@@ -18,7 +18,15 @@ import re
 from pathlib import Path
 
 
+class CurrentItem:
+    """An object to hold the current bag and letters values. Values are written
+    by the first image with a particular letter pattern (a, bbb, cc).  As the script moves 
+    down the list, later occurances of that pattern are written to the initial item.  
+    This prevents the creation of multiple items for a given letter pattern."""
 
+    def __init__(self, name, letters):
+        self.name = name
+        self.letters = letters
 
 def clean_dzis():
     """This function fixes a peculiarity of the dzi making process for openseadragon.
@@ -134,6 +142,7 @@ class Command(BaseCommand):
         help = "Imports data from an Archivematica DIP in tmp/DIP into the database"
         def handle(self, *args, **options):
                 print ("**Import DIP to Django**")
+                current_item = CurrentItem
                 project_list = os.listdir('/tmp/DIP/') #change to '/tmp/DIP'
 
                 for project in project_list:
@@ -158,23 +167,6 @@ class Command(BaseCommand):
                             path = '/tmp/DIP/' + dip_name + '/objects/' + file
                             #change to 4mb if larger
                             change_size_if_needed(path)
-
-                            
-
-                
-                            #send to vision for ocr
-                            #try:
-                            #    ocr_text = vision_ocr(dip_name,file)
-                            #except:
-                            #    pass
-
-                            #if ocr_text == None:
-                            #    ocr_text = ''
-                            #else:
-                            #    ocr_text.decode('utf-8')
-                            #ocr_text = ' '
-                            #print('File: %s' % file)
-                            #print('Text: %s' % ocr_text.decode('utf8'))
                             
                             # remove uuid
                             location = file.split('-')[-1]
@@ -214,25 +206,7 @@ class Command(BaseCommand):
                                 collection_name = input("That collection does not exist, please enter a new collection name: ")
                                 Colección.objects.get_or_create(nombre_de_la_colección=collection_name)
                                 collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection_name)
-                            #print('I am at line 168')
-                            #print('localizacion_fisica= ',physical_location)
-                            #print('archivo= ',archivo_id.nombre_del_archivo)
-                            #print('colección= ', collection_id.nombre_de_la_colección)
-                            #print('caja= ', box)
-                            #print('legajo= ', bundle)
-                            #print('carpeta= ', folder)
-                            #print('image= ', image)
-
-                            #if not already in db, create a folder entry (carpeta)
-                            #Carpeta.objects.update_or_create(
-                            #    archivo_id = archivo_id.pk,
-                            #    colección_id = collection_id.pk,
-                            #    caja = box,
-                            #    legajo = bundle,
-                            #    carpeta = folder,
-                            #)
-
-
+                            
                             #create the document in the db
                             Imagen.objects.update_or_create(
                                 nombre_del_archivo= file,
@@ -274,74 +248,8 @@ class Command(BaseCommand):
                                 #subprocess.call('mv /srv/GAM/gam_app/dzis/%s_files /srv/GAM/gam_app/dzis/%s_files' %  (file.split('.')[0], file))
                             except Exception as e:
                                 print(e)
-                            #If letter at end of filename
-
-                            '''
-                               image= gam_des_001_001_004_001a  item = gam_des_001_001_004_001
-                                      gam_des_001_001_004_002a         "
-                                      gam_des_001_001_004_003          gam_des_001_001_004_003
-                                      gam_des_001_001_004_004b         gam_des_001_001_004_004
-                                      gam_des_001_001_004_005b         "
-                                      gam_des_001_001_004_006b         "
-                            '''
-
-                            if re.search('[a-zA-Z]', image):
-                                #Separate the numbers and letters in the filename
-                                numbers = ''.join([i for i in image if i.isdigit()])
-                                letters = ''.join([i for i in image if not i.isdigit()])
-                                
-                                # Find the first entry for that letter in the same folder
-                                #print('Create list of images in the folder')
-                                folder_images = Imagen.objects.filter(archivo__id=archivo_id.pk, colección__id=collection_id.pk, caja=str(box), legajo=str(bundle), carpeta=str(folder)).order_by('número_de_imagen')
-                                #print('folder_images= ',folder_images)
-                                for image in folder_images:
-                                    image_letters = ''.join([i for i in image.número_de_imagen if not i.isdigit()])
-                                    image_numbers = ''.join([i for i in image.número_de_imagen if i.isdigit()])  
-                                    
-                                    image_id = Imagen.objects.get(localizacion_fisica= physical_location)
-                                    #print(image_id)
-                                    # Folder images are sorted, so the first result with the same letter will be the item number.
-                                    if letters == image_letters:
-                                        
-                                        Item.objects.update_or_create(
-                                        nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+image_numbers,
-                                        )
-
-                                        my_item = Item.objects.get(nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+image_numbers)
-                                        #my_item.imágenes.add(image_id)
-                                        # either of these should work, not sure which is better                                       
-                                        #defaults= {'imágenes': image_id}
-                                        #obj = Item.objects.get(nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+item_number,)
-                                        #for key, value in defaults.items():
-                                        #    setattr(obj, key, value)
-                                        #    obj.save()
-                                    
-                                    else:
-                                        Item.objects.update_or_create(
-                                        nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+numbers,
-                                        )
-
-                                        my_item = Item.objects.get(nombre_del_item = archive+'_'+collection+'_'+box+'_'+bundle+'_'+folder+'_'+numbers)
-                                        #my_item.imágenes.add(image_id)
-                                        #if this is the first time that the letter occurs in the folder
-                                        
-                            # Otherwise create a single-image item
-                            else:
-                                try:
-                                    image_id = Imagen.objects.get(nombre_del_archivo= file).pk
-                                except:
-                                    #ensure no duplicates of the image
-                                    image_id = Imagen.objects.filter(nombre_del_archivo= file)
-                                    for image in image_id[1:]:
-                                        image.delete()
-                                    image_id = Imagen.objects.get(nombre_del_archivo= file).pk
-
-                                Item.objects.update_or_create(
-                                nombre_del_item = physical_location,
-                                )
-                                my_item = Item.objects.get(nombre_del_item = physical_location)
-                                #my_item.imágenes.add(image_id)
-                      
+                            
+                        #  Read the folder descriptions and write them to a folder object
                         if file.split('.')[1] == 'txt':
                            path = '/tmp/DIP/' + dip_name + '/objects/' + file
                            with open(path, encoding='ISO-8859-1') as fp:
@@ -402,8 +310,75 @@ class Command(BaseCommand):
                                     carpeta = folder,
                                     descripción = descripción
                                )
-                #what to do with METs file
-                #what is processing MCP file? 
+                
                 clean_dzis()
+
+                # create items for all of the images in the DIP
+                bag = dip_name
+                bags = {}
+                bags[bag] = {}
+                query_imagens = Imagen.objects.filter(
+                    bag_name=bag).order_by(
+                    "caja", "legajo", "carpeta", "número_de_imagen")
+
+                #  create a list from the queryset that will allow indexing
+                imagens_list = []
+                for item in query_imagens:
+                    imagens_list.append(item.nombre_del_archivo)
+
+                for index, image in enumerate(imagens_list):
+                    número_de_imagen = image.split('.')[0]
+                    número_de_imagen = número_de_imagen.split('_')[-1]
+
+                    # file number has letter
+                    if re.search('[a-zA-Z]', número_de_imagen):
+                        letters = ''.join(
+                            [i for i in número_de_imagen if not i.isdigit()])
+
+                        #  check previous image, if previous had no letters
+                        if letters not in imagens_list[index-1].split(
+                            '.')[0].split('_')[-1]:
+
+                            #  create an item from physical
+                            #  location minus letters
+                            item_name = image.split('.')[0].split(
+                                '-')[-1][:-len(letters)]
+                            bags[bag][item_name] = []
+
+                            #  add current image to the item
+                            bags[bag][item_name].append(image)
+
+                            #  variable to hold current item name
+                            current_item.name = item_name
+                            current_item.letters = letters
+
+                        #  if previous had letters, add to existing item
+                        elif current_item.letters in imagens_list[index-1].split('.')[0].split('_')[-1]:
+                            try:
+                                bags[bag][current_item.name].append(image)
+
+                            except:
+                                print('[*] Error with {}'.format(
+                                    current_item.name))
+                                continue
+
+                    # file number has no letters : create single-image item
+                    else:
+                        bags[bag][image.split('.')[0].split('-')[-1]] = []
+                        bags[bag][image.split('.')[0].split('-')[-1]].append(image)
+
+                    for key, value in bags.items():
+                        for value1 in value.items():
+                        # get item with name in the list
+                            try:
+                                item = Item.objects.get(nombre_del_item=value1[0])
+                            except:
+                                item = Item(nombre_del_item=value1[0])
+                                item.save()
+
+                            for file in value1[1]:
+                                image = Imagen.objects.get(nombre_del_archivo=file)
+                                image.item = item
+                                image.save()
 
 

@@ -7,6 +7,7 @@ from gam_app.forms import EditForm, SearchForm, PortapapelesForm, CarpetaForm, P
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 #search engine dependencies
 from elasticsearch_django.settings import get_client
@@ -238,6 +239,7 @@ def explorar(request):
         return render(request, 'personal_explorar.html', context)
 
     else:
+        #TODO convert to return Items not images 
 
         archives = Archivo.objects.all()
         collections = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección').distinct()
@@ -507,22 +509,22 @@ def documento4(request, archivo, colección, caja, legajo, carpeta):
             current = item
             print('current is',current)
     #find index in list for current
-    index_current= carpeta_list.index(current)
-    previous_carpeta = carpeta_list[index_current-1]
     try:
-        next_carpeta = carpeta_list[index_current+1]
+        index_current= carpeta_list.index(current)
+        
+        try:
+            previous_carpeta = carpeta_list[index_current-1]
+            next_carpeta = carpeta_list[index_current+1]
+        except:
+            next_carpeta = carpeta_list[0]
     except:
-        next_carpeta = carpeta_list[0]
-    carpeta_info = Caso.objects.filter(caja_no=caja, legajo_no=legajo, carpeta_no=carpeta)
-
-    images_in_carpeta = Imagen.objects.all().filter(caja=caja, legajo=legajo, carpeta=carpeta)
-
+        pass 
+    
     context = {'state':state,
                    'location':location,
                    'previous_carpeta':previous_carpeta,
                    'next_carpeta':next_carpeta,
-                   'carpeta_info':carpeta_info,
-                   'images_in_carpeta' : images_in_carpeta}
+                  }
     return render(request, 'all_documents_page.html', context)
 
 #legajo view
@@ -550,7 +552,9 @@ def documento3(request, archivo, colección, caja, legajo):
     except:
         next_legajo = legajo_list[0]
         print(next_legajo)
-    context = {'state':state, 'location':location, 'previous_legajo':previous_legajo, 'next_legajo':next_legajo}
+    carpetas = Carpeta.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo)
+    
+    context = {'state':state, 'location':location, 'previous_legajo':previous_legajo, 'next_legajo':next_legajo, 'carpetas':carpetas}
     return render(request, 'grandes_colecciones.html', context)
 
 def documento2(request, archivo, colección, caja):
@@ -575,22 +579,28 @@ def documento2(request, archivo, colección, caja):
         next_caja = caja_list[index_current+1]
     except:
         next_caja = caja_list[0]
-    context = {'state':state, 'location':location, 'previous_caja':previous_caja, 'next_caja':next_caja}
+    #distinct = Imagen.objects.values('legajo').annotate(count=Count('legajo')).filter(count=1)
+    legajos = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja).distinct() #.values('legajo')
+    context = {'state':state, 'location':location, 'previous_caja':previous_caja, 'next_caja':next_caja, 'legajos':legajos}
     return render(request, 'grandes_colecciones.html', context)
 
 def documento1(request, archivo, colección):
 
     state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección).order_by('caja')
+    cajas = Caja.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección)
     location = {'archivo':archivo, 'colección':colección}
-    context = {'state':state, 'location':location}
+ 
+    context = {'state':state, 'location':location, 'cajas':cajas}
     return render(request, 'grandes_colecciones.html', context)
 
 @login_required
 def documento0(request, archivo):
   
     state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo).order_by('número_de_imagen')
+    colecciones = Colección.objects.filter(archivo__nombre_del_archivo=archivo)
+
     location = {'archivo':archivo}
-    context = {'state':state, 'location':location }
+    context = {'state':state, 'location':location, 'colecciones':colecciones }
 
     return render(request, 'grandes_colecciones.html', context)
 

@@ -31,13 +31,10 @@ class Persona(models.Model):
         return "/persona/%i/" % self.id
 
 #relationships 
-#class Relación(models.Model):
-    #personA = models.ManyToManyField(Persona, blank=True)
-    #personB = models.ManyToManyField(Persona, blank=True)
- #   relationship = models.CharField(max_length=200, choices=(('s', 'esposa'),
-  #                                           ('c', 'niño'),
-   #                                          ('p', 'padre')),
-    #                                          default='s')
+class Relación(models.Model):
+    persona_A = models.ManyToManyField(Persona, blank=False, related_name= 'A')
+    persona_B = models.ManyToManyField(Persona, blank=False, related_name= 'B')
+    relación = models.CharField(max_length=200, null=True)
 
 #This is a place.
 class Lugar(models.Model):
@@ -115,6 +112,7 @@ class Caja(models.Model):
     archivo = models.ForeignKey('Archivo', on_delete=models.CASCADE, default=1)
     colección = models.ForeignKey('Colección', on_delete=models.CASCADE, default=1)
     número_de_caja= models.CharField(max_length=200, blank=True) 
+    carpetas = models.ManyToManyField('Carpeta', blank=True, related_name= 'carpetas')
     departamento= models.ManyToManyField(Lugar, blank=True)
     municipios= models.CharField(max_length=200, blank=True)
     letras= models.CharField(max_length=200, blank=True)
@@ -122,17 +120,10 @@ class Caja(models.Model):
     fechas_extremas= models.CharField(max_length=200, blank=True)
     volumen_en_metros_lineales= models.CharField(max_length=200, blank=True) 
     sistema_digital= models.CharField(max_length=200, blank=True)
+    descripción = RichTextField(blank=True, default='')
 
-    def carpetas(self):
-        archivo = self.archivo
-        colección= self.colección
-        caja= self.número_de_caja
-        legajos = self.legajos.split(',')
-        carpetas= []
-        for legajo in legajos:
-            carpeta= Carpeta.objects.filter(archivo=archivo, colección=colección, caja=caja, legajo=legajo)
-            carpetas.append(carpeta)
-        return carpetas
+    def __str__(self):
+        return '{}/{}/{}'.format(self.archivo,self.colección,self.número_de_caja)
 
 class Carpeta(models.Model):
     carpeta_titulo = models.CharField(max_length=200, blank=True)

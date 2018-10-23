@@ -43,9 +43,16 @@ class PersonaAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Persona, PersonaAdmin) 
 
+class RelaciónAdmin(admin.ModelAdmin):
+    search_fields = ['persona_A','persona_B',]
+    #autocomplete_fields = ['persona_A','persona_B',]
+
+admin.site.register(Relación, RelaciónAdmin)
+
 class LugarAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Lugar, LugarAdmin)
+
 
 class OrganizaciónAdmin(admin.ModelAdmin):
     pass
@@ -71,6 +78,12 @@ class ColecciónAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Colección, ColecciónAdmin)
+
+class CajaAdmin(admin.ModelAdmin):
+    search_fields = [ 'número_de_caja']
+    autocomplete_fields = ['carpetas',]
+
+admin.site.register(Caja, CajaAdmin)
 
 class ItemAdmin(admin.ModelAdmin):
     search_fields = [ 'nombre_del_item']

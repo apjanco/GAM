@@ -7,6 +7,7 @@ from gam_app.forms import EditForm, SearchForm, PortapapelesForm, CarpetaForm, P
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 #search engine dependencies
 from elasticsearch_django.settings import get_client
@@ -22,6 +23,10 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from gam_app.forms import PersonaForm, LugarForm, OrganizaciónForm
 from django.views import generic
+
+#For datatables server-side processing
+from django_datatables_view.base_datatable_view import BaseDatatableView
+from django.utils.html import escape
 # Create your views here.
 
 def index(request):
@@ -75,16 +80,56 @@ def track_bags(request):
 
 @login_required
 def mission_control(request):
-    #tab1
-    imagen = Imagen.objects.all().order_by('localizacion_fisica')
 
-    #tab2
-    carpeta = Carpeta.objects.all().order_by('carpeta_titulo')
+    context = {}
+    return render(request, 'mission_control2.html', context)
 
-    context = {'imagen': imagen,
-               'carpeta': carpeta,
-              }
-    return render(request, 'mission_control.html', context)
+
+class ImagenListJson(BaseDatatableView):
+    model = Imagen
+    columns = ['localizacion_fisica', 'status', 'traducción']
+
+    # define column names that will be used in sorting order is important and should be same as order of columns displayed by datatables. 
+    # For non sortable columns use empty value like ''
+    order_columns = ['localizacion_fisica', 'status', 'traducción']
+
+    # set max limit of records returned, this is used to protect our site if someone tries to attack our site and make it return huge amount of data
+    max_display_length = 500
+
+    def render_column(self, row, column):
+        # we want to render 'traducción' as custom columns
+        if column == 'traducción':
+            if row.traducción == '':
+                return escape('sin traducción')
+            else:
+                return escape('traducido')
+        else:
+            return super(ImagenListJson, self).render_column(row, column)
+
+    def filter_queryset(self, qs):
+        search = self.request.GET.get('search[value]', None)
+        if search:
+            qs = qs.filter(localizacion_fisica__icontains=search)
+        return qs
+
+class CarpetaListJson(BaseDatatableView):
+    model = Carpeta
+    columns = ['carpeta_titulo', 'person_status', 'place_status', 'organization_status']
+    order_columns = ['carpeta_titulo', 'person_status', 'place_status', 'organization_status']
+    max_display_length = 500
+
+    def render_column(self, row, column):
+        # we want to render 'carpeta_titulo' as custom columns
+        if column == 'carpeta_titulo':
+            return escape('{0}/{1}/{2}/{3}'.format(row.colección, row.caja, row.legajo, row.carpeta))
+        else:
+            return super(CarpetaListJson, self).render_column(row, column)
+
+    def filter_queryset(self, qs):
+        search = self.request.GET.get('search[value]', None)
+        if search:
+            qs = qs.filter(carpeta_titulo__icontains=search)
+        return qs
 
 
 @login_required

@@ -50,7 +50,14 @@ class RelaciónAdmin(admin.ModelAdmin):
 admin.site.register(Relación, RelaciónAdmin)
 
 class LugarAdmin(admin.ModelAdmin):
-    pass
+    search_fields= ['lugar']
+    def get_form(self, request, obj=None, **kwargs):
+        if not obj:
+            self.form = LugarAdminForm
+        else:
+            self.form = LugarAdminStaticForm
+        return super(LugarAdmin, self).get_form(request, obj, **kwargs)
+
 admin.site.register(Lugar, LugarAdmin)
 
 

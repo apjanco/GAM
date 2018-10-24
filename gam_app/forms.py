@@ -8,7 +8,7 @@ import datetime
 from django.db import models
 from django.core.files.storage import FileSystemStorage
 from gam_app.models import *
-
+from mapwidgets.widgets import GooglePointFieldWidget, GoogleStaticMapWidget
 
 class EditForm(forms.ModelForm):
     texto_de_OCR = forms.CharField(widget=CKEditorWidget(), required=False)
@@ -29,6 +29,22 @@ class CarpetaForm(forms.ModelForm):
         model = Carpeta
         widgets = { 'carpeta_titulo': forms.TextInput(attrs= {'size': 84 }),
                   }
+
+class LugarAdminForm(forms.ModelForm):
+    class Meta:
+        model = Lugar
+        fields = '__all__'
+        widgets = {
+            'punto':GooglePointFieldWidget(settings={"GooglePointFieldWidget":(("zoom",8),)}),
+        }
+
+class LugarAdminStaticForm(forms.ModelForm):
+    class Meta:
+        model = Lugar
+        fields = '__all__'
+        widgets = {
+            'punto':GoogleStaticMapWidget,
+        }
 
 class SearchForm(forms.Form):
 	search = forms.CharField(label='search', max_length=100)

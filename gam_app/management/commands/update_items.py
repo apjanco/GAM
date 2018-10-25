@@ -17,6 +17,23 @@ class CurrentItem:
 
 
 class Command(BaseCommand):
+    """This is a script for generating the relationships between images and items in the collection.  An image is a single scan of a document. An item can 
+    contain one or more images.  It is typically used when we have scanned the front and back of a document or there are several pages in the same form.
+    An item associates the images that are part of the item in the database.
+
+    During scanning in Guatemala, the staff indicate that images are part of a common item by adding a letter to the number of the filename.
+    This typically happens sequentially, but often the letters start and restart based on folders, boxes or other reasons that are not clear.
+    Nonetheless, images in an item are nearly always next to eachother.  So 001a and 002a should, in most cases, be part of the same item.
+    However, 001a, 002a...008a and 020a are likely three separate items.
+
+    To address this problem, this script sorts all of the image files so that associated images will be proximate to one another.
+
+    The script moves down the list of sorted images.  Where no letter is present, a single-image item is created.
+
+    Where there is a letter in the file number, the script checks the previous entry for a letter.  If none is present, then a new item is created.
+    For the next row, we check if a letter is present.  If the letter matches that of the most recently created item (presumably the row before),
+    then the image is added to the current item.  If the letter is not the same, then a new item is created.  
+        """
 
     def handle(self, *args, **options):
         print("Associating images with their host item.")
@@ -75,8 +92,8 @@ class Command(BaseCommand):
                             current_item.name = item_name
                             current_item.letters = letters
 
-                        #  if previous had letters, add to existing item
-                        elif current_item.letters in imagens_list[index-1].split('.')[0].split('_')[-1]:
+                        #  Check if letters are the same. if current item letters matches image letters, add to current item
+                        elif letters and current_item.letters in imagens_list[index-1].split('.')[0].split('_')[-1]:
                             try:
                                 bags[bag][current_item.name].append(image)
 
@@ -103,7 +120,3 @@ class Command(BaseCommand):
                     image = Imagen.objects.get(nombre_del_archivo=file)
                     image.item = item
                     image.save()
-    #   print(bags['agos29_2018_bag106'])
-    #   print(bags['nov9_2017_bag3'])
-    #   print(bags['Agos24_2018_bag101'])
-    #   print(bags['Dic06_17_bag8'])

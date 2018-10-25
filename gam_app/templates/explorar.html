@@ -94,8 +94,13 @@
 {% endif %}
 
 <script>
-$(document).ready( function () {
-    $('.resourceTable').DataTable();
+$(document).ready(function() {
+    $('.resourceTable').DataTable( {
+        "pageLength": 50,
+        "processing": true,
+        "serverSide": true,
+        "ajax": "{% url 'carpeta_list_json' %}",
+    } );
 } );
 </script>
 {% endblock %}

@@ -55,7 +55,8 @@ class LugarAdmin(admin.ModelAdmin):
         if not obj:
             self.form = LugarAdminForm
         else:
-            self.form = LugarAdminStaticForm
+            # self.form = LugarAdminStaticForm
+            self.form = LugarAdminForm
         return super(LugarAdmin, self).get_form(request, obj, **kwargs)
 
 admin.site.register(Lugar, LugarAdmin)

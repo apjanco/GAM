@@ -163,7 +163,7 @@ CKEDITOR_CONFIGS = {
 MAP_WIDGETS = {
     "GooglePointFieldWidget": (
         ("zoom", 15),
-        ("mapCenterLocationName", "london"),
+        ("mapCenterLocationName", [14.642213, -90.516653]),
         ("GooglePlaceAutocompleteOptions", {'componentRestrictions': {'country': 'uk'}}),
         ("markerFitZoom", 12),
     ),

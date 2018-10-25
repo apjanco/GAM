@@ -35,7 +35,7 @@ class LugarAdminForm(forms.ModelForm):
         model = Lugar
         fields = '__all__'
         widgets = {
-            'punto':GooglePointFieldWidget(settings={"GooglePointFieldWidget":(("zoom",8),)}),
+            'punto':GooglePointFieldWidget(settings={"GooglePointFieldWidget":(("zoom",8),("mapCenterLocation", [14.642213, -90.516653]),)}),
         }
 
 class LugarAdminStaticForm(forms.ModelForm):

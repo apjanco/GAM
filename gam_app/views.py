@@ -136,7 +136,8 @@ class CarpetaListJson_Buscar(BaseDatatableView):
     def render_column(self, row, column):
         # we want to render 'carpeta_titulo' as custom columns
         if column == 'carpeta_titulo':
-            return escape('{0}/{1}/{2}/{3}'.format(row.colección, row.caja, row.legajo, row.carpeta))
+            #return escape('{0}/{1}/{2}/{3}'.format(row.colección, row.caja, row.legajo, row.carpeta))
+            return format_html("<a href='../procesamiento/{0}/{1}/{2}/{3}/{4}'>{0}/{1}/{2}/{3}/{4}</a>".format(row.archivo, row.colección, row.caja, row.legajo, row.carpeta))
         else:
             return super(CarpetaListJson_Buscar, self).render_column(row, column)
 

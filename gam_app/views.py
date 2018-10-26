@@ -75,7 +75,6 @@ def track_bags(request):
 
 @login_required
 def mission_control(request):
-
     context = {}
     return render(request, 'mission_control2.html', context)
 
@@ -123,9 +122,29 @@ class CarpetaListJson(BaseDatatableView):
     def filter_queryset(self, qs):
         search = self.request.GET.get('search[value]', None)
         if search:
-            qs = qs.filter(carpeta_titulo__icontains=search)
+            q = Q(person_status__icontains=search)|Q(place_status__icontains=search)|Q(organization_status__icontains=search)
+            qs = qs.filter(q)
+
         return qs
 
+class CarpetaListJson_Buscar(BaseDatatableView):
+    model = Carpeta
+    columns = ['carpeta_titulo', 'descripción']
+    order_columns = ['carpeta_titulo', '']
+    max_display_length = 500
+
+    def render_column(self, row, column):
+        # we want to render 'carpeta_titulo' as custom columns
+        if column == 'carpeta_titulo':
+            return escape('{0}/{1}/{2}/{3}'.format(row.colección, row.caja, row.legajo, row.carpeta))
+        else:
+            return super(CarpetaListJson_Buscar, self).render_column(row, column)
+
+    def filter_queryset(self, qs):
+        search = self.request.GET.get('search[value]', None)
+        if search:
+            qs = qs.filter(descripción__icontains=search)
+        return qs
 
 def lugar(request, lugar):
     l_id = Lugar.objects.filter(nombre_del_lugar=lugar)
@@ -274,7 +293,7 @@ def explorar(request):
 
         #carpetas = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección', 'caja', 'legajo', 'carpeta').distinct()
         carpetas  = Carpeta.objects.all()
-        print(carpetas)
+#        print(carpetas)
         #for carpeta in carpetas:
         #    print(carpeta)
     #        carpeta['descripción'] = get_object_or_404(Carpeta, archivo=carpeta['archivo__nombre_del_archivo'], carpeta_no= carpeta['carpeta']).descripcion_caso
@@ -291,10 +310,10 @@ def explorar(request):
             collection['descripción'] = get_object_or_404(Colección, nombre_de_la_colección= collection['colección__nombre_de_la_colección']).descripción
 
         #carpetas = Imagen.objects.values('archivo__nombre_del_archivo','colección__nombre_de_la_colección', 'caja', 'legajo', 'carpeta').distinct()
-        carpetas  = Carpeta.objects.all()
-        
+#        carpetas  = Carpeta.objects.all()
 
-        context  = {'archives':archives, 'collections':collections, 'carpetas':carpetas}
+
+        context  = {'archives':archives, 'collections':collections} #, 'carpetas':carpetas}
         return render(request, 'publico_explorar.html', context)
 
 
@@ -617,15 +636,19 @@ def documento2(request, archivo, colección, caja):
         else:
             current = caja_list[0]
     #find index in list for current
-    index_current= caja_list.index(current)
+    index_current = caja_list.index(current)
     previous_caja = caja_list[index_current-1]
     try:
         next_caja = caja_list[index_current+1]
     except:
         next_caja = caja_list[0]
     #distinct = Imagen.objects.values('legajo').annotate(count=Count('legajo')).filter(count=1)
-    legajos = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja).distinct() #.values('legajo')
-    context = {'state':state, 'location':location, 'previous_caja':previous_caja, 'next_caja':next_caja, 'legajos':legajos}
+    
+    legajos = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja)
+    legajo_list = set([legajo.legajo for legajo in legajos])
+    
+    
+    context = {'state':state, 'location':location, 'previous_caja':previous_caja, 'next_caja':next_caja, 'legajos':legajo_list,}
     return render(request, 'grandes_colecciones.html', context)
 
 def documento1(request, archivo, colección):

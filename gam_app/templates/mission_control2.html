@@ -30,8 +30,8 @@
     <thead>
       <tr>
         <th>imagen</th>
-        <th class="select">transcription status</th>
-        <th class="select">translation status</th>
+        <th>transcription status</th>
+        <th>translation status</th>
       </tr>
     </thead>
     </table>
@@ -44,9 +44,9 @@
     <thead>
       <tr>
         <th>Carpeta</th>
-        <th class="select">{% trans "Registros de persona" %}</th>
-        <th class="select">{% trans "Registros de lugar" %}</th>
-        <th class="select">{% trans "Registros de organizaciones" %}</th>
+        <th>{% trans "Registros de persona" %}</th>
+        <th>{% trans "Registros de lugar" %}</th>
+        <th>{% trans "Registros de organizaciones" %}</th>
       </tr>
     </thead>
     </table>
@@ -69,6 +69,8 @@ $(document).ready(function() {
         "processing": true,
         "serverSide": true,
         "ajax": "{% url 'carpeta_list_json' %}",
+
+        /// this works for filtering the status, but it is not functioning now...
         initComplete: function () {
             this.api().columns('.select').every( function () {
                 var column = this;

@@ -288,33 +288,6 @@ class autocompletar_manuscrito(autocomplete.Select2QuerySetView):
 
 
 @login_required
-def todo_texto(request):
-    state = Imagen.objects.all()
-    context  = {'state':state}
-    return render(request, 'todo_texto.html', context)
-
-#These two views work with the clipboard.  The first takes a url with portapaeles and an
-#the name of a clipboard.  It then returns the name of the clipboard and all images in it.
-def espacio_de_trabajo(request, portapapeles):
-    clipboard = Portapapeles.objects.filter(nombre_del_portapapeles=portapapeles)
-    state = Imagen.objects.filter(portapapeles__nombre_del_portapapeles=portapapeles)
-    context  = {'state':state, 'clipboards':clipboard }
-    return render(request, 'document_multi_image.html', context)
-
-#This one renders a list of all clipboards.  Note that both views share the same template.
-@login_required
-def portapapeles(request):
-    clipboards = Portapapeles.objects.all()
-    state = Imagen.objects.all()
-    context  = {'state':state, 'clipboards':clipboards}
-    return render(request, 'document_multi_image.html', context)
-
-def dzi(request, file):
-    file = open('/srv/GAM/gam_app/dzis/%s.dzi' % file)
-    response = HttpResponse(content=file)
-    return response
-
-@login_required
 def explorar(request):
     if request.user.is_staff:
 

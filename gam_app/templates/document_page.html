@@ -33,21 +33,21 @@
 {% if state %}
 
 <div class="row">
-  <a href="/{{ state.archivo }}/">{{ state.archivo }}</a>
-  &gt; <a href="/{{ state.archivo }}/{{ state.colección }}/">{{ state.colección }}</a>
-  &gt; <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}">{% trans "Caja" %}: {{ state.caja }}</a>
-  &gt; <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/">{% trans "Legajo" %}: {{ state.legajo }}</a>
-  &gt; <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/">{% trans "Carpeta" %}: {{ state.carpeta }}</a>
-  &gt; <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ state.número_de_imagen }}/">{% trans "Número de imagen" %}: {{ state.número_de_imagen }}</a>
+  <a href="{% url 'documento0' state.archivo %}">{{ state.archivo }}</a>
+  &gt; <a href="{% url 'documento1' state.archivo state.colección %}">{{ state.colección }}</a>
+  &gt; <a href="{% url 'documento2' state.archivo state.colección state.caja %}">{% trans "Caja" %}: {{ state.caja }}</a>
+  &gt; <a href="{% url 'documento3' state.archivo state.colección state.caja state.legajo %}">{% trans "Legajo" %}: {{ state.legajo }}</a>
+  &gt; <a href="{% url 'documento4' state.archivo state.colección state.caja state.legajo state.carpeta %}">{% trans "Carpeta" %}: {{ state.carpeta }}</a>
+  &gt; <a href="{% url 'documento5' state.archivo state.colección state.caja state.legajo state.carpeta state.número_de_imagen %}">{% trans "Número de imagen" %}: {{ state.número_de_imagen }}</a>
 ({{ current}} {% trans "de" %} {{ total }})
 
 {% if previous %}
   <div class="col-sm-2">
-    <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ previous }}/"> &lt; Atrás :</a>
+    <a href="{% url 'documento5' state.archivo state.colección state.caja state.legajo state.carpeta previous %}"> &lt; Anterior :</a>
 {% endif %}
 
 {% if next_one %}
-  <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ next_one }}/">Siguente &gt;</a>
+  <a href="{% url 'documento5' state.archivo state.colección state.caja state.legajo state.carpeta next_one %}">Siguiente &gt;</a>
 {% endif %}
 </div>
       <input type="hidden" value="clipboard" name="input" />

@@ -70,7 +70,7 @@ ROOT_URLCONF = 'archivo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'gam_app/templates','./templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'gam_app/templates','./templates', 'acceso/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -142,6 +142,7 @@ STATIC_ROOT = '/var/www/html/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'gam_app/static'),
+    os.path.join(BASE_DIR, 'acceso/static'),
 ]
 
 ACCOUNT_ACTIVATION_DAYS = 30

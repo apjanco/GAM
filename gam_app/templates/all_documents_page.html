@@ -117,7 +117,7 @@
 var items = [];
 var srcs = [];
 {% for item in state %}
-items.push(["{{ item.nombre_del_archivo }}", "/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"]);
+items.push(["{{ item.nombre_del_archivo }}", "{% url 'documento5' item.archivo item.colección item.caja item.legajo item.carpeta item.número_de_imagen %}"]);
 // srcs.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
 srcs.push("https://dzis.nyc3.digitaloceanspaces.com/{{ item.nombre_del_archivo }}.dzi")
 {% endfor %}

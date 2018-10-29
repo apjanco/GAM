@@ -65,10 +65,10 @@ urlpatterns += i18n_patterns(
     path('lugar/<lugar>', views.lugar, name='lugar'),
     path('procesamiento/<archivo>/<colección>/<caja>/<legajo>/<carpeta>/', views.procesamiento, name='procesamiento'),
     #paths for working with images (personal is 'staff')
-    path('<archivo>/<colección>/<caja>/<legajo>/<carpeta>/<número_de_imagen>/', views.documento5, name='documento5'),
-    path('<archivo>/<colección>/<caja>/<legajo>/<carpeta>/', views.documento4, name='documento4'),
-    path('<archivo>/<colección>/<caja>/<legajo>/', views.documento3, name='documento3'),
-    path('<archivo>/<colección>/<caja>/', views.documento2, name='documento2'),
-    path('<archivo>/<colección>/', views.documento1, name='documento1'),
-    path('<archivo>/', views.documento0, name='documento0'),
+    path('imagen/<archivo>/<colección>/<caja>/<legajo>/<carpeta>/<número_de_imagen>/', views.documento5, name='documento5'),
+    path('imagen/<archivo>/<colección>/<caja>/<legajo>/<carpeta>/', views.documento4, name='documento4'),
+    path('imagen/<archivo>/<colección>/<caja>/<legajo>/', views.documento3, name='documento3'),
+    path('imagen/<archivo>/<colección>/<caja>/', views.documento2, name='documento2'),
+    path('imagen/<archivo>/<colección>/', views.documento1, name='documento1'),
+    path('imagen/<archivo>/', views.documento0, name='documento0'),
 )

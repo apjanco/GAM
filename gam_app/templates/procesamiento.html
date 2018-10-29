@@ -23,54 +23,53 @@
 <div>
 {% if previous_caja %}
   <div class="col-sm-2">
-<a class="previous" href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ previous_caja }}/"> < {% trans "Atrás" %} :</a>
-{% endif %}
+<a class="previous" href="{% url 'documento2' location.archivo location.colección previous_caja %}"> < {% trans "Anterior" %} :</a>
 
+{% endif %}
 {% if next_caja %}
-<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ next_caja }}/">{% trans "Siguente" %} ></a>
+<a href="{% url 'documento2' location.archivo location.colección next_caja %}">{% trans "Siguiente" %} ></a>
 </div>
 {% endif %}
-
 {% if previous_legajo %}
   <div class="col-sm-2">
-<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ previous_legajo }}/"> < {% trans "Atrás" %} :</a>
-{% endif %}
+<a href="{% url 'documento3' location.archivo location.colección location.caja previous_legajo %}"> < {% trans "Anterior" %} :</a>
 
+{% endif %}
 {% if next_legajo %}
-<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ next_legajo }}/">{% trans "Siguente" %} ></a>
+<a href="{% url 'documento3' location.archivo location.colección location.caja next_legajo %}">{% trans "Siguiente" %} ></a>
 </div>
 {% endif %}
 
 {% if previous_carpeta %}
   <div class="col-sm-2">
-<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ previous_carpeta }}/"> < {% trans "Atrás" %} :</a>
-{% endif %}
+<a href="{% url 'documento4' location.archivo location.colección location.caja location.legajo previous_carpeta %}"> < {% trans "Anterior" %} :</a>
 
+{% endif %}
 {% if next_carpeta %}
-<a href="/procesamiento/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ next_carpeta }}/">{% trans "Siguente" %} ></a>
+<a href="{% url 'documento4' location.archivo location.colección location.caja location.legajo next_carpeta %}">{% trans "Siguiente" %} ></a>
 </div>
 {% endif %}  
 
-<a href="/{{ location.archivo }}/">{{ location.archivo }}</a>
+<a href="{% url 'documento0' location.archivo %}">{{ location.archivo }}</a>
 
 {% if location.colección %}
-> <a href="/{{ location.archivo }}/{{ location.colección }}/">{{ location.colección }}</a>
+> <a href="{% url 'documento1' location.archivo location.colección %}">{{ location.colección }}</a>
 {% endif %}
 
 {% if location.caja %}
-> <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/">{% trans "Caja" %}: {{ location.caja }}</a>
+> <a href="{% url 'documento2' location.archivo location.colección location.caja %}">{% trans "Caja" %}: {{ location.caja }}</a>
 {% endif %}
 
 {% if location.legajo %}
-> <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/">{% trans "Legajo" %}: {{ location.legajo }}</a>
+> <a href="{% url 'documento3' location.archivo location.colección location.caja location.legajo %}">{% trans "Legajo" %}: {{ location.legajo }}</a>
 {% endif %}
 
 {% if location.carpeta %}
-> <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ location.carpeta }}/">{% trans "Carpeta" %}: {{ location.carpeta }}</a>
+> <a href="{% url 'documento4' location.archivo location.colección location.caja location.legajo location.carpeta %}">{% trans "Carpeta" %}: {{ location.carpeta }}</a>
 {% endif %}
 
 {% if location.número_de_imagen %}
-> <a href="/{{ location.archivo }}/{{ location.colección }}/{{ location.caja }}/{{ location.legajo }}/{{ location.carpeta}}/{{ location.número_de_imagen }}/">{% trans "Número de imagen" %}: {{ location.número_de_imagen }}</a>
+> <a href="{% url 'documento5' location.archivo location.colección location.caja location.legajo location.carpeta location.número_de_imagen %}">{% trans "Número de imagen" %}: {{ location.número_de_imagen }}</a>
 {% endif %}
 </div>
 

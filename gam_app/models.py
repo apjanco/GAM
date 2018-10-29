@@ -143,8 +143,10 @@ class Carpeta(models.Model):
     person_status = models.CharField(max_length= 20, choices=PERSON_STATUS_CHOICES)
     place_status = models.CharField(max_length= 20, choices=PLACE_STATUS_CHOICES)
     organization_status = models.CharField(max_length= 20, choices=ORGANIZATION_STATUS_CHOICES)
+
     def __str__(self):
-       return '%s/%s/%s' % (self.caja,self.legajo,self.carpeta)
+        return '{}/{}/{}'.format(self.caja, self.legajo, self.carpeta)
+    
 
 #This is an archival collection
 class Colección(models.Model):

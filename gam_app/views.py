@@ -166,8 +166,11 @@ class CarpetaListJson_Buscar(BaseDatatableView):
         if column == 'carpeta_titulo':
             #return escape('{0}/{1}/{2}/{3}'.format(row.colección, row.caja, row.legajo, row.carpeta))
             return format_html("<a href='../procesamiento/{0}/{1}/{2}/{3}/{4}'>{1}/{2}/{3}/{4}</a>".format(row.archivo, row.colección, row.caja, row.legajo, row.carpeta))
-        else:
-            return super(CarpetaListJson_Buscar, self).render_column(row, column)
+        if column == 'descripción':
+            return format_html("<div align='left'>{0}</div>".format(row.descripción))
+
+        #else:
+        #    return super(CarpetaListJson_Buscar, self).render_column(row, column)
 
     def filter_queryset(self, qs):
         search = self.request.GET.get('search[value]', None)

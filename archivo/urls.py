@@ -39,6 +39,7 @@ urlpatterns += i18n_patterns(
     path('item/<nombre_del_item>/', views.item, name='item'),
     path('track-bags/', views.track_bags, name='track_bags'),
     path('datatable/imagen', login_required(views.ImagenListJson.as_view()), name='imagen_list_json'),
+    path('datatable/imagen_desc', login_required(views.ImagenListDescJson.as_view()), name='imagen_desc_list_json'),
     path('datatable/carpeta', login_required(views.CarpetaListJson.as_view()), name='carpeta_list_json'),
     path('datatable/carpeta_buscar', login_required(views.CarpetaListJson_Buscar.as_view()), name='carpeta_list_json_buscar'),
     path('autocompletar_imagen/', views.ImageFieldAutocomplete.as_view(), name='autocompletar_imagen'),

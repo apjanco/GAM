@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'mapwidgets',
+    'acceso',
 #    'django-datatables-view',
 ]
 

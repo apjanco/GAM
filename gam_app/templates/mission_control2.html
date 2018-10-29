@@ -60,6 +60,9 @@ $(document).ready(function() {
         "processing": true,
         "serverSide": true,
         "ajax": "{% url 'imagen_list_json' %}",
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+        },
     } );
 } );
 
@@ -69,7 +72,9 @@ $(document).ready(function() {
         "processing": true,
         "serverSide": true,
         "ajax": "{% url 'carpeta_list_json' %}",
-
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+        },
         /// this works for filtering the status, but it is not functioning now...
         initComplete: function () {
             this.api().columns('.select').every( function () {

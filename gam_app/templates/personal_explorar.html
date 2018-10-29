@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+
 {% block extra_static %}
 <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -21,7 +22,6 @@
 {% block title %}GAM{% endblock %}
 
 {% block content %}
-
 {% if archives %}
 <h3>{% trans "Archivos" %}</h3>
 <table class="resource_table" style="margin-top: 15px;">
@@ -71,7 +71,9 @@
 
 
 
-    
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!-- Current language: {{ LANGUAGE_CODE }} -->
 
 
     
@@ -86,6 +88,15 @@ $(document).ready(function() {
         "processing": true,
         "serverSide": true,
         "ajax": "{% url 'carpeta_list_json_buscar' %}",
+        {% if LANGUAGE_CODE == 'es' %}
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+        },
+        {% elif LANGUAGE_CODE == 'de' %}
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/German.json"
+        },
+        {% endif %}
     } );
 } );
 </script>

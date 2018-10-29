@@ -13,7 +13,7 @@
 </style>
 {% endblock %}
 
-
+{% load static %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -59,47 +59,30 @@
 <br>
 
 <h3>{% trans "Carpetas" %}</h3>
-<table class="resourceTable">
+<table class="resourceTable3">
   <thead>
     <tr>
       <th>{% trans "Nombre" %}</th>
       <th><div align="left">{% trans "Descripción" %}</div></th>
     </tr>
   </thead>
-  <tbody>
-    {% for carpeta in carpetas %}
-      <tr>
-        <td><a href="{% url 'procesamiento' carpeta.archivo carpeta.colección carpeta.caja carpeta.legajo carpeta.carpeta %}">{{ carpeta.colección }} {{ carpeta.caja }}/{{carpeta.legajo }}/{{ carpeta.carpeta }}</a></td>
-	{% if carpeta.descripción %}
-	<td><div align="left"> {{ carpeta.descripción|safe }} </div></td>
-	{% elif carpeta.descripción_generada_automaticamente %}
-	<td><div align="left"> {{ carpeta.descripción_generada_automaticamente }} </div></td>
-	{% else %}
-        <td><div align="left"> --- </div></td>
-	{% endif %}
-      </tr>   
-    {% endfor %}
-  </tbody>
 </table>
 <hr>
-
-
-
-    
-
 
     
 {% else %}
   <p>{% trans "Inicia sesión para ver este contenido" %}</p>
 {% endif %}
 
-<script>
+
+
+<script type="text/javascript">
 $(document).ready(function() {
-    $('.resourceTable').DataTable( {
+    $('.resourceTable3').DataTable( {
         "pageLength": 50,
         "processing": true,
         "serverSide": true,
-        "ajax": "{% url 'carpeta_list_json' %}",
+        "ajax": "{% url 'carpeta_list_json_buscar' %}",
     } );
 } );
 </script>

@@ -9,6 +9,7 @@ import datetime
 from django.contrib.auth.models import User
 from django.db.models import Count, Q
 
+
 #search engine dependencies
 from elasticsearch_django.settings import get_client
 from elasticsearch_django.models import SearchQuery
@@ -106,6 +107,33 @@ class ImagenListJson(BaseDatatableView):
             qs = qs.filter(localizacion_fisica__icontains=search)
         return qs
 
+class ImagenListDescJson(BaseDatatableView):
+    model = Imagen
+    columns = ['localizacion_fisica', 'texto_de_OCR']
+
+    # define column names that will be used in sorting order is important and should be same as order of columns displayed by datatables. 
+    # For non sortable columns use empty value like ''
+    order_columns = ['localizacion_fisica', 'texto_de_OCR']
+
+    # set max limit of records returned, this is used to protect our site if someone tries to attack our site and make it return huge amount of data
+    max_display_length = 500
+
+    def render_column(self, row, column):
+        # we want to render 'traducción' as custom columns
+        if column == 'localizacion_fisica':
+            return format_html("<a href='/{0}/{1}/{2}/{3}/{4}'>{1}/{2}/{3}/{4}</a>".format(row.archivo, row.colección, row.caja, row.legajo, row.carpeta, row.número_de_imagen,))
+        if column == 'texto_de_OCR':
+            return format_html("<div align='left'>{0}</div>".format(row.texto_de_OCR))
+        #else:
+        #    return super(ImagenListDescJson, self).render_column(row, column)
+        #return super(ImagenListDescJson, self).render_column(row, column)
+
+    def filter_queryset(self, qs):
+        search = self.request.GET.get('search[value]', None)
+        if search:
+            qs = qs.filter(texto_de_OCR__icontains=search)
+        return qs
+
 class CarpetaListJson(BaseDatatableView):
     model = Carpeta
     columns = ['carpeta_titulo', 'person_status', 'place_status', 'organization_status']
@@ -137,7 +165,7 @@ class CarpetaListJson_Buscar(BaseDatatableView):
         # we want to render 'carpeta_titulo' as custom columns
         if column == 'carpeta_titulo':
             #return escape('{0}/{1}/{2}/{3}'.format(row.colección, row.caja, row.legajo, row.carpeta))
-            return format_html("<a href='../procesamiento/{0}/{1}/{2}/{3}/{4}'>{0}/{1}/{2}/{3}/{4}</a>".format(row.archivo, row.colección, row.caja, row.legajo, row.carpeta))
+            return format_html("<a href='../procesamiento/{0}/{1}/{2}/{3}/{4}'>{1}/{2}/{3}/{4}</a>".format(row.archivo, row.colección, row.caja, row.legajo, row.carpeta))
         else:
             return super(CarpetaListJson_Buscar, self).render_column(row, column)
 

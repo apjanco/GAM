@@ -42,17 +42,9 @@ $(document).ready(function () {
 });
 
 
-function sleep(ms) {
-    // TODO: find a way to do this without using ES2015 features.
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 
-// TODO: find a way to do this without using ES2015 features.
-async function addLinkOverlays() {
-  // Wait until OSD is finished arranging the images so that the coordinates are accurate.
-  await sleep(2000);
-
+function addLinkOverlays() {
   for (var i = 0; i < images.length; i++) {
     addOneLinkOverlay(images[i], items[i][1]);
   }
@@ -91,4 +83,32 @@ function addOneLinkOverlay(image, link) {
 function isPointInsideRect(point, rect) {
     return point.x > rect.x && point.x < rect.x + rect.width && point.y > rect.y &&
            point.y < rect.y + rect.height;
+}
+
+function areAllFullyLoaded() {
+  var tiledImage;
+  var count = viewer.world.getItemCount();
+  for (var i = 0; i < count; i++) {
+    tiledImage = viewer.world.getItemAt(i);
+    if (!tiledImage.getFullyLoaded()) {
+      return false;
+    }
+  }
+  return true;
+}
+
+var isFullyLoaded = false;
+
+viewer.world.addHandler('add-item', function(event) {
+  var tiledImage = event.item;
+  tiledImage.addHandler('fully-loaded-change', function() {
+    var newFullyLoaded = areAllFullyLoaded();
+    if (newFullyLoaded !== isFullyLoaded) {
+      isFullyLoaded = newFullyLoaded;
+      // Raise event
+      if (isFullyLoaded) {
+         addLinkOverlays();
+       }
+    }
+  });
 }

@@ -7,6 +7,7 @@
 index/
 logs
 uwsgi_params
+*.save 
 
 gam_app/dzis
 gam_app/static/thumbnails

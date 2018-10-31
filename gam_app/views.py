@@ -143,7 +143,7 @@ class CarpetaListJson(BaseDatatableView):
     def render_column(self, row, column):
         # we want to render 'carpeta_titulo' as custom columns
         if column == 'carpeta_titulo':
-            return escape('{0}/{1}/{2}/{3}'.format(row.colección, row.caja, row.legajo, row.carpeta))
+            return format_html("<a href='../procesamiento/{0}/{1}/{2}/{3}/{4}'>{1}/{2}/{3}/{4}</a>".format(row.archivo, row.colección, row.caja, row.legajo, row.carpeta))
         else:
             return super(CarpetaListJson, self).render_column(row, column)
 
@@ -174,6 +174,7 @@ class CarpetaListJson_Buscar(BaseDatatableView):
 
     def filter_queryset(self, qs):
         search = self.request.GET.get('search[value]', None)
+
         if search:
             qs = qs.filter(descripción__icontains=search)
         return qs
@@ -322,12 +323,6 @@ def explorar(request):
         return render(request, 'publico_explorar.html', context)
 
 
-@login_required
-def caso(request):
-    state = Caso.objects.all()
-    context  = {'state':state}
-    return render(request, 'caso_page.html', context)
-
 def single_caso(request, caso):
     state = get_object_or_404(Caso, caso=caso)
     context  = {'state':state}
@@ -434,6 +429,7 @@ def procesamiento(request, archivo, colección, caja, legajo, carpeta):
 
 
 #image view
+@login_required
 def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_imagen):
 
     if request.method == 'POST':
@@ -562,6 +558,7 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
         return render(request, 'document_page.html', context)
 
 #carpeta view
+@login_required
 def documento4(request, archivo, colección, caja, legajo, carpeta):
 
     state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta).order_by('número_de_imagen')
@@ -596,6 +593,7 @@ def documento4(request, archivo, colección, caja, legajo, carpeta):
     return render(request, 'all_documents_page.html', context)
 
 #legajo view
+@login_required
 def documento3(request, archivo, colección, caja, legajo):
 
     state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo).order_by('carpeta')
@@ -625,6 +623,7 @@ def documento3(request, archivo, colección, caja, legajo):
     context = {'state':state, 'location':location, 'previous_legajo':previous_legajo, 'next_legajo':next_legajo, 'carpetas':carpetas}
     return render(request, 'grandes_colecciones.html', context)
 
+@login_required
 def documento2(request, archivo, colección, caja):
 
     state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja).order_by('legajo')
@@ -656,6 +655,7 @@ def documento2(request, archivo, colección, caja):
     context = {'state':state, 'location':location, 'previous_caja':previous_caja, 'next_caja':next_caja, 'legajos':legajo_list,}
     return render(request, 'grandes_colecciones.html', context)
 
+@login_required
 def documento1(request, archivo, colección):
 
     state = Imagen.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección).order_by('caja')

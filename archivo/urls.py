@@ -55,7 +55,6 @@ urlpatterns += i18n_patterns(
     path('organizacionlookup/', views.OrganizacionNameLookup.as_view(), name='organizacion_name_lookup'),
     path('autocompletar_manuscrito/', views.autocompletar_manuscrito.as_view(), name='autocompletar_manuscrito'),
     path('crear_usuario/', include('registration.backends.simple.urls')),
-    path('caso/', views.caso, name='caso'),
     path('advanced_search_submit/', views.advanced_search_submit, name='advanced-search-submit'),
     path('sobre/', flat_views.flatpage, {'url': '/es/sobre/'}, name='sobre'),
     path('about/', flat_views.flatpage, {'url': '/en/about/'}, name='about'),

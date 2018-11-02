@@ -1,0 +1,66 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-09-27 19:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: acceso/templates/single_page.html:37
+msgid "Caja"
+msgstr ""
+
+#: acceso/templates/single_page.html:38
+msgid "Legajo"
+msgstr ""
+
+#: acceso/templates/single_page.html:39 acceso/templates/single_page.html:77
+msgid "Carpeta"
+msgstr ""
+
+#: acceso/templates/single_page.html:40
+msgid "Número de imagen"
+msgstr ""
+
+#: acceso/templates/single_page.html:41
+msgid "de"
+msgstr ""
+
+#: acceso/templates/single_page.html:74
+msgid "Texto"
+msgstr ""
+
+#: acceso/templates/single_page.html:90 acceso/templates/single_page.html:107
+msgid "Guardar cambios"
+msgstr ""
+
+#: acceso/templates/single_page.html:91 acceso/templates/single_page.html:108
+msgid "Estado de la transcripción"
+msgstr ""
+
+#: acceso/templates/single_page.html:102
+msgid "Notas"
+msgstr ""
+
+#: acceso/templates/single_page.html:109
+msgid "Carpeta titulo"
+msgstr ""
+
+#: acceso/templates/single_page.html:110
+msgid "Descripción"
+msgstr ""
+
+#: acceso/templates/single_page.html:119
+msgid "Ningún documento con ese nombre de archivo"
+msgstr ""

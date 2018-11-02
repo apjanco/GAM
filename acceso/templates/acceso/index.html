@@ -1,0 +1,122 @@
+
+{% extends 'acceso/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content1 %}
+	<body class="homepage is-preload">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<div id="header">
+
+					<!-- Inner -->
+						<div class="inner">
+							<header>
+								<h1><a href="{% url 'index' %}" id="logo">Gam</a></h1>
+								<hr />
+								<p>{% trans "A History of Guatemala Disappearances" %}</p>
+							</header>
+							<footer>
+								<a href="#main" class="button circled scrolly">Start</a>
+							</footer>
+						</div>
+
+
+
+						{% endblock %}						
+}
+
+{% block content2 %}
+				</div>
+
+
+	
+
+
+
+
+			<div class="wrapper style2">
+
+					<article id="main" class="container special">
+						<header>
+							<h2><a href="#">{% trans "The History" %} </a></h2>
+							<p>
+								{% trans "about the history summary aenean eu aenean mollis mollis facilisis primis ornare penatibus aenean. Cursus ac enim pulvinar curabitur morbi convallis. Lectus malesuada sed fermentum dolore amet." %}
+							</p>
+						</header>
+						
+						<footer>
+							<a href="{% url 'acceso:history' %}" class="button">{% trans "Continue Reading About the History" %}</a>
+						</footer>
+						
+					
+					</article>
+<!-- carousel -->
+				</div>
+				<section class="carousel">
+					<div class="reel">
+
+						<article>
+							<a href="#" class="image featured"><img src="{% static 'images/pic01.jpg' %}" alt="" /></a>
+							<header>
+								<h3><a href="#">Case 1</a></h3>
+							</header>
+							<p>This is a summary of Case 1</p>
+						</article>
+
+
+						<article>
+							<a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
+							<header>
+								<h3><a href="#">Case 2</a></h3>
+							</header>
+							<p>This is a summary of Case 2</p>
+						</article>
+
+						<article>
+							<a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
+							<header>
+								<h3><a href="#">Case 3</a></h3>
+							</header>
+							<p>This is a summary of Case 3</p>
+						</article>
+
+						<article>
+							<a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
+							<header>
+								<h3><a href="#">Case 4</a></h3>
+							</header>
+							<p>This is a summary of Case 4</p>
+						</article>
+
+
+						<article>
+							<a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
+							<header>
+								<h3><a href="#">Case 5</a></h3>
+							</header>
+							<p>This is a summary of Case 5</p>
+						</article>
+
+						<article>
+							<a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
+							<header>
+								<h3><a href="#">Case 6</a></h3>
+							</header>
+							<p>This is a summary of Case 6</p>
+						</article>
+
+						
+					</div>
+				</section>
+
+			<!-- Main -->
+				
+
+			
+
+				</div>
+
+			
+	{% endblock %}

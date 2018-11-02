@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from acceso.models import *
 
 # Create your views here.
 def main(request):
@@ -14,6 +15,10 @@ def map(request):
 def history(request):
     return render(request, 'acceso/history.html', {})
 
+def caso(request, caso):
+    caso = Caso.objects.get(slug_name=caso)
+    context = {'caso': caso }
+    return render(request, 'acceso/caso.html', context)
 
 
 

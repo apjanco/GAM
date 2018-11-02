@@ -60,7 +60,6 @@ urlpatterns += i18n_patterns(
     path('about/', flat_views.flatpage, {'url': '/en/about/'}, name='about'),
     path('über/', flat_views.flatpage, {'url': '/de/über/'}, name='über'),
     path('explorar/', views.explorar, name='explorar'),
-    path('caso/<caso>', views.single_caso, name='single_caso'),
     path('lugar/<lugar>', views.lugar, name='lugar'),
     path('procesamiento/<archivo>/<colección>/<caja>/<legajo>/<carpeta>/', views.procesamiento, name='procesamiento'),
     #paths for working with images (personal is 'staff')

@@ -31,7 +31,7 @@ class CurrentItem:
 def clean_dzis():
     """This function fixes a peculiarity of the dzi making process for openseadragon.
     """
-    files = os.listdir('/mnt/dzis/')
+    files = os.listdir('/mnt/dzis1/')
     for file in files:
         try:
             if 'jpg' in file:
@@ -39,15 +39,15 @@ def clean_dzis():
 
             elif 'files' in file:
                 front = file[:-6] + '.jpg_files'
-                check_existing = Path('/mnt/dzis/{}'.format(front))
+                check_existing = Path('/mnt/dzis1/{}'.format(front))
                 if check_existing.exists():
                     continue
                 else:
-                    os.rename('/mnt/dzis/{}'.format(file), '/mnt/dzis/{}'.format(front))
+                    os.rename('/mnt/dzis1/{}'.format(file), '/mnt/dzis1/{}'.format(front))
 
             else:
                 new = file[:-3] + 'jpg.dzi'
-                os.rename('/mnt/dzis/{}'.format(file), '/mnt/dzis/{}'.format(new))
+                os.rename('/mnt/dzis1/{}'.format(file), '/mnt/dzis1/{}'.format(new))
         except:
             print('exception')
 
@@ -243,7 +243,7 @@ class Command(BaseCommand):
                                 #print('path is: %s' % path)
                                 print('[*] %s' % file)
                                 dzi_me = pyvips.Image.new_from_file(path)
-                                dzi_me.dzsave('/mnt/dzis/%s' % file) 
+                                dzi_me.dzsave('/mnt/dzis1/%s' % file) 
                                 #subprocess.call('mv /srv/GAM/gam_app/dzis/%s.dzi /srv/GAM/gam_app/dzis/%s.dzi' % (file.split('.')[0], file))
                                 #subprocess.call('mv /srv/GAM/gam_app/dzis/%s_files /srv/GAM/gam_app/dzis/%s_files' %  (file.split('.')[0], file))
                             except Exception as e:

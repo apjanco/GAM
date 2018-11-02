@@ -42,11 +42,11 @@
 
 {% if previous_carpeta %}
   <div class="col-sm-2">
-<a href="{% url 'documento4' location.archivo location.colección location.caja location.legajo previous_carpeta %}"> < {% trans "Anterior" %} :</a>
+<a href="{% url 'procesamiento' location.archivo location.colección location.caja location.legajo previous_carpeta %}"> < {% trans "Anterior" %} :</a>
 
 {% endif %}
 {% if next_carpeta %}
-<a href="{% url 'documento4' location.archivo location.colección location.caja location.legajo next_carpeta %}">{% trans "Siguiente" %} ></a>
+<a href="{% url 'procesamiento' location.archivo location.colección location.caja location.legajo next_carpeta %}">{% trans "Siguiente" %} ></a>
 </div>
 {% endif %}  
 
@@ -65,7 +65,7 @@
 {% endif %}
 
 {% if location.carpeta %}
-> <a href="{% url 'documento4' location.archivo location.colección location.caja location.legajo location.carpeta %}">{% trans "Carpeta" %}: {{ location.carpeta }}</a>
+> <a href="{% url 'procesamiento' location.archivo location.colección location.caja location.legajo location.carpeta %}">{% trans "Carpeta" %}: {{ location.carpeta }}</a>
 {% endif %}
 
 {% if location.número_de_imagen %}

@@ -121,7 +121,7 @@ class ImagenListDescJson(BaseDatatableView):
     def render_column(self, row, column):
         # we want to render 'traducción' as custom columns
         if column == 'localizacion_fisica':
-            return format_html("<a href='/{0}/{1}/{2}/{3}/{4}'>{1}/{2}/{3}/{4}</a>".format(row.archivo, row.colección, row.caja, row.legajo, row.carpeta, row.número_de_imagen,))
+            return format_html("<a href='/imagen/{0}/{1}/{2}/{3}/{4}'>{1}/{2}/{3}/{4}</a>".format(row.archivo, row.colección, row.caja, row.legajo, row.carpeta, row.número_de_imagen,))
         if column == 'texto_de_OCR':
             return format_html("<div align='left'>{0}</div>".format(row.texto_de_OCR))
         #else:
@@ -322,11 +322,6 @@ def explorar(request):
         context  = {'archives':archives, 'collections':collections} #, 'carpetas':carpetas}
         return render(request, 'publico_explorar.html', context)
 
-
-def single_caso(request, caso):
-    state = get_object_or_404(Caso, caso=caso)
-    context  = {'state':state}
-    return render(request, 'single_caso_page.html', context)
 
 def sobre(request):
     return render(request, 'about.html')

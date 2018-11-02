@@ -121,8 +121,83 @@ items.push(["{{ item.nombre_del_archivo }}", "{% url 'documento5' item.archivo i
 // srcs.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
 srcs.push("https://dzis.nyc3.digitaloceanspaces.com/{{ item.nombre_del_archivo }}.dzi")
 {% endfor %}
+var viewer = OpenSeadragon({
+    id: "openseadragon1",
+    homeButton: "home",        
+    zoomInButton: "zoom-in",
+    zoomOutButton: "zoom-out",
+    fullPageButton: "full-page",
+    rotateRightButton: "right-rotate", 
+    rotateLeftButton: "left-rotate", 
+
+    //tileSources: srcs,
+
+    crossOriginPolicy: 'Anonymous',
+    collectionColumns: 4,
+    collectionMode: true,
+    showRotationControl: true
+});
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+var images = [];
+for (var i = 0; i < items.length; i++) {
+  viewer.addTiledImage({
+      tileSource: 'https://dzis.nyc3.digitaloceanspaces.com/' + items[i][0] + '.dzi',
+      success: function (event) {
+        images.push(event.item);
+      }
+  });
+}
+
+addLinkOverlays()
+
+async function addLinkOverlays() {
+  // Wait until OSD is finished arranging the images so that the coordinates are accurate.
+  await sleep(2000);
+
+  for (var i = 0; images.length; i++) {
+    addOneLinkOverlay(images[i], items[i][1]);
+  }
+}
+
+function addOneLinkOverlay(image, link) {
+    var imageRect = image.getBounds();
+    var rect = new OpenSeadragon.Rect(imageRect.x, imageRect.y, 0.05, 0.05);
+    console.log(rect);
+
+    var buttonElement = document.createElement("a");
+    var imgElement = document.createElement("img");
+    imgElement.src = '{% static 'edit_button.png' %}';
+    imgElement.href = link;
+    buttonElement.appendChild(imgElement);
+    //buttonElement.className = "highlight";
+    viewer.addOverlay(buttonElement, rect, OpenSeadragon.OverlayPlacement.CENTER);
+
+    viewer.addViewerInputHook({
+        hooks: [{
+            tracker: "viewer",
+            handler: "clickHandler",
+            hookHandler: function (event) {
+              event.preventDefaultAction = true;
+              var pos = viewer.viewport.viewerElementToViewportCoordinates(event.position);
+              if (isPointInsideRect(pos, rect.clone())) {
+                  window.location.href = link;
+              }
+            },
+        }]
+    });
+    viewer.viewport.goHome()
+}
+
+
+function isPointInsideRect(point, rect) {
+    return point.x > rect.x && point.x < rect.x + rect.width && point.y > rect.y && point.y < rect.y + rect.height;
+}
 </script>
-<script src="{% static "js/document_page.js" %}"></script>
 </div>
 
 

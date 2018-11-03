@@ -3,7 +3,14 @@ from acceso.models import *
 
 # Create your views here.
 def main(request):
-    return render(request, 'acceso/index.html', {})
+    casos = Caso.objects.all()
+    photo_list = []
+    for caso in casos:
+    	photo_list.append(caso.fotos.first())
+
+    print('casos:  ', casos)
+    context = {'casos': casos, 'photo_list':photo_list }
+    return render(request, 'acceso/index.html', context)
 
 def about(request):
     return render(request, 'acceso/about.html', {})

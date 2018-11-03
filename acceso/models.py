@@ -8,6 +8,12 @@ class Foto(models.Model):
     caso = models.ForeignKey('Caso', on_delete=models.CASCADE, default=1)
     file = models.FileField(upload_to='media/')
 
+    def get_absolute_url(self):
+        return "/media/%i/" % self.file
+
+    def __str__(self):
+        return str(self.file)
+
 class Caso(models.Model):
     nombre_del_caso = models.CharField(max_length=200, blank=True)
     slug_name = models.SlugField(blank=True)

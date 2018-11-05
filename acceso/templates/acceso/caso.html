@@ -1,10 +1,22 @@
-
 {% extends 'acceso/base.html' %}
 {% load i18n %}
 {% load static %}
 
-{% block content2 %}
+{% block content1 %}
+<body class="no-sidebar is-preload">
+		<div id="page-wrapper">
 
+			<!-- Header -->
+				<div id="header">
+
+					<!-- Inner -->
+						<div class="inner">
+							<header>
+								<h1><a href="index.html" id="logo">{% trans "Map"%}</a></h1>
+							</header>
+						</div>
+{% endblock %}
+{% block content2 %}
 <p> {{ caso.nombre_del_caso }} </p>
 
 <section class="carousel">
@@ -15,7 +27,8 @@
 	</div>
 </section>
 
+{% endblock %}
 
 			
 			
-{% endblock %}
+

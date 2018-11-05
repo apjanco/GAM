@@ -2,33 +2,12 @@
 {% load i18n %}
 {% load static %}
 
-{% block content1 %}
-<body class="no-sidebar is-preload">
-		<div id="page-wrapper">
-
-			<!-- Header -->
-				<div id="header">
-
-					<!-- Inner -->
-						<div class="inner">
-							<header>
-								<h1><a href="index.html" id="logo">{% trans "Map"%}</a></h1>
-							</header>
-						</div>
-{% endblock %}
 {% block content2 %}
-<p> {{ caso.nombre_del_caso }} </p>
-
 <section class="carousel">
-	<div class="reel">
-			<article> <!-- Might not need article tags -->
-			<!-- Put images in here -->
-		</article>
-	</div>
+  <div class="reel">
+	  <article> 
+	  </article>
+  </div>
 </section>
-
+<p> {{ caso.nombre_del_caso }} </p>
 {% endblock %}
-
-			
-			
-

@@ -4,81 +4,71 @@
 {% load static %}
 
 {% block content1 %}
-	<body class="homepage is-preload">
-		<div id="page-wrapper">
-
-			<!-- Header -->
-				<div id="header">
-
-					<!-- Inner -->
-						<div class="inner">
-								<h1><a href="{% url 'index' %}" id="logo">Gam</a></h1>
-								<hr />
-								<p>{% trans "Una historia de desapariciones en Guatemala" %}</p>
-								<a href="#main" class="button circled scrolly">{% trans "comienzo" %}</a>
-						</div>
+<body class="homepage is-preload">
+  <div id="page-wrapper">
+    <!-- Header -->
+    <div id="header">
+  <!-- Inner -->
+      <div class="inner">
+    <h1><a href="{% url 'index' %}" id="logo">Gam</a></h1>
+    <hr />
+    <p>{% trans "Una historia de desapariciones en Guatemala" %}</p>
+    <a href="#main" class="button circled scrolly">{% trans "comienzo" %}</a>
+      </div>
 
 
 
-						{% endblock %}						
+            {% endblock %}            
 }
 
 {% block content2 %}
-				</div>
-
-
-	
-
-
-
-
-			<div class="wrapper style2">
-
-					<article id="main" class="container special">
-						<header>
-							<h2><a href="#">{% trans "The History" %} </a></h2>
-							<p>
-								{% trans "about the history summary aenean eu aenean mollis mollis facilisis primis ornare penatibus aenean. Cursus ac enim pulvinar curabitur morbi convallis. Lectus malesuada sed fermentum dolore amet." %}
-							</p>
-						</header>
-						
-						<footer>
-							<a href="{% url 'acceso:history' %}" class="button">{% trans "Continue Reading About the History" %}</a>
-						</footer>
-						
-					
-					</article>
+  </div>
+  <div class="wrapper style2">
+    <article id="main" class="container special">
+      <header>
+      <h2><a href="#">{% trans "The History" %} </a></h2>
+      <p>
+      {% trans "about the history summary aenean eu aenean mollis mollis facilisis primis ornare penatibus aenean. Cursus ac enim pulvinar curabitur morbi convallis. Lectus malesuada sed fermentum dolore amet." %}
+    </p>
+    </header>
+            
+      <footer>
+    <a href="{% url 'acceso:history' %}" class="button">{% trans "Continue Reading About the History" %}</a>
+    </footer>
+            
+          
+  </article>
 <!-- carousel -->
-				</div>
-				<section class="carousel">	
-					<div class="reel">
-							<script>
-								console.log('{{ casos }}');
-							</script>	
-						{% for caso in casos %}
-					 
-						<article>
-						    
-							<a href="#" class="image featured"><img src="" alt="" /></a>
-							<header>
-								<h3><a href="{% url 'acceso:caso' caso.slug_name %}">{{ caso.nombre_del_caso}}</a></h3>
-							</header>
-							<p>{{ caso.descripción|safe}}</p>
-						</article>
-						
-						{% endfor %}
-						
-						
-						
-					</div>
-				</section>
+  </div>
+        <section class="carousel">  
+          <div class="reel">
+              <script>
+                console.log('{{ casos }}');
+              </script>  
+            {% for caso in casos %}
+           
+            <article>
+                
+              <a href="#" class="image featured"><img src="" alt="" /></a>
+              <header>
+                <h3><a href="{% url 'acceso:caso' caso.slug_name %}">{{ caso.nombre_del_caso}}</a></h3>
+              </header>
+              <p>{{ caso.descripción|safe}}</p>
+            </article>
+            
+            {% endfor %}
+            
+            
+            
+          </div>
+        </section>
 
-			<!-- Main -->
-				
+      <!-- Main -->
+        
 
-			
+      
 
-				</div>
+        </div>
 
-			
-	{% endblock %}
+      
+  {% endblock %}

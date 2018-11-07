@@ -16,7 +16,7 @@ def timeout_handler(signum, frame):   # Custom signal handler
     raise TimeoutException
 
 # Change the behavior of SIGALRM
-signal.signal(signal.SIGALRM, timeout_handler)
+#signal.signal(signal.SIGALRM, timeout_handler)
 ###
 
 

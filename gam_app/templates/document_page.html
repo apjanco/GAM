@@ -11,22 +11,6 @@
 <script src="{% static "js/ckeditor.js" %}"></script>
 <script src="{% static "js/openseadragon.min.js" %}"></script>
 <script src="http://msalsbery.github.io/builds/openseadragonimaging/openseadragon-viewerinputhook.min.js"></script>
-
-<script>
-  /* Some values that the JS needs that come from the server's database by way of Django. */
-  // var dziFile = "/dzi/{{ state.nombre_del_archivo }}.dzi";
-  var dziFile = "https://dzis.nyc3.digitaloceanspaces.com/{{ state.nombre_del_archivo }}.dzi";
-  var personas = [{% for p in state.persona.all %}"{{ p }}",{% endfor %}];
-  var items = [];
-  var srcs = [];
-  {% for item in images_in_carpeta %}
-  items.push(["{{ item.nombre_del_archivo }}", "{% url 'documento5' item.archivo item.colección item.caja item.legajo item.carpeta item.número_de_imagen %}"]);
-   //  srcs.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
-       srcs.push("https://dzis.nyc3.digitaloceanspaces.com/{{ item.nombre_del_archivo }}.dzi")
-  {% endfor %}
-  var editButtonURL = '{% static 'edit_button.png' %}';
-</script>
-<script src="{% static "js/document_page.js" %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -120,4 +104,13 @@
   <p>{% trans "Ningún documento con ese nombre de archivo" %}</p>
 
 {% endif %}
+
+<script>
+// Initialize the OSD viewer.
+var dziFile = "https://dzis.nyc3.digitaloceanspaces.com/{{ state.nombre_del_archivo}}.dzi";
+var viewer = OpenSeadragon({
+    id: "openseadragon1",
+    tileSources: dziFile,
+});
+</script>
 {% endblock %}

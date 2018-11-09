@@ -107,7 +107,7 @@
           var text  = $(this).children().children().children(".search_text").val();
           var logic = $(this).children().children(".logic_option").val();
           var field = $(this).children().children(".field_option").val();
-	  the_request += text + "^" + logic + "^" + field+"^";
+	  the_request += text + "-" + logic + "-" + field+"-";
         });        
         $("#full_info").val(the_request);
       });

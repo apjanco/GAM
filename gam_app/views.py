@@ -331,14 +331,15 @@ def über(request):
 
 def advanced_search_submit(request):
     context = advanced_search.advanced_search(request)
-    print ('context', context)
     if context:
         context['state'] = context['results']
         print ('context after if', context)
         return render(request, 'search_result_page.html', context)
     else:
         context = {"failed" : True}
-        return render(request, 'index.html', context)
+        print ('context at failed', context)
+       # return render(request, 'index.html', context)
+        return redirect('index')
 
 @login_required
 def procesamiento(request, archivo, colección, caja, legajo, carpeta):

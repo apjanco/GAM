@@ -7,9 +7,9 @@ from itertools import chain
 
 def advanced_search(request):
 
-    # right now it looks like [Iraq^^Any Field^Iran^OR^Keyword^]
-    # so we split on ^ and delete the last one (there is always a tailing empty list
-    request_list = request.GET["full_info"].split("^")[:-1]
+    # right now it looks like [Iraq-Any Field-Iran-OR-Keyword-]
+    # so we split on - and delete the last one (there is always a tailing empty list
+    request_list = request.GET["full_info"].split("-")[:-1]
 
     # request list needs to be split into threes
     # right now it looks like ['Iraq','','Any Field', 'Iran', 'OR', 'Keyword,...]

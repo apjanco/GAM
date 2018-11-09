@@ -7,7 +7,7 @@ var viewer = OpenSeadragon({
     rotateRightButton: "right-rotate", 
     rotateLeftButton: "left-rotate", 
 
-    //tileSources: srcs,
+    tileSources: srcs,
     crossOriginPolicy: 'Anonymous',
     collectionColumns: 6,
     collectionMode: true,
@@ -48,7 +48,7 @@ function addOneLinkOverlay(image, link, name) {
     var divElement = document.createElement("div");
     var buttonElement = document.createElement("a");
     var imgElement = document.createElement("img");
-    imgElement.src = '{% static 'edit_button.png' %}';
+    imgElement.src = '{% static "edit_button.png" %}';
     imgElement.href = link;
     buttonElement.appendChild(imgElement);
     divElement.appendChild(buttonElement);

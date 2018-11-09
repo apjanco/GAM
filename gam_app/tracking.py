@@ -1,9 +1,10 @@
+import os
 import boto3
 import botocore
 import ast
 from gam_app.models import Imagen
 from archivo.settings_secret import SECRET_ACCESS_KEY, ACCESS_KEY_ID
-
+import getpass
 
 ### from https://stackoverflow.com/questions/25027122/break-the-function-after-certain-time
 ### Handles times when network hangs or no reponse from Digital Ocean
@@ -20,14 +21,39 @@ def timeout_handler(signum, frame):   # Custom signal handler
 ###
 
 
+def descargar_una_sola_bolsa(filename):
+    """This is a function used to download individual bag files from object storage"""
+    try:
+        config = botocore.client.Config(connect_timeout=20, read_timeout=20)
+        session = boto3.session.Session()
+        client = session.client('s3',
+                                endpoint_url='https://nyc3.digitaloceanspaces.com',
+                                aws_secret_access_key=SECRET_ACCESS_KEY,
+
+                                aws_access_key_id=ACCESS_KEY_ID,
+                                config=config)
+
+        client.download_file('bolsas', filename, '/tmp/{}'.format(filename))
+        return True
+
+    except TimeoutException:
+        print('Timeout Exception')
+
+
+def descargar_una_sola_bolsa_s3cmd(filename):
+    getpass.getuser()
+    os.system('s3cmd get "s3://bolsas/{}" /tmp/{}'.format(filename, filename))
+    return True
+
+
 def getBags():
     try:
-        signal.alarm(5)
+        # signal.alarm(5)
         session = boto3.session.Session()
         client = session.client('s3',
                                  endpoint_url = 'https://nyc3.digitaloceanspaces.com',
-                                 aws_secret_access_key = SECRET_ACCESS_KEY, #'siqMTLrCUcjwCXLG3HUa+2CGTuETrQRyiqsfHayHcI',
-                                 aws_access_key_id = ACCESS_KEY_ID) #'XWVILRP2O4XT5WXK6BHK')
+                                 aws_secret_access_key = SECRET_ACCESS_KEY,
+                                 aws_access_key_id = ACCESS_KEY_ID)
 
         bags = []
         for thing in client.list_objects(Bucket='bolsas')['Contents']:

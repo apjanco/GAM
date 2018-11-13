@@ -24,7 +24,7 @@ def timeout_handler(signum, frame):   # Custom signal handler
 def descargar_una_sola_bolsa(filename):
     """This is a function used to download individual bag files from object storage"""
     try:
-        config = botocore.client.Config(connect_timeout=20, read_timeout=20)
+        config = botocore.client.Config(connect_timeout=2000, read_timeout=2000)
         session = boto3.session.Session()
         client = session.client('s3',
                                 endpoint_url='https://nyc3.digitaloceanspaces.com',
@@ -36,8 +36,8 @@ def descargar_una_sola_bolsa(filename):
         client.download_file('bolsas', filename, '/tmp/{}'.format(filename))
         return True
 
-    except TimeoutException:
-        print('Timeout Exception')
+    except Exception as e:
+        print(e)
 
 
 def descargar_una_sola_bolsa_s3cmd(filename):

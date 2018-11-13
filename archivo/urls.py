@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls import include, url
 from gam_app import views
@@ -55,7 +55,7 @@ urlpatterns += i18n_patterns(
     path('organizacionlookup/', views.OrganizacionNameLookup.as_view(), name='organizacion_name_lookup'),
     path('autocompletar_manuscrito/', views.autocompletar_manuscrito.as_view(), name='autocompletar_manuscrito'),
     path('crear_usuario/', include('registration.backends.simple.urls')),
-    path('advanced_search_submit/', views.advanced_search_submit, name='advanced-search-submit'),
+    re_path(r'^advanced_search_submit/$', views.advanced_search_submit, name='advanced-search-submit'),
     path('sobre/', flat_views.flatpage, {'url': '/es/sobre/'}, name='sobre'),
     path('about/', flat_views.flatpage, {'url': '/en/about/'}, name='about'),
     path('über/', flat_views.flatpage, {'url': '/de/über/'}, name='über'),

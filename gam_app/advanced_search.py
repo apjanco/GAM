@@ -51,10 +51,10 @@ def advanced_search(request):
             return False
 
     result_list = query
-    print('result', result_list)
+    #print('result', result_list)
     q_time = time.time() - start
     print ("generating result_list took %s seconds" % q_time)
-    print(result_list)
+    #print(result_list)
     #print("testo", Imagen.objects.filter(persona__nombre_de_la_persona__icontains="Manuel"))
     context = {'results' : result_list, 'search' : search_string, 'full_info' : request.GET["full_info"], 'num_results' : len(result_list)}
     return context
@@ -68,7 +68,7 @@ def make_queryset(search_string, field):  #this will return queryset in LIST
         q3 = list(Persona.objects.filter(género__icontains=search_string))
         q4 = list(Persona.objects.filter(etnicidad__icontains=search_string))
         queryset = q1 + q2 + q3 + q4
-        print('queryset', queryset)
+        #print('queryset', queryset)
     elif field == 'Persona':
         queryset = list(Persona.objects.filter(nombre_de_la_persona__icontains=search_string))
         print('queryset', queryset)

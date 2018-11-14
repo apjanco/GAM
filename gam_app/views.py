@@ -337,13 +337,13 @@ def advanced_search_submit(request):
     context = advanced_search.advanced_search(request)
     if context:
         context['state'] = context['results']
-        print ('context after if', context)
+        for item in context['state']:
+            print (type(item))
         return render(request, 'search_result_page.html', context)
     else:
         context = {"failed" : True}
-        print ('context at failed', context)
-       # return render(request, 'index.html', context)
         return redirect('index')
+       # return render(request, 'index.html', context)
 
 @login_required
 def procesamiento(request, archivo, colección, caja, legajo, carpeta):

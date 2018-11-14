@@ -18,7 +18,10 @@ class Caso(models.Model):
     nombre_del_caso = models.CharField(max_length=200, blank=True)
     slug_name = models.SlugField(blank=True)
     carpetas = models.ManyToManyField(Carpeta, blank=True, related_name= 'caso_carpetas')
+#  profile image field doesn't work yet
+    foto_de_perfil = models.OneToOneField(Foto, blank=True, related_name = 'caso_foto_de_perfil',on_delete=models.CASCADE, null=True)
 	#  Photos that will populate the slider section in index and caso
+    
     fotos = models.ManyToManyField(Foto, blank=True, related_name= 'caso_fotos')
     descripción = RichTextField(blank=True, default='')
 

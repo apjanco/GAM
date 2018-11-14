@@ -10,25 +10,25 @@ from django.contrib.auth.models import User
 from django.db.models import Count, Q
 
 
-#search engine dependencies
+#  search engine dependencies
 from elasticsearch_django.settings import get_client
 from elasticsearch_django.models import SearchQuery
-#from elasticsearch_dsl import Search
 from dal import autocomplete
 
-#For Mission Control
+#  For Mission Control
 from gam_app.tracking import getBags, getImportedBags
 
-#For CRUD
+#  For CRUD
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from gam_app.forms import PersonaForm, LugarForm, OrganizaciónForm
 from django.views import generic
 
-#For datatables server-side processing
+#  For datatables server-side processing
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.utils.html import escape
 # Create your views here.
+
 
 def index(request):
     if request.method == 'POST':
@@ -45,6 +45,7 @@ def index(request):
         form = SearchForm(initial={'search': search })
     return render(request, 'index.html', {'form':form})
 
+
 def search(request, query):
     if request.method == 'POST':
         form = SearchForm(request.POST)
@@ -56,23 +57,26 @@ def search(request, query):
             print(form.errors)
     else:
         search = "Buscar..."
-        form = SearchForm(initial={'search': search })
-    return render(request, 'index.html', {'form':form})
+        form = SearchForm(initial={'search': search})
+    return render(request, 'index.html', {'form': form})
+
 
 def elasticsearch(request, query):
     search = Search(using=get_client(), index='gam')
     state = SearchQuery.execute(search)
     for obj in Imagen.objects.from_search_query(sq):
         print(obj.search_score, obj.search_rank)
-        context  = {'state':state}
+        context = {'state': state}
     return render(request, 'all_documents_page.html', context)
+
 
 @login_required
 def track_bags(request):
     bags = getBags()
     imported_bags = getImportedBags()
-    context = {'bags': bags, 'imported_bags': imported_bags,}
+    context = {'bags': bags, 'imported_bags': imported_bags, }
     return render(request, 'track_bags.html', context)
+
 
 @login_required
 def mission_control(request):
@@ -373,12 +377,12 @@ def procesamiento(request, archivo, colección, caja, legajo, carpeta):
     persona_auto_form = PersonaAutoForm(initial={'person_status': current_carpeta.person_status })
     lugar_auto_form = LugarAutoForm()
     organizacion_auto_form = OrganizacionAutoForm()
-    context = {'state':state,
-               'persona_auto_form':persona_auto_form,
-               'lugar_auto_form':lugar_auto_form,
-               'organizacion_auto_form':organizacion_auto_form,
-               'location':location,
-               'previous_carpeta':previous_carpeta,
+    context = {'state': state,
+               'persona_auto_form': persona_auto_form,
+               'lugar_auto_form': lugar_auto_form,
+               'organizacion_auto_form': organizacion_auto_form,
+               'location': location,
+               'previous_carpeta': previous_carpeta,
                'next_carpeta':next_carpeta,
                'carpeta_info':carpeta_info,
                'current_carpeta':current_carpeta,

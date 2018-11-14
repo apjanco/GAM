@@ -2,18 +2,22 @@ from django.shortcuts import render
 from acceso.models import *
 
 # Create your views here.
+
+
 def main(request):
     casos = Caso.objects.all()
     photo_list = []
     for caso in casos:
-    	photo_list.append(caso.fotos.first())
+        photo_list.append(caso.fotos.first())
 
     print('casos:  ', casos)
-    context = {'casos': casos, 'photo_list':photo_list }
+    context = {'casos': casos, 'photo_list': photo_list}
     return render(request, 'acceso/index.html', context)
+
 
 def about(request):
     return render(request, 'acceso/about.html', {})
+
 
 def map(request):
     return render(request, 'acceso/map.html', {})
@@ -22,18 +26,8 @@ def map(request):
 def history(request):
     return render(request, 'acceso/history.html', {})
 
+
 def caso(request, caso):
     caso = Caso.objects.get(slug_name=caso)
-    context = {'caso': caso }
+    context = {'caso': caso}
     return render(request, 'acceso/caso.html', context)
-
-
-
-
-
-
-
-
-
-
-

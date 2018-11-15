@@ -33,7 +33,7 @@ def descargar_una_sola_bolsa(filename):
                                 aws_access_key_id=ACCESS_KEY_ID,
                                 config=config)
 
-        client.download_file('bolsas', filename, '/tmp/{}'.format(filename))
+        client.download_file('bolsas', filename, '/mnt/bags/{}'.format(filename))
         return True
 
     except Exception as e:

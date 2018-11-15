@@ -50,10 +50,10 @@ def change_size_if_needed(file):
 
 def import_image_file(filename, nombre_de_la_bolsa):
     new_filename = str(uuid.uuid4()) + '-' + filename.split('/')[-1].split('.')[0] + '.jpg'
-    if not os.path.isdir('/tmp/{}/documents/'.format(nombre_de_la_bolsa)):
-        os.mkdir('/tmp/{}/documents/'.format(nombre_de_la_bolsa))
+    if not os.path.isdir('/mnt/bags/{}/documents/'.format(nombre_de_la_bolsa)):
+        os.mkdir('/mnt/bags/{}/documents/'.format(nombre_de_la_bolsa))
 
-    new_path = '/tmp/{}/documents/'.format(nombre_de_la_bolsa)
+    new_path = '/mnt/bags/{}/documents/'.format(nombre_de_la_bolsa)
 
     #  convert the tiff to jpeg
     try:
@@ -74,12 +74,13 @@ def import_image_file(filename, nombre_de_la_bolsa):
         print('[*] %s' % new_filename)
         dzi_me = pyvips.Image.new_from_file(new_path + new_filename)
 
-
-        dzi_me.dzsave('/mnt/dzis1/{}'.format(new_filename))
+        if not os.path.isdir('/mnt/bags/dzis1/'):
+            os.mkdir('/mnt/bags/dzis1/')
+        dzi_me.dzsave('/mnt/bags/dzis1/{}'.format(new_filename))
 
         #  Here we re-add the jpg to the filename, this is not really a good thing, but too late to change it
-        os.rename('/mnt/dzis1/{}'.format(new_filename.replace('.jpg', '.dzi')), '/mnt/dzis1/{}'.format(new_filename + '.dzi'))
-        os.rename('/mnt/dzis1/{}'.format(new_filename.replace('.jpg', '_files')), '/mnt/dzis1/{}'.format(new_filename + '_files'))
+        os.rename('/mnt/bags/dzis1/{}'.format(new_filename.replace('.jpg', '.dzi')), '/mnt/bags/dzis1/{}'.format(new_filename + '.dzi'))
+        os.rename('/mnt/bags/dzis1/{}'.format(new_filename.replace('.jpg', '_files')), '/mnt/bags/dzis1/{}'.format(new_filename + '_files'))
 
     except Exception as e:
         print(e)
@@ -240,27 +241,27 @@ class Command(BaseCommand):
         print("Importando la bolsa {}".format(nombre_de_la_bolsa))
 
         #  download and unzip the bag file
-        if os.path.isfile('/tmp/{}'.format(nombre_de_la_bolsa + '.zip')):
+        if os.path.isfile('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip')):
             print('file already downloaded')
-            zip_file = zipfile.ZipFile('/tmp/{}'.format(nombre_de_la_bolsa + '.zip'))
-            zip_file.extractall('/tmp/')
+            zip_file = zipfile.ZipFile('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip'))
+            zip_file.extractall('/mnt/bags/')
             zip_file.close()
-            os.remove('/tmp/{}'.format(nombre_de_la_bolsa + '.zip'))
+            #os.remove('/tmp/{}'.format(nombre_de_la_bolsa + '.zip'))
 
         elif descargar_una_sola_bolsa(nombre_de_la_bolsa + '.zip'):
-            zip_file = zipfile.ZipFile('/tmp/{}'.format(nombre_de_la_bolsa + '.zip'))
-            zip_file.extractall('/tmp/')
+            zip_file = zipfile.ZipFile('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip'))
+            zip_file.extractall('/mnt/bags/')
             zip_file.close()
-            os.remove('/tmp/{}'.format(nombre_de_la_bolsa + '.zip'))
+            os.remove('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip'))
             print('archivo descargado exitosamente')
 
         #  Validate the bag
-        bag = bagit.Bag('/tmp/{}'.format(nombre_de_la_bolsa))
+        bag = bagit.Bag('/mnt/bags/{}'.format(nombre_de_la_bolsa))
         if bag.is_valid():
             print('la bolsa es valida')
-            tiff_files = [os.path.join(root, name) for root, dirs, files in os.walk('/tmp/{}/data/'.format(nombre_de_la_bolsa))
+            tiff_files = [os.path.join(root, name) for root, dirs, files in os.walk('/mnt/bags/{}/data/'.format(nombre_de_la_bolsa))
                           for name in files if name.endswith(('.tiff', '.tif'))]
-            txt_files = [os.path.join(root, name) for root, dirs, files in os.walk('/tmp/{}/data/'.format(nombre_de_la_bolsa))
+            txt_files = [os.path.join(root, name) for root, dirs, files in os.walk('/mnt/bags/{}/data/'.format(nombre_de_la_bolsa))
                          for name in files if name.endswith(('.txt', '.TXT'))]
 
             [import_image_file(file, nombre_de_la_bolsa) for file in tiff_files]

@@ -73,7 +73,7 @@ class Caso(models.Model):
     descripcion_caso = RichTextField()
 
     def __str__(self):
-       return self.caso
+        return self.caso
 
 #Clipboard.  An entity for creating lists of individual images, manuscripts and cases for users during research.
 #For example, a member of the legal team may want to include all the documents they have come across that relate to

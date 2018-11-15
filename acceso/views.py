@@ -30,8 +30,14 @@ def history(request):
 
 def caso(request, caso):
     caso = Caso.objects.get(slug_name=caso)
-    context = {'caso': caso}
-    return render(request, 'simple/caso.html', context)
+    foto = []
+    for x in caso.fotos.all():
+        print(x)
+        foto.append(x)
+
+    profile_photos = Foto.objects.filter(caso__slug_name=caso)
+    context = {'caso': caso, 'images': foto}
+    return render(request, 'acceso/caso.html', context)
 
 
 def simple(request):

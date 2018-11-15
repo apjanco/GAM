@@ -1,0 +1,28 @@
+
+{% load static %}
+{% block navbar %}
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="{% url 'acceso:index' %}">Inicio</a>
+    <a href="{% url 'acceso:about' %}">Sobre</a>
+    <a href="{% url 'acceso:history' %}">Historia</a>
+    <a href="{% url 'acceso:map' %}">Mapa</a>
+
+</div>
+
+<div class="navback">
+<span  style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; <img style="height: 100%; float: right;" src="{% static 'Logo_01.png' %}"><h3 class="card-title"><br>Archivos Digitales</h3></span>
+<p class="card-text">Un sitio para la memoria pública.</p>
+</div>
+
+<script>
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+
+{% endblock %}

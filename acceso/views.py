@@ -3,6 +3,8 @@ from acceso.models import *
 
 
 # Create your views here.
+
+
 def main(request):
     casos = Caso.objects.all()
     photo_list = []
@@ -10,7 +12,7 @@ def main(request):
         photo_list.append(caso.fotos.first())
 
     print('casos:  ', casos)
-    context = {'casos': casos, 'photo_list':photo_list }
+    context = {'casos': casos, 'photo_list': photo_list}
     return render(request, 'acceso/index.html', context)
 
 
@@ -28,7 +30,6 @@ def history(request):
 
 def caso(request, caso):
     caso = Caso.objects.get(slug_name=caso)
-
     context = {'caso': caso}
     return render(request, 'simple/caso.html', context)
 

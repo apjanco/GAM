@@ -5,7 +5,7 @@
 <!-- the path to images is {% static '/srv/GAM/acceso/static/acceso/images/ {the image you want}' %}
 ex:
 
-{% static '/srv/GAM/acceso/static/acceso/images/placeholder.png' %} 
+{% static 'acceso/images/placeholder.png' %} 
 -->
 
  <!DOCTYPE HTML>
@@ -16,6 +16,7 @@ ex:
       <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
       <link rel="stylesheet" href="{% static 'acceso/css/main.css' %}" />
       <noscript><link rel="stylesheet" href="{% static 'acceso/css/noscript.css'%}" /></noscript>
+      {% block extrahead %}{% endblock %}
   </head>
 
 {% block content1 %} {% endblock %}
@@ -131,22 +132,22 @@ ex:
                   </header>
                   <div class="row gtr-25">
                     <div class="col-6">
-                      <a href="#" class="image fit"><img src="images/pic10.jpg" alt="" /></a>
+                      <a href="#" class="image fit"><img src="acceso/images/placeholder2.jpg" alt="" /></a>
                     </div>
                     <div class="col-6">
-                      <a href="#" class="image fit"><img src="images/pic11.jpg" alt="" /></a>
+                      <a href="#" class="image fit"><img src="acceso/images/placeholder2.jpg" alt="" /></a>
                     </div>
                     <div class="col-6">
-                      <a href="#" class="image fit"><img src="images/pic12.jpg" alt="" /></a>
+                      <a href="#" class="image fit"><img src="acceso/images/placeholder2.jpg" alt="" /></a>
                     </div>
                     <div class="col-6">
-                      <a href="#" class="image fit"><img src="images/pic13.jpg" alt="" /></a>
+                      <a href="#" class="image fit"><img src="acceso/images/placeholder2.jpg" alt="" /></a>
                     </div>
                     <div class="col-6">
-                      <a href="#" class="image fit"><img src="images/pic14.jpg" alt="" /></a>
+                      <a href="#" class="image fit"><img src="acceso/images/placeholder2.jpg" alt="" /></a>
                     </div>
                     <div class="col-6">
-                      <a href="#" class="image fit"><img src="images/pic15.jpg" alt="" /></a>
+                      <a href="#" class="image fit"><img src="acceso/images/placeholder2.jpg" alt="" /></a>
                     </div>
                   </div>
                 </section>

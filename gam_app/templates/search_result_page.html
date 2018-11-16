@@ -149,6 +149,9 @@
 <hr>
 
 {% load my_tags %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
 {% if state %}
 <div>
 <!-- result table -->
@@ -156,7 +159,7 @@
 <table class="myTable">
 <thead>
 <tr>
-  <th> Results </th>
+  <th> {% trans "Result" %} </th>
 </tr>
 </thead>
 
@@ -176,16 +179,28 @@
 </table>
 </div>
 
+
+
 <script>
 $(document).ready( function () {  
     $('.myTable').DataTable({
         "pageLength": 25,
+        searching: false,
         columnDefs: [
             {
                 targets: -1,
                 className: 'dt-left'
             }
-        ]
+        ],
+        {% if LANGUAGE_CODE == 'es' %}
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+        },
+        {% elif LANGUAGE_CODE == 'de' %}
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/German.json"
+        },
+        {% endif %}
     });
 } );
 </script>

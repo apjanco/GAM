@@ -1,0 +1,108 @@
+{% extends "simple/base.html" %}
+{% load static %}
+{% block content %}
+
+{% include "simple/navbar.html" %}
+<br>
+
+<!-- Section for subject headings -->
+
+<div id="row">
+    <div id="column">
+        <div class="card">
+          <div class="card-body">
+
+
+              <p class="card-text">Este es un sitio web que presenta documentos históricos de casos investigados por el grupo de apoyo mutuo en su trabajo para ayudar a las familias de los desaparecidos. Se han seleccionado varios casos que representan los tipos de materiales e historia que se pueden encontrar en los archivos de GAM. Actualmente estamos en el proceso de digitalizar la colección completa de desapariciones y haremos estos materiales disponibles para la investigación de la historia y el trabajo de casos en curso.</p>
+             <a href="{% url 'acceso:history' %}" class="card-link"> leer más aquí
+</a>
+
+        </div>
+      </div>
+    </div>
+</div>
+<hr>
+<br>
+<b>Casos del Archivo</b>
+<div class="grid">
+    <div class="grid-sizer"></div>
+
+         {% for item in casos %}
+    <a href="{% url 'acceso:caso' item.slug_name %}">
+            <div class="grid-item" style="background-image: url('{% static "img004.jpg" %}');">
+            <h3 class="card-title">{{ item.nombre_del_caso }}</h3>
+                <br>
+                <p style="margin-left: 10px;">{{ item.descripción|safe|truncatewords:30 }}</p>
+            </div></a>
+         {% endfor %}
+</div>
+
+<style>
+* { box-sizing: border-box; }
+
+/* force scrollbar */
+html { overflow-y: scroll; }
+
+body { font-family: sans-serif; }
+
+/* ---- grid ---- */
+
+.grid {
+  /* background: #4997D0; */
+
+}
+
+/* clear fix */
+.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* ---- .grid-item ---- */
+
+.grid-sizer,
+.grid-item {
+  width: 33.333%;
+    margin-bottom: 10px;
+
+}
+
+.grid-item {
+  float: left;
+}
+
+.grid-item img {
+  display: block;
+  max-width: 100%;
+}
+
+</style>
+
+<script>
+// external js: masonry.pkgd.js, imagesloaded.pkgd.js
+
+var grid = document.querySelector('.grid');
+var msnry;
+
+imagesLoaded( grid, function() {
+  // init Isotope after all images have loaded
+  msnry = new Masonry( grid, {
+    itemSelector: '.grid-item',
+    columnWidth: '.grid-sizer',
+    percentPosition: true
+  });
+});
+
+
+    function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+{% include "simple/footer.html" %}
+{% endblock %}
+

@@ -18,4 +18,5 @@ gam_app/static/*.png
 gam_app/static/openseadragon-flat-toolbar-icons
 gam_app/tracking.py
 archivo/settings_secret.py
+acceso/static/acceso/images/
 *.mo

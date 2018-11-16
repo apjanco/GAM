@@ -73,7 +73,7 @@ class Caso(models.Model):
     descripcion_caso = RichTextField()
 
     def __str__(self):
-       return self.caso
+        return self.caso
 
 #Clipboard.  An entity for creating lists of individual images, manuscripts and cases for users during research.
 #For example, a member of the legal team may want to include all the documents they have come across that relate to
@@ -140,9 +140,9 @@ class Carpeta(models.Model):
     tipo_de_violencia= models.CharField(max_length=200, blank=True)
     descripción = RichTextField(blank=True, default='')
     descripción_generada_automaticamente = RichTextField(blank=True)
-    person_status = models.CharField(max_length= 20, choices=PERSON_STATUS_CHOICES)
-    place_status = models.CharField(max_length= 20, choices=PLACE_STATUS_CHOICES)
-    organization_status = models.CharField(max_length= 20, choices=ORGANIZATION_STATUS_CHOICES)
+    person_status = models.CharField(max_length= 20, choices=PERSON_STATUS_CHOICES, null=True)
+    place_status = models.CharField(max_length= 20, choices=PLACE_STATUS_CHOICES, null=True)
+    organization_status = models.CharField(max_length= 20, choices=ORGANIZATION_STATUS_CHOICES, null=True)
 
     def __str__(self):
         return '{}/{}/{}'.format(self.caja, self.legajo, self.carpeta)

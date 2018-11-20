@@ -1,9 +1,8 @@
 from django.shortcuts import render
 from acceso.models import *
-
+from gam_app.models import Persona
 
 # Create your views here.
-
 
 def main(request):
     casos = Caso.objects.all()
@@ -30,8 +29,20 @@ def history(request):
 
 def caso(request, caso):
     caso = Caso.objects.get(slug_name=caso)
-    context = {'caso': caso}
-    return render(request, 'simple/caso.html', context)
+    foto = []
+    print(caso)
+    
+    persona = Persona.objects.get(nombre_de_la_persona=caso)
+    temp = persona.__dict__
+    persona_dict = {k.replace("_", " ").capitalize(): v for k, v in temp.items() if len(str(v)) > 0}
+    for x in caso.fotos.all():
+        print(x)
+        foto.append(x)
+    persona_dict.pop(" state")
+    persona_dict.pop("Id")
+    profile_photos = Foto.objects.filter(caso__slug_name=caso)
+    context = {'caso': caso, 'images': foto, "data":persona_dict}
+    return render(request, 'acceso/caso.html', context)
 
 
 def simple(request):

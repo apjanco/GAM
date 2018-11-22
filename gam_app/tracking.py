@@ -3,9 +3,26 @@ import boto3
 import botocore
 import ast
 from gam_app.models import Imagen
-from archivo.settings_secret import SECRET_ACCESS_KEY, ACCESS_KEY_ID
+from archivo.settings_secret import SECRET_ACCESS_KEY, ACCESS_KEY_ID, AWS_SECRET_KEY, AWS_KEY
 import getpass
 
+
+def aws_client(session):
+
+    client = session.client('s3',
+                            endpoint_url='https://s3.amazonaws.com',
+                            aws_secret_access_key=AWS_SECRET_KEY,
+                            aws_access_key_id=AWS_KEY,
+                            )
+    return client
+
+
+def do_client(session):
+    client = session.client('s3',
+                            endpoint_url = 'https://nyc3.digitaloceanspaces.com',
+                            aws_secret_access_key = SECRET_ACCESS_KEY,
+                            aws_access_key_id = ACCESS_KEY_ID)
+    return client
 ### from https://stackoverflow.com/questions/25027122/break-the-function-after-certain-time
 ### Handles times when network hangs or no reponse from Digital Ocean
 import signal
@@ -26,14 +43,11 @@ def descargar_una_sola_bolsa(filename):
     try:
         config = botocore.client.Config(connect_timeout=2000, read_timeout=2000)
         session = boto3.session.Session()
-        client = session.client('s3',
-                                endpoint_url='https://nyc3.digitaloceanspaces.com',
-                                aws_secret_access_key=SECRET_ACCESS_KEY,
+        client = aws_client(session)
 
-                                aws_access_key_id=ACCESS_KEY_ID,
-                                config=config)
+        #client.download_file('bolsas', filename, '/mnt/bags/{}'.format(filename))
+        client.download_file('gam-bolsas', filename, '/mnt/bags/{}'.format(filename))
 
-        client.download_file('bolsas', filename, '/mnt/bags/{}'.format(filename))
         return True
 
     except Exception as e:
@@ -50,13 +64,10 @@ def getBags():
     try:
         # signal.alarm(5)
         session = boto3.session.Session()
-        client = session.client('s3',
-                                 endpoint_url = 'https://nyc3.digitaloceanspaces.com',
-                                 aws_secret_access_key = SECRET_ACCESS_KEY,
-                                 aws_access_key_id = ACCESS_KEY_ID)
+        client = aws_client(session)
 
         bags = []
-        for thing in client.list_objects(Bucket='bolsas')['Contents']:
+        for thing in client.list_objects(Bucket='gam-bolsas')['Contents']:
             if '.zip' in thing['Key']:
                 bags += [thing['Key'][:-4].replace('Bags/','')]
             else:

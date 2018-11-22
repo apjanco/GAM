@@ -8,6 +8,7 @@ import pyvips
 import re
 import uuid
 from PIL import Image
+import shutil
 
 
 class file_counter(object):
@@ -247,7 +248,7 @@ class Command(BaseCommand):
             zip_file = zipfile.ZipFile('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip'))
             zip_file.extractall('/mnt/bags/')
             zip_file.close()
-            os.remove('/tmp/{}'.format(nombre_de_la_bolsa + '.zip'))
+            os.remove('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip'))
 
         elif descargar_una_sola_bolsa(nombre_de_la_bolsa + '.zip'):
             zip_file = zipfile.ZipFile('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip'))
@@ -267,6 +268,8 @@ class Command(BaseCommand):
 
             [import_image_file(file, nombre_de_la_bolsa) for file in tiff_files]
             [import_resumen_file(file) for file in txt_files]
+
+            shutil.rmtree('/mnt/bags/{}'.format(nombre_de_la_bolsa))
 
         else:
             print('la bolsa no es valida')

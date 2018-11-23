@@ -9,7 +9,7 @@ import re
 import uuid
 from PIL import Image
 import shutil
-
+import sys
 
 class file_counter(object):
     def __init__(self):
@@ -237,7 +237,7 @@ class Command(BaseCommand):
 
         if len(bolsas_nuevas) == 0:
             print('no hay bolsas nuevas')
-            exit()
+            sys.exit()
 
         for bolsa in bolsas_nuevas:
             print(bolsas_nuevas.index(bolsa), bolsa)

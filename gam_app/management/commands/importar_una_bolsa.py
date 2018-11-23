@@ -9,7 +9,7 @@ import re
 import uuid
 from PIL import Image
 import shutil
-
+import sys
 
 class file_counter(object):
     def __init__(self):
@@ -234,6 +234,10 @@ class Command(BaseCommand):
         bolsas_importadas = set(getImportedBags())
         bolsas_nuevas = bolsas.difference(bolsas_importadas)
         bolsas_nuevas = list(bolsas_nuevas)
+
+        if len(bolsas_nuevas) == 0:
+            print('no hay bolsas nuevas')
+            sys.exit()
 
         for bolsa in bolsas_nuevas:
             print(bolsas_nuevas.index(bolsa), bolsa)

@@ -49,12 +49,15 @@ class LugarAdminStaticForm(forms.ModelForm):
 class SearchForm(forms.Form):
 	search = forms.CharField(label='search', max_length=100)
 
+CHOICES = []
+"""
 clipboards = Portapapeles.objects.all()
 CHOICES = []
 count = 0
 for item in clipboards:
 	count += 1
 	CHOICES.append((str(count),item.nombre_del_portapapeles))
+"""
 
 class PortapapelesForm(forms.Form):
 	list_name = forms.ChoiceField(choices=CHOICES)

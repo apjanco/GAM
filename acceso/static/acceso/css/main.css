@@ -2162,7 +2162,7 @@ input, select, textarea {
 	#header {
 		position: relative;
 		/* this changes the top most image behind the title*/
-		background-image: url('/static/acceso/images/placeholder.png');
+		background-image: url('/static/acceso/images/img003.jpg');
 		background-size: contain;
 		background-position: center center;
 		background-attachment: fixed;

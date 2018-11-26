@@ -40,6 +40,7 @@ def timeout_handler(signum, frame):   # Custom signal handler
 
 def descargar_una_sola_bolsa(filename):
     """This is a function used to download individual bag files from object storage"""
+    """AWS to DO, change Lines 47 and 68, 50 and 71"""
     try:
         config = botocore.client.Config(connect_timeout=2000, read_timeout=2000)
         session = boto3.session.Session()
@@ -56,7 +57,7 @@ def descargar_una_sola_bolsa(filename):
 
 def descargar_una_sola_bolsa_s3cmd(filename):
     getpass.getuser()
-    os.system('s3cmd get "s3://bolsas/{}" /tmp/{}'.format(filename, filename))
+    os.system('s3cmd get "s3://gam-bolsas/{}" /tmp/{}'.format(filename, filename))
     return True
 
 

@@ -337,8 +337,20 @@ def advanced_search_submit(request):
     context = advanced_search.advanced_search(request)
     if context:
         context['state'] = context['results']
-        for item in context['state']:
-            print (type(item))
+        print(type(context['state']))
+        #print(context)
+        '''
+        # wanted to provide relevant carpeta on the result page, but it seems this relationship is not used yet
+        relevant_carpeta = []
+        for obj in context['state']:
+            print (type(obj))
+            if obj.__class__.__name__ == 'Persona':
+                relevant_carpeta.append(Carpeta.objects.filter(persona__nombre_de_la_persona=obj.nombre_de_la_persona))
+            elif obj.__class__.__name__ == 'Lugar':
+                relevant_carpeta.append(Carpeta.objects.filter(ubicación_geográfica__nombre_del_lugar = obj.nombre_del_lugar))
+        context['relevant_resources'] = relevant_carpeta
+        print (context['relevant_resources'])
+        '''
         return render(request, 'search_result_page.html', context)
     else:
         context = {"failed" : True}

@@ -18,9 +18,6 @@ django-mptt==0.9.0
 django-registration==2.3
 -e git+https://github.com/jschneier/django-storages.git@adefe324be22843148b03a2068d2922eaae1a48b#egg=django_storages
 docutils==0.14
-elasticsearch==5.5.1
-elasticsearch-django==5.0.5
-elasticsearch-dsl==5.4.0
 future==0.16.0
 gapic-google-cloud-datastore-v1==0.15.3
 gapic-google-cloud-error-reporting-v1beta1==0.15.3

@@ -45,7 +45,7 @@
       <div class="row">
         <div class="col-md-6">
             <div class="page-header">
-        <h3> Una descripción general</h3>
+        <h3>This is a general description</h3>
           <div class="well">
 				  {{ caso.descripción |safe}} 
           </div>
@@ -54,7 +54,6 @@
         </div>
         <div class="col-md-6">
 
-{% if caso.fotos.all  %}
         <div id="cases" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
     <li data-target="#cases" data-slide-to="0" class="active"></li>
@@ -70,7 +69,6 @@
       <img class="d-block w-100" src="{% static 'acceso/images/placeholder2.jpg' %}" alt="First slide">
     </div>
    {% for image in images %}
-
 	<div class="carousel-item">
 			<img class="d-block w-100" src="http://archivogam.haverford.edu/{{image}}" alt="Slide number {{ forloop.counter  }}">
 	</div>
@@ -86,16 +84,25 @@
     <span class="sr-only">Next</span>
   </a>
 </div>
-{% endif %}
+          
         </div>
       </div>
     </div>
 <div class="row">
         <div class="col-md-6">
           <h3>Open sea dragon </h3>
-          {% include "acceso/seadragon.html"%}
-          <div id="openseadragon1" style="width: 100%; height:100%;"></div>
-		</div>
+        <script src="{% static 'acceso/js/seadragon/openseadragon.min.js.map' %}"></script>
+        <script src="{% static 'acceso/js/seadragon/openseadragon.min.js' %}"></script>
+        <div id="seadragon-viewer" style="width:400px; height:300px;"></div>
+
+        <script>
+        var SRC=[];
+        {% for i in dragon %}
+        SRC.push("https://dzis.nyc3.digitaloceanspaces.com/{{i.nombre_del_archivo}}.dzi");
+        {% endfor %}
+        </script>
+<script src="{% static 'acceso/js/seadragon/call_the_dragon.js' %}"></script>
+        </div>
         <div class="col-md-6">
 		  <h3>Metadatos sobre el caso</h3>
           <table class="table table-striped">
@@ -118,9 +125,20 @@
         </div>
       </div>
 
+    
+      
+
+
+    </div> <!-- /container -->
+
+
    
   </body>
+
   
+
+
+
 
 
 {% endblock %}

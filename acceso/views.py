@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from gam_app.models import *
 from acceso.models import *
 from gam_app.models import Persona
 
@@ -30,6 +31,15 @@ def history(request):
 def caso(request, caso):
     caso = Caso.objects.get(slug_name=caso)
     foto = []
+    dragon= []
+
+    for x in caso.fotos.all():
+        print(x)
+        foto.append(x)
+
+    for x in caso.carpetas.all():
+        dragon= Imagen.objects.filter(archivo=x.archivo, colección=x.colección, caja=x.caja,legajo=x.legajo, carpeta=x.carpeta).order_by('número_de_imagen')
+    
     persona = Persona.objects.get(nombre_de_la_persona=caso)
     temp = persona.__dict__
     persona_dict = {k.replace("_", " ").capitalize(): v for k, v in temp.items() if len(str(v)) > 0}
@@ -39,7 +49,7 @@ def caso(request, caso):
     persona_dict.pop(" state")
     persona_dict.pop("Id")
     profile_photos = Foto.objects.filter(caso__slug_name=caso)
-    context = {'caso': caso, 'images': foto, "data":persona_dict}
+    context = {'caso': caso, 'images': foto, "data":persona_dict, 'dragon':dragon}
 
     return render(request, 'acceso/caso.html', context)
 

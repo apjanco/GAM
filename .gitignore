@@ -10,13 +10,17 @@ index/
 logs
 uwsgi_params
 *.save 
+.venv
 
-gam_app/dzis
-gam_app/static/thumbnails
-gam_app/static/documents
-gam_app/static/*.png
-gam_app/static/openseadragon-flat-toolbar-icons
-gam_app/tracking.py
-archivo/settings_secret.py
-acceso/static/acceso/images/
+/gam_app/dzis
+/gam_app/static/thumbnails
+/gam_app/static/documents
+/gam_app/static/*.png
+/gam_app/static/openseadragon-flat-toolbar-icons
+/gam_app/tracking.py
+/archivo/settings_secret.py
+/acceso/static/acceso/images/
+/acceso/static/acceso/js/seadragon/images
+/media
+
 *.mo

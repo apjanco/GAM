@@ -8,7 +8,8 @@ import pyvips
 import re
 import uuid
 from PIL import Image
-
+import shutil
+import sys
 
 class file_counter(object):
     def __init__(self):
@@ -45,6 +46,7 @@ def change_size_if_needed(file):
     if os.path.getsize(file) > 4000000:
         im = Image.open(file)
         size = smaller_than(im,4000000)
+        #  print(size) very useful to improve performance, print average value and change line 62 for less processing
         im.save(file, 'JPEG', quality=size)
 
 
@@ -58,7 +60,7 @@ def import_image_file(filename, nombre_de_la_bolsa):
     #  convert the tiff to jpeg
     try:
         im = Image.open(filename)
-        im.save(new_path + new_filename, 'JPEG', quality=100)
+        im.save(new_path + new_filename, 'JPEG', quality=85)
 
     except Exception as e:
         print(e)
@@ -74,13 +76,13 @@ def import_image_file(filename, nombre_de_la_bolsa):
         print('[*] %s' % new_filename)
         dzi_me = pyvips.Image.new_from_file(new_path + new_filename)
 
-        if not os.path.isdir('/mnt/bags/dzis1/'):
-            os.mkdir('/mnt/bags/dzis1/')
-        dzi_me.dzsave('/mnt/bags/dzis1/{}'.format(new_filename))
+        if not os.path.isdir('/mnt/dzis1/'):
+            os.mkdir('/mnt/dzis1/')
+        dzi_me.dzsave('/mnt/dzis1/{}'.format(new_filename))
 
         #  Here we re-add the jpg to the filename, this is not really a good thing, but too late to change it
-        os.rename('/mnt/bags/dzis1/{}'.format(new_filename.replace('.jpg', '.dzi')), '/mnt/bags/dzis1/{}'.format(new_filename + '.dzi'))
-        os.rename('/mnt/bags/dzis1/{}'.format(new_filename.replace('.jpg', '_files')), '/mnt/bags/dzis1/{}'.format(new_filename + '_files'))
+        os.rename('/mnt/dzis1/{}'.format(new_filename.replace('.jpg', '.dzi')), '/mnt/dzis1/{}'.format(new_filename + '.dzi'))
+        os.rename('/mnt/dzis1/{}'.format(new_filename.replace('.jpg', '_files')), '/mnt/dzis1/{}'.format(new_filename + '_files'))
 
     except Exception as e:
         print(e)
@@ -233,6 +235,10 @@ class Command(BaseCommand):
         bolsas_nuevas = bolsas.difference(bolsas_importadas)
         bolsas_nuevas = list(bolsas_nuevas)
 
+        if len(bolsas_nuevas) == 0:
+            print('no hay bolsas nuevas')
+            sys.exit()
+
         for bolsa in bolsas_nuevas:
             print(bolsas_nuevas.index(bolsa), bolsa)
 
@@ -246,7 +252,7 @@ class Command(BaseCommand):
             zip_file = zipfile.ZipFile('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip'))
             zip_file.extractall('/mnt/bags/')
             zip_file.close()
-            #os.remove('/tmp/{}'.format(nombre_de_la_bolsa + '.zip'))
+            os.remove('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip'))
 
         elif descargar_una_sola_bolsa(nombre_de_la_bolsa + '.zip'):
             zip_file = zipfile.ZipFile('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip'))
@@ -266,6 +272,8 @@ class Command(BaseCommand):
 
             [import_image_file(file, nombre_de_la_bolsa) for file in tiff_files]
             [import_resumen_file(file) for file in txt_files]
+
+            shutil.rmtree('/mnt/bags/{}'.format(nombre_de_la_bolsa))
 
         else:
             print('la bolsa no es valida')

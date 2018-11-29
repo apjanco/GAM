@@ -30,8 +30,6 @@ def history(request):
 def caso(request, caso):
     caso = Caso.objects.get(slug_name=caso)
     foto = []
-    print(caso)
-    
     persona = Persona.objects.get(nombre_de_la_persona=caso)
     temp = persona.__dict__
     persona_dict = {k.replace("_", " ").capitalize(): v for k, v in temp.items() if len(str(v)) > 0}
@@ -42,6 +40,7 @@ def caso(request, caso):
     persona_dict.pop("Id")
     profile_photos = Foto.objects.filter(caso__slug_name=caso)
     context = {'caso': caso, 'images': foto, "data":persona_dict}
+
     return render(request, 'acceso/caso.html', context)
 
 

@@ -11,8 +11,6 @@ from django.db.models import Count, Q
 
 
 #  search engine dependencies
-from elasticsearch_django.settings import get_client
-from elasticsearch_django.models import SearchQuery
 from dal import autocomplete
 
 #  For Mission Control
@@ -59,15 +57,6 @@ def search(request, query):
         search = "Buscar..."
         form = SearchForm(initial={'search': search})
     return render(request, 'index.html', {'form': form})
-
-
-def elasticsearch(request, query):
-    search = Search(using=get_client(), index='gam')
-    state = SearchQuery.execute(search)
-    for obj in Imagen.objects.from_search_query(sq):
-        print(obj.search_score, obj.search_rank)
-        context = {'state': state}
-    return render(request, 'all_documents_page.html', context)
 
 
 @login_required
@@ -337,8 +326,20 @@ def advanced_search_submit(request):
     context = advanced_search.advanced_search(request)
     if context:
         context['state'] = context['results']
-        for item in context['state']:
-            print (type(item))
+        print(type(context['state']))
+        #print(context)
+        '''
+        # wanted to provide relevant carpeta on the result page, but it seems this relationship is not used yet
+        relevant_carpeta = []
+        for obj in context['state']:
+            print (type(obj))
+            if obj.__class__.__name__ == 'Persona':
+                relevant_carpeta.append(Carpeta.objects.filter(persona__nombre_de_la_persona=obj.nombre_de_la_persona))
+            elif obj.__class__.__name__ == 'Lugar':
+                relevant_carpeta.append(Carpeta.objects.filter(ubicación_geográfica__nombre_del_lugar = obj.nombre_del_lugar))
+        context['relevant_resources'] = relevant_carpeta
+        print (context['relevant_resources'])
+        '''
         return render(request, 'search_result_page.html', context)
     else:
         context = {"failed" : True}

@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from gam_app.models import *
 from acceso.models import *
 
 
@@ -31,12 +32,21 @@ def history(request):
 def caso(request, caso):
     caso = Caso.objects.get(slug_name=caso)
     foto = []
+    dragon= []
+
     for x in caso.fotos.all():
         print(x)
         foto.append(x)
 
+
+
+    for x in caso.carpetas.all():
+        dragon= Imagen.objects.filter(archivo=x.archivo, colección=x.colección, caja=x.caja,legajo=x.legajo, carpeta=x.carpeta).order_by('número_de_imagen')
+
+
     profile_photos = Foto.objects.filter(caso__slug_name=caso)
-    context = {'caso': caso, 'images': foto}
+    
+    context = {'caso': caso, 'images': foto, 'dragon':dragon}
     return render(request, 'acceso/caso.html', context)
 
 

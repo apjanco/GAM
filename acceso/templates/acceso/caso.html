@@ -45,7 +45,7 @@
       <div class="row">
         <div class="col-md-6">
             <div class="page-header">
-        <h3>This is a general description</h3>
+        <h3> Una descripción general</h3>
           <div class="well">
 				  {{ caso.descripción |safe}} 
           </div>
@@ -54,6 +54,7 @@
         </div>
         <div class="col-md-6">
 
+{% if caso.fotos.all  %}
         <div id="cases" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
     <li data-target="#cases" data-slide-to="0" class="active"></li>
@@ -69,6 +70,7 @@
       <img class="d-block w-100" src="{% static 'acceso/images/placeholder2.jpg' %}" alt="First slide">
     </div>
    {% for image in images %}
+
 	<div class="carousel-item">
 			<img class="d-block w-100" src="http://archivogam.haverford.edu/{{image}}" alt="Slide number {{ forloop.counter  }}">
 	</div>
@@ -84,7 +86,7 @@
     <span class="sr-only">Next</span>
   </a>
 </div>
-          
+{% endif %}
         </div>
       </div>
     </div>
@@ -92,55 +94,33 @@
         <div class="col-md-6">
           <h3>Open sea dragon </h3>
           {% include "acceso/seadragon.html"%}
-        </div>
+          <div id="openseadragon1" style="width: 100%; height:100%;"></div>
+		</div>
         <div class="col-md-6">
+		  <h3>Metadatos sobre el caso</h3>
           <table class="table table-striped">
             <thead>
               <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
+			    <th><b>Typo de información</b></th>
+				<th><b>Contenido</b></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>filler</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>filler</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>filler</td>
+		      {% for key, value in data.items %}
+			  <tr>
+			    <td>{{key|safe}}</td>
+				<td>{{value|safe}}</td>
+			  </tr>
+			  {% endfor %}
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-    
-      
-
-
-    </div> <!-- /container -->
-
-
    
   </body>
-
   
-
-
-
 
 
 {% endblock %}

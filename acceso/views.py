@@ -46,10 +46,15 @@ def caso(request, caso):
     for x in caso.fotos.all():
         print(x)
         foto.append(x)
-    persona_dict.pop(" state")
-    persona_dict.pop("Id")
+    persona_dict = {key: persona_dict[key] for key in persona_dict if key not in ["Id"," state"]}
+    keys = []
+    values = []
+    for i in sorted(persona_dict.keys()):
+        keys.append(i)
+        values.append(persona_dict[i])
+    kv = zip(keys, values)
     profile_photos = Foto.objects.filter(caso__slug_name=caso)
-    context = {'caso': caso, 'images': foto, "data":persona_dict, 'dragon':dragon}
+    context = {'caso': caso, 'images': foto, "kv": kv, 'dragon':dragon}
 
     return render(request, 'acceso/caso.html', context)
 

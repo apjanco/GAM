@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% load staticfiles %}
 {% load i18n %}
 
@@ -10,313 +11,222 @@
 <script src="{% static 'js/openseadragon.min.js' %}"></script>
 <script src="http://msalsbery.github.io/builds/openseadragonimaging/openseadragon-viewerinputhook.min.js"></script>
 <script type="text/javascript" src="https://cdn.rawgit.com/Pin0/openseadragon-justified-collection/1.0.2/dist/openseadragon-justified-collection.min.js"></script>
-
+<script src="http://msalsbery.github.io/builds/openseadragonimaging/openseadragon-viewerinputhook.min.js"></script>
 {% endblock %}
-
 
 {% block title %}GAM{% endblock %}
 
 {% block content %}
-
 <hr>
+
 {% if state %}
 <div>
-{% if previous_caja %}
+  {% if previous_caja %}
   <div class="col-sm-2">
-<a class="previous" href="{% url 'documento2' location.archivo location.colección previous_caja %}"> < {% trans "Anterior" %} :</a>
+    <a class="previous" href="{% url 'documento2' location.archivo location.colección previous_caja %}">&lt; {% trans "Anterior" %}:</a>
+  {% endif %}
 
-{% endif %}
-{% if next_caja %}
-<a href="{% url 'documento2' location.archivo location.colección next_caja %}">{% trans "Siguiente" %} ></a>
-</div>
-{% endif %}
-{% if previous_legajo %}
+  {% if next_caja %}
+    <a href="{% url 'documento2' location.archivo location.colección next_caja %}">{% trans "Siguiente" %} ></a>
+  </div>
+  {% endif %}
+
+  {% if previous_legajo %}
   <div class="col-sm-2">
-<a href="{% url 'documento3' location.archivo location.colección location.caja previous_legajo %}"> < {% trans "Anterior" %} :</a>
+    <a href="{% url 'documento3' location.archivo location.colección location.caja previous_legajo %}">&lt; {% trans "Anterior" %} :</a>
+  {% endif %}
 
-{% endif %}
-{% if next_legajo %}
-<a href="{% url 'documento3' location.archivo location.colección location.caja next_legajo %}">{% trans "Siguiente" %} ></a>
-</div>
-{% endif %}
+  {% if next_legajo %}
+    <a href="{% url 'documento3' location.archivo location.colección location.caja next_legajo %}">{% trans "Siguiente" %} ></a>
+  </div>
+  {% endif %}
 
-{% if previous_carpeta %}
+  {% if previous_carpeta %}
   <div class="col-sm-2">
-<a href="{% url 'procesamiento' location.archivo location.colección location.caja location.legajo previous_carpeta %}"> < {% trans "Anterior" %} :</a>
+    <a href="{% url 'procesamiento' location.archivo location.colección location.caja location.legajo previous_carpeta %}">&lt; {% trans "Anterior" %} :</a>
+  {% endif %}
 
-{% endif %}
-{% if next_carpeta %}
-<a href="{% url 'procesamiento' location.archivo location.colección location.caja location.legajo next_carpeta %}">{% trans "Siguiente" %} ></a>
+  {% if next_carpeta %}
+    <a href="{% url 'procesamiento' location.archivo location.colección location.caja location.legajo next_carpeta %}">{% trans "Siguiente" %} ></a>
+  </div>
+  {% endif %}
+
+  <a href="{% url 'documento0' location.archivo %}">{{ location.archivo }}</a>
+
+  {% if location.colección %}
+  &gt; <a href="{% url 'documento1' location.archivo location.colección %}">{{ location.colección }}</a>
+  {% endif %}
+
+  {% if location.caja %}
+  &gt; <a href="{% url 'documento2' location.archivo location.colección location.caja %}">{% trans "Caja" %}: {{ location.caja }}</a>
+  {% endif %}
+
+  {% if location.legajo %}
+  &gt; <a href="{% url 'documento3' location.archivo location.colección location.caja location.legajo %}">{% trans "Legajo" %}: {{ location.legajo }}</a>
+  {% endif %}
+
+  {% if location.carpeta %}
+  &gt; <a href="{% url 'procesamiento' location.archivo location.colección location.caja location.legajo location.carpeta %}">{% trans "Carpeta" %}: {{ location.carpeta }}</a>
+  {% endif %}
+
+  {% if location.número_de_imagen %}
+  &gt; <a href="{% url 'documento5' location.archivo location.colección location.caja location.legajo location.carpeta location.número_de_imagen %}">{% trans "Número de imagen" %}: {{ location.número_de_imagen }}</a>
+  {% endif %}
 </div>
-{% endif %}  
-
-<a href="{% url 'documento0' location.archivo %}">{{ location.archivo }}</a>
-
-{% if location.colección %}
-> <a href="{% url 'documento1' location.archivo location.colección %}">{{ location.colección }}</a>
-{% endif %}
-
-{% if location.caja %}
-> <a href="{% url 'documento2' location.archivo location.colección location.caja %}">{% trans "Caja" %}: {{ location.caja }}</a>
-{% endif %}
-
-{% if location.legajo %}
-> <a href="{% url 'documento3' location.archivo location.colección location.caja location.legajo %}">{% trans "Legajo" %}: {{ location.legajo }}</a>
-{% endif %}
-
-{% if location.carpeta %}
-> <a href="{% url 'procesamiento' location.archivo location.colección location.caja location.legajo location.carpeta %}">{% trans "Carpeta" %}: {{ location.carpeta }}</a>
-{% endif %}
-
-{% if location.número_de_imagen %}
-> <a href="{% url 'documento5' location.archivo location.colección location.caja location.legajo location.carpeta location.número_de_imagen %}">{% trans "Número de imagen" %}: {{ location.número_de_imagen }}</a>
-{% endif %}
-</div>
-
 
 <span>
-   <img src={% static 'openseadragon-flat-toolbar-icons/images/zoomin_rest.png' %}   id='zoom-in' class='sea-icon'>
-   <img src={% static 'openseadragon-flat-toolbar-icons/images/zoomout_rest.png' %}  id='zoom-out' class='sea-icon'>
-   <img src={% static 'openseadragon-flat-toolbar-icons/images/home_rest.png' %}     id='home'  class='sea-icon'>
-   <img src={% static 'openseadragon-flat-toolbar-icons/images/fullpage_rest.png' %} id='full-page' class='sea-icon'  >
-   <img src={% static 'openseadragon-flat-toolbar-icons/images/rotateleft_rest.png' %} id='left-rotate' class='sea-icon'>
-   <img src={% static 'openseadragon-flat-toolbar-icons/images/rotateright_rest.png' %}     id='right-rotate' class='sea-icon'>
+  <img src={% static 'openseadragon-flat-toolbar-icons/images/zoomin_rest.png' %} id='zoom-in' class='sea-icon'>
+  <img src={% static 'openseadragon-flat-toolbar-icons/images/zoomout_rest.png' %} id='zoom-out' class='sea-icon'>
+  <img src={% static 'openseadragon-flat-toolbar-icons/images/home_rest.png' %} id='home'  class='sea-icon'>
+  <img src={% static 'openseadragon-flat-toolbar-icons/images/fullpage_rest.png' %} id='full-page' class='sea-icon'  >
+  <img src={% static 'openseadragon-flat-toolbar-icons/images/rotateleft_rest.png' %} id='left-rotate' class='sea-icon'>
+  <img src={% static 'openseadragon-flat-toolbar-icons/images/rotateright_rest.png' %} id='right-rotate' class='sea-icon'>
 </span>
+
 <div class="row align-items-center">
-<h4>{% trans "Artículos en la carpeta" %} {{ location.carpeta }}</h4>
-<div class="col" style="background-color:#aaa; height: 450px;">
-<div id="openseadragon1" style="width:100%; height: 100%;"></div>
-</div></div>
-      <ul id="tabs" class="nav nav-tabs nav-justified" data-tabs="tabs">
-        <li class="pills tabs-small active"><a data-toggle="tab" href="#tab1-slug">
-          {% trans "Persona" %}</a>
-        </li>
-        <li class="pills tabs-small"><a data-toggle="tab" href="#tab2-slug">
-          {% trans "Lugar" %}</a>
-        </li>
-        <li class="pills tabs-small"><a data-toggle="tab" href="#tab3-slug">
-          {% trans "Organización" %}</a>
-        </li>
-      </ul>
+  <h4>{% trans "Artículos en la carpeta" %} {{ location.carpeta }}</h4>
+  <div class="col" style="background-color:#aaa; height: 450px;">
+    <div id="openseadragon1" style="width:100%; height: 100%;"></div>
+  </div>
+</div>
+
+<ul id="tabs" class="nav nav-tabs nav-justified" data-tabs="tabs">
+  <li class="pills tabs-small active"><a data-toggle="tab" href="#tab1-slug">
+    {% trans "Persona" %}</a>
+  </li>
+  <li class="pills tabs-small"><a data-toggle="tab" href="#tab2-slug">
+    {% trans "Lugar" %}</a>
+  </li>
+  <li class="pills tabs-small"><a data-toggle="tab" href="#tab3-slug">
+    {% trans "Organización" %}</a>
+  </li>
+</ul>
 
 {% if carpeta_info %}
 <br>
-<br>{% for item in carpeta_info %}<p>{{ item.descripcion_caso }}</p>{% endfor %}
+<br>
+{% for item in carpeta_info %}
+<p>{{ item.descripcion_caso }}</p>
+{% endfor %}
 {% endif %}
 
-   <div class="tab-content text-left">
-     <!-- Text -->
-     <div id="tab1-slug" class="tab-pane active">
+<div class="tab-content text-left">
+  <!-- Text -->
+  <div id="tab1-slug" class="tab-pane active">
+    <form action="" method="post">
+      {% csrf_token %}
+      {{ form.media }}
+      <h4>{% trans "Personas en la Carpeta" %} {{ location.carpeta }}:</h4>
+      <table>
+        {% for persons in images_in_carpeta %}
+          {% for person in persons.persona.all %}
+          <td> {{ person }}</td>
+          {% endfor %}
+        {% endfor %}
+      </table>
+    </form>
+    <hr>
 
-       <!-- This form is never closed, but I can't close it because I don't know where it's
-            supposed to be closed -->
-       <form action="" method="post">
-         {% csrf_token %}
-         {{ form.media }}
-         <h4>{% trans "Personas en la Carpeta" %} {{ location.carpeta }}:</h4>
-         <table>
-         {% for persons in images_in_carpeta %}
-            {% for person in persons.persona.all %}
-            <td> {{ person }}</td>
-         {% endfor %}{% endfor %}
-         </table>
-     <hr> 
-
-     <!-- mission control -->        
-     <div>
-     {{ current_carpeta.carpeta_titulo }}
-     <form action="" method="post>
-       {% csrf_token %}
-       <table>
-       {{ carpeta_persona_form.as_table }}
-       </table>
-       <input type="submit" name="carpeta_persona"/>
-     </form>
-     </div>
-
-     <!-- persona_autocompletar -->
-     <div>
-       <form action="" method="post">
-         {% csrf_token %}
-         <table>
-         {{ persona_auto_form.as_table }}
-         </table>
-         {{ persona_auto_form.media }}
-         <input type="submit" name="persona"/>
-       </form>
-       {% if persona %}
-       <script>
-         function myFunction() {
-             window.open("{% url 'persona_update' persona %}", "_blank", "location=yes,height=800,width=800,scrollbars=yes,status=yes");
-         }
-       </script>
-       {% endif %}
-     </div>
-       
-         <hr>
-         <input type="hidden" value="{{ state.nombre_del_archivo }}" name="nombre_del_archivo" />
-         <input type="hidden" value="{{ state.archivo }}" name="archivo" />
-         <input type="hidden" value="{{ state.colección }}" name="colección" />
-         <input type="hidden" value="{{ state.caja }}" name="caja" />
-         <input type="hidden" value="{{ state.legajo }}" name="legajo" />
-         <input type="hidden" value="{{ state.carpeta }}" name="carpeta" />
-         <input type="hidden" value="{{ state.texto_de_OCR }}" name="old_text" />
-         <input type="hidden" value="text_edit" name="input" />
+    <!-- mission control -->
+    <div>
+      {{ current_carpeta.carpeta_titulo }}
+      <form action="" method="post">
+        {% csrf_token %}
+        <table>
+        {{ carpeta_persona_form.as_table }}
+        </table>
+        <input type="submit" name="carpeta_persona"/>
+      </form>
     </div>
 
-    <!-- Lugar -->
-    <div id="tab2-slug" class="tab-pane">
-
-      <!-- lugar_autocompletar -->
-      <div>
-        <form action="" method="post" >
-          {% csrf_token %}
-          <table>
-          {{ lugar_auto_form.as_table }}
-          </table>
-          {{ lugar_auto_form.media }}
-          <input type="submit" name="lugar" />
-        </form>
-        {% if lugar  %}
-          <script>
-          function myFunctionLugar() {
-              window.open("{% url 'lugar_update' lugar %}", "_blank", "location=yes,height=800,width=800,scrollbars=yes,status=yes");
-          }
-          </script>
-        {% endif %} 
-     </div>
-     <br>
+    <!-- persona_autocompletar -->
+    <div>
+      <form action="" method="post">
+        {% csrf_token %}
+        <table>
+        {{ persona_auto_form.as_table }}
+        </table>
+        {{ persona_auto_form.media }}
+        <input type="submit" name="persona"/>
+      </form>
     </div>
 
-    <!-- Organización -->
-    <div id="tab3-slug" class="tab-pane">
+    <hr>
+    <input type="hidden" value="{{ state.nombre_del_archivo }}" name="nombre_del_archivo" />
+    <input type="hidden" value="{{ state.archivo }}" name="archivo" />
+    <input type="hidden" value="{{ state.colección }}" name="colección" />
+    <input type="hidden" value="{{ state.caja }}" name="caja" />
+    <input type="hidden" value="{{ state.legajo }}" name="legajo" />
+    <input type="hidden" value="{{ state.carpeta }}" name="carpeta" />
+    <input type="hidden" value="{{ state.texto_de_OCR }}" name="old_text" />
+    <input type="hidden" value="text_edit" name="input" />
+  </div>
 
-      <!-- organizacion_autocompletar -->
-      <div>
-        <form action="" method="post" >
-          {% csrf_token %}
-          <table>
-          {{ organizacion_auto_form.as_table }}
-          </table>
-          {{ organizacion_auto_form.media }}
-          <input type="submit" name="organizacion" />
-        </form>
-        {% if organizacion  %}
-          <script>
-          function myFunctionOrganizacion() {
-              window.open("{% url 'organizacion_update' organizacion %}", "_blank", "location=yes,height=800,width=800,scrollbars=yes,status=yes");
-          }
-          </script>
-        {% endif %}
-     </div>
-     <br>
-
+  <!-- Lugar -->
+  <div id="tab2-slug" class="tab-pane">
+    <!-- lugar_autocompletar -->
+    <div>
+      <form action="" method="post" >
+        {% csrf_token %}
+        <table>
+        {{ lugar_auto_form.as_table }}
+        </table>
+        {{ lugar_auto_form.media }}
+        <input type="submit" name="lugar" />
+      </form>
     </div>
+    <br>
+  </div>
 
-<script src="http://msalsbery.github.io/builds/openseadragonimaging/openseadragon-viewerinputhook.min.js"></script>
-<script type="text/javascript">
+  <!-- Organización -->
+  <div id="tab3-slug" class="tab-pane">
+    <!-- organizacion_autocompletar -->
+    <div>
+      <form action="" method="post" >
+        {% csrf_token %}
+        <table>
+        {{ organizacion_auto_form.as_table }}
+        </table>
+        {{ organizacion_auto_form.media }}
+        <input type="submit" name="organizacion" />
+      </form>
+    </div>
+    <br>
+  </div>
 
-var items = [];
-var srcs = [];
+<!-- I think there's a missing </div> here but I'm not sure -->
+{% else %}
+<p>{% trans "Error" %}</p>
+{% endif %}
+
+<script>
+// This script initializes variables that require Django templating features, which is why it
+// is inline and not in gam_app/js/procesamiento.js like the rest of the code.
+{% if persona %}
+var PERSONA_UPDATE_URL = "{% url 'persona_update' persona %}";
+{% endif %}
+{% if lugar %}
+var LUGAR_UPDATE_URL = "{% url 'lugar_update' lugar %}";
+{% endif %}
+{% if organizacion %}
+var ORGANIZACION_URL = "{% url 'organizacion_update' organizacion %}";
+{% endif %}
+
+var EDIT_BUTTON_URL = "{% static 'edit_button.png' %}";
+
+// We need a better way of doing this.
+var ITEMS = [];
+var SRCS = [];
 {% for item in images_in_carpeta %}
-items.push(["{{ item.nombre_del_archivo }}", "{% url 'documento5' item.archivo item.colección item.caja item.legajo item.carpeta item.número_de_imagen %}", "{{ item.localizacion_fisica }}"]);
-// srcs.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
-srcs.push("https://dzis.nyc3.digitaloceanspaces.com/{{ item.nombre_del_archivo }}.dzi")
+ITEMS.push([
+    "{{ item.nombre_del_archivo }}",
+    "{% url 'documento5' item.archivo item.colección item.caja item.legajo item.carpeta item.número_de_imagen %}",
+    "{{ item.localizacion_fisica }}"
+]);
+//SRCS.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
+SRCS.push("https://dzis.nyc3.digitaloceanspaces.com/{{ item.nombre_del_archivo }}.dzi")
 {% endfor %}
-var viewer = OpenSeadragon({
-    id: "openseadragon1",
-    homeButton: "home",        
-    zoomInButton: "zoom-in",
-    zoomOutButton: "zoom-out",
-    fullPageButton: "full-page",
-    rotateRightButton: "right-rotate", 
-    rotateLeftButton: "left-rotate", 
-
-    //tileSources: srcs,
-    crossOriginPolicy: 'Anonymous',
-    collectionColumns: 6,
-    collectionMode: true,
-    showRotationControl: true
-});
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-
-var images = [];
-for (var i = 0; i < items.length; i++) {
-  viewer.addTiledImage({
-      tileSource: 'https://dzis.nyc3.digitaloceanspaces.com/' + items[i][0] + '.dzi',
-      success: function (event) {
-        images.push(event.item);
-      }
-  });
-}
-
-addLinkOverlays()
-
-async function addLinkOverlays() {
-  // Wait until OSD is finished arranging the images so that the coordinates are accurate.
-  await sleep (2000);
-  for (var i = 0; images.length; i++) {
-    addOneLinkOverlay(images[i], items[i][1], items[i][2]);
-  }
-}
-
-
-function addOneLinkOverlay(image, link, name) {
-    var imageRect = image.getBounds();
-    var rect = new OpenSeadragon.Rect(imageRect.x, imageRect.y, 0.05, 0.05);
-    console.log(rect);
-
-    var divElement = document.createElement("div");
-    var buttonElement = document.createElement("a");
-    var imgElement = document.createElement("img");
-    imgElement.src = '{% static 'edit_button.png' %}';
-    imgElement.href = link;
-    buttonElement.appendChild(imgElement);
-    divElement.appendChild(buttonElement);
-
-    var markElement = document.createElement("mark");
-    var textElement = document.createTextNode(name);
-    markElement.appendChild(textElement);
-    divElement.appendChild(markElement);
-    //buttonElement.className = "highlight";
-    viewer.addOverlay(divElement, rect, OpenSeadragon.OverlayPlacement.CENTER);
- 
-    viewer.addViewerInputHook({
-        hooks: [{
-            tracker: "viewer",
-            handler: "clickHandler",
-            hookHandler: function (event) {
-              event.preventDefaultAction = true;
-              var pos = viewer.viewport.viewerElementToViewportCoordinates(event.position);
-              if (isPointInsideRect(pos, rect.clone())) {
-                  window.location.href = link;
-              }
-            },
-        }]
-    });
-    viewer.viewport.goHome()
-}
-
-
-function isPointInsideRect(point, rect) {
-    return point.x > rect.x && point.x < rect.x + rect.width && point.y > rect.y && point.y < rect.y + rect.height;
-}
-
-
-
 </script>
 
-
-
-
-{% else %}
-  <p>{% trans "Error" %}</p>
-{% endif %}
-
-
-
+<script src="{% static 'gam_app/js/procesamiento.js' %}"></script>
 {% endblock %}

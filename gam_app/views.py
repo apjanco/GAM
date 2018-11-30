@@ -11,8 +11,6 @@ from django.db.models import Count, Q
 
 
 #  search engine dependencies
-#from elasticsearch_django.settings import get_client
-#from elasticsearch_django.models import SearchQuery
 from dal import autocomplete
 
 #  For Mission Control
@@ -59,15 +57,6 @@ def search(request, query):
         search = "Buscar..."
         form = SearchForm(initial={'search': search})
     return render(request, 'index.html', {'form': form})
-
-
-def elasticsearch(request, query):
-    search = Search(using=get_client(), index='gam')
-    state = SearchQuery.execute(search)
-    for obj in Imagen.objects.from_search_query(sq):
-        print(obj.search_score, obj.search_rank)
-        context = {'state': state}
-    return render(request, 'all_documents_page.html', context)
 
 
 @login_required

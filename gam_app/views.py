@@ -11,8 +11,8 @@ from django.db.models import Count, Q
 
 
 #  search engine dependencies
-from elasticsearch_django.settings import get_client
-from elasticsearch_django.models import SearchQuery
+#from elasticsearch_django.settings import get_client
+#from elasticsearch_django.models import SearchQuery
 from dal import autocomplete
 
 #  For Mission Control
@@ -339,6 +339,35 @@ def advanced_search_submit(request):
         context['state'] = context['results']
         print(type(context['state']))
         #print(context)
+
+        # to determine the number of returning objects for each model
+        persona_count = 0
+        lugar_count = 0
+        imagen_count = 0
+
+        persona = []
+        lugar = []
+        imagen = []
+
+        for obj in context['results']:
+            if obj.__class__.__name__ == 'Persona':
+                persona_count += 1
+                persona.append(obj)
+            elif obj.__class__.__name__ == 'Lugar':
+                lugar_count += 1
+                lugar.append(obj)
+            elif obj.__class__.__name__ == 'Imagen':
+                imagen_count += 1
+                imagen.append(obj)
+
+        context['persona_count'] = persona_count
+        context['lugar_count'] = lugar_count
+        context['imagen_count'] = imagen_count
+
+        context['persona'] = persona
+        context['lugar'] = lugar
+        context['imagen'] = imagen
+
         '''
         # wanted to provide relevant carpeta on the result page, but it seems this relationship is not used yet
         relevant_carpeta = []

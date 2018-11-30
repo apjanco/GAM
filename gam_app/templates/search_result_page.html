@@ -49,11 +49,6 @@
 <button type="button" style="border-color: #000000;" id="AND_search" class="btn">{% trans "Y" %}</button>
 <button type="button" style="border-color: #000000;" id="NOT_search" class="btn">{% trans "NO" %}</button>
 
-<!-- load in jQuery -->
-<script src="{% static 'gam_site/jquery.js' %}"></script>
-<script src="{% static 'gam_site/jquery-ui.js' %}"></script>
-<script src="{% static 'gam_site/jQDateRangeSlider-min.js' %}"></script>
-
 
 <script>
   // reset counter to 1
@@ -191,7 +186,14 @@
     <td>{{obj.nombre_del_lugar}}</td>
     <!-- TODO: add more if for other categories -->
     {% elif obj|get_type == 'Imagen' %}
-    <td>{{obj.localizacion_fisica}}</td>
+    <td><div><a href="{% url 'documento5' obj.archivo obj.colección obj.caja obj.legajo obj.carpeta obj.número_de_imagen %}" style="color:firebrick; font-size:18px;">
+        <b>[{% trans 'Image' %}]</b> &nbsp; {{obj.localizacion_fisica}}</a><br>
+        <span> <em style="color:gray"> {% trans 'archivo' %}:</em> {{obj.archivo}} &nbsp;
+            <em style="color:gray"> {% trans 'colección' %}:</em> {{obj.colección}} &nbsp;
+            <em style="color:gray"> {% trans 'caja' %}:</em> {{obj.caja}} <br>
+            <em style="color:gray"> {% trans 'item' %}:</em> {{obj.item}} &nbsp;
+        </span>
+    </div></td>
     {% endif %}
 </tr>
 {% endfor %}
@@ -219,6 +221,7 @@ $(document).ready( function () {
             "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/German.json"
         },
         {% endif %}
+        ordering: false
     });
 } );
 </script>
@@ -226,24 +229,23 @@ $(document).ready( function () {
 
 <div class="container" style="width:40%; float:right;">
     <br>
-    {% if state|length == 1 %}
     <div style="width:100%; margin:20px; border:1px solid darkgray; padding:30px">
-        {% if state.0|get_type == 'Persona' %}
-        <div><h2 style="float:left; width:70%;">{{ state.0 }}</h2><img src="{{state.0.image.all.0 }}" style="float:right; width:30%;"></div>
+        {% if persona_count == 1 %}
+        <div><h2 style="float:left; width:70%;">{{ persona.0 }}</h2><img src="{{persona.0.image.all.0 }}" style="float:right; width:30%;"></div>
         <br><hr><br>
-        <b>{% trans "género" %} : </b> {{ state.0.género }}<br>
-        <b>{% trans "etnicidad" %} : </b> {{ state.0.etnicidad }}<br>
-        <b>{% trans "fecha de nacimiento" %} : </b> {{ state.0.fecha_de_nacimiento}}<br>
-        <b>{% trans "profesión" %} : </b> {{ state.0.profesión }}<br>
+        <b>{% trans "género" %} : </b> {{ persona.0.género }}<br>
+        <b>{% trans "etnicidad" %} : </b> {{ persona.0.etnicidad }}<br>
+        <b>{% trans "fecha de nacimiento" %} : </b> {{ persona.0.fecha_de_nacimiento}}<br>
+        <b>{% trans "profesión" %} : </b> {{ persona.0.profesión }}<br>
         <b>{% trans "actividades políticas" %} : </b>
-            {% if state.0.actividades_políticas.all|length == 0 %} N/A
-            {% else %}{{ state.0.actividades_políticas.all }}{% endif %}<br>
-        <b>{% trans "fecha desaparicion" %} : </b> {{ state.0.fecha_desaparicion}}<br>
-        <b>{% trans "edad en el momento" %} : </b> {{ state.0.edad_en_el_momento}}
+            {% if persona.0.actividades_políticas.all|length == 0 %} N/A
+            {% else %}{{ persona.0.actividades_políticas.all }}{% endif %}<br>
+        <b>{% trans "fecha desaparicion" %} : </b> {{ persona.0.fecha_desaparicion}}<br>
+        <b>{% trans "edad en el momento" %} : </b> {{ persona.0.edad_en_el_momento}}
         <!-- TODO: add more objects -->
         {% endif %}
     </div>
-    {% endif %}
+
 
 
 </div>

@@ -71,6 +71,8 @@ def import_image_file(filename, nombre_de_la_bolsa):
     if change_size:
         change_size_if_needed(new_path + new_filename)
 
+        #  save a copy of the jpg in the documents directory
+        im.save('/mnt/documents/' + new_filename, 'JPEG')
     #  create a dzi from the jpeg
     try:
         print('[*] %s' % new_filename)

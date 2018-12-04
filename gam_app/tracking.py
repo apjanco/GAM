@@ -44,10 +44,10 @@ def descargar_una_sola_bolsa(filename):
     try:
         config = botocore.client.Config(connect_timeout=2000, read_timeout=2000)
         session = boto3.session.Session()
-        client = aws_client(session)
+        client = do_client(session)
 
         #client.download_file('bolsas', filename, '/mnt/bags/{}'.format(filename))
-        client.download_file('gam-bolsas', filename, '/mnt/bags/{}'.format(filename))
+        client.download_file('bolsas', filename, '/mnt/bags/{}'.format(filename))
 
         return True
 
@@ -57,7 +57,7 @@ def descargar_una_sola_bolsa(filename):
 
 def descargar_una_sola_bolsa_s3cmd(filename):
     getpass.getuser()
-    os.system('s3cmd get "s3://gam-bolsas/{}" /tmp/{}'.format(filename, filename))
+    os.system('s3cmd get "s3://bolsas/{}" /tmp/{}'.format(filename, filename))
     return True
 
 
@@ -65,10 +65,10 @@ def getBags():
     try:
         # signal.alarm(5)
         session = boto3.session.Session()
-        client = aws_client(session)
+        client = do_client(session)
 
         bags = []
-        for thing in client.list_objects(Bucket='gam-bolsas')['Contents']:
+        for thing in client.list_objects(Bucket='bolsas')['Contents']:
             if '.zip' in thing['Key']:
                 bags += [thing['Key'][:-4].replace('Bags/','')]
             else:

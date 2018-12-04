@@ -339,13 +339,13 @@ def advanced_search_submit(request):
         imagen = []
 
         for obj in context['results']:
-            if obj.__class__.__name__ == 'Persona':
+            if isinstance(obj, Persona):
                 persona_count += 1
                 persona.append(obj)
-            elif obj.__class__.__name__ == 'Lugar':
+            elif isinstance(obj, Lugar):
                 lugar_count += 1
                 lugar.append(obj)
-            elif obj.__class__.__name__ == 'Imagen':
+            elif isinstance(obj, Imagen):
                 imagen_count += 1
                 imagen.append(obj)
 

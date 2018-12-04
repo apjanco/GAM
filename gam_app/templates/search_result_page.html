@@ -306,10 +306,13 @@ var srcs = [];
     {% for image in object.image.all %}
     items.push(["{{ image.nombre_del_archivo }}", "{% url 'documento5' image.archivo image.colección image.caja image.legajo image.carpeta image.número_de_imagen %}", "{{ image.localizacion_fisica }}"]);
     srcs.push("/dzi/{{ image.nombre_del_archivo }}.dzi")
+    console.log('I am from persona')
     {% endfor %}
-{% elif object|get_type == "Imagen" %}
-    items.push(["{{ object.nombre_del_archivo }}", "{% url 'documento5' object.archivo object.colección object.caja object.legajo object.carpeta object.número_de_objectn %}", "{{ object.localizacion_fisica }}"]);
+{% endif %}
+{% if object|get_type == "Imagen" %}
+    items.push(["{{ object.nombre_del_archivo }}", "{% url 'documento5' object.archivo object.colección object.caja object.legajo object.carpeta object.número_de_imagen %}", "{{ object.localizacion_fisica }}"]);
     srcs.push("/dzi/{{ object.nombre_del_archivo }}.dzi")
+    console.log('I am from imagen')
 {% endif %}
 {% endfor %}
 

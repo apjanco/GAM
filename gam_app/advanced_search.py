@@ -66,7 +66,7 @@ def make_queryset(search_string, field):  # this will return queryset in SET
         q1 = set(Persona.objects.filter(Q(nombre_de_la_persona__icontains=search_string) | Q(género__icontains=search_string) | Q(etnicidad__icontains=search_string)))
         q2 = set(Lugar.objects.filter(nombre_del_lugar__icontains=search_string))
         # it is still a question whether there is a need to return Imagen objects
-        q3 = set(Imagen.objects.filter(Q(texto_de_OCR__icontains=search_string)))
+        q3 = set(Imagen.objects.filter(Q(texto_de_OCR__icontains=search_string) | Q(notas__icontains=search_string)))
         queryset = q1 | q2 | q3
         # print('queryset', queryset)
     elif field == 'Persona':

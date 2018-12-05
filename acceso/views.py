@@ -5,6 +5,7 @@ from gam_app.models import Persona
 
 # Create your views here.
 
+
 def main(request):
     casos = Caso.objects.all()
     photo_list = []
@@ -31,22 +32,32 @@ def history(request):
 def caso(request, caso):
     caso = Caso.objects.get(slug_name=caso)
     foto = []
-    dragon= []
+    dragon = []
 
     for x in caso.fotos.all():
         print(x)
         foto.append(x)
 
     for x in caso.carpetas.all():
-        dragon= Imagen.objects.filter(archivo=x.archivo, colección=x.colección, caja=x.caja,legajo=x.legajo, carpeta=x.carpeta).order_by('número_de_imagen')
-    
+        dragon = Imagen.objects.filter(
+            archivo=x.archivo,
+            colección=x.colección,
+            caja=x.caja,
+            legajo=x.legajo,
+            carpeta=x.carpeta,
+        ).order_by('número_de_imagen')
+
     persona = Persona.objects.get(nombre_de_la_persona=caso)
     temp = persona.__dict__
-    persona_dict = {k.replace("_", " ").capitalize(): v for k, v in temp.items() if len(str(v)) > 0}
+    persona_dict = {
+        k.replace("_", " ").capitalize(): v for k, v in temp.items() if len(str(v)) > 0
+    }
     for x in caso.fotos.all():
         print(x)
         foto.append(x)
-    persona_dict = {key: persona_dict[key] for key in persona_dict if key not in ["Id"," state"]}
+    persona_dict = {
+        key: persona_dict[key] for key in persona_dict if key not in ["Id", " state"]
+    }
     keys = []
     values = []
     for i in sorted(persona_dict.keys()):
@@ -54,21 +65,12 @@ def caso(request, caso):
         values.append(persona_dict[i])
     kv = zip(keys, values)
     profile_photos = Foto.objects.filter(caso__slug_name=caso)
-    context = {'caso': caso, 'images': foto, "kv": kv, 'dragon':dragon}
+    context = {'caso': caso, 'images': foto, "kv": kv, 'dragon': dragon}
 
     return render(request, 'acceso/caso.html', context)
 
 
 def simple(request):
     casos = Caso.objects.all()
-    context = {'casos': casos,}
+    context = {'casos': casos}
     return render(request, 'simple/acceso.html', context)
-
-
-
-
-
-
-
-
-

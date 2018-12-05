@@ -57,9 +57,9 @@ class Command(BaseCommand):
         for bag in bag_values:
             if ' ' not in bag:
                 bags[bag] = {}
-                query_imagens = Imagen.objects.filter(
-                    bag_name=bag).order_by(
-                    "caja", "legajo", "carpeta", "número_de_imagen")
+                query_imagens = Imagen.objects.filter(bag_name=bag).order_by(
+                    "caja", "legajo", "carpeta", "número_de_imagen"
+                )
 
                 #  create a list from the queryset that will allow indexing
                 imagens_list = []
@@ -73,16 +73,20 @@ class Command(BaseCommand):
                     # file number has letter
                     if re.search('[a-zA-Z]', número_de_imagen):
                         letters = ''.join(
-                            [i for i in número_de_imagen if not i.isdigit()])
+                            [i for i in número_de_imagen if not i.isdigit()]
+                        )
 
                         #  check previous image, if previous had no letters
-                        if letters not in imagens_list[index-1].split(
-                            '.')[0].split('_')[-1]:
+                        if (
+                            letters
+                            not in imagens_list[index - 1].split('.')[0].split('_')[-1]
+                        ):
 
                             #  create an item from physical
                             #  location minus letters
-                            item_name = image.split('.')[0].split(
-                                '-')[-1][:-len(letters)]
+                            item_name = image.split('.')[0].split('-')[-1][
+                                : -len(letters)
+                            ]
                             bags[bag][item_name] = []
 
                             #  add current image to the item
@@ -93,13 +97,16 @@ class Command(BaseCommand):
                             current_item.letters = letters
 
                         #  Check if letters are the same. if current item letters matches image letters, add to current item
-                        elif letters and current_item.letters in imagens_list[index-1].split('.')[0].split('_')[-1]:
+                        elif (
+                            letters
+                            and current_item.letters
+                            in imagens_list[index - 1].split('.')[0].split('_')[-1]
+                        ):
                             try:
                                 bags[bag][current_item.name].append(image)
 
                             except:
-                                print('[*] Error with {}'.format(
-                                    current_item.name))
+                                print('[*] Error with {}'.format(current_item.name))
                                 continue
 
                     # file number has no letters : create single-image item
@@ -109,7 +116,7 @@ class Command(BaseCommand):
 
         for key, value in bags.items():
             for value1 in value.items():
-            # get item with name in the list
+                # get item with name in the list
                 try:
                     item = Item.objects.get(nombre_del_item=value1[0])
                 except:

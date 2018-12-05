@@ -23,12 +23,12 @@ class Persona(models.Model):
     etnicidad = models.CharField(max_length=200, blank=True)
     profesión = models.CharField(max_length=200, blank=True)
     actividades_políticas = models.ManyToManyField('Organización', blank=True)
-    #relaciones = models.ManyToManyField('Relación', blank=True)
+    # relaciones = models.ManyToManyField('Relación', blank=True)
     image = models.ManyToManyField('Imagen', blank=True)
     notas = RichTextField(blank=True)
 
     def __str__(self):
-       return self.nombre_de_la_persona
+        return self.nombre_de_la_persona
 
     def get_absolute_url(self):
         return "/persona/%i/" % self.id
@@ -37,9 +37,10 @@ class Persona(models.Model):
 class Relación(models.Model):
     """A relationship."""
 
-    persona_A = models.ManyToManyField(Persona, blank=False, related_name= 'A')
-    persona_B = models.ManyToManyField(Persona, blank=False, related_name= 'B')
+    persona_A = models.ManyToManyField(Persona, blank=False, related_name='A')
+    persona_B = models.ManyToManyField(Persona, blank=False, related_name='B')
     relación = models.CharField(max_length=200, null=True)
+
 
 class Lugar(models.Model):
     """A place."""
@@ -49,7 +50,7 @@ class Lugar(models.Model):
     punto = geomodels.PointField(blank=True, null=True)
 
     def __str__(self):
-       return self.nombre_del_lugar
+        return self.nombre_del_lugar
 
 
 class Organización(models.Model):
@@ -63,7 +64,6 @@ class Organización(models.Model):
 
     def __str__(self):
         return self.nombre_de_la_organización
-
 
 
 class Caso(models.Model):
@@ -106,41 +106,45 @@ class Portapapeles(models.Model):
     manuscrito = models.ManyToManyField('Item', blank=True)
 
     def __str__(self):
-       return self.nombre_del_portapapeles
+        return self.nombre_del_portapapeles
 
 
 PERSON_STATUS_CHOICES = (
-        ('NONE', 'Sin correcciones'),
-        ('IN', 'En progreso'),
-        ('DONE', 'Compitió'),
-        ('FINAL', 'Competido y verificado')
+    ('NONE', 'Sin correcciones'),
+    ('IN', 'En progreso'),
+    ('DONE', 'Compitió'),
+    ('FINAL', 'Competido y verificado'),
 )
 PLACE_STATUS_CHOICES = (
-        ('NONE', 'Sin correcciones'),
-        ('IN', 'En progreso'),
-        ('DONE', 'Compitió'),
-        ('FINAL', 'Competido y verificado')
+    ('NONE', 'Sin correcciones'),
+    ('IN', 'En progreso'),
+    ('DONE', 'Compitió'),
+    ('FINAL', 'Competido y verificado'),
 )
 ORGANIZATION_STATUS_CHOICES = (
-        ('NONE', 'Sin correcciones'),
-        ('IN', 'En progreso'),
-        ('DONE', 'Compitió'),
-        ('FINAL', 'Competido y verificado')
+    ('NONE', 'Sin correcciones'),
+    ('IN', 'En progreso'),
+    ('DONE', 'Compitió'),
+    ('FINAL', 'Competido y verificado'),
 )
+
+
 class Caja(models.Model):
     """A folder."""
 
     archivo = models.ForeignKey('Archivo', on_delete=models.CASCADE, default=1)
     colección = models.ForeignKey('Colección', on_delete=models.CASCADE, default=1)
-    número_de_caja= models.CharField(max_length=200, blank=True)
-    carpetas = models.ManyToManyField('Carpeta', blank=True, related_name= 'carpetas')
-    departamento= models.ManyToManyField(Lugar, blank=True, related_name= 'departamento')
-    municipios= models.ManyToManyField(Lugar, blank=True, related_name= 'municipios')
-    letras= models.CharField(max_length=200, blank=True)
-    legajos= models.CharField(max_length=200, blank=True)
-    fechas_extremas= models.CharField(max_length=200, blank=True)
-    volumen_en_metros_lineales= models.CharField(max_length=200, blank=True)
-    sistema_digital= models.CharField(max_length=200, blank=True)
+    número_de_caja = models.CharField(max_length=200, blank=True)
+    carpetas = models.ManyToManyField('Carpeta', blank=True, related_name='carpetas')
+    departamento = models.ManyToManyField(
+        Lugar, blank=True, related_name='departamento'
+    )
+    municipios = models.ManyToManyField(Lugar, blank=True, related_name='municipios')
+    letras = models.CharField(max_length=200, blank=True)
+    legajos = models.CharField(max_length=200, blank=True)
+    fechas_extremas = models.CharField(max_length=200, blank=True)
+    volumen_en_metros_lineales = models.CharField(max_length=200, blank=True)
+    sistema_digital = models.CharField(max_length=200, blank=True)
     descripción = RichTextField(blank=True, default='')
 
     def __str__(self):
@@ -159,17 +163,17 @@ class Carpeta(models.Model):
     carpeta = models.CharField(max_length=200, blank=True)
     número_de_víctimas = models.IntegerField(null=True, blank=True)
     ubicación_geográfica = models.ManyToManyField('Lugar', blank=True)
-    tipo_de_violencia= models.CharField(max_length=200, blank=True)
+    tipo_de_violencia = models.CharField(max_length=200, blank=True)
     descripción = RichTextField(blank=True, default='')
     descripción_generada_automaticamente = RichTextField(blank=True)
     person_status = models.CharField(
-        max_length= 20, choices=PERSON_STATUS_CHOICES, null=True, blank=True
+        max_length=20, choices=PERSON_STATUS_CHOICES, null=True, blank=True
     )
     place_status = models.CharField(
-        max_length= 20, choices=PLACE_STATUS_CHOICES, null=True, blank=True
+        max_length=20, choices=PLACE_STATUS_CHOICES, null=True, blank=True
     )
     organization_status = models.CharField(
-        max_length= 20, choices=ORGANIZATION_STATUS_CHOICES, null=True, blank=True
+        max_length=20, choices=ORGANIZATION_STATUS_CHOICES, null=True, blank=True
     )
 
     def __str__(self):
@@ -184,7 +188,7 @@ class Colección(models.Model):
     descripción = RichTextField(blank=True, default='')
 
     def __str__(self):
-       return self.nombre_de_la_colección
+        return self.nombre_de_la_colección
 
 
 class Archivo(models.Model):
@@ -196,18 +200,21 @@ class Archivo(models.Model):
     descripción = RichTextField(blank=True, default='')
 
     def __str__(self):
-       return self.nombre_del_archivo
+        return self.nombre_del_archivo
+
 
 STATUS_CHOICES = (
-        ('NONE','Sin correcciones'),
-        ('IN','En progreso'),
-        ('DONE','Compitió'),
-        ('FINAL','Competido y verificado')
+    ('NONE', 'Sin correcciones'),
+    ('IN', 'En progreso'),
+    ('DONE', 'Compitió'),
+    ('FINAL', 'Competido y verificado'),
 )
+
+
 class Imagen(models.Model):
     """An image in the archive. The core entiy in the data model."""
 
-    #persona = models.ManyToManyField('Persona', blank=True)
+    # persona = models.ManyToManyField('Persona', blank=True)
     nombre_del_archivo = models.CharField(max_length=200, blank=True)
     localizacion_fisica = models.CharField(max_length=200, blank=True)
     archivo = models.ForeignKey(Archivo, on_delete=models.CASCADE, default=1)
@@ -222,7 +229,7 @@ class Imagen(models.Model):
     texto_de_OCR = RichTextField(blank=True)
     notas = RichTextField(blank=True)
     traducción = RichTextField(blank=True)
-    status = models.CharField(max_length= 20, choices=STATUS_CHOICES, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, blank=True)
     bag_name = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
@@ -235,7 +242,7 @@ class Imagen(models.Model):
             self.caja,
             self.legajo,
             self.carpeta,
-            self.número_de_imagen
+            self.número_de_imagen,
         ]
         return reverse('documento5', args=args)
 
@@ -246,7 +253,7 @@ class Imagen(models.Model):
             self.caja,
             self.legajo,
             self.carpeta,
-            self.número_de_imagen
+            self.número_de_imagen,
         ]
         link = reverse('documento5', args=args)
         return format_html(u'<a target="_blank" href="{}">abierto</a>'.format(link))
@@ -254,10 +261,12 @@ class Imagen(models.Model):
     def get_image_url(self):
         return '/static/documents/' + self.nombre_del_archivo
 
+
 class Item(models.Model):
     """An entity to link single-page images together as part of multi-page documents
     such as a pamphlet or book.
     """
+
     nombre_del_item = models.CharField(max_length=200, null=True)
     site = models.ManyToManyField(Site)
 
@@ -275,7 +284,9 @@ class Item(models.Model):
             return colección
 
         if self.nombre_del_item.split('_')[1] == 'nin':
-            colección = Colección.objects.get(nombre_de_la_colección='Niñez Desparecida')
+            colección = Colección.objects.get(
+                nombre_de_la_colección='Niñez Desparecida'
+            )
             return colección
 
     def caja(self):

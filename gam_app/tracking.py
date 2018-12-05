@@ -3,38 +3,51 @@ import boto3
 import botocore
 import ast
 from gam_app.models import Imagen
-from archivo.settings_secret import SECRET_ACCESS_KEY, ACCESS_KEY_ID, AWS_SECRET_KEY, AWS_KEY
+from archivo.settings_secret import (
+    SECRET_ACCESS_KEY,
+    ACCESS_KEY_ID,
+    AWS_SECRET_KEY,
+    AWS_KEY,
+)
 import getpass
 
 
 def aws_client(session):
 
-    client = session.client('s3',
-                            endpoint_url='https://s3.amazonaws.com',
-                            aws_secret_access_key=AWS_SECRET_KEY,
-                            aws_access_key_id=AWS_KEY,
-                            )
+    client = session.client(
+        's3',
+        endpoint_url='https://s3.amazonaws.com',
+        aws_secret_access_key=AWS_SECRET_KEY,
+        aws_access_key_id=AWS_KEY,
+    )
     return client
 
 
 def do_client(session):
-    client = session.client('s3',
-                            endpoint_url = 'https://nyc3.digitaloceanspaces.com',
-                            aws_secret_access_key = SECRET_ACCESS_KEY,
-                            aws_access_key_id = ACCESS_KEY_ID)
+    client = session.client(
+        's3',
+        endpoint_url='https://nyc3.digitaloceanspaces.com',
+        aws_secret_access_key=SECRET_ACCESS_KEY,
+        aws_access_key_id=ACCESS_KEY_ID,
+    )
     return client
+
+
 ### from https://stackoverflow.com/questions/25027122/break-the-function-after-certain-time
 ### Handles times when network hangs or no reponse from Digital Ocean
 import signal
 
-class TimeoutException(Exception):   # Custom exception class
+
+class TimeoutException(Exception):  # Custom exception class
     pass
 
-def timeout_handler(signum, frame):   # Custom signal handler
+
+def timeout_handler(signum, frame):  # Custom signal handler
     raise TimeoutException
 
+
 # Change the behavior of SIGALRM
-#signal.signal(signal.SIGALRM, timeout_handler)
+# signal.signal(signal.SIGALRM, timeout_handler)
 ###
 
 
@@ -46,7 +59,7 @@ def descargar_una_sola_bolsa(filename):
         session = boto3.session.Session()
         client = do_client(session)
 
-        #client.download_file('bolsas', filename, '/mnt/bags/{}'.format(filename))
+        # client.download_file('bolsas', filename, '/mnt/bags/{}'.format(filename))
         client.download_file('bolsas', filename, '/mnt/bags/{}'.format(filename))
 
         return True
@@ -70,7 +83,7 @@ def getBags():
         bags = []
         for thing in client.list_objects(Bucket='bolsas')['Contents']:
             if '.zip' in thing['Key']:
-                bags += [thing['Key'][:-4].replace('Bags/','')]
+                bags += [thing['Key'][:-4].replace('Bags/', '')]
             else:
                 pass
         with open('/tmp/bag_temp.txt', 'w+') as f:
@@ -95,6 +108,7 @@ def getBags():
             bags = f.read()
             bags = ast.literal_eval(bags)
         return sorted(bags)
+
 
 def getImportedBags():
     bags = []

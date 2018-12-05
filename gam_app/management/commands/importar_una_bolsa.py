@@ -11,6 +11,7 @@ from PIL import Image
 import shutil
 import sys
 
+
 class file_counter(object):
     def __init__(self):
         self.position = self.size = 0
@@ -45,13 +46,15 @@ def smaller_than(im, size, guess=70, subsampling=1, low=1, high=100):
 def change_size_if_needed(file):
     if os.path.getsize(file) > 4000000:
         im = Image.open(file)
-        size = smaller_than(im,4000000)
+        size = smaller_than(im, 4000000)
         #  print(size) very useful to improve performance, print average value and change line 62 for less processing
         im.save(file, 'JPEG', quality=size)
 
 
 def import_image_file(filename, nombre_de_la_bolsa):
-    new_filename = str(uuid.uuid4()) + '-' + filename.split('/')[-1].split('.')[0] + '.jpg'
+    new_filename = (
+        str(uuid.uuid4()) + '-' + filename.split('/')[-1].split('.')[0] + '.jpg'
+    )
     if not os.path.isdir('/mnt/bags/{}/documents/'.format(nombre_de_la_bolsa)):
         os.mkdir('/mnt/bags/{}/documents/'.format(nombre_de_la_bolsa))
 
@@ -83,8 +86,14 @@ def import_image_file(filename, nombre_de_la_bolsa):
         dzi_me.dzsave('/mnt/dzis1/{}'.format(new_filename))
 
         #  Here we re-add the jpg to the filename, this is not really a good thing, but too late to change it
-        os.rename('/mnt/dzis1/{}'.format(new_filename.replace('.jpg', '.dzi')), '/mnt/dzis1/{}'.format(new_filename + '.dzi'))
-        os.rename('/mnt/dzis1/{}'.format(new_filename.replace('.jpg', '_files')), '/mnt/dzis1/{}'.format(new_filename + '_files'))
+        os.rename(
+            '/mnt/dzis1/{}'.format(new_filename.replace('.jpg', '.dzi')),
+            '/mnt/dzis1/{}'.format(new_filename + '.dzi'),
+        )
+        os.rename(
+            '/mnt/dzis1/{}'.format(new_filename.replace('.jpg', '_files')),
+            '/mnt/dzis1/{}'.format(new_filename + '_files'),
+        )
 
     except Exception as e:
         print(e)
@@ -114,7 +123,9 @@ def import_image_file(filename, nombre_de_la_bolsa):
     if archive == 'gam':
         archivo_id = Archivo.objects.get(nombre_del_archivo='Archivo del GAM')
     else:
-        archivo_name = input("That archive does not exist, please enter a new archive name: ")
+        archivo_name = input(
+            "That archive does not exist, please enter a new archive name: "
+        )
         Archivo.objects.get_or_create(nombre_del_archivo=archivo_name)
         archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name)
 
@@ -123,15 +134,21 @@ def import_image_file(filename, nombre_de_la_bolsa):
         collection_id = Colección.objects.get(nombre_de_la_colección='Desaparecidos')
 
     elif collection == 'nin':
-        collection_id = Colección.objects.get(nombre_de_la_colección='Niñez Desparecida')
+        collection_id = Colección.objects.get(
+            nombre_de_la_colección='Niñez Desparecida'
+        )
 
     else:
-        collection_name = input("That collection does not exist, please enter a new collection name: ")
+        collection_name = input(
+            "That collection does not exist, please enter a new collection name: "
+        )
         Colección.objects.get_or_create(nombre_de_la_colección=collection_name)
-        collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection_name)
+        collection_id = Colección.objects.get(
+            nombre_de_la_colección='%s' % collection_name
+        )
 
     # create the document in the db
-    #print('nombre_del_archivo= ',new_filename,
+    # print('nombre_del_archivo= ',new_filename,
     #    'localizacion_fisica= ',physical_location,
     #    'archivo_id= ', archivo_id.pk,
     #    'colección_id= ', collection_id.pk,
@@ -177,9 +194,9 @@ def import_resumen_file(path):
 
     for i in range(len(keys)):
         try:
-            carpeta_descripcion[content[keys[i]]] = content[(keys[i] + 1):keys[i + 1]]
+            carpeta_descripcion[content[keys[i]]] = content[(keys[i] + 1) : keys[i + 1]]
         except IndexError:
-            carpeta_descripcion[content[keys[i]]] = content[(keys[i] + 1):]
+            carpeta_descripcion[content[keys[i]]] = content[(keys[i] + 1) :]
 
     # print(carpeta_descripcion)
     for carpeta in carpeta_descripcion:
@@ -196,21 +213,31 @@ def import_resumen_file(path):
         if archive == 'gam':
             archivo_id = Archivo.objects.get(nombre_del_archivo='Archivo del GAM')
         else:
-            archivo_name = input("That archive does not exist, please enter a new archive name: ")
+            archivo_name = input(
+                "That archive does not exist, please enter a new archive name: "
+            )
             Archivo.objects.get_or_create(nombre_del_archivo=archivo_name)
             archivo_id = Archivo.objects.get(nombre_del_archivo='%s' % archivo_name)
 
         if collection == 'des':
-            collection_id = Colección.objects.get(nombre_de_la_colección='Desaparecidos')
+            collection_id = Colección.objects.get(
+                nombre_de_la_colección='Desaparecidos'
+            )
         elif collection == 'nin':
-            collection_id = Colección.objects.get(nombre_de_la_colección='Niñez Desparecida')
+            collection_id = Colección.objects.get(
+                nombre_de_la_colección='Niñez Desparecida'
+            )
 
         else:
-            collection = input("That collection does not exist, please enter a new archive name: ")
+            collection = input(
+                "That collection does not exist, please enter a new archive name: "
+            )
             Colección.objects.get_or_create(nombre_de_la_colección=collection)
-            collection_id = Colección.objects.get(nombre_de_la_colección='%s' % collection)
+            collection_id = Colección.objects.get(
+                nombre_de_la_colección='%s' % collection
+            )
 
-        #print('archivo_id= ', archivo_id.pk,
+        # print('archivo_id= ', archivo_id.pk,
         #      'colección_id= ', collection_id.pk,
         #      'caja= ', box,
         #      'legajo= ', bundle,
@@ -223,7 +250,7 @@ def import_resumen_file(path):
             caja=box,
             legajo=bundle,
             carpeta=folder,
-            descripción=descripción
+            descripción=descripción,
         )
 
 
@@ -251,13 +278,17 @@ class Command(BaseCommand):
         #  download and unzip the bag file
         if os.path.isfile('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip')):
             print('file already downloaded')
-            zip_file = zipfile.ZipFile('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip'))
+            zip_file = zipfile.ZipFile(
+                '/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip')
+            )
             zip_file.extractall('/mnt/bags/')
             zip_file.close()
             os.remove('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip'))
 
         elif descargar_una_sola_bolsa(nombre_de_la_bolsa + '.zip'):
-            zip_file = zipfile.ZipFile('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip'))
+            zip_file = zipfile.ZipFile(
+                '/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip')
+            )
             zip_file.extractall('/mnt/bags/')
             zip_file.close()
             os.remove('/mnt/bags/{}'.format(nombre_de_la_bolsa + '.zip'))
@@ -267,10 +298,22 @@ class Command(BaseCommand):
         bag = bagit.Bag('/mnt/bags/{}'.format(nombre_de_la_bolsa))
         if bag.is_valid():
             print('la bolsa es valida')
-            tiff_files = [os.path.join(root, name) for root, dirs, files in os.walk('/mnt/bags/{}/data/'.format(nombre_de_la_bolsa))
-                          for name in files if name.endswith(('.tiff', '.tif'))]
-            txt_files = [os.path.join(root, name) for root, dirs, files in os.walk('/mnt/bags/{}/data/'.format(nombre_de_la_bolsa))
-                         for name in files if name.endswith(('.txt', '.TXT'))]
+            tiff_files = [
+                os.path.join(root, name)
+                for root, dirs, files in os.walk(
+                    '/mnt/bags/{}/data/'.format(nombre_de_la_bolsa)
+                )
+                for name in files
+                if name.endswith(('.tiff', '.tif'))
+            ]
+            txt_files = [
+                os.path.join(root, name)
+                for root, dirs, files in os.walk(
+                    '/mnt/bags/{}/data/'.format(nombre_de_la_bolsa)
+                )
+                for name in files
+                if name.endswith(('.txt', '.TXT'))
+            ]
 
             [import_image_file(file, nombre_de_la_bolsa) for file in tiff_files]
             [import_resumen_file(file) for file in txt_files]

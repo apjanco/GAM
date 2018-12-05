@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.241.128.56', 'archivogam.haverford.edu',]
+ALLOWED_HOSTS = ['192.241.128.56', 'archivogam.haverford.edu']
 
 
 # Application definition
@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'mapwidgets',
     'acceso',
-#    'django-datatables-view',
+    #    'django-datatables-view',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +61,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-
 ]
 
 
@@ -70,7 +69,11 @@ ROOT_URLCONF = 'archivo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'gam_app/templates','./templates', 'acceso/templates')],
+        'DIRS': [
+            os.path.join(
+                BASE_DIR, 'gam_app/templates', './templates', 'acceso/templates'
+            )
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,15 +81,15 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-            ],
+            ]
         },
-    },
+    }
 ]
 
 WSGI_APPLICATION = 'archivo.wsgi.application'
 
 SITE_ID = 2
-#from https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Authentication
+# from https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Authentication
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
@@ -94,23 +97,16 @@ LOGOUT_REDIRECT_URL = '/'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 
@@ -119,11 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 LANGUAGE_CODE = 'es'
-LANGUAGES = [
-    ('es', _('Español')),
-    ('de', _('Deutsch')),
-    ('en', _('English')),
-]
+LANGUAGES = [('es', _('Español')), ('de', _('Deutsch')), ('en', _('English'))]
 
 TIME_ZONE = 'UTC'
 
@@ -151,15 +143,15 @@ REGISTRATION_OPEN = True
 
 CKEDITOR_CONFIGS = {
     'default': {
-	'allowedContent' : True,
+        'allowedContent': True,
         'height': 600,
         'width': 600,
         'toolbar': 'Custom',
         'toolbar_Custom': [
             ['Bold', 'Italic', 'Underline'],
-            ['Copy','Styles'],
-            ['language','Source']
-        ]
+            ['Copy', 'Styles'],
+            ['language', 'Source'],
+        ],
     }
 }
 
@@ -167,10 +159,12 @@ MAP_WIDGETS = {
     "GooglePointFieldWidget": (
         ("zoom", 15),
         ("mapCenterLocationName", [14.642213, -90.516653]),
-        ("GooglePlaceAutocompleteOptions", {'componentRestrictions': {'country': 'uk'}}),
+        (
+            "GooglePlaceAutocompleteOptions",
+            {'componentRestrictions': {'country': 'uk'}},
+        ),
         ("markerFitZoom", 12),
     ),
-    "GOOGLE_MAP_API_KEY": "AIzaSyDWqgDyEf7Vk4pURXc4mLQEeIFsLqRD-KI"
+    "GOOGLE_MAP_API_KEY": "AIzaSyDWqgDyEf7Vk4pURXc4mLQEeIFsLqRD-KI",
 }
 GOOGLE_MAP_API_KEY = 'AIzaSyDWqgDyEf7Vk4pURXc4mLQEeIFsLqRD-KI'
-

@@ -576,7 +576,7 @@ def documento5(request, archivo, colección, caja, legajo, carpeta, número_de_i
             #print (possible_pages)
 
         id = state.id
-        form = EditForm(initial={'texto_de_OCR':state.texto_de_OCR})
+        form = EditForm(initial={'texto_de_OCR':state.texto_de_OCR, 'notas':state.notas.encode('utf8')})
         images_in_carpeta = Imagen.objects.all().filter(caja=caja, legajo=legajo, carpeta=carpeta)
 
         carpeta_query = Carpeta.objects.filter(archivo__nombre_del_archivo=archivo, colección__nombre_de_la_colección=colección, caja=caja, legajo=legajo, carpeta=carpeta) 

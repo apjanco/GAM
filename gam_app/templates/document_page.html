@@ -84,7 +84,7 @@
          <input type="hidden" value="{{ state.carpeta }}" name="carpeta" />
          <input type="hidden" value="{{ state.texto_de_OCR }}" name="old_text" />
          <input type="hidden" value="text_edit" name="input" />
-         {% trans "Notas" %}:<br> {{ form.notas }}
+         {% trans "Notas" %}:<br> {{ form.notas|safe }}
     </div>
 
     <!-- Carpeta -->

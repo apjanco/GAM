@@ -22,14 +22,9 @@ class Command(BaseCommand):
                     print('la bolsa no es valida')
                     # unzip the file
                     # convert tiffs to jpg
-                    
+
                 else:
                     print('')
-            #if descargar_una_sola_bolsa_s3cmd(bolsa + '.zip'):
+            # if descargar_una_sola_bolsa_s3cmd(bolsa + '.zip'):
             #    print('s3cmd descargado {}'.format(bolsa))
             #    os.system('rm /tmp/{}'.format(bolsa + '.zip'))
-
-
-
-
-

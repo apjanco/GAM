@@ -22,7 +22,7 @@ from django.contrib.flatpages import views as flat_views
 from dal import autocomplete
 from django.contrib.auth.decorators import login_required
 
-#from gam_app.views import *
+# from gam_app.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,34 +38,94 @@ urlpatterns += i18n_patterns(
     path('control-de-misión/', views.mission_control, name='mission_control'),
     path('item/<nombre_del_item>/', views.item, name='item'),
     path('track-bags/', views.track_bags, name='track_bags'),
-    path('datatable/imagen', login_required(views.ImagenListJson.as_view()), name='imagen_list_json'),
-    path('datatable/imagen_desc', login_required(views.ImagenListDescJson.as_view()), name='imagen_desc_list_json'),
-    path('datatable/carpeta', login_required(views.CarpetaListJson.as_view()), name='carpeta_list_json'),
-    path('datatable/carpeta_buscar', login_required(views.CarpetaListJson_Buscar.as_view()), name='carpeta_list_json_buscar'),
-    path('autocompletar_imagen/', views.ImageFieldAutocomplete.as_view(), name='autocompletar_imagen'),
+    path(
+        'datatable/imagen',
+        login_required(views.ImagenListJson.as_view()),
+        name='imagen_list_json',
+    ),
+    path(
+        'datatable/imagen_desc',
+        login_required(views.ImagenListDescJson.as_view()),
+        name='imagen_desc_list_json',
+    ),
+    path(
+        'datatable/carpeta',
+        login_required(views.CarpetaListJson.as_view()),
+        name='carpeta_list_json',
+    ),
+    path(
+        'datatable/carpeta_buscar',
+        login_required(views.CarpetaListJson_Buscar.as_view()),
+        name='carpeta_list_json_buscar',
+    ),
+    path(
+        'autocompletar_imagen/',
+        views.ImageFieldAutocomplete.as_view(),
+        name='autocompletar_imagen',
+    ),
     path('persona/create/', views.PersonaCreate.as_view(), name='persona_create'),
-    path('persona/<int:pk>/update/', views.PersonaUpdate.as_view(), name='persona_update'),
+    path(
+        'persona/<int:pk>/update/', views.PersonaUpdate.as_view(), name='persona_update'
+    ),
     path('persona/<int:pk>/', views.PersonaDetailView.as_view(), name='persona_detail'),
-    path('personalookup/', views.PersonaNameLookup.as_view(), name='persona_name_lookup'),
+    path(
+        'personalookup/', views.PersonaNameLookup.as_view(), name='persona_name_lookup'
+    ),
     path('lugar/create/', views.LugarCreate.as_view(), name='lugar_create'),
     path('lugar/<int:pk>/update/', views.LugarUpdate.as_view(), name='lugar_update'),
     path('lugarlookup/', views.LugarNameLookup.as_view(), name='lugar_name_lookup'),
-    path('organizacion/create/', views.OrganizacionCreate.as_view(), name='organizacion_create'),
-    path('organizacion/<int:pk>/update/', views.OrganizacionUpdate.as_view(), name='organizacion_update'),
-    path('organizacionlookup/', views.OrganizacionNameLookup.as_view(), name='organizacion_name_lookup'),
-    path('autocompletar_manuscrito/', views.autocompletar_manuscrito.as_view(), name='autocompletar_manuscrito'),
+    path(
+        'organizacion/create/',
+        views.OrganizacionCreate.as_view(),
+        name='organizacion_create',
+    ),
+    path(
+        'organizacion/<int:pk>/update/',
+        views.OrganizacionUpdate.as_view(),
+        name='organizacion_update',
+    ),
+    path(
+        'organizacionlookup/',
+        views.OrganizacionNameLookup.as_view(),
+        name='organizacion_name_lookup',
+    ),
+    path(
+        'autocompletar_manuscrito/',
+        views.autocompletar_manuscrito.as_view(),
+        name='autocompletar_manuscrito',
+    ),
     path('crear_usuario/', include('registration.backends.simple.urls')),
-    re_path(r'^advanced_search_submit/$', views.advanced_search_submit, name='advanced-search-submit'),
+    re_path(
+        r'^advanced_search_submit/$',
+        views.advanced_search_submit,
+        name='advanced-search-submit',
+    ),
     path('sobre/', flat_views.flatpage, {'url': '/es/sobre/'}, name='sobre'),
     path('about/', flat_views.flatpage, {'url': '/en/about/'}, name='about'),
     path('über/', flat_views.flatpage, {'url': '/de/über/'}, name='über'),
     path('explorar/', views.explorar, name='explorar'),
     path('lugar/<lugar>', views.lugar, name='lugar'),
-    path('procesamiento/<archivo>/<colección>/<caja>/<legajo>/<carpeta>/', views.procesamiento, name='procesamiento'),
-    #paths for working with images (personal is 'staff')
-    path('imagen/<archivo>/<colección>/<caja>/<legajo>/<carpeta>/<número_de_imagen>/', views.documento5, name='documento5'),
-    path('imagen/<archivo>/<colección>/<caja>/<legajo>/<carpeta>/', views.documento4, name='documento4'),
-    path('imagen/<archivo>/<colección>/<caja>/<legajo>/', views.documento3, name='documento3'),
+    path(
+        'procesamiento/<archivo>/<colección>/<caja>/<legajo>/<carpeta>/',
+        views.procesamiento,
+        name='procesamiento',
+    ),
+    # paths for working with images (personal is 'staff')
+    path(
+        'imagen/<archivo>/<colección>/<caja>/<legajo>/<carpeta>/<número_de_imagen>/',
+        views.documento5,
+        name='documento5',
+    ),
+    path(
+        'imagen/<archivo>/<colección>/<caja>/<legajo>/<carpeta>/',
+        views.documento4,
+        name='documento4',
+    ),
+    path(
+        'imagen/<archivo>/<colección>/<caja>/<legajo>/',
+        views.documento3,
+        name='documento3',
+    ),
     path('imagen/<archivo>/<colección>/<caja>/', views.documento2, name='documento2'),
     path('imagen/<archivo>/<colección>/', views.documento1, name='documento1'),
     path('imagen/<archivo>/', views.documento0, name='documento0'),

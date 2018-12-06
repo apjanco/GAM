@@ -5,6 +5,7 @@ Functions currently used in basic_search.py and filtering.py pertaining to getti
 from .models import *
 import time
 
+
 def generate_keywords_dictionary(statement_list):
     """
        given a list of statement (like the one returned when you query the DB)
@@ -17,11 +18,11 @@ def generate_keywords_dictionary(statement_list):
     for statement in statement_list:
         for keyword in statement.get_keywords():
             if keyword in keywords_dict:
-                keywords_dict[keyword]+=1
+                keywords_dict[keyword] += 1
             else:
                 keywords_dict[keyword] = 1
 
-    print ("generating keywords took %s seconds" % time.time() - start)
+    print("generating keywords took %s seconds" % time.time() - start)
     return keywords_dict
 
 
@@ -32,15 +33,17 @@ def get_top_keywords(keywords_dict, top_n):
     Given a dictionary of keywords as keys and the number of times that keyword is linked to a statement in the search results: {Iraq : 300}
     Returns the top n results as as list of pairs, ordered by appearances: [(Iraq, 300), (Iran, 200)]
     """
-    return sorted(keywords_dict.items(), key=lambda student: student[1], reverse=True)[:top_n]
+    return sorted(keywords_dict.items(), key=lambda student: student[1], reverse=True)[
+        :top_n
+    ]
 
 
-    
 def generate_top_n_keywords(statement_list, top_n):
     """
      Generates and gets top n keywords.
     """
     return get_top_keywords(generate_keywords_dictionary(statement_list), top_n)
+
 
 def generate_just_keywords(statement_list):
     """
@@ -52,5 +55,5 @@ def generate_just_keywords(statement_list):
     keywords = set()
     keyword_sets = [set(statement.get_keywords()) for statement in qs_list]
     keywords = keywords.union(*keyword_sets)
-    print ("generating keywords took %s seconds" % time.time() - start)
+    print("generating keywords took %s seconds" % time.time() - start)
     return keywords

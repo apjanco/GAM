@@ -1,5 +1,6 @@
 from django.db import transaction
 
+
 @transaction.atomic
 def update_or_create1(model, **kwargs):
     """
@@ -36,7 +37,13 @@ def update_or_create1(model, **kwargs):
             fields[key] = update_or_create(model._meta.get_field(key).rel.to, **val)[0]
 
     # unique fields
-    unique_fields = list(set(field.name for field in model._meta.get_fields() if getattr(field, 'unique', False) and field.name != pk).intersection(fields.keys()))
+    unique_fields = list(
+        set(
+            field.name
+            for field in model._meta.get_fields()
+            if getattr(field, 'unique', False) and field.name != pk
+        ).intersection(fields.keys())
+    )
 
     # if available, prepend pk
     if pk in fields:
@@ -46,11 +53,11 @@ def update_or_create1(model, **kwargs):
     for key in unique_fields:
         try:
             # try to query a single object
-            instance = model.objects.get(**{key:fields[key]})
+            instance = model.objects.get(**{key: fields[key]})
         except model.DoesNotExist:
-            pass # didn't match, continue
+            pass  # didn't match, continue
         else:
-            break # matched, we got the object
+            break  # matched, we got the object
 
     # if instance didn't match any unique field
     if not instance:
@@ -58,11 +65,13 @@ def update_or_create1(model, **kwargs):
         for constraint in model._meta.unique_together:
             try:
                 # try to query a single object
-                instance = model.objects.get(**{key: val for key, val in fields.items() if key in constraint})
+                instance = model.objects.get(
+                    **{key: val for key, val in fields.items() if key in constraint}
+                )
             except model.DoesNotExist:
-                pass # didn't match, continue
+                pass  # didn't match, continue
             else:
-                break # matched, we got the object
+                break  # matched, we got the object
 
     # if instance didn't match any model constraint
     if not instance:
@@ -83,6 +92,7 @@ def update_or_create1(model, **kwargs):
                 setattr(instance, key, val)
                 changed = True
         # if anything changed, save the object
-        if changed: instance.save()
+        if changed:
+            instance.save()
 
     return instance, created

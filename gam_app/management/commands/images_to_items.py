@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
         all_imagens = Imagen.objects.all()
 
-        #Getting all bag values
+        # Getting all bag values
         bag_values = []
         for image in all_imagens:
             if image.bag_name not in bag_values:
@@ -23,29 +23,38 @@ class Command(BaseCommand):
 
         # Variable to keep track of filenames
         for bag in bag_values:
-            if bag is not None:  #  This is needed because some bag names are not true bags.  They reflect the name as we received it from Guatemala with spaces.
+            if (
+                bag is not None
+            ):  #  This is needed because some bag names are not true bags.  They reflect the name as we received it from Guatemala with spaces.
                 if ' ' not in bag:
-                    query_imagens = Imagen.objects.filter(bag_name= bag).order_by("número_de_imagen")
+                    query_imagens = Imagen.objects.filter(bag_name=bag).order_by(
+                        "número_de_imagen"
+                    )
                     ### Is this query in order. Are the images in the order listed like in the example below???
                     # The order_by should handle this, but I am unser.
-                    
+
                     # Code adapted from import_dip.py
                     last_known_file_name = None
                     for image in query_imagens:
-                        # Splitting the image filename. The image filename is similar to the item name. 
+                        # Splitting the image filename. The image filename is similar to the item name.
                         # From taa1cf992-b86e-4eab-bcb2-5b45958hat, we can call the items by filename.
                         # If it fails, then its item name is the one above it that passed.
-                        letters = ''.join([i for i in image.localizacion_fisica[8:] if not i.isdigit()])
+                        letters = ''.join(
+                            [
+                                i
+                                for i in image.localizacion_fisica[8:]
+                                if not i.isdigit()
+                            ]
+                        )
                         letters = letters[3:]
-                        image_file = image.localizacion_fisica[:-len(letters)]
+                        image_file = image.localizacion_fisica[: -len(letters)]
                         # The letters takes into account image files with endings with multiple letters.
-
 
                         # Retrieving the item from our information above
                         try:
-                            my_item = Item.objects.get(nombre_del_item = image_file)
+                            my_item = Item.objects.get(nombre_del_item=image_file)
                             # If there is no item with that filename, it will raise an error.
-                            image.item =  my_item
+                            image.item = my_item
                             last_known_file_name = my_item
                         except:
                             '''
@@ -58,6 +67,6 @@ class Command(BaseCommand):
                             '''
                             # Looking at this example, the second image would fail to find an item with its name
                             # It would instead look at the last known image that succeeded.
-                            # It would then set its item information to that last known item, its 'host'. 
+                            # It would then set its item information to that last known item, its 'host'.
                             image.item = last_known_file_name
                         image.save()

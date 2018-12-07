@@ -1,6 +1,7 @@
 
 {% load i18n %}
 {% load static %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <!-- the path to images is {% static '/srv/GAM/acceso/static/acceso/images/ {the image you want}' %}
 ex:
@@ -8,15 +9,15 @@ ex:
 {% static 'acceso/images/placeholder.png' %} 
 -->
 
- <!DOCTYPE HTML>
+<!DOCTYPE HTML>
   <html>
   <head>
-        <title>Public Gam</title>
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-      <link rel="stylesheet" href="{% static 'acceso/css/main.css' %}" />
-      <noscript><link rel="stylesheet" href="{% static 'acceso/css/noscript.css'%}" /></noscript>
-      {% block extrahead %}{% endblock %}
+    <title>Public Gam</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="{% static 'acceso/css/main.css' %}" />
+    <noscript><link rel="stylesheet" href="{% static 'acceso/css/noscript.css'%}" /></noscript>
+    {% block extrahead %}{% endblock %}
   </head>
 
 {% block content1 %} {% endblock %}
@@ -26,18 +27,33 @@ ex:
 
 <nav id="nav">
   <ul>
+    {% get_current_language as LANGUAGE_CODE %}
+	{% get_available_languages as LANGUAGES %}
+	{% get_language_info_list for LANGUAGES as languages %}
     <li>
-      <a href="#">{% trans "Language" %}</a>
-      <ul>
-        <li><a href="#">Spanish</a></li>
-        <li><a href="#">German </a></li>
-        <li><a href="#">English </a></li>
-      </ul>
+	  <a href="#">{% trans "Language" %}</a>
+	  <ul>
+	  {% for language in languages %}
+	    <li>
+          <a href="/{{ language.code }}{{request.get_full_path|slice:'3:' }}" class="{% if language.code == LANGUAGE_CODE %}slected{% endif %}" lang="{{ language.code}}">
+	        {{ language.name_local }}
+		  </a>
+		</li>
+      {% endfor %}
+	  </ul>
     </li>
-    <li><a href="{% url 'acceso:about' %}">{% trans "About us" %}</a></li>
-    <li><a href="{% url 'acceso:index' %}">{% trans "Home" %}</a></li>
-    <li><a href="{% url 'acceso:history' %}">{% trans "History" %}</a></li>
-    <li><a href="{% url 'acceso:map' %} ">{% trans "Map" %}</a></li>
+    <li>
+	  <a href="{% url 'acceso:about' %}">{% trans "About us" %}</a>
+	</li>
+    <li>
+	  <a href="{% url 'acceso:index' %}">{% trans "Home" %}</a>
+	</li>
+    <li>
+	  <a href="{% url 'acceso:history' %}">{% trans "History" %}</a>
+	</li>
+    <li>
+	  <a href="{% url 'acceso:map' %} ">{% trans "Map" %}</a>
+	</li>
   </ul>
 </nav>
                                                                                                      

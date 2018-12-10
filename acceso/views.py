@@ -33,10 +33,8 @@ def caso(request, caso):
     caso = Caso.objects.get(slug_name=caso)
     foto = []
     dragon = []
+    imageprofile = caso.foto_de_perfil
 
-    for x in caso.fotos.all():
-        print(x)
-        foto.append(x)
 
     for x in caso.carpetas.all():
         dragon = Imagen.objects.filter(
@@ -53,7 +51,6 @@ def caso(request, caso):
         k.replace("_", " ").capitalize(): v for k, v in temp.items() if len(str(v)) > 0
     }
     for x in caso.fotos.all():
-        print(x)
         foto.append(x)
     persona_dict = {
         key: persona_dict[key] for key in persona_dict if key not in ["Id", " state"]
@@ -65,7 +62,7 @@ def caso(request, caso):
         values.append(persona_dict[i])
     kv = zip(keys, values)
     profile_photos = Foto.objects.filter(caso__slug_name=caso)
-    context = {'caso': caso, 'images': foto, "kv": kv, 'dragon': dragon}
+    context = {'caso': caso, 'images': foto, "kv": kv, 'dragon': dragon, 'face':imageprofile}
 
     return render(request, 'acceso/caso.html', context)
 

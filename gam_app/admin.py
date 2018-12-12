@@ -55,7 +55,7 @@ admin.site.register(Carpeta, CarpetaAdmin)
 
 
 class PersonaAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['nombre_de_la_persona']
 
 
 admin.site.register(Persona, PersonaAdmin)

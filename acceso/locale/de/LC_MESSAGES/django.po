@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-07 20:47+0000\n"
+"POT-Creation-Date: 2018-12-13 17:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,39 +74,43 @@ msgid "Augue euismod feugiat tempus"
 msgstr ""
 
 #: templates/acceso/base.html:34
-msgid "Language"
+msgid "Idioma"
 msgstr ""
 
 #: templates/acceso/base.html:46
-msgid "About us"
+msgid "Sobre"
 msgstr ""
 
 #: templates/acceso/base.html:49
-msgid "Home"
+msgid "Inicio"
 msgstr ""
 
 #: templates/acceso/base.html:52 templates/acceso/history.html:25
 #: templates/acceso/history.html:42
-msgid "History"
+msgid "Historia"
 msgstr ""
 
 #: templates/acceso/base.html:55 templates/acceso/map.html:15
-msgid "Map"
+msgid "Mapa"
 msgstr ""
 
 #: templates/acceso/caso.html:48
 msgid "Una descripción general"
 msgstr ""
 
-#: templates/acceso/caso.html:107
+#: templates/acceso/caso.html:94
+msgid "Archivos Dentro del Caso"
+msgstr ""
+
+#: templates/acceso/caso.html:108
 msgid "Metadatos sobre el caso"
 msgstr ""
 
-#: templates/acceso/caso.html:111
+#: templates/acceso/caso.html:112
 msgid "Typo de información"
 msgstr ""
 
-#: templates/acceso/caso.html:112
+#: templates/acceso/caso.html:113
 msgid "Contenido"
 msgstr ""
 
@@ -131,22 +135,22 @@ msgid "comienzo"
 msgstr ""
 
 #: templates/acceso/index.html:30
-msgid "The History"
+msgid "La History"
 msgstr ""
 
 #: templates/acceso/index.html:32
 msgid ""
-"about the history summary aenean eu aenean mollis mollis facilisis primis "
+"Sobre la historia  summary aenean eu aenean mollis mollis facilisis primis "
 "ornare penatibus aenean. Cursus ac enim pulvinar curabitur morbi convallis. "
 "Lectus malesuada sed fermentum dolore amet."
 msgstr ""
 
 #: templates/acceso/index.html:37
-msgid "Continue Reading About the History"
+msgid "Sigue Leyendo Sobre la Historia"
 msgstr ""
 
 #: templates/acceso/map.html:31
-msgid "Location"
+msgid "Ubiquación"
 msgstr ""
 
 #: templates/acceso/map.html:33

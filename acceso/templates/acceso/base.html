@@ -31,7 +31,7 @@ ex:
 	{% get_available_languages as LANGUAGES %}
 	{% get_language_info_list for LANGUAGES as languages %}
     <li>
-	  <a href="#">{% trans "Language" %}</a>
+	  <a href="#">{% trans "Idioma" %}</a>
 	  <ul>
 	  {% for language in languages %}
 	    <li>
@@ -43,16 +43,16 @@ ex:
 	  </ul>
     </li>
     <li>
-	  <a href="{% url 'acceso:about' %}">{% trans "About us" %}</a>
+	  <a href="{% url 'acceso:about' %}">{% trans "Sobre" %}</a>
 	</li>
     <li>
-	  <a href="{% url 'acceso:index' %}">{% trans "Home" %}</a>
+	  <a href="{% url 'acceso:index' %}">{% trans "Inicio" %}</a>
 	</li>
     <li>
-	  <a href="{% url 'acceso:history' %}">{% trans "History" %}</a>
+	  <a href="{% url 'acceso:history' %}">{% trans "Historia" %}</a>
 	</li>
     <li>
-	  <a href="{% url 'acceso:map' %} ">{% trans "Map" %}</a>
+	  <a href="{% url 'acceso:map' %} ">{% trans "Mapa" %}</a>
 	</li>
   </ul>
 </nav>

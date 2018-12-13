@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-07 20:47+0000\n"
+"POT-Creation-Date: 2018-12-13 17:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,7 +63,7 @@ msgstr ""
 
 #: templates/acceso/about.html:137
 msgid "Our Mission"
-msgstr ""
+msgstr "Nuestra Missión"
 
 #: templates/acceso/about.html:151 templates/acceso/map.html:47
 msgid "Ultrices tempor sagittis nisl"
@@ -74,39 +74,43 @@ msgid "Augue euismod feugiat tempus"
 msgstr ""
 
 #: templates/acceso/base.html:34
-msgid "Language"
-msgstr ""
+msgid "Idioma"
+msgstr "Language"
 
 #: templates/acceso/base.html:46
-msgid "About us"
-msgstr ""
+msgid "Sobre"
+msgstr "About Us"
 
 #: templates/acceso/base.html:49
-msgid "Home"
-msgstr ""
+msgid "Inicio"
+msgstr "Home"
 
 #: templates/acceso/base.html:52 templates/acceso/history.html:25
 #: templates/acceso/history.html:42
-msgid "History"
-msgstr ""
+msgid "Historia"
+msgstr "History"
 
 #: templates/acceso/base.html:55 templates/acceso/map.html:15
-msgid "Map"
-msgstr ""
+msgid "Mapa"
+msgstr "Map"
 
 #: templates/acceso/caso.html:48
 msgid "Una descripción general"
 msgstr "General Description"
 
-#: templates/acceso/caso.html:107
+#: templates/acceso/caso.html:94
+msgid "Archivos Dentro del Caso"
+msgstr "Files in the Case"
+
+#: templates/acceso/caso.html:108
 msgid "Metadatos sobre el caso"
 msgstr "Metadata about the case"
 
-#: templates/acceso/caso.html:111
+#: templates/acceso/caso.html:112
 msgid "Typo de información"
 msgstr "Type of Information"
 
-#: templates/acceso/caso.html:112
+#: templates/acceso/caso.html:113
 msgid "Contenido"
 msgstr "Content"
 
@@ -131,23 +135,23 @@ msgid "comienzo"
 msgstr "Begin "
 
 #: templates/acceso/index.html:30
-msgid "The History"
-msgstr ""
+msgid "La History"
+msgstr "The History"
 
 #: templates/acceso/index.html:32
 msgid ""
-"about the history summary aenean eu aenean mollis mollis facilisis primis "
+"Sobre la historia  summary aenean eu aenean mollis mollis facilisis primis "
 "ornare penatibus aenean. Cursus ac enim pulvinar curabitur morbi convallis. "
 "Lectus malesuada sed fermentum dolore amet."
 msgstr ""
 
 #: templates/acceso/index.html:37
-msgid "Continue Reading About the History"
-msgstr ""
+msgid "Sigue Leyendo Sobre la Historia"
+msgstr "Continue Reading About the History"
 
 #: templates/acceso/map.html:31
-msgid "Location"
-msgstr ""
+msgid "Ubiquación"
+msgstr "Location"
 
 #: templates/acceso/map.html:33
 msgid "Morbi convallis lectus malesuada sed fermentum dolore amet"

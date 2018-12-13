@@ -6,14 +6,14 @@ from gam_app.models import Persona
 # Create your views here.
 
 
-def main(request):
+def main(request, options):
     casos = Caso.objects.all()
     photo_list = []
     for caso in casos:
         photo_list.append(caso.fotos.first())
 
     print('casos:  ', casos)
-    context = {'casos': casos, 'photo_list': photo_list}
+    context = {'casos': casos, 'photo_list': photo_list, 'options':options}
     return render(request, 'acceso/index.html', context)
 
 

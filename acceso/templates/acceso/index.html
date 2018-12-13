@@ -35,12 +35,22 @@
             
       <footer>
     <a href="{% url 'acceso:history' %}" class="button">{% trans "Sigue Leyendo Sobre la Historia" %}</a>
+
     </footer>
             
           
   </article>
+
+
 <!-- carousel -->
   </div>
+    {% if options %}
+    <a href="{% url 'acceso:table' %}" class="button">{% trans "mesa" %}</a>
+    {% else %}
+    <a href="{% url 'acceso:index' %}" class="button">{% trans "carrusel" %}</a>
+    {% endif %}
+
+    {% if options %}
         <section class="carousel">  
           <div class="reel">
               <script>
@@ -58,8 +68,43 @@
             </article>
             
             {% endfor %}
-            
-            
+   {% else %}
+  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+           <script>
+             $(function() {
+
+    $("#jsGrid").jsGrid({
+        height: "90%",
+        width: "100%",
+
+        filtering: true,
+        editing: true,
+        sorting: true,
+        paging: true,
+        autoload: true,
+
+        pageSize: 15,
+        pageButtonCount: 5,
+
+        deleteConfirm: "Do you really want to delete the client?",
+
+        controller: db,
+
+        fields: [
+            { name: "Name", type: "text", width: 150 },
+            { name: "Age", type: "number", width: 50 },
+            { name: "Address", type: "text", width: 200 },
+            { name: "Country", type: "select", items: db.countries, valueField: "Id", textField: "Name" },
+            { name: "Married", type: "checkbox", title: "Is Married", sorting: false },
+            { type: "control" }
+        ]
+    });
+
+});
+             </script>
+   {% endif %}
             
           </div>
         </section>

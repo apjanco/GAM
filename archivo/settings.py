@@ -63,6 +63,10 @@ MIDDLEWARE = [
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, "gam_app/locale"),
+    os.path.join(BASE_DIR, "acceso/locale"),
+]
 
 ROOT_URLCONF = 'archivo.urls'
 

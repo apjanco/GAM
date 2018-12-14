@@ -46,8 +46,8 @@
         <div class="col-md-6">
             <div class="page-header">
 			  <h3>{% trans "Una descripción general" %}</h3>
-                <div class="well">
-				  {{ caso.descripción |safe}} 
+                <div class="well" style="overflow:auto; width:100%; height:300px;">
+			      {{ caso.descripción |safe}} 
                 </div>
 
             </div>

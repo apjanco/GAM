@@ -1,0 +1,51 @@
+{% load i18n %}
+{% load static %}
+{% load staticfiles %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block head %}
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+{% endblock %}
+
+{% block content %}
+    <div id="jsGrid"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function() {
+            $("#jsGrid").jsGrid({
+                height: "100%",
+                width: "100%",
+                filtering: true,
+                sorting: true,
+                paging: true,
+                autoload: true,
+                pageSize: 10,
+                pageButtonCount: 5,
+                controller: {
+                    loadData: function(filter) {
+                        var d = $.Deferred();
+                        $.ajax({
+                            type: "GET",
+                            url: "/acceso/api",
+                            data: filter
+                        }).done(function(result) {
+                            d.resolve($.map(result, function(item) {
+                                return $.extend(item.fields, { id: item.pk });
+                            }));
+                        });
+                        return d.promise();
+                    },
+                },
+                fields: [
+                    { name: "nombre_del_caso", type: "text", width: 150 },
+                    { name: "descripción", type: "text", width: 300 },
+                ]
+            });
+        });
+    </script>
+{% endblock %}

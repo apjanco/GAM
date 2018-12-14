@@ -129,4 +129,5 @@ urlpatterns += i18n_patterns(
     path('imagen/<archivo>/<colección>/<caja>/', views.documento2, name='documento2'),
     path('imagen/<archivo>/<colección>/', views.documento1, name='documento1'),
     path('imagen/<archivo>/', views.documento0, name='documento0'),
+
 )

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-13 17:07+0000\n"
+"POT-Creation-Date: 2018-12-14 18:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,43 +75,53 @@ msgstr ""
 
 #: templates/acceso/base.html:34
 msgid "Idioma"
-msgstr ""
+msgstr "Sprache"
 
 #: templates/acceso/base.html:46
 msgid "Sobre"
-msgstr ""
+msgstr "Über"
 
 #: templates/acceso/base.html:49
 msgid "Inicio"
-msgstr ""
+msgstr "Startseite"
 
 #: templates/acceso/base.html:52 templates/acceso/history.html:25
 #: templates/acceso/history.html:42
 msgid "Historia"
-msgstr ""
+msgstr "Geschichte"
 
 #: templates/acceso/base.html:55 templates/acceso/map.html:15
 msgid "Mapa"
-msgstr ""
+msgstr "Karte"
 
 #: templates/acceso/caso.html:48
 msgid "Una descripción general"
-msgstr ""
+msgstr "Eine Allgemeine Beschreibung"
 
 #: templates/acceso/caso.html:94
 msgid "Archivos Dentro del Caso"
-msgstr ""
+msgstr "Dateien in der Hülle"
 
 #: templates/acceso/caso.html:108
 msgid "Metadatos sobre el caso"
-msgstr ""
+msgstr "Metadaten zum Fall"
 
 #: templates/acceso/caso.html:112
 msgid "Typo de información"
-msgstr ""
+msgstr "Art der Informationen"
 
 #: templates/acceso/caso.html:113
 msgid "Contenido"
+msgstr "Inhalt"
+
+#: templates/acceso/caso.html:119
+#, python-format
+msgid " %(key|safe)s "
+msgstr ""
+
+#: templates/acceso/caso.html:120
+#, python-format
+msgid " %(value|safe)s "
 msgstr ""
 
 #: templates/acceso/history.html:44
@@ -128,15 +138,15 @@ msgstr ""
 
 #: templates/acceso/index.html:15
 msgid "Una historia de desapariciones en Guatemala"
-msgstr ""
+msgstr "Eine Geschichte des Verschwindens in Gautemala"
 
 #: templates/acceso/index.html:16
 msgid "comienzo"
-msgstr ""
+msgstr "Starten"
 
 #: templates/acceso/index.html:30
 msgid "La History"
-msgstr ""
+msgstr "Die Geschichte"
 
 #: templates/acceso/index.html:32
 msgid ""
@@ -147,11 +157,11 @@ msgstr ""
 
 #: templates/acceso/index.html:37
 msgid "Sigue Leyendo Sobre la Historia"
-msgstr ""
+msgstr "Lesen sie weiter über die Geschichte"
 
 #: templates/acceso/map.html:31
-msgid "Ubiquación"
-msgstr ""
+msgid "Ubicación"
+msgstr "Standort"
 
 #: templates/acceso/map.html:33
 msgid "Morbi convallis lectus malesuada sed fermentum dolore amet"

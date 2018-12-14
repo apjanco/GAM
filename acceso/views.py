@@ -1,7 +1,12 @@
 from django.shortcuts import render
+from django.http import HttpResponse
+from django.core import serializers
+
 from gam_app.models import *
 from acceso.models import *
 from gam_app.models import Persona
+
+from simple_rest import Resource
 
 # Create your views here.
 
@@ -12,7 +17,7 @@ def main(request):
     for caso in casos:
         photo_list.append(caso.fotos.first())
 
-    print('casos:  ', casos)
+    #print('casos:  ', casos)
     context = {'casos': casos, 'photo_list': photo_list}
     return render(request, 'acceso/index.html', context)
 
@@ -71,3 +76,21 @@ def simple(request):
     casos = Caso.objects.all()
     context = {'casos': casos}
     return render(request, 'simple/acceso.html', context)
+
+
+def caso_index(request):
+    return render(request, 'acceso/caso_index.html')
+
+
+class casoTable(Resource):
+
+    def get(self, request):
+        caso = Caso.objects \
+            .filter(nombre_del_caso__icontains = request.GET.get('nombre_del_caso')) \
+            .filter(descripción__icontains = request.GET.get('descripción'))
+        return HttpResponse(self.to_json(caso), content_type = 'application/json', status = 200)
+
+    def to_json(self, objects):
+        return serializers.serialize('json', objects)
+
+

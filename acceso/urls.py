@@ -1,6 +1,7 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
+from .views import casoTable
 
 from django.urls import include
 
@@ -13,4 +14,9 @@ urlpatterns = [
     path('map/', views.map, name='map'),
     path('caso/<caso>', views.caso, name='caso'),
     path('simple/', views.simple, name='simple'),
+
+    # jsGrid
+    path('caso-index/', views.caso_index, name='caso_index'),
+    path('api/', casoTable.as_view()),
+    re_path(r'api/(?P<caso_id>[0-9])/$', casoTable.as_view()),
 ]

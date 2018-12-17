@@ -16,7 +16,6 @@ django-js-asset==0.1.1
 django-map-widgets==0.2.0
 django-mptt==0.9.0
 django-registration==2.3
-django-simple-rest==1.4.1
 -e git+https://github.com/jschneier/django-storages.git@adefe324be22843148b03a2068d2922eaae1a48b#egg=django_storages
 docutils==0.14
 future==0.16.0

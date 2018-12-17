@@ -6,10 +6,6 @@ from gam_app.models import *
 from acceso.models import *
 from gam_app.models import Persona
 
-from simple_rest import Resource
-
-# Create your views here.
-
 
 def main(request):
     casos = Caso.objects.all()
@@ -82,15 +78,10 @@ def caso_index(request):
     return render(request, 'acceso/caso_index.html')
 
 
-class casoTable(Resource):
-
-    def get(self, request):
-        caso = Caso.objects \
-            .filter(nombre_del_caso__icontains = request.GET.get('nombre_del_caso')) \
-            .filter(descripción__icontains = request.GET.get('descripción'))
-        return HttpResponse(self.to_json(caso), content_type = 'application/json', status = 200)
-
-    def to_json(self, objects):
-        return serializers.serialize('json', objects)
-
-
+def caso_table(request, caso_id):
+    # TODO: Probably want nombre_del_caso to be an explicit part of the URL rather than
+    # a GET parameter.
+    caso = Caso.objects \
+        .filter(nombre_del_caso__icontains=request.GET.get('nombre_del_caso')) \
+        .filter(descripción__icontains=request.GET.get('descripción'))
+    return JsonResponse(serializers.serialize(caso))

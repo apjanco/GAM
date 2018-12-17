@@ -11,41 +11,6 @@
 {% endblock %}
 
 {% block content %}
-    <div id="jsGrid"></div>
-{% endblock %}
-
-{% block scripts %}
-    <script>
-        $(function() {
-            $("#jsGrid").jsGrid({
-                height: "100%",
-                width: "100%",
-                filtering: true,
-                sorting: true,
-                paging: true,
-                autoload: true,
-                pageSize: 10,
-                pageButtonCount: 5,
-                controller: {
-                    loadData: function(filter) {
-                        var d = $.Deferred();
-                        $.ajax({
-                            type: "GET",
-                            url: "/acceso/api",
-                            data: filter
-                        }).done(function(result) {
-                            d.resolve($.map(result, function(item) {
-                                return $.extend(item.fields, { id: item.pk });
-                            }));
-                        });
-                        return d.promise();
-                    },
-                },
-                fields: [
-                    { name: "nombre_del_caso", type: "text", width: 150 },
-                    { name: "descripción", type: "text", width: 300 },
-                ]
-            });
-        });
-    </script>
+<div id="jsGrid"></div>
+<script src="{% static 'acceso/js/caso_index.js' %}"></script>
 {% endblock %}

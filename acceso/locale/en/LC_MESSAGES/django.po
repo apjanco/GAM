@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-14 18:58+0000\n"
+"POT-Creation-Date: 2018-12-14 21:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,141 +18,142 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: templates/acceso/about.html:24
+#: acceso/templates/acceso/about.html:24
 msgid "About Us"
 msgstr ""
 
-#: templates/acceso/about.html:40
+#: acceso/templates/acceso/about.html:40
 msgid "Founder 1"
 msgstr ""
 
-#: templates/acceso/about.html:50
+#: acceso/templates/acceso/about.html:50
 msgid "Founder 2"
 msgstr ""
 
-#: templates/acceso/about.html:60
+#: acceso/templates/acceso/about.html:60
 msgid "Founder 3"
 msgstr ""
 
-#: templates/acceso/about.html:77
+#: acceso/templates/acceso/about.html:77
 msgid "Notable Members"
 msgstr ""
 
-#: templates/acceso/about.html:80
+#: acceso/templates/acceso/about.html:80
 msgid "Intro to notable members"
 msgstr ""
 
-#: templates/acceso/about.html:87 templates/acceso/about.html:96
-#: templates/acceso/about.html:105 templates/acceso/about.html:114
-#: templates/acceso/about.html:123
+#: acceso/templates/acceso/about.html:87 acceso/templates/acceso/about.html:96
+#: acceso/templates/acceso/about.html:105
+#: acceso/templates/acceso/about.html:114
+#: acceso/templates/acceso/about.html:123
 msgid "member 1"
 msgstr ""
 
-#: templates/acceso/about.html:98 templates/acceso/about.html:116
-#: templates/acceso/about.html:125
+#: acceso/templates/acceso/about.html:98 acceso/templates/acceso/about.html:116
+#: acceso/templates/acceso/about.html:125
 msgid "Amet nullam fringilla nibh nulla convallis tique ante proin."
 msgstr ""
 
-#: templates/acceso/about.html:107
+#: acceso/templates/acceso/about.html:107
 msgid "Amet nullam fringilla nibh nulla convallis tique ante proin. "
 msgstr ""
 
-#: templates/acceso/about.html:130
+#: acceso/templates/acceso/about.html:130
 msgid "Magna Adipiscing"
 msgstr ""
 
-#: templates/acceso/about.html:137
+#: acceso/templates/acceso/about.html:137
 msgid "Our Mission"
 msgstr "Nuestra Missión"
 
-#: templates/acceso/about.html:151 templates/acceso/map.html:47
+#: acceso/templates/acceso/about.html:151 acceso/templates/acceso/map.html:47
 msgid "Ultrices tempor sagittis nisl"
 msgstr ""
 
-#: templates/acceso/about.html:168 templates/acceso/map.html:64
+#: acceso/templates/acceso/about.html:168 acceso/templates/acceso/map.html:64
 msgid "Augue euismod feugiat tempus"
 msgstr ""
 
-#: templates/acceso/base.html:34
+#: acceso/templates/acceso/base.html:34
 msgid "Idioma"
 msgstr "Language"
 
-#: templates/acceso/base.html:46
+#: acceso/templates/acceso/base.html:46
 msgid "Sobre"
 msgstr "About Us"
 
-#: templates/acceso/base.html:49
+#: acceso/templates/acceso/base.html:49
 msgid "Inicio"
 msgstr "Home"
 
-#: templates/acceso/base.html:52 templates/acceso/history.html:25
-#: templates/acceso/history.html:42
+#: acceso/templates/acceso/base.html:52 acceso/templates/acceso/history.html:25
+#: acceso/templates/acceso/history.html:42
 msgid "Historia"
 msgstr "History"
 
-#: templates/acceso/base.html:55 templates/acceso/map.html:15
+#: acceso/templates/acceso/base.html:55 acceso/templates/acceso/map.html:15
 msgid "Mapa"
 msgstr "Map"
 
-#: templates/acceso/caso.html:48
+#: acceso/templates/acceso/caso.html:48
 msgid "Una descripción general"
 msgstr "General Description"
 
-#: templates/acceso/caso.html:94
+#: acceso/templates/acceso/caso.html:94
 msgid "Archivos Dentro del Caso"
 msgstr "Files in the Case"
 
-#: templates/acceso/caso.html:108
+#: acceso/templates/acceso/caso.html:108
 msgid "Metadatos sobre el caso"
 msgstr "Metadata about the case"
 
-#: templates/acceso/caso.html:112
+#: acceso/templates/acceso/caso.html:112
 msgid "Typo de información"
 msgstr "Type of Information"
 
-#: templates/acceso/caso.html:113
+#: acceso/templates/acceso/caso.html:113
 msgid "Contenido"
 msgstr "Content"
 
-#: templates/acceso/history.html:44
+#: acceso/templates/acceso/history.html:44
 msgid "Section picture"
 msgstr ""
 
-#: templates/acceso/history.html:58
+#: acceso/templates/acceso/history.html:58
 msgid "Section 1"
 msgstr ""
 
-#: templates/acceso/history.html:79
+#: acceso/templates/acceso/history.html:79
 msgid "Section 2"
 msgstr ""
 
-#: templates/acceso/index.html:15
+#: acceso/templates/acceso/index.html:15
 msgid "Una historia de desapariciones en Guatemala"
 msgstr "A history of disapearances in Guatemala"
 
-#: templates/acceso/index.html:16
+#: acceso/templates/acceso/index.html:16
 msgid "comienzo"
 msgstr "Begin "
 
-#: templates/acceso/index.html:30
+#: acceso/templates/acceso/index.html:30
 msgid "La History"
 msgstr "The History"
 
-#: templates/acceso/index.html:32
+#: acceso/templates/acceso/index.html:32
 msgid ""
 "Sobre la historia  summary aenean eu aenean mollis mollis facilisis primis "
 "ornare penatibus aenean. Cursus ac enim pulvinar curabitur morbi convallis. "
 "Lectus malesuada sed fermentum dolore amet."
 msgstr ""
 
-#: templates/acceso/index.html:37
+#: acceso/templates/acceso/index.html:37
 msgid "Sigue Leyendo Sobre la Historia"
 msgstr "Continue Reading About the History"
 
-#: templates/acceso/map.html:31
+#: acceso/templates/acceso/map.html:31
 msgid "Ubicación"
 msgstr "Location"
 
-#: templates/acceso/map.html:33
+#: acceso/templates/acceso/map.html:33
 msgid "Morbi convallis lectus malesuada sed fermentum dolore amet"
 msgstr ""

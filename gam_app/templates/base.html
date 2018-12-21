@@ -1,6 +1,16 @@
 {% load staticfiles %}
 
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-45185227-15"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-45185227-15');
+</script>
+
   <title>{% block title %}{% endblock %}</title>
   <script>window.CKEDITOR_BASEPATH = '{% static 'ckeditor/ckeditor/' %}';</script>
   

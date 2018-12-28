@@ -3,75 +3,94 @@
 {% load i18n %}
 {% get_current_language as LANGUAGE_CODE %}
 
-<header class="qodef-page-header">
-        <div class="qodef-menu-area" >
-                    <div class="qodef-grid">
-              <form action="https://grupodeapoyomutuo.org.gt/" class="qodef-search-cover" method="get">
-    <div class="qodef-container">
-    <div class="qodef-container-inner clearfix">
-            <div class="qodef-form-holder-outer">
-        <div class="qodef-form-holder">
-          <div class="qodef-form-holder-inner">
-            <input type="text" placeholder="Search" name="s" class="qode_search_field" autocomplete="off" />
-            <div class="qodef-search-close">
-              <a href="#">
-                <i class="qodef-icon-font-awesome fa fa-times " ></i>             </a>
-            </div>
-          </div>
-        </div>
-      </div>
-          </div>
-  </div>
-  </form>            <div class="qodef-vertical-align-containers">
-                <div class="qodef-position-left">
-                    <div class="qodef-position-left-inner">
-                   
+<header>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {margin: 0;}
 
-<div class="qodef-logo-wrapper">
-    <a href="/" style="height: 400px;">
-        <img class="qodef-normal-logo" src="{% static 'Logo_01.png' %}" alt="logo"/>
-        <img class="qodef-dark-logo" src="{% static 'Logo_01.png' %}" alt="dark logo"/>        <img class="qodef-light-logo" src="{% static 'Logo_01.png' %}" alt="light logo"/>    </a>
+ul.topnav {
+
+  list-style-type: none;
+  margin-left: 85px;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
+}
+
+ul.topnav li {float:left;}
+
+ul.topnav li a {
+  display: block;
+  color: black;
+  text-align: center;
+  vertical-align: middle;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+ul.topnav li a:hover {background-color: #FBE930;}
+
+ul.topnav li a.active {background-color: white;}
+
+ul.topnav li.right {float: right;}
+
+.topnav-centered a {
+  float: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media screen and (max-width: 600px) {
+  ul.topnav li.right,
+  ul.topnav li {float: none;}
+}
+
+.logo {
+  height: 80px;
+  vertical-align: middle;
+  background-color: #FBE930;
+}
+</style>
+<div class="logo">
+    <a style="margin-left: 85px;" href="/"><img class="logo" src="{% static 'Logo_01.png' %}" alt="GAM logo"/></a>
 </div>
+    <nav>
 
-                    </div>
-                </div>
-                <div class="qodef-position-right">
-                    <div class="qodef-position-right-inner">
-                        
-<nav class="qodef-main-menu qodef-drop-down qodef-default-nav">
-    <ul id="menu-main-menu" class="clearfix">
+<ul class="topnav">
+
 {% if LANGUAGE_CODE == 'en' %}
-<li id="nav-menu-item-3282" class="menu-item menu-item-type-custom menu-item-object-custom  narrow"><a href="{% url 'about' %}" class=""><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon blank fa"></i></span><span class="item_text">{% trans "Sobre" %}</span></span><span class="plus"></span></span></a></li>
+    <li><a href="{% url 'about' %}" >{% trans "Sobre" %}</a></li>
+
 {% elif LANGUAGE_CODE == 'de' %}
-<li id="nav-menu-item-3282" class="menu-item menu-item-type-custom menu-item-object-custom rrow"><a href="{% url 'über' %}" class=""><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon blank fa"></i></span><span class="item_text">{% trans "Sobre" %}</span></span><span class="plus"></span></span></a></li>
+<li><a href="{% url 'über' %}">{% trans "Sobre" %}</a></li>
 {% else %}
-<li id="nav-menu-item-3282" class="menu-item menu-item-type-custom menu-item-object-custom  narrow"><a href="{% url 'sobre' %}" class=""><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon blank fa"></i></span><span class="item_text">{% trans "Sobre" %}</span></span><span class="plus"></span></span></a></li>
+<li><a href="{% url 'sobre' %}">{% trans "Sobre" %}</a></li>
 {% endif %}
 
 {% if user.is_authenticated %}
-<li id="nav-menu-item-3282" class="menu-item menu-item-type-custom menu-item-object-custom  narrow"><a href="/" class=""><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon blank fa"></i></span><span class="item_text">{% trans "Buscar" %}</span></span><span class="plus"></span></span></a></li>
+<li><a href="/">{% trans "Buscar" %}</a></li>
 
-<li id="nav-menu-item-3276" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item anchor-item  narrow"><a href="{% url 'explorar' %}" class=" current "><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">{% trans "Explorar" %}</span></span><span class="plus"></span></span></a></li>
+<li><a class="topnav-centered" href="{% url 'explorar' %}">{% trans "Explorar" %}</a></li>
 {% endif %}
 
 {% if request.user.is_staff %}
-<li id="nav-menu-item-3276" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item anchor-item  narrow"><a href="{% url 'mission_control' %}" class=" current "><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">{% trans "Control de misión" %}</span></span><span class="plus"></span></span></a></li>
-<li id="nav-menu-item-3276" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item anchor-item  narrow"><a href="{% url 'track_bags' %}" class=" current "><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">{% trans "Bolsas" %}</span></span><span class="plus"></span></span></a></li>
+<li><a href="{% url 'mission_control' %}">{% trans "Control de misión" %}</a></li>
+<li><a href="{% url 'track_bags' %}">{% trans "Bolsas" %}</a></li>
 {% endif %}
 
-            {% if not user.is_authenticated %}
-            <li id="nav-menu-item-3296" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item anchor-item  narrow"><a href="/cuentas/login/" class=" current "><span class="item_outer"><span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">{% trans "Iniciar sesión" %}</span></span><span class="plus"></span></span></a></li>
-            
-            {% else %}
-            <li id="nav-menu-item-3226" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item anchor-item  narrow">
-              <a href="/cuentas/logout/" class=" current "><span class="item_outer">
+{% if not user.is_authenticated %}
+<li><a href="/cuentas/login/">{% trans "Iniciar sesión" %}</a></li>
 
-                <span class="item_inner"><span class="menu_icon_wrapper"><i class="menu_icon null fa"></i></span><span class="item_text">{% trans "Cerrar sesión" %}</span></span><span class="plus"></span></span></a></li>
-            
-            {% endif %} 
-        <li id="nav-menu-item-3226" class="dropdown"> 
+{% else %}
+<li><a href="/cuentas/logout/">{% trans "Cerrar sesión" %}</a></li>
+
+{% endif %}
+
+        <li>
 <!-- https://docs.djangoproject.com/en/2.1/topics/i18n/translation/#set-language-redirect-view -->
-<form style="margin-top: 18px;" action="{% url 'set_language' %}" method="post">{% csrf_token %}
+<form style="margin-top: 8px;" action="{% url 'set_language' %}" method="post">{% csrf_token %}
     <input name="next" type="hidden" value="{{ redirect_to }}">
     <select style="border-color: black; background-color: #FBE930;t" class="form-control" name="language" onchange="this.form.submit();">
         {% get_current_language as LANGUAGE_CODE %}
@@ -83,11 +102,10 @@
             </option>
         {% endfor %}
     </select>
-</form>   
-            </li>    
-        
-</ul></nav>
+</form>
+            </li>
 
+</ul></nav>
         </div>
 
 </header>

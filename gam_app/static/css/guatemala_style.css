@@ -73,6 +73,7 @@ h1 a,h2 a,h3 a,h4 a,h5 a,h6 a{
 }
 a:hover,h1 a:hover,h2 a:hover,h3 a:hover,h4 a:hover,h5 a:hover,h6 a:hover,p a:hover{
     color:#ea9195
+    border-bottom: 3px solid #000;
 }
 a,p a{
     color:inherit;
@@ -83,4 +84,31 @@ a,p a{
     -o-transition:color .15s ease-out;
     -ms-transition:color .15s ease-out;
     transition:color .15s ease-out
+}
+table tbody tr,table thead tr{
+    border:1px solid #e6e6e6
+}
+table tbody th{
+    border-right:1px solid #e6e6e6
+}
+a,abbr,acronym,address,applet,b,big,blockquote,body,caption,center,cite,code,dd,del,dfn,div,dl,dt,em,fieldset,font,form,h1,h2,h3,h4,h5,h6,html,i,iframe,ins,kbd,label,legend,li,object,ol,p,pre,q,s,samp,small,span,strike,strong,sub,sup,table,tbody,td,tfoot,th,thead,tr,tt,u,ul,var{
+    background:0 0;
+    border:0;
+    margin:0;
+    padding:0;
+    vertical-align:baseline;
+    outline:0
+}
+table th{
+    border:0;
+    padding:5px 7px
+}
+table td{
+    padding:5px 10px
+}
+table tbody tr,table thead tr{
+    border:1px solid #e6e6e6
+}
+table tbody th{
+    border-right:1px solid #e6e6e6
 }

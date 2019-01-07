@@ -71,7 +71,7 @@ function areAllFullyLoaded() {
 
 function addLinkOverlay(image, link, name) {
     var imageRect = image.getBounds();
-    var rect = new OpenSeadragon.Rect(imageRect.x, imageRect.y, 0.5, 0.5);
+    var rect = new OpenSeadragon.Rect(imageRect.x, imageRect.y, 0.2, 0.2);
 
     var divElement = document.createElement("div");
     var buttonElement = document.createElement("a");

@@ -14,4 +14,3 @@ var viewer = OpenSeadragon({
     showRotationControl: true
 });
 
-

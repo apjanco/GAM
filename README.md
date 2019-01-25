@@ -1,6 +1,7 @@
 <img src="https://github.com/HCDigitalScholarship/GAM/raw/master/gam_app/static/Logo_01.png" alt="GAM logo" height="100" width="100"/>
-LOS ARCHIVOS DIGITALES DEL GRUPO DE APOYO MUTUO / Digital Archives of the Group of Mutual Assistance (Guatemala)
-https://archivogam.haverford.edu/
+# LOS ARCHIVOS DIGITALES DEL GRUPO DE APOYO MUTUO 
+# Digital Archives of the Group of Mutual Assistance (Guatemala) 
+https://archivogam.haverford.edu/  
 
 >El Grupo de Apoyo Mutuo es una organización de la sociedad civil sin fines de lucro creada en 1984 que aglutina a los familiares de >personas detenidas ilegalmente y desaparecidas forzadamente en Guatemala durante el Conflicto Armado Interno que duró de 1960 a 1996. >Nuestro ámbito de trabajo abarca la justicia por el desaparecido y la dignificación de las víctimas, trabajo que ha llevado a GAM a estar >nominado por el Premio Nobel de la Paz en 1986. Además elaboramos informes temáticos relacionados a los índices de violencia actuales y >monitoreo a las instituciones que conforman el sector de seguridad y justicia.
 

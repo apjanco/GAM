@@ -4,7 +4,6 @@
 {% load static %}
 
 {% block content1 %}
-<body class="homepage is-preload">
   <div id="page-wrapper">
     <!-- Header -->
     <div id="header">
@@ -19,8 +18,8 @@
 
 
 
-            {% endblock %}            
-}
+            {% endblock %}
+
 
 {% block content2 %}
 <body class="homepage is-preload">
@@ -28,37 +27,363 @@
     <!-- Header -->
     <div id="header">
   <!-- Inner -->
-<!--      <div class="inner">
-    <h1><a href="{% url 'index' %}" id="logo">Gam</a></h1>
+        <div class="inner">
+
     <hr />
     <p>{% trans "Una historia de desapariciones en Guatemala" %}</p>
-    <a href="#main" class="button circled scrolly">{% trans "comienzo" %}</a>
-      </div>-->
+
+    <a href="#main"><i class="fa fa-angle-double-down" style="font-size:58px;"></i></a>
+      </div>
   </div>
-<div class="row" style="margin-top:auto;">  
-<!--<div class="col-md-8 wrapper style2">-->
+<!-- History section -->
+      <div class="container">
+      <div class="row" style="margin-top:auto;">
    <div class="col-md-8" style="margin-top: 10%;">
-    <article id="main" class="container special">
-      <header>
+    <div id="main" class="container special">
       <h2><a href="#">{% trans "La History" %} </a></h2>
       <p>
       {% trans "Sobre la historia  summary aenean eu aenean mollis mollis facilisis primis ornare penatibus aenean. Cursus ac enim pulvinar curabitur morbi convallis. Lectus malesuada sed fermentum dolore amet." %}
     </p>
-    </header>
-            
-      <footer>
+
+
     <a href="{% url 'acceso:history' %}" class="button">{% trans "Sigue Leyendo Sobre la Historia" %}</a>
-    </footer>
-            
-          
-  </article>
+
+    </div>
+        <!--End history section-->
+
+
 <!-- carousel -->
+   </div>
+
+    <!-- AJ grid  -->
+<style>
+/* quick grid */
+.container {
+  width: 93%;
+  margin: auto;
+}
+
+/* Bootstrap-style columns */
+.column {
+  position: relative;
+  float: left;
+  min-height: 1px;
+  width: 25%;
+  padding-left: 4px;
+  padding-right: 4px;
+
+  /* Space between tiles */
+  margin-top: 8px;
+}
+
+.col-span {
+  width: 50%;
+}
+
+.my-sizer-element {
+  width: 8.33333%;
+}
+
+/* default styles so shuffle doesn't have to set them (it will if they're missing) */
+.my-shuffle {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ensure images take up the same space when they load */
+/* https://vestride.github.io/Shuffle/images */
+.aspect {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%;
+  overflow: hidden;
+}
+
+.aspect__inner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.aspect--16x9 {
+  padding-bottom: 56.25%;
+}
+
+.aspect--9x80 {
+  padding-bottom: calc(112.5% + 8px);
+}
+
+.aspect--32x9 {
+  padding-bottom: calc(28.125% - 3px);
+}
+
+img {
+  display: block;
+  width: 100%;
+
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Small reset */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+figure {
+  margin: 0;
+  padding: 0;
+}
+</style>
+
+<div class="container">
+    <h2><a href="#">{% trans "Los Casos" %} </a></h2>
+    <div class="filters-group">
+        <label for="filters-search-input" class="filter-label">{% trans 'Buscar' %}</label>
+        <input class="textfield filter__search js-shuffle-search" type="search" id="filters-search-input" />
+      </div>
+  <div class="js-grid my-shuffle">
+    <figure class="js-item column">
+      <div class="aspect aspect--16x9">
+        <div class="aspect__inner"><img src="https://images.unsplash.com/uploads/141310026617203b5980d/c86b8baa?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=600&amp;h=338&amp;fit=crop&amp;s=882e851a008e83b7a80d05bdc96aa817" obj.alt="obj.alt"/></div>
+      </div>
+    </figure>
+    <figure class="js-item column">
+      <div class="aspect aspect--16x9">
+        <div class="aspect__inner"><img src="https://images.unsplash.com/photo-1484402628941-0bb40fc029e7?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=600&amp;h=338&amp;fit=crop&amp;s=6237e62a10fa079d99b088b0db0144ac" obj.alt="obj.alt"/></div>
+      </div>
+    </figure>
+    <figure class="js-item column">
+      <div class="aspect aspect--16x9">
+        <div class="aspect__inner"><img src="https://images.unsplash.com/uploads/1413142095961484763cf/d141726c?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=600&amp;h=338&amp;fit=crop&amp;s=86dc2dcb74588b338dfbb15d959c5037" obj.alt="obj.alt"/></div>
+      </div>
+    </figure>
+    <figure class="js-item column">
+      <div class="aspect aspect--16x9">
+        <div class="aspect__inner"><img src="https://images.unsplash.com/photo-1465414829459-d228b58caf6e?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=600&amp;h=338&amp;fit=crop&amp;s=7ab1744fe016fb39feb2972244246359" obj.alt="obj.alt"/></div>
+      </div>
+    </figure>
+    <figure class="js-item column row-span">
+      <div class="aspect aspect--9x80">
+        <div class="aspect__inner"><img src="https://images.unsplash.com/photo-1416184008836-5486f3e2cf58?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=601&amp;h=676&amp;fit=crop&amp;s=5f1f1ffba05979d4248cc16d8eb82f0a" obj.alt="obj.alt"/></div>
+      </div>
+    </figure>
+    <figure class="js-item column">
+      <div class="aspect aspect--16x9">
+        <div class="aspect__inner"><img src="https://images.unsplash.com/photo-1478033394151-c931d5a4bdd6?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=600&amp;h=338&amp;fit=crop&amp;s=57a00aabcfaa1b04fd268ea3ad4a4cbb" obj.alt="obj.alt"/></div>
+      </div>
+    </figure>
+    <figure class="js-item column col-span">
+      <div class="aspect aspect--32x9">
+        <div class="aspect__inner"><img src="https://images.unsplash.com/photo-1473175494278-d83ed8459089?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1208&amp;h=338&amp;fit=crop&amp;s=fd1cf1e8eddf88ef87015314f85ce3fb" obj.alt="obj.alt"/></div>
+      </div>
+    </figure>
+    <figure class="js-item column">
+      <div class="aspect aspect--16x9">
+        <div class="aspect__inner"><img src="https://images.unsplash.com/photo-1434144893279-2a9fc14e9337?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=600&amp;h=338&amp;fit=crop&amp;s=d2f930bbb91de7e19e6436f5b03897b0" obj.alt="obj.alt"/></div>
+      </div>
+    </figure>
+    <figure class="js-item column">
+      <div class="aspect aspect--16x9">
+        <div class="aspect__inner"><img src="https://images.unsplash.com/photo-1464454709131-ffd692591ee5?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=600&amp;h=338&amp;fit=crop&amp;s=eda14f45e94e9024f854b1e06708c629" obj.alt="obj.alt"/></div>
+      </div>
+    </figure>
+    <figure class="js-item column">
+      <div class="aspect aspect--16x9">
+        <div class="aspect__inner"><img src="https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=600&amp;h=338&amp;fit=crop&amp;s=70dabb0dcc604c558245b72f3109bbbb" obj.alt="obj.alt"/></div>
+      </div>
+    </figure>
+    <figure class="js-item column">
+      <div class="aspect aspect--16x9">
+        <div class="aspect__inner"><img src="https://images.unsplash.com/photo-1447433589675-4aaa569f3e05?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=600&amp;h=338&amp;fit=crop&amp;s=4e19022724205e38e491961f50e47d32" obj.alt="obj.alt"/></div>
+      </div>
+    </figure>
+    <figure class="js-item column">
+      <div class="aspect aspect--16x9">
+        <div class="aspect__inner"><img src="https://images.unsplash.com/photo-1430026996702-608b84ce9281?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=600&amp;h=338&amp;fit=crop&amp;s=363a88755a7b87635641969a8d66f7aa" obj.alt="obj.alt"/></div>
+      </div>
+    </figure>
+    <div class="column my-sizer-element"></div>
   </div>
-<div class="col-md-4">
-<a class="twitter-timeline" data-width="400" data-height="500" data-theme="light" href="https://twitter.com/apoyomutuo?ref_src=twsrc%5Etfw">Tweets by apoyomutuo</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </div>
+
+
+
+
+<script>
+
+var Shuffle = window.Shuffle;
+
+var myShuffle = new Shuffle(document.querySelector('.my-shuffle'), {
+  itemSelector: '.js-item',
+  sizer: '.my-sizer-element',
+  buffer: 1,
+});
+
+class Demo {
+  constructor(element) {
+    this.element = element;
+    this.shuffle = new Shuffle(element, {
+      itemSelector: '.js-item',
+      sizer: '.my-sizer-element',
+    });
+
+    // Log events.
+    this.addShuffleEventListeners();
+    this._activeFilters = [];
+    this.addFilterButtons();
+    this.addSorting();
+    this.addSearchFilter();
+  }
+
+  /**
+   * Shuffle uses the CustomEvent constructor to dispatch events. You can listen
+   * for them like you normally would (with jQuery for example).
+   */
+  addShuffleEventListeners() {
+    this.shuffle.on(Shuffle.EventType.LAYOUT, (data) => {
+      console.log('layout. data:', data);
+    });
+    this.shuffle.on(Shuffle.EventType.REMOVED, (data) => {
+      console.log('removed. data:', data);
+    });
+  }
+
+  addFilterButtons() {
+    const options = document.querySelector('.filter-options');
+    if (!options) {
+      return;
+    }
+
+    const filterButtons = Array.from(options.children);
+    const onClick = this._handleFilterClick.bind(this);
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', onClick, false);
+    });
+  }
+
+  _handleFilterClick(evt) {
+    const btn = evt.currentTarget;
+    const isActive = btn.classList.contains('active');
+    const btnGroup = btn.getAttribute('data-group');
+
+    this._removeActiveClassFromChildren(btn.parentNode);
+
+    let filterGroup;
+    if (isActive) {
+      btn.classList.remove('active');
+      filterGroup = Shuffle.ALL_ITEMS;
+    } else {
+      btn.classList.add('active');
+      filterGroup = btnGroup;
+    }
+
+    this.shuffle.filter(filterGroup);
+  }
+
+  _removeActiveClassFromChildren(parent) {
+    const { children } = parent;
+    for (let i = children.length - 1; i >= 0; i--) {
+      children[i].classList.remove('active');
+    }
+  }
+
+  addSorting() {
+    const buttonGroup = document.querySelector('.sort-options');
+    if (!buttonGroup) {
+      return;
+    }
+    buttonGroup.addEventListener('change', this._handleSortChange.bind(this));
+  }
+
+  _handleSortChange(evt) {
+    // Add and remove `active` class from buttons.
+    const buttons = Array.from(evt.currentTarget.children);
+    buttons.forEach((button) => {
+      if (button.querySelector('input').value === evt.target.value) {
+        button.classList.add('active');
+      } else {
+        button.classList.remove('active');
+      }
+    });
+
+    // Create the sort options to give to Shuffle.
+    const { value } = evt.target;
+    let options = {};
+
+    function sortByDate(element) {
+      return element.getAttribute('data-created');
+    }
+
+    function sortByTitle(element) {
+      return element.getAttribute('data-title').toLowerCase();
+    }
+
+    if (value === 'date-created') {
+      options = {
+        reverse: true,
+        by: sortByDate,
+      };
+    } else if (value === 'title') {
+      options = {
+        by: sortByTitle,
+      };
+    }
+    this.shuffle.sort(options);
+  }
+
+  // Advanced filtering
+  addSearchFilter() {
+    const searchInput = document.querySelector('.js-shuffle-search');
+    if (!searchInput) {
+      return;
+    }
+    searchInput.addEventListener('keyup', this._handleSearchKeyup.bind(this));
+  }
+
+  /**
+   * Filter the shuffle instance by items with a title that matches the search input.
+   * @param {Event} evt Event object.
+   */
+  _handleSearchKeyup(evt) {
+    const searchText = evt.target.value.toLowerCase();
+    this.shuffle.filter((element, shuffle) => {
+      // If there is a current filter applied, ignore elements that don't match it.
+      if (shuffle.group !== Shuffle.ALL_ITEMS) {
+        // Get the item's groups.
+        const groups = JSON.parse(element.getAttribute('data-groups'));
+        const isElementInCurrentGroup = groups.indexOf(shuffle.group) !== -1;
+        // Only search elements in the current group
+        if (!isElementInCurrentGroup) {
+          return false;
+        }
+      }
+      const titleElement = element.querySelector('.picture-item__title');
+      const titleText = titleElement.textContent.toLowerCase().trim();
+      return titleText.indexOf(searchText) !== -1;
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  window.demo = new Demo(document.getElementById('grid'));
+});
+
+
+</script>
+
+    <!-- end AJ grid -->
+
+
+
 </div>
-  <!--      <section class="carousel">  
+      <section class="carousel">
           <div class="reel">
               <script>
                 console.log('{{ casos }}');
@@ -79,21 +404,9 @@
             
             
           </div>
-        </section> -->
+        </section>
 
-<form action="" method="get">
-	{{ caso.form.as_p }}
-	<input type="submit">
-</form>
-{% for obj in caso.qs %}
-	{{ obj.nombre_del_caso }} <br/>
-{% endfor %}
 
-      <!-- Main -->
-        
-
-      
-
-	 </div>
-
+</div>
+  </div>
   {% endblock %}

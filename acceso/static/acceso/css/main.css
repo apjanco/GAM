@@ -71,7 +71,20 @@ input, select, textarea {
 	-ms-appearance: none;
 	appearance: none;
 }
+.qodef-page-header{
+	background:#FFF;
+}
 
+.qodef-main-menu ul li.qodef-active-item a, .qodef-main-menu ul li:hover a, .qodef-main-menu>ul>li.qodef-active-item>a, body:not(.qodef-menu-item-first-level-bg-color) .qodef-main-menu>ul>li:hover>a {
+    border-bottom: 3px solid #51361c;
+    margin-top: -2px !important;
+}
+.qodef-main-menu ul li a {
+    font-size: 11px;
+}
+h4.qodef-footer-widget-title {
+    color: #ffec00 !important;
+}
 /* Basic */
 
 	html {
@@ -2153,18 +2166,19 @@ input, select, textarea {
 		padding: 6em 0 6em 0;
 	}
 
-		.wrapper.style2 {
+		/*.wrapper.style2 {
 			padding-top: 0;
-		}
+		}*/
 
 /* Header */
 
 	#header {
 		position: relative;
 		/* this changes the top most image behind the title*/
-		background-image: url('/static/acceso/images/img003.jpg');
-		background-size: contain;
+		background-image: url(http://grupodeapoyomutuo.org.gt/wp-content/uploads/2017/07/baner1-1.jpg);;
+		/*background-size: contain;*/
 		background-position: center center;
+		margin-top: 70px;
 		background-attachment: fixed;
 		background-repeat: no-repeat;
 		color: #fff;
@@ -2270,8 +2284,8 @@ input, select, textarea {
 
 	#nav {
 		position: absolute;
-		top: 0;
-		left: 0;
+		/*top: 0;
+		left: 0;*/
 		width: 100%;
 		text-align: center;
 		padding: 1.5em 0 1.5em 0;
@@ -3024,7 +3038,9 @@ input, select, textarea {
 		/* Header */
 
 			#header {
-				background-attachment: scroll;
+				background-image: url(http://grupodeapoyomutuo.org.gt/wp-content/uploads/2017/07/baner1-1.jpg);
+				/*background-attachment: scroll;*/
+				margin-top: 50px;
 				padding: 2.5em 0 0 0;
 			}
 

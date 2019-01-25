@@ -31,7 +31,8 @@ def history(request):
 
 
 def caso(request, caso):
-    caso = Caso.objects.get(slug_name=caso)
+    #caso = Caso.objects.get(slug_name=caso)
+    caso = CasoFilter(request.GET, queryset=Caso.objects.get(slug_name=caso))
     foto = []
     dragon = []
     imageprofile = caso.foto_de_perfil

@@ -2,6 +2,7 @@ from django.db import models
 from gam_app.models import Persona, Imagen, Carpeta
 from django.template.defaultfilters import slugify
 from ckeditor.fields import RichTextField
+import django_filters
 
 # Create your models here.
 class Foto(models.Model):
@@ -38,3 +39,10 @@ class Caso(models.Model):
 
     def __str__(self):
         return self.nombre_del_caso
+
+class CasoFilter(django_filters.FilterSet):
+	nombre_del_caso = django_filters.CharFilter(lookup_expr='icontains')
+	descripcion = django_filters.CharFilter(lookup_expr='icontains')
+	class Meta:
+		model = Caso
+		fields = ['nombre_del_caso', 'descripción']

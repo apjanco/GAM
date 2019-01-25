@@ -9,12 +9,13 @@
     <!-- Header -->
     <div id="header">
   <!-- Inner -->
-      <div class="inner">
+<!--      <div class="inner">
     <h1><a href="{% url 'index' %}" id="logo">Gam</a></h1>
     <hr />
     <p>{% trans "Una historia de desapariciones en Guatemala" %}</p>
     <a href="#main" class="button circled scrolly">{% trans "comienzo" %}</a>
-      </div>
+      </div>-->
+</div>
 
 
 
@@ -22,9 +23,21 @@
 }
 
 {% block content2 %}
+<body class="homepage is-preload">
+  <div id="page-wrapper">
+    <!-- Header -->
+    <div id="header">
+  <!-- Inner -->
+<!--      <div class="inner">
+    <h1><a href="{% url 'index' %}" id="logo">Gam</a></h1>
+    <hr />
+    <p>{% trans "Una historia de desapariciones en Guatemala" %}</p>
+    <a href="#main" class="button circled scrolly">{% trans "comienzo" %}</a>
+      </div>-->
   </div>
-   
-  <div class="wrapper style2">
+<div class="row" style="margin-top:auto;">  
+<!--<div class="col-md-8 wrapper style2">-->
+   <div class="col-md-8" style="margin-top: 10%;">
     <article id="main" class="container special">
       <header>
       <h2><a href="#">{% trans "La History" %} </a></h2>
@@ -41,7 +54,11 @@
   </article>
 <!-- carousel -->
   </div>
-        <section class="carousel">  
+<div class="col-md-4">
+<a class="twitter-timeline" data-width="400" data-height="500" data-theme="light" href="https://twitter.com/apoyomutuo?ref_src=twsrc%5Etfw">Tweets by apoyomutuo</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+</div>
+  <!--      <section class="carousel">  
           <div class="reel">
               <script>
                 console.log('{{ casos }}');
@@ -62,14 +79,21 @@
             
             
           </div>
-        </section>
+        </section> -->
+
+<form action="" method="get">
+	{{ caso.form.as_p }}
+	<input type="submit">
+</form>
+{% for obj in caso.qs %}
+	{{ obj.nombre_del_caso }} <br/>
+{% endfor %}
 
       <!-- Main -->
         
 
       
 
-        </div>
+	 </div>
 
-      
   {% endblock %}

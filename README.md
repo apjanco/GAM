@@ -1,6 +1,6 @@
 <img style="border-bottom: 2px solid #ffec00; padding-top: 8px;" height= "100" width="100" src="https://github.com/HCDigitalScholarship/GAM/raw/master/gam_app/static/Logo_01.png" alt="GAM logo"/></a>
-LOS ARCHIVOS DIGITALES DEL GRUPO DE APOYO MUTUO 
-Digital Archives of the Group of Mutual Assistance (Guatemala) 
+LOS ARCHIVOS DIGITALES DEL GRUPO DE APOYO MUTUO <br>
+Digital Archives of the Group of Mutual Assistance (Guatemala) <br>
   
 https://archivogam.haverford.edu/  
 
@@ -8,7 +8,7 @@ https://archivogam.haverford.edu/
 
 <p>In 1984, the friends and family members of Guatemalans ‘disappeared’ by state security forces formed the Grupo de Apoyo Mutuo (GAM). Members of the GAM searched for their loved ones and demanded information from state officials during a period of Cold War violence in which Guatemala’s military and police routinely murdered activists, union leaders, agricultural workers, and anyone deemed an insurgent or subversive threat. In the countryside, the military waged a genocidal campaign against indigenous Guatemalan communities in an effort to combat guerrilla forces by taking “the water away from the fish.” The Guatemalan Truth Commission’s 1999 <a href="https://www.usip.org/publications/1997/02/truth-commission-guatemala">report</a> documented over 200,000 deaths during internal conflict (1960-1996) and attributed 93% of human rights violations to state security and related paramilitary forces. The GAM has spent the past three decades collecting textual, visual, and audio-materials related to ongoing human rights trials and historical memory.</p>
 
-<p><img src="http://ds.haverford.edu/gam-archive/images/marcha.jpg" alt="GAM members marching with posters of disappeared victims)" height="520.44" width="740"/>
+<p><img src="http://ds.haverford.edu/gam-archive/images/marcha.jpg" alt="GAM members marching with posters of disappeared victims)" height="520.44" width="740"/><br>
 <em>GAM members marching with posters of disappeared victims (Photo courtesy of Pat Goudvis).</em></p>
 
 <p>In 2016, Anita Isaacs - a political science professor at Haverford College who researches transitional justice in Guatemala and has provided expert testimony in human rights trials - made one of her regular visits to the GAM offices. There, GAM staff showed Anita the progress they were making on their new project to catalog their materials and create an archive. With funding from the German Corporation for International Cooperation (GIZ) and in collaboration with the Archivo Histórico de la Policía Nacional (AHPN) the GAM formed an archival team and cleaned, organized, and cataloged a large portion of the materials they had collected over three decades. Anita consulted with librarians at Magill Library at Haverford College about the possibility of supporting the GAM’s digitization efforts in the fall of 2016. Haverford librarians successfully applied for a CLIR Postdoctoral Fellow in Data Curation for Latin American and Caribbean Studies. In the summer of 2017 they hired me, Alex Galarza, to lead the project.</p>

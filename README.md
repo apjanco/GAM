@@ -1,5 +1,5 @@
-<img style="border-bottom: 2px solid #ffec00; padding-top: 8px;" height= "100" width="100" src="https://github.com/HCDigitalScholarship/GAM/raw/master/gam_app/static/Logo_01.png" alt="GAM logo"/></a>
-LOS ARCHIVOS DIGITALES DEL GRUPO DE APOYO MUTUO <br>
+<img style="border-bottom: 2px solid #ffec00; padding-top: 8px;" height= "200" width="200" src="https://github.com/HCDigitalScholarship/GAM/raw/master/gam_app/static/Logo_01.png" alt="GAM logo"/></a><br>
+Los Archivos Digitales del Grupo de Apoyo Mutuo <br>
 Digital Archives of the Group of Mutual Assistance (Guatemala) <br>
   
 https://archivogam.haverford.edu/  

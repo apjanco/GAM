@@ -1,16 +1,4 @@
-<style>
-.logo {
-  height: 80px;
-  vertical-align: middle;
-  background-color: #ffec00;
-  border-bottom: 2px solid #7E7E7E;
-  
-}
-
-</style>
-<div class="logo">
-    <a style="margin-left: 85px;" href="/"><img class="logo" style="border-bottom: 2px solid #ffec00; height: 95%; padding-top: 8px;" src="https://github.com/HCDigitalScholarship/GAM/raw/master/gam_app/static/Logo_01.png" alt="GAM logo"/></a>
-</div>
+<img style="border-bottom: 2px solid #ffec00; height: 100; width: 100; padding-top: 8px;" src="https://github.com/HCDigitalScholarship/GAM/raw/master/gam_app/static/Logo_01.png" alt="GAM logo"/></a>
 LOS ARCHIVOS DIGITALES DEL GRUPO DE APOYO MUTUO 
 Digital Archives of the Group of Mutual Assistance (Guatemala) 
   

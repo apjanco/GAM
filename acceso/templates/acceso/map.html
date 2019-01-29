@@ -3,24 +3,29 @@
 {% load static %}
 
   {% block content1 %}
-  <body class="no-sidebar is-preload">
-    <div id="page-wrapper">
 
-      <!-- Header -->
-        <div id="header">
-
-          <!-- Inner -->
-            <div class="inner">
-              <header>
-                <h1><a href="index.html" id="logo">{% trans "Mapa"%}</a></h1>
-              </header>
-            </div>
 
           {% endblock %}
 
 {% block content2 %}
-        </div>
+<style>
+#header {
+		background-image: url(https://archivogam.haverford.edu/static/pat_goudvis/{{ photo }});
+	}
+</style>
+<body class="homepage is-preload">
+  <div id="page-wrapper">
+    <!-- Header -->
+    <div id="header">
+  <!-- Inner -->
+        <div class="inner">
 
+    <hr />
+    <h4>{% trans "Casos del diario militar en los archivos del GAM" %}</h4>
+
+    <a href="#main"><i class="fa fa-angle-double-down" style="font-size:58px;"></i></a>
+      </div>
+  </div>
       <!-- Main -->
       
         <div class="wrapper style1">
@@ -33,7 +38,7 @@
                   {% trans "Morbi convallis lectus malesuada sed fermentum dolore amet"%}
                 </p>
               </header>
-              <a href="#" class="image featured"><img src="images/pic06.jpg" alt="" /></a>
+              
               <p>
                 {% trans "Commodo id natoque malesuada sollicitudin elit suscipit. Curae suspendisse mauris posuere accumsan massa
                 posuere lacus convallis tellus interdum. Amet nullam fringilla nibh nulla convallis ut venenatis purus

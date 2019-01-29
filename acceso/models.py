@@ -5,6 +5,14 @@ from ckeditor.fields import RichTextField
 import django_filters
 
 # Create your models here.
+class Filtros(models.Model):
+    nombre_del_filtro = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return str(self.nombre_del_filtro)
+
+
+
 class Foto(models.Model):
     caso = models.ForeignKey('Caso', on_delete=models.CASCADE, default=1)
     file = models.FileField(upload_to='media/')
@@ -32,6 +40,15 @@ class Caso(models.Model):
 
     fotos = models.ManyToManyField(Foto, blank=True, related_name='caso_fotos')
     descripción = RichTextField(blank=True, default='')
+    filtros = models.ManyToManyField(Filtros, blank=True, related_name='caso_filtros')
+    fecha_de_desaparicion = models.DateField(null=True, blank=True)
+
+    def filters_list(self):
+        filters_list = []
+        for filter in self.filtros.values():
+            filters_list.append(filter['nombre_del_filtro'])
+
+        return str(filters_list).replace("'",'"')
 
     def save(self, *args, **kwargs):
         self.slug_name = slugify(self.nombre_del_caso)

@@ -2068,8 +2068,8 @@ h4.qodef-footer-widget-title {
 	.button {
 		position: relative;
 		display: inline-block;
-		background: #df7366;
-		color: #fff;
+		background: #FAE746;
+		color: black;
 		text-align: center;
 		border-radius: 0.5em;
 		text-decoration: none;
@@ -2089,8 +2089,8 @@ h4.qodef-footer-widget-title {
 		input[type="reset"]:hover,
 		button:hover,
 		.button:hover {
-			color: #fff;
-			background: #ef8376;
+			color: #FAE746;
+			background: black;
 		}
 
 		input[type="button"].alt,
@@ -2525,7 +2525,7 @@ h4.qodef-footer-widget-title {
 				position: absolute;
 				top: 50%;
 				margin: -1.5em 0 0 0;
-				background: url("images/arrow.svg") no-repeat center center;
+				/*background: url("images/arrow.svg") no-repeat center center; */
 			}
 
 			.carousel .forward:hover:before, .carousel .backward:hover:before {

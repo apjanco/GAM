@@ -5,34 +5,48 @@ from django.core import serializers
 from gam_app.models import *
 from acceso.models import *
 from gam_app.models import Persona
+import os
+import random
 
+def random_photo():
+    photos = os.listdir('/srv/GAM/acceso/static/pat_goudvis')
+    photo = random.choice(photos)
+    return photo
 
 def main(request):
     casos = Caso.objects.all()
+    filters = Filtros.objects.all()
+    filter_list = []
+    for filter in filters:
+        filter_list.append(filter.nombre_del_filtro)
     photo_list = []
     for caso in casos:
         photo_list.append(caso.fotos.first())
 
+    photo = random_photo()
     #print('casos:  ', casos)
-    context = {'casos': casos, 'photo_list': photo_list}
+    context = {'casos': casos, 'photo_list': photo_list, 'filter_list':filter_list, 'photo': photo}
     return render(request, 'acceso/index.html', context)
 
 
 def about(request):
-    return render(request, 'acceso/about.html', {})
+    photo = random_photo()
+    return render(request, 'acceso/about.html', {'photo':photo})
 
 
 def map(request):
-    return render(request, 'acceso/map.html', {})
+    photo = random_photo()
+    return render(request, 'acceso/map.html', {'photo':photo})
 
 
 def history(request):
-    return render(request, 'acceso/history.html', {})
+    photo = random_photo()
+    return render(request, 'acceso/history.html', {'photo':photo})
 
 
 def caso(request, caso):
-    #caso = Caso.objects.get(slug_name=caso)
-    caso = CasoFilter(request.GET, queryset=Caso.objects.get(slug_name=caso))
+    caso = Caso.objects.get(slug_name=caso)
+    #caso = CasoFilter(request.GET, queryset=Caso.objects.get(slug_name=caso))
     foto = []
     dragon = []
     imageprofile = caso.foto_de_perfil

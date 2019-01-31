@@ -153,7 +153,7 @@ figure {
 }
 </style>
 <div class="container">
-   <h2><a href="#">{% trans "Casos" %} </a></h2>
+   <h2><a href="#">{% trans "Personas" %} </a></h2>
   <div class="row">
     <div class="col-4@sm col-3@md">
       <div class="filters-group">
@@ -161,28 +161,18 @@ figure {
         <input class="textfield filter__search js-shuffle-search" type="search" id="filters-search-input" />
       </div>
     </div>
-  </div>
-  <div class="row">
+
+
+
     <div class="col-12@sm filters-group-wrap">
       <div class="filters-group">
-        <p>{% trans 'filtrar' %}</p>
         <div class="btn-group filter-options">
           {% for filter in filter_list %}
           <button class="btn btn--primary" data-group="{{ filter }}">{{ filter }}</button>
           {% endfor %}
         </div>
       </div>
-      <fieldset class="filters-group">
-          <p>{% trans 'ordenar' %}</p>
-        <div class="btn-group sort-options">
-          <label class="btn active">
-            <input type="radio" name="sort-value" value="dom" checked />{% trans 'sin clasificar' %}
-          </label>
-          <label class="btn">
-            <input type="radio" name="sort-value" value="fecha-de-desaparicion" />{% trans 'fecha de desaparicion' %}
-          </label>
-        </div>
-      </fieldset>
+
     </div>
   </div>
 </div>
@@ -206,11 +196,11 @@ figure {
         </div>
         <!-- <figcaption class="picture-item__title"><a href="{% url 'acceso:caso' caso.slug_name %}" target="_blank" rel="noopener">{{ caso.nombre_del_caso}}</a></figcaption> -->
         <div class="picture-item__title" style="padding-top: 8px; padding-bottom: 8px">
-          <p>{{ caso.descripción|safe|truncatewords:150 }}</p>
+            <p>{{ caso.descripción|safe|truncatewords:150 }}<b><a href="{% url 'acceso:caso' caso.slug_name %}">{% trans "leer más aquí" %}</a></b></p>
           <!-- <p class="picture-item__tags hidden@xs">caso</p> -->
         </div>
-          <div class="picture-item_details">
-              <p hidden>{{ caso.descripción|safe}}</p>
+          <div hidden class="picture-item_details">
+              <p>{{ caso.descripción|safe}}</p>
       </div>
     </figure>
 

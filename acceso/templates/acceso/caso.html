@@ -46,7 +46,7 @@
         <div class="col-md-6">
             <div class="page-header">
 			  <h3>{% trans "Una descripción general" %}</h3>
-                <div class="well" style="overflow:auto; width:100%; height:300px;">
+			  <div  style="width:100%; font-size: 12px; overflow:auto; height:300px;">
 			      {{ caso.descripción |safe}} 
                 </div>
 
@@ -94,7 +94,7 @@
 		  <h3> {% trans "Archivos Dentro del Caso" %} </h3>
           <script src="{% static 'acceso/js/seadragon/openseadragon.min.js.map' %}"></script>
           <script src="{% static 'acceso/js/seadragon/openseadragon.min.js' %}"></script>
-          <div id="seadragon-viewer" style="width:400px; height:300px;"></div>
+          <div id="seadragon-viewer" style="width:100%; height:100%;"></div>
 
           <script>
             var SRC=[];
@@ -114,13 +114,54 @@
               </tr>
             </thead>
             <tbody>
-		      {% for key, value in kv  %}
 			  <tr>
-			    <td>{{key|safe}}</td>
-				<td>{{value|safe}}</td>
-			  </tr>
-			  {% endfor %}
+				<td>{% trans "Nombre de la Persona" %}</td>
+				<td>{{ info.0 }} </td>
               </tr>
+			  <tr>
+		        <td>{% trans "Nombre" %}</td>
+				<td>{{ info.1 }}</td>
+			  </tr>
+			  <tr>
+			    <td>{% trans  "Segundo"  %}</td>
+				<td>{{ info.2 }}</td>
+			  </tr>
+			  <tr>
+				<td>{% trans "Apellido Paterno"  %}</td>
+				<td>{{ info.3 }}</td>
+			  </tr>
+			  <tr>
+				<td>{% trans "Apellido Materno" %}</td>
+				<td>{{ info.4 }}</td>
+			  </tr>
+			  <tr>
+				<td>{% trans "Fecha de Nacimiento" %}</td>
+				<td>{{ info.5 }}</td>
+			  </tr>
+			  <tr>
+				<td>{% trans "Fecha de desaparición" %}</td>
+				<td>{{ info.6 }}</td>
+			  </tr>
+			  <tr>
+				<td>{% trans "Edad en el Momento" %}</td>
+				<td>{{ info.7 }}</td>
+			  </tr>
+			  <tr>
+				<td>{% trans "Género" %}</td>
+				<td>{{ info.8 }}</td>
+			  </tr>
+			  <tr>
+			    <td>{% trans "Etnicidad" %}</td>
+			    <td>{{ info.9}}</td>
+			  </tr>
+			  <tr>
+			    <td>{% trans "Profesión" %}</td>
+			    <td>{{ info.10 }}</td>
+			  </tr>
+			  <tr>
+		   	    <td>{% trans "Actividaded Políticas" %}</td>
+			    <td>{{ info.11 }}</td>
+			  </tr>
             </tbody>
           </table>
         </div>

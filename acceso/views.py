@@ -62,23 +62,11 @@ def caso(request, caso):
         ).order_by('número_de_imagen')
 
     persona = Persona.objects.get(nombre_de_la_persona=caso)
-    temp = persona.__dict__
-    persona_dict = {
-        k.replace("_", " ").capitalize(): v for k, v in temp.items() if len(str(v)) > 0
-    }
+    info = [persona.nombre_de_la_persona, persona.nombre, persona.segundo, persona.apellido_paterno, persona.apellido_materno, persona.fecha_de_nacimiento, persona.fecha_desaparicion, persona.edad_en_el_momento, persona.género, persona.etnicidad, persona.profesión, persona.actividades_políticas]
     for x in caso.fotos.all():
         foto.append(x)
-    persona_dict = {
-        key: persona_dict[key] for key in persona_dict if key not in ["Id", " state"]
-    }
-    keys = []
-    values = []
-    for i in sorted(persona_dict.keys()):
-        keys.append(i)
-        values.append(persona_dict[i])
-    kv = zip(keys, values)
     profile_photos = Foto.objects.filter(caso__slug_name=caso)
-    context = {'caso': caso, 'images': foto, "kv": kv, 'dragon': dragon, 'face':imageprofile}
+    context = {'caso': caso, 'images': foto,'info': info, 'dragon': dragon, 'face':imageprofile}
 
     return render(request, 'acceso/caso.html', context)
 

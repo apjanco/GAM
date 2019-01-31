@@ -1,17 +1,40 @@
+from itertools import cycle
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core import serializers
 
-from gam_app.models import *
 from acceso.models import *
 from gam_app.models import Persona
+from gam_app.models import Caso as Database
 import os
 import random
+from django_datatables_view.base_datatable_view import BaseDatatableView
+from django.utils.html import escape
+
+def cycle(iterable):
+    saved = []
+    for element in iterable:
+        yield element
+        saved.append(element)
+    while saved:
+        for element in saved:
+            yield element
+
+
 
 def random_photo():
+    #yield from cycle(os.listdir('/srv/GAM/acceso/static/pat_goudvis'))
     photos = os.listdir('/srv/GAM/acceso/static/pat_goudvis')
     photo = random.choice(photos)
     return photo
+
+def next_photo():
+        photos = os.listdir('/srv/GAM/acceso/static/pat_goudvis')
+        num = 0
+        while num < len(photos)-1:
+            yield photos[num]
+            num += 1
 
 def main(request):
     casos = Caso.objects.all()
@@ -24,6 +47,10 @@ def main(request):
         photo_list.append(caso.fotos.first())
 
     photo = random_photo()
+    #photos = os.listdir('/srv/GAM/acceso/static/pat_goudvis')
+    #photo = cycle(photos)
+    #photo = next(photo)
+    #print(photo)
     #print('casos:  ', casos)
     context = {'casos': casos, 'photo_list': photo_list, 'filter_list':filter_list, 'photo': photo}
     return render(request, 'acceso/index.html', context)
@@ -34,9 +61,10 @@ def about(request):
     return render(request, 'acceso/about.html', {'photo':photo})
 
 
-def map(request):
+def collection(request):
+    database = Database.objects.all()
     photo = random_photo()
-    return render(request, 'acceso/map.html', {'photo':photo})
+    return render(request, 'acceso/collection.html', {'photo':photo, 'database':database, })
 
 
 def history(request):
@@ -88,3 +116,35 @@ def caso_table(request, caso_id):
         .filter(nombre_del_caso__icontains=request.GET.get('nombre_del_caso')) \
         .filter(descripción__icontains=request.GET.get('descripción'))
     return JsonResponse(serializers.serialize(caso))
+
+
+class DbListJson(BaseDatatableView):
+    # the model you're going to show
+    model = Database
+
+    # define columns that will be returned
+    # they should be the fields of your model, and you may customize their displaying contents in render_column()
+    # don't worry if your headers are not the same as your field names, you will define the headers in your template
+    columns = ['caso', 'fecha_desaparicion', 'departamento','descripcion_caso', ]
+
+    # define column names that will be used in sorting
+    # order is important and should be same as order of columns displayed by datatables
+    # for non sortable columns use empty value like ''
+    order_columns = ['caso', 'fecha_desaparicion', 'departamento','descripcion_caso', ]
+
+    # set max limit of records returned
+    # this is used to protect your site if someone tries to attack your site and make it return huge amount of data
+    max_display_length = 500
+
+    def render_column(self, row, column):
+        return super(DbListJson, self).render_column(row, column)
+
+    def filter_queryset(self, qs):
+        # use parameters passed in GET request to filter queryset
+
+        # here is a simple example
+        search = self.request.GET.get('search[value]', None)
+        if search:
+            q = Q(caso__icontains=search) | Q(descripcion_caso_icontains=search)
+            qs = qs.filter(q)
+        return qs

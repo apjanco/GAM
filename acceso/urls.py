@@ -1,4 +1,6 @@
 from django.urls import path, re_path
+from django.contrib.auth.decorators import login_required
+
 
 from . import views
 
@@ -10,11 +12,16 @@ urlpatterns = [
     path('', views.main, name='index'),
     path('about/', views.about, name='about'),
     path('history/', views.history, name='history'),
-    path('map/', views.map, name='map'),
+    path('colección/', views.collection, name='collection'),
     path('caso/<caso>', views.caso, name='caso'),
     path('simple/', views.simple, name='simple'),
 
     # jsGrid
     path('caso-index/', views.caso_index, name='caso_index'),
     path('api/<int:caso_id>/', views.caso_table),
+    path(
+        'datatable/caso',
+        login_required(views.DbListJson.as_view()),
+        name='db_list_json',
+    ),
 ]

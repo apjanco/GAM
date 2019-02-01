@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-27 19:41+0000\n"
+"POT-Creation-Date: 2019-01-29 20:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,25 +38,34 @@ msgstr "Sie sind nicht berechtigt, etwas zu bearbeiten."
 #: gam_app/templates/all_documents_page.html:37
 #: gam_app/templates/all_documents_page.html:46
 #: gam_app/templates/all_documents_page.html:56
-#: gam_app/templates/procesamiento.html:26
+#: gam_app/templates/grandes_colecciones.html:29
+#: gam_app/templates/grandes_colecciones.html:38
+#: gam_app/templates/grandes_colecciones.html:48
+#: gam_app/templates/procesamiento.html:25
 #: gam_app/templates/procesamiento.html:35
 #: gam_app/templates/procesamiento.html:45
-msgid "Atrás"
+msgid "Anterior"
 msgstr "Zurück"
 
 #: gam_app/templates/all_documents_page.html:41
 #: gam_app/templates/all_documents_page.html:50
 #: gam_app/templates/all_documents_page.html:60
-#: gam_app/templates/procesamiento.html:30
+#: gam_app/templates/grandes_colecciones.html:33
+#: gam_app/templates/grandes_colecciones.html:42
+#: gam_app/templates/grandes_colecciones.html:52
+#: gam_app/templates/procesamiento.html:29
 #: gam_app/templates/procesamiento.html:39
 #: gam_app/templates/procesamiento.html:49
-msgid "Siguente"
+#, fuzzy
+#| msgid "Siguente"
+msgid "Siguiente"
 msgstr "Weiter"
 
 #: gam_app/templates/all_documents_page.html:71
 #: gam_app/templates/app_documents_temp.html:60
 #: gam_app/templates/document_edit_page.html:10
-#: gam_app/templates/document_page.html:37
+#: gam_app/templates/document_page.html:22
+#: gam_app/templates/grandes_colecciones.html:63 gam_app/templates/item.html:70
 #: gam_app/templates/procesamiento.html:60
 msgid "Caja"
 msgstr "Kasten"
@@ -64,7 +73,8 @@ msgstr "Kasten"
 #: gam_app/templates/all_documents_page.html:75
 #: gam_app/templates/app_documents_temp.html:64
 #: gam_app/templates/document_edit_page.html:12
-#: gam_app/templates/document_page.html:38
+#: gam_app/templates/document_page.html:23
+#: gam_app/templates/grandes_colecciones.html:67 gam_app/templates/item.html:74
 #: gam_app/templates/procesamiento.html:64
 msgid "Legajo"
 msgstr "Datei"
@@ -72,8 +82,9 @@ msgstr "Datei"
 #: gam_app/templates/all_documents_page.html:79
 #: gam_app/templates/app_documents_temp.html:68
 #: gam_app/templates/document_edit_page.html:14
-#: gam_app/templates/document_page.html:39
-#: gam_app/templates/document_page.html:77
+#: gam_app/templates/document_page.html:24
+#: gam_app/templates/document_page.html:62
+#: gam_app/templates/grandes_colecciones.html:71 gam_app/templates/item.html:78
 #: gam_app/templates/procesamiento.html:68
 msgid "Carpeta"
 msgstr "Ordner"
@@ -81,27 +92,32 @@ msgstr "Ordner"
 #: gam_app/templates/all_documents_page.html:83
 #: gam_app/templates/app_documents_temp.html:72
 #: gam_app/templates/document_edit_page.html:16
-#: gam_app/templates/document_page.html:40
+#: gam_app/templates/document_page.html:25
+#: gam_app/templates/grandes_colecciones.html:75
 #: gam_app/templates/procesamiento.html:72
 msgid "Número de imagen"
 msgstr "Bildnummer"
 
-#: gam_app/templates/all_documents_page.html:231
+#: gam_app/templates/all_documents_page.html:165
 #: gam_app/templates/app_documents_temp.html:178
-#: gam_app/templates/caso_page.html:25 gam_app/templates/explorar.html:93
+#: gam_app/templates/caso_page.html:24 gam_app/templates/explorar.html:77
+#: gam_app/templates/grandes_colecciones.html:195
+#: gam_app/templates/personal_explorar.html:81
+#: gam_app/templates/publico_explorar.html:79
+#: gam_app/templates/search_result_page.html:338
 msgid "Inicia sesión para ver este contenido"
 msgstr "Logge dich ein, um diesen Inhalt zu sehen"
 
-#: gam_app/templates/caso_page.html:11
+#: gam_app/templates/caso_page.html:10
 #: gam_app/templates/single_caso_page.html:10
 msgid "Caso"
 msgstr "Fall"
 
-#: gam_app/templates/caso_page.html:12
+#: gam_app/templates/caso_page.html:11
 msgid "Fecha de desaparición"
 msgstr "Datum des Verschwindens"
 
-#: gam_app/templates/caso_page.html:13
+#: gam_app/templates/caso_page.html:12
 #: gam_app/templates/single_caso_page.html:12
 msgid "Departamento"
 msgstr "Abteilung"
@@ -115,8 +131,19 @@ msgid "Colección"
 msgstr "Sammlung"
 
 #: gam_app/templates/document_edit_page.html:19
-#: gam_app/templates/explorar.html:29 gam_app/templates/explorar.html:47
-#: gam_app/templates/explorar.html:65
+#: gam_app/templates/explorar.html:31 gam_app/templates/explorar.html:49
+#: gam_app/templates/explorar.html:67
+#: gam_app/templates/grandes_colecciones.html:83
+#: gam_app/templates/grandes_colecciones.html:104
+#: gam_app/templates/grandes_colecciones.html:132
+#: gam_app/templates/grandes_colecciones.html:152
+#: gam_app/templates/grandes_colecciones.html:178
+#: gam_app/templates/personal_explorar.html:29
+#: gam_app/templates/personal_explorar.html:47
+#: gam_app/templates/personal_explorar.html:65
+#: gam_app/templates/publico_explorar.html:29
+#: gam_app/templates/publico_explorar.html:47
+#: gam_app/templates/publico_explorar.html:65
 msgid "Nombre"
 msgstr "Name"
 
@@ -149,7 +176,7 @@ msgid "Archivo de imagen"
 msgstr "Bilddatei"
 
 #: gam_app/templates/document_edit_page.html:68
-#: gam_app/templates/document_page.html:74
+#: gam_app/templates/document_page.html:59
 msgid "Texto"
 msgstr "Text"
 
@@ -159,7 +186,7 @@ msgstr "Senden"
 
 #: gam_app/templates/document_edit_page.html:76
 #: gam_app/templates/document_multi_image.html:160
-#: gam_app/templates/document_page.html:119
+#: gam_app/templates/document_page.html:102
 #: gam_app/templates/single_caso_page.html:29
 #: gam_app/templates/todo_texto.html:29
 msgid "Ningún documento con ese nombre de archivo"
@@ -169,190 +196,289 @@ msgstr "Kein Dokument mit diesem Dateinamen"
 msgid "Portapapeles"
 msgstr "Zwischenablage"
 
-#: gam_app/templates/document_page.html:41
+#: gam_app/templates/document_page.html:26
 msgid "de"
 msgstr "von"
 
-#: gam_app/templates/document_page.html:68
-msgid "otros documentos en la carpeta"
-msgstr "andere Dokumente im Ordner"
+#: gam_app/templates/document_page.html:30
+#, fuzzy
+#| msgid "Anterior"
+msgid "< Anterior :"
+msgstr "< Zurück :"
 
-#: gam_app/templates/document_page.html:90
-#: gam_app/templates/document_page.html:107
+#: gam_app/templates/document_page.html:34
+#, fuzzy
+#| msgid "Siguente"
+msgid "Siguiente >"
+msgstr "Weiter >"
+
+#: gam_app/templates/document_page.html:75
+#: gam_app/templates/document_page.html:92
 msgid "Guardar cambios"
 msgstr "Änderungen speichern"
 
-#: gam_app/templates/document_page.html:91
-#: gam_app/templates/document_page.html:108
+#: gam_app/templates/document_page.html:76
+#: gam_app/templates/document_page.html:93
 msgid "Estado de la transcripción"
 msgstr "Stand der Transkription"
 
-#: gam_app/templates/document_page.html:102
+#: gam_app/templates/document_page.html:87
 msgid "Notas"
 msgstr "Notizen"
 
-#: gam_app/templates/document_page.html:109
+#: gam_app/templates/document_page.html:94
 msgid "Carpeta titulo"
 msgstr "Titelordner"
 
-#: gam_app/templates/document_page.html:110 gam_app/templates/explorar.html:31
-#: gam_app/templates/explorar.html:48 gam_app/templates/explorar.html:66
+#: gam_app/templates/document_page.html:95 gam_app/templates/explorar.html:33
+#: gam_app/templates/explorar.html:50 gam_app/templates/explorar.html:68
+#: gam_app/templates/grandes_colecciones.html:84
+#: gam_app/templates/grandes_colecciones.html:105
+#: gam_app/templates/grandes_colecciones.html:153
+#: gam_app/templates/grandes_colecciones.html:179
+#: gam_app/templates/personal_explorar.html:31
+#: gam_app/templates/personal_explorar.html:48
+#: gam_app/templates/personal_explorar.html:66
+#: gam_app/templates/publico_explorar.html:31
+#: gam_app/templates/publico_explorar.html:48
+#: gam_app/templates/publico_explorar.html:66
 msgid "Descripción"
 msgstr "Beschreibung"
 
-#: gam_app/templates/explorar.html:26
+#: gam_app/templates/explorar.html:28
+#: gam_app/templates/personal_explorar.html:26
+#: gam_app/templates/publico_explorar.html:26
 #, fuzzy
 #| msgid "Archivo"
 msgid "Archivos"
 msgstr "Archivieren"
 
-#: gam_app/templates/explorar.html:45
+#: gam_app/templates/explorar.html:47
+#: gam_app/templates/grandes_colecciones.html:81
+#: gam_app/templates/personal_explorar.html:45
+#: gam_app/templates/publico_explorar.html:45
 msgid "Colecciónes"
 msgstr "Sammlungen"
 
-#: gam_app/templates/explorar.html:61
+#: gam_app/templates/explorar.html:63
+#: gam_app/templates/grandes_colecciones.html:148
+#: gam_app/templates/personal_explorar.html:61
+#: gam_app/templates/publico_explorar.html:61
 msgid "Carpetas"
 msgstr "Ordner"
 
-#: gam_app/templates/index.html:24
+#: gam_app/templates/footer.html:40
+msgid "COMO APOYAR"
+msgstr "WIE UNTERSTÜTZEN?"
+
+#: gam_app/templates/footer.html:41
+msgid "¿Cómo donar?"
+msgstr "Wie spenden?"
+
+#: gam_app/templates/footer.html:42
+msgid "Voluntariado"
+msgstr "Freiwilligenarbeit"
+
+#: gam_app/templates/footer.html:45
+msgid "CONTÁCTANOS"
+msgstr "KONTAKTIEREN SIE UNS"
+
+#: gam_app/templates/footer.html:46
+msgid "  8a calle 3-11 Zona 1"
+msgstr "8. Straße 3-11 Zone 1"
+
+#: gam_app/templates/grandes_colecciones.html:100
+#, fuzzy
+#| msgid "Caja"
+msgid "Cajas"
+msgstr "Kasten"
+
+#: gam_app/templates/grandes_colecciones.html:128
+#, fuzzy
+#| msgid "Legajo"
+msgid "Legajos"
+msgstr "Datei"
+
+#: gam_app/templates/grandes_colecciones.html:174
+#, fuzzy
+#| msgid "Item"
+msgid "Items"
+msgstr "Artikel"
+
+#: gam_app/templates/index.html:24 gam_app/templates/search_result_page.html:46
 msgid "Agregar un término de búsqueda"
 msgstr "Fügen Sie einen Suchbegriff hinzu"
 
 #: gam_app/templates/index.html:26 gam_app/templates/index.html:50
+#: gam_app/templates/search_result_page.html:48
+#: gam_app/templates/search_result_page.html:73
 msgid "O"
-msgstr "O"
+msgstr "oder"
 
 #: gam_app/templates/index.html:27 gam_app/templates/index.html:44
-#: gam_app/templates/index.html:47
+#: gam_app/templates/index.html:47 gam_app/templates/search_result_page.html:49
+#: gam_app/templates/search_result_page.html:67
+#: gam_app/templates/search_result_page.html:70
 msgid "Y"
-msgstr "Y"
+msgstr "und"
 
 #: gam_app/templates/index.html:28 gam_app/templates/index.html:44
 #: gam_app/templates/index.html:47 gam_app/templates/index.html:50
+#: gam_app/templates/search_result_page.html:50
+#: gam_app/templates/search_result_page.html:67
+#: gam_app/templates/search_result_page.html:70
+#: gam_app/templates/search_result_page.html:73
 msgid "NO"
-msgstr "NEIN"
+msgstr "nicht"
 
-#: gam_app/templates/index.html:39
+#: gam_app/templates/index.html:39 gam_app/templates/search_result_page.html:61
 msgid "Cualquier Campo"
 msgstr "Irgendein Feld"
 
-#: gam_app/templates/index.html:39 gam_app/templates/procesamiento.html:92
+#: gam_app/templates/index.html:39 gam_app/templates/procesamiento.html:94
+#: gam_app/templates/search_result_page.html:61
+#: gam_app/templates/search_result_page.html:265
 msgid "Persona"
 msgstr "Person"
 
-#: gam_app/templates/index.html:39
+#: gam_app/templates/index.html:39 gam_app/templates/search_result_page.html:61
 msgid "Ubicación Geográfica"
 msgstr "Geografische Lage"
 
-#: gam_app/templates/index.html:39
+#: gam_app/templates/index.html:39 gam_app/templates/search_result_page.html:61
 msgid "Género"
 msgstr "Geschlecht"
 
-#: gam_app/templates/index.html:39
+#: gam_app/templates/index.html:39 gam_app/templates/search_result_page.html:61
 msgid "Etnicidad"
 msgstr "Ethnizität"
 
-#: gam_app/templates/index.html:54
+#: gam_app/templates/index.html:54 gam_app/templates/search_result_page.html:78
 msgid "Buscar..."
 msgstr "Suche ..."
 
-#: gam_app/templates/index.html:116
-msgid "Error, por favor intente nuevamente o inicie sesión"
-msgstr "Fehler, bitte versuchen Sie es erneut oder melden Sie sich an"
+#: gam_app/templates/index.html:119
+msgid ""
+"El Grupo de Apoyo Mutuo</strong>&nbsp;es una organizaci&oacute;n de la "
+"sociedad civil sin fines de lucro creada en 1984 que aglutina a los "
+"familiares de personas detenidas ilegalmente y desaparecidas forzadamente en "
+"Guatemala durante el Conflicto Armado Interno que dur&oacute; de 1960 a "
+"1996. Nuestro &aacute;mbito de trabajo abarca la justicia por el "
+"desaparecido y la dignificaci&oacute;n de las v&iacute;ctimas, trabajo que "
+"ha llevado a GAM a estar nominado por el Premio Nobel de la Paz en 1986. "
+"Adem&aacute;s elaboramos informes tem&aacute;ticos relacionados a los "
+"&iacute;ndices de violencia actuales y monitoreo a las instituciones que "
+"conforman el sector de seguridad y justicia.&nbsp;"
+msgstr ""
+
+#: gam_app/templates/index.html:121
+msgid "Haga clic aquí para crear una cuenta e iniciar sesión."
+msgstr "Klicken Sie hier, um ein Konto zu erstellen und sich anzumelden."
+
+#: gam_app/templates/item.html:36 gam_app/templates/item.html:45
+#: gam_app/templates/item.html:55
+msgid "Atrás"
+msgstr "Zurück"
+
+#: gam_app/templates/item.html:40 gam_app/templates/item.html:49
+#: gam_app/templates/item.html:59
+msgid "Siguente"
+msgstr "Weiter"
+
+#: gam_app/templates/item.html:82
+#, fuzzy
+#| msgid "Número de imagen"
+msgid "Número de item"
+msgstr "Bildnummer"
 
 #: gam_app/templates/mission_control.html:15
+#: gam_app/templates/mission_control2.html:15
+#: gam_app/templates/track_bags.html:15
 msgid "Control de Misión"
 msgstr "Missionskontrolle"
 
 #: gam_app/templates/mission_control.html:19
-msgid "Bolsas"
-msgstr "Taschen"
-
-#: gam_app/templates/mission_control.html:22
+#: gam_app/templates/mission_control2.html:19
 msgid "Transcripción y traducción"
 msgstr "Transkription und Übersetzung"
 
-#: gam_app/templates/mission_control.html:25
+#: gam_app/templates/mission_control.html:22
+#: gam_app/templates/mission_control2.html:22
 msgid "Procesamiento secundario"
 msgstr "Sekundäre Verarbeitung"
 
-#: gam_app/templates/mission_control.html:35
-msgid "número de bolso"
-msgstr "Taschennummer"
-
-#: gam_app/templates/mission_control.html:36
-msgid "status"
-msgstr "Status"
-
-#: gam_app/templates/mission_control.html:44
-msgid "importado"
-msgstr "importiert"
-
-#: gam_app/templates/mission_control.html:46
-msgid "no importado"
-msgstr "nicht importiert"
-
-#: gam_app/templates/mission_control.html:70
+#: gam_app/templates/mission_control.html:43
 msgid "sin traducción"
 msgstr "ohne Übersetzung"
 
-#: gam_app/templates/mission_control.html:72
+#: gam_app/templates/mission_control.html:45
 msgid "traducido"
 msgstr "übersetzt"
 
-#: gam_app/templates/mission_control.html:87
+#: gam_app/templates/mission_control.html:60
+#: gam_app/templates/mission_control2.html:47
 msgid "Registros de persona"
 msgstr "Personendatensätze"
 
-#: gam_app/templates/mission_control.html:88
+#: gam_app/templates/mission_control.html:61
+#: gam_app/templates/mission_control2.html:48
 msgid "Registros de lugar"
 msgstr "Datensätze platzieren"
 
-#: gam_app/templates/mission_control.html:89
+#: gam_app/templates/mission_control.html:62
+#: gam_app/templates/mission_control2.html:49
 msgid "Registros de organizaciones"
 msgstr "Aufzeichnungen von Organisationen"
 
-#: gam_app/templates/navbar.html:44 gam_app/templates/navbar.html:46
+#: gam_app/templates/navbar.html:77 gam_app/templates/navbar.html:80
+#: gam_app/templates/navbar.html:82
 msgid "Sobre"
 msgstr "Über"
 
-#: gam_app/templates/navbar.html:48
+#: gam_app/templates/navbar.html:87
 msgid "Buscar"
 msgstr "Suche"
 
-#: gam_app/templates/navbar.html:50
+#: gam_app/templates/navbar.html:89
 msgid "Explorar"
 msgstr "Erforschen"
 
-#: gam_app/templates/navbar.html:52
+#: gam_app/templates/navbar.html:93
 msgid "Control de misión"
 msgstr "Missionskontrolle"
 
-#: gam_app/templates/navbar.html:56
+#: gam_app/templates/navbar.html:94
+msgid "Bolsas"
+msgstr "Taschen"
+
+#: gam_app/templates/navbar.html:98
 msgid "Iniciar sesión"
 msgstr "Einloggen"
 
-#: gam_app/templates/navbar.html:62
+#: gam_app/templates/navbar.html:101
 msgid "Cerrar sesión"
 msgstr "Sitzung schließen"
 
 #: gam_app/templates/procesamiento.html:86
-msgid "Artículos en la carpeta {{ location.carpeta }}"
-msgstr "Artikel im Ordner {{location.folder}}"
+#, fuzzy
+#| msgid "otros documentos en la carpeta"
+msgid "Artículos en la carpeta"
+msgstr "andere Dokumente im Ordner"
 
-#: gam_app/templates/procesamiento.html:95
+#: gam_app/templates/procesamiento.html:97
+#: gam_app/templates/search_result_page.html:268
 msgid "Lugar"
 msgstr "Ort"
 
-#: gam_app/templates/procesamiento.html:98
+#: gam_app/templates/procesamiento.html:100
 msgid "Organización"
 msgstr "Organisation"
 
-#: gam_app/templates/procesamiento.html:116
+#: gam_app/templates/procesamiento.html:118
 msgid "Personas en la Carpeta"
 msgstr "Leute im Ordner"
 
-#: gam_app/templates/procesamiento.html:311
+#: gam_app/templates/procesamiento.html:198
 msgid "Error"
 msgstr "Fehler"
 
@@ -388,6 +514,87 @@ msgstr ", Sie haben eine Kontoaktivierung aktiviert"
 #: gam_app/templates/registration/registration_complete.html:5
 msgid "You are now registered. Activation email sent."
 msgstr "Sie sind jetzt registriert. Aktivierungs-E-Mail gesendet"
+
+#: gam_app/templates/search_result_page.html:156
+msgid "All"
+msgstr "Alle"
+
+#: gam_app/templates/search_result_page.html:159
+#: gam_app/templates/search_result_page.html:192
+msgid "Image"
+msgstr "Bild"
+
+#: gam_app/templates/search_result_page.html:170
+msgid "Result"
+msgstr "Ergebnis"
+
+#: gam_app/templates/search_result_page.html:180
+#: gam_app/templates/search_result_page.html:241
+#, fuzzy
+#| msgid "Género"
+msgid "género"
+msgstr "Geschlecht"
+
+#: gam_app/templates/search_result_page.html:181
+#: gam_app/templates/search_result_page.html:242
+#, fuzzy
+#| msgid "Etnicidad"
+msgid "etnicidad"
+msgstr "Ethnizität"
+
+#: gam_app/templates/search_result_page.html:182
+#, fuzzy
+#| msgid "Fecha desaparición"
+msgid "fecha desaparición"
+msgstr "Datum des Verschwindens"
+
+#: gam_app/templates/search_result_page.html:193
+#, fuzzy
+#| msgid "Archivo"
+msgid "archivo"
+msgstr "Archivieren"
+
+#: gam_app/templates/search_result_page.html:194
+#, fuzzy
+#| msgid "Colección"
+msgid "colección"
+msgstr "Sammlung"
+
+#: gam_app/templates/search_result_page.html:195
+msgid "caja"
+msgstr "Box"
+
+#: gam_app/templates/search_result_page.html:196
+msgid "item"
+msgstr "Artikel"
+
+#: gam_app/templates/search_result_page.html:243
+msgid "fecha de nacimiento"
+msgstr "Geburtsdatum"
+
+#: gam_app/templates/search_result_page.html:244
+msgid "profesión"
+msgstr "Beruf"
+
+#: gam_app/templates/search_result_page.html:245
+msgid "actividades políticas"
+msgstr "politische Aktivitäten"
+
+#: gam_app/templates/search_result_page.html:248
+#, fuzzy
+#| msgid "Fecha desaparicion"
+msgid "fecha desaparicion"
+msgstr "Datum des Verschwindens"
+
+#: gam_app/templates/search_result_page.html:249
+#, fuzzy
+#| msgid "Edad en ese momento"
+msgid "edad en el momento"
+msgstr "Alter zu dieser Zeit"
+
+#: gam_app/templates/search_result_page.html:271
+msgid "Imagen"
+msgstr "Bild"
 
 #: gam_app/templates/single_caso_page.html:11
 msgid "Fecha desaparicion"
@@ -432,3 +639,25 @@ msgstr "Transkription"
 #: gam_app/templates/todo_texto.html:15
 msgid "Traducción"
 msgstr "Übersetzung"
+
+#: gam_app/templates/track_bags.html:23
+msgid "número de bolso"
+msgstr "Taschennummer"
+
+#: gam_app/templates/track_bags.html:24
+msgid "status"
+msgstr "Status"
+
+#: gam_app/templates/track_bags.html:32
+msgid "importado"
+msgstr "importiert"
+
+#: gam_app/templates/track_bags.html:34
+msgid "no importado"
+msgstr "nicht importiert"
+
+#~ msgid "Error, por favor intente nuevamente o inicie sesión"
+#~ msgstr "Fehler, bitte versuchen Sie es erneut oder melden Sie sich an"
+
+#~ msgid "Artículos en la carpeta {{ location.carpeta }}"
+#~ msgstr "Artikel im Ordner {{location.folder}}"

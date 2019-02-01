@@ -1,6 +1,16 @@
 {% load staticfiles %}
 
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-45185227-15"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-45185227-15');
+</script>
+
   <title>{% block title %}{% endblock %}</title>
   <script>window.CKEDITOR_BASEPATH = '{% static 'ckeditor/ckeditor/' %}';</script>
   
@@ -30,6 +40,7 @@
 
   <link rel='stylesheet' id='kloe_qodef_google_fonts-css'  href='https://fonts.googleapis.com/css?family=Raleway%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CPoppins%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CPoppins%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic&#038;subset=latin%2Clatin-ext&#038;ver=1.0.0' type='text/css' media='all' />
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- end of bootstrap things -->
   
   <!-- Our custom stylesheets -->
@@ -51,10 +62,10 @@
   
       {% include "navbar.html" %}
    
-  <div class="container">
-<div class="col-lg">
+
+<div class="content">
   {% block content %}{% endblock %}
-    </div>
 </div>
-  </div>
+
+{% include "footer.html" %}
 </body>

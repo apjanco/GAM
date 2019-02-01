@@ -71,13 +71,13 @@ function areAllFullyLoaded() {
 
 function addLinkOverlay(image, link, name) {
     var imageRect = image.getBounds();
-    var rect = new OpenSeadragon.Rect(imageRect.x, imageRect.y, 0.05, 0.05);
+    var rect = new OpenSeadragon.Rect(imageRect.x, imageRect.y, 0.2, 0.2);
 
     var divElement = document.createElement("div");
     var buttonElement = document.createElement("a");
     var imgElement = document.createElement("img");
     imgElement.src = EDIT_BUTTON_URL;
-    imgElement.href = link;
+    buttonElement.href = link;
     buttonElement.appendChild(imgElement);
     divElement.appendChild(buttonElement);
 

@@ -1,0 +1,62 @@
+{% load i18n %}
+{% load static %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<header>
+<style>
+.logo {
+  height: 80px;
+  vertical-align: middle;
+  background-color: #ffec00;
+  border-bottom: 2px solid #7E7E7E;
+
+}
+
+.nav-text {
+    line-height: 12px;
+    font-weight: 600;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: Poppins,sans-serif;
+}
+
+</style>
+<div class="logo">
+    <a href="/acceso"><img class="logo" style="height: 80px; width: 180px; margin-left: 80px;" src="{% static 'Logo-GAM-header.png.1' %}"  alt="GAM logo"/></a>
+</div>
+<nav id="nav">
+  <ul>
+
+    <li>
+          <a class="nav-text" href="{% url 'acceso:index' %}">{% trans "Inicio" %}</a>
+        </li>
+          <li>
+          <a class="nav-text" href="{% url 'acceso:about' %}">{% trans "Sobre el proyecto" %}</a>
+        </li>
+
+    <li>
+          <a class="nav-text" href="{% url 'acceso:history' %}">{% trans "contexto histórico" %}</a>
+        </li>
+    <li>
+          <a class="nav-text" href="{% url 'acceso:collection' %} ">{% trans "la colección" %}</a>
+        </li>
+          {% get_current_language as LANGUAGE_CODE %}
+          {% get_available_languages as LANGUAGES %}
+          {% get_language_info_list for LANGUAGES as languages %}
+    <li>
+          <a class="nav-text" id="droptron nav-text" href="#">{% trans "Idioma" %}</a>
+          <ul>
+          {% for language in languages %}
+            <li>
+          <a class="nav-text" href="/{{ language.code }}{{request.get_full_path|slice:'3:' }}" class="{% if language.code == LANGUAGE_CODE %}slected{% endif %}" lang="{{ language.code}}">
+                {{ language.name_local }}
+                  </a>
+                </li>
+      {% endfor %}
+          </ul>
+
+    </li>
+  </ul>
+</nav>
+</header>

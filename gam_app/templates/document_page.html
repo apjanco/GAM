@@ -10,7 +10,7 @@
 <script src="{% static "js/ckeditor-init.js" %}"></script>
 <script src="{% static "js/ckeditor.js" %}"></script>
 <script src="{% static "js/openseadragon.min.js" %}"></script>
-<script src="http://msalsbery.github.io/builds/openseadragonimaging/openseadragon-viewerinputhook.min.js"></script>
+<script src="{% static 'js/openseadragon-viewerinputhook.min.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -27,11 +27,11 @@
 
 {% if previous %}
   <div class="col-sm-2">
-    <a href="{% url 'documento5' state.archivo state.colección state.caja state.legajo state.carpeta previous %}"> &lt; Anterior :</a>
+    <a href="{% url 'documento5' state.archivo state.colección state.caja state.legajo state.carpeta previous %}"> {% trans "< Anterior :" %}</a>
 {% endif %}
 
 {% if next_one %}
-  <a href="{% url 'documento5' state.archivo state.colección state.caja state.legajo state.carpeta next_one %}">Siguiente &gt;</a>
+  <a href="{% url 'documento5' state.archivo state.colección state.caja state.legajo state.carpeta next_one %}">{% trans "Siguiente >" %}</a>
 {% endif %}
 </div>
       <input type="hidden" value="clipboard" name="input" />
@@ -39,8 +39,9 @@
       <input type="hidden" value="{{ state.nombre_del_archivo }}" name="filename" />
 <hr>
 
-<div class="row">
-  <div class="column" style="background-color:#aaa;">
+
+
+    <div class="column">
     <span>
       <img src={% static 'openseadragon-flat-toolbar-icons/images/zoomin_rest.png' %}   id='zoom-in' class='sea-icon'>
       <img src={% static 'openseadragon-flat-toolbar-icons/images/zoomout_rest.png' %}  id='zoom-out' class='sea-icon'>
@@ -49,9 +50,8 @@
       <img src={% static 'openseadragon-flat-toolbar-icons/images/rotateleft_rest.png' %} id='left-rotate' class='sea-icon'>
       <img src={% static 'openseadragon-flat-toolbar-icons/images/rotateright_rest.png' %}     id='right-rotate' class='sea-icon'>
     </span>
-    <div id="openseadragon1" style="width:100%; height: 200%;"></div>
-      <h3 id="other-docs-h">{% trans "otros documentos en la carpeta" %} {{ state.carpeta }}</h3>
-      <div id="openseadragon2"></div>
+
+    <div id="openseadragon1"></div>
     </div>
     <div class="column">
       <ul id="tabs" class="nav nav-tabs nav-justified" data-tabs="tabs">
@@ -83,7 +83,7 @@
          <input type="hidden" value="{{ state.legajo }}" name="legajo" />
          <input type="hidden" value="{{ state.carpeta }}" name="carpeta" />
          <input type="hidden" value="{{ state.texto_de_OCR }}" name="old_text" />
-         <input type="hidden" value="text_edit" name="input" />
+         <input type="hidden" value="text_edit" name="input" /><br>
          {% trans "Notas" %}:<br> {{ form.notas|safe }}
     </div>
 
@@ -96,21 +96,19 @@
       </div>
     </div>
   
-   <select class="helpme" multiple="multiple"></select>
   </div>
-  <div class="row">
-</div>
+  </div>
 {% else %}
   <p>{% trans "Ningún documento con ese nombre de archivo" %}</p>
 
 {% endif %}
 
-<script>
-// Initialize the OSD viewer.
-var dziFile = "https://dzis.nyc3.digitaloceanspaces.com/{{ state.nombre_del_archivo}}.dzi";
-var viewer = OpenSeadragon({
-    id: "openseadragon1",
-    tileSources: dziFile,
-});
+<script type="text/javascript">
+var EDIT_BUTTON_URL = "/static/edit_button.png";
+var items = [];
+var srcs = [];
+// srcs.push("/dzi/{{ state.nombre_del_archivo }}.dzi")
+srcs.push("https://dzis.nyc3.digitaloceanspaces.com/{{ state.nombre_del_archivo }}.dzi")
 </script>
+<script src="{% static "js/document_page.js" %}"></script>
 {% endblock %}

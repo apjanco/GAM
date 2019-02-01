@@ -5,31 +5,28 @@
 
 
 {% block content1 %}
-<html>
-	<head>
-		<title>Right Sidebar - Helios by HTML5 UP</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="{% static 'acceso/css/main.css' %}" />
-		<noscript><link rel="stylesheet" href="{% static 'acceso/css/noscript.css" /></noscript>
-	</head>
-	<body class="right-sidebar is-preload">
-		<div id="page-wrapper">
 
-			<!-- Header -->
-				<div id="header">
-
-					<!-- Inner -->
-						<div class="inner">
-							<header>
-								<h1><a href="index.html" id="logo">{% trans "Historia" %}</a></h1>
-							</header>
-						</div>
 {% endblock %}
 					<!-- Nav -->
 {% block content2 %}
+<style>
+#header {
+		background-image: url(https://archivogam.haverford.edu/static/pat_goudvis/{{ photo }});
+	}
+</style>
+<body class="homepage is-preload">
+  <div id="page-wrapper">
+    <!-- Header -->
+    <div id="header">
+  <!-- Inner -->
+        <div class="inner">
 
-				</div>
+    <hr />
+    <h4>{% trans "La historia del GAM" %}</h4>
+
+    <a href="#main"><i class="fa fa-angle-double-down" style="font-size:58px;"></i></a>
+      </div>
+  </div>
 
 			<!-- Main -->
 				<div class="wrapper style1">
@@ -39,9 +36,9 @@
 							<div class="col-8 col-12-mobile" id="content">
 								<article id="main">
 									<header>
-										<h2><a href="#">{% trans "Historia"%}</a></h2>
+										<h2><a href="#">{% trans "Historia" %}</a></h2>
 										<p>
-											{% trans "Section picture"%}
+											{% trans "Section picture" %}
 										</p>
 									</header>
 									<a href="#" class="image featured"><img src="images/pic06.jpg" alt="" /></a>
@@ -51,11 +48,11 @@
 										lobortis. Auctor etiam porttitor phasellus tempus cubilia ultrices tempor sagittis. Nisl fermentum
 										consequat integer interdum integer purus sapien. Nibh eleifend nulla nascetur pharetra commodo mi augue
 										interdum tellus. Ornare cursus augue feugiat sodales velit lorem. Semper elementum ullamcorper lacinia
-										natoque aenean scelerisque vel lacinia mollis quam sodales congue."%}
+										natoque aenean scelerisque vel lacinia mollis quam sodales congue." %}
 									</p>
 									<section>
 										<header>
-											<h3>{% trans "Section 1"%}</h3>
+											<h3>{% trans "Section 1" %}</h3>
 										</header>
 										<p>
 											{% trans "Commodo id natoque malesuada sollicitudin elit suscipit. Curae suspendisse mauris posuere accumsan massa
@@ -63,7 +60,7 @@
 										lobortis. Auctor etiam porttitor phasellus tempus cubilia ultrices tempor sagittis. Nisl fermentum
 										consequat integer interdum integer purus sapien. Nibh eleifend nulla nascetur pharetra commodo mi augue
 										interdum tellus. Ornare cursus augue feugiat sodales velit lorem. Semper elementum ullamcorper lacinia
-										natoque aenean scelerisque vel lacinia mollis quam sodales congue."%}
+										natoque aenean scelerisque vel lacinia mollis quam sodales congue." %}
 										</p>
 										<p>
 											{% trans "Commodo id natoque malesuada sollicitudin elit suscipit. Curae suspendisse mauris posuere accumsan massa
@@ -71,18 +68,18 @@
 										lobortis. Auctor etiam porttitor phasellus tempus cubilia ultrices tempor sagittis. Nisl fermentum
 										consequat integer interdum integer purus sapien. Nibh eleifend nulla nascetur pharetra commodo mi augue
 										interdum tellus. Ornare cursus augue feugiat sodales velit lorem. Semper elementum ullamcorper lacinia
-										natoque aenean scelerisque vel lacinia mollis quam sodales congue."%}
+										natoque aenean scelerisque vel lacinia mollis quam sodales congue." %}
 										</p>
 									</section>
 									<section>
 										<header>
-											<h3>{% trans "Section 2"%}</h3>
+											<h3>{% trans "Section 2" %}</h3>
 										</header>
 										<p>
 											{% trans "Pretium tellus in euismod a integer sodales neque. Nibh quis dui quis mattis eget imperdiet venenatis
 											feugiat. Neque primis ligula cum erat aenean tristique luctus risus ipsum praesent iaculis. Fermentum elit
 											ut nunc urna volutpat donec cubilia commodo risus morbi. Lobortis vestibulum velit malesuada ante
-											egestas odio nisl duis sociis purus faucibus morbi. Eget massa mus etiam sociis pharetra magna."%}
+											egestas odio nisl duis sociis purus faucibus morbi. Eget massa mus etiam sociis pharetra magna." %}
 										</p>
 									</section>
 								</article>

@@ -112,17 +112,25 @@
    <img src={% static 'openseadragon-flat-toolbar-icons/images/rotateright_rest.png' %}     id='right-rotate' class='sea-icon'>
 </span>
 <div id="openseadragon1" style="width:100%; height: 100%;"></div>
-<script src="http://msalsbery.github.io/builds/openseadragonimaging/openseadragon-viewerinputhook.min.js"></script>
+<script src="{% static 'js/openseadragon-viewerinputhook.min.js' %}"></script>
+
 <script type="text/javascript">
-var items = [];
-var srcs = [];
+var EDIT_BUTTON_URL = "/static/edit_button.png";
+var ITEMS = [];
+var SRCS = [];
+
 {% for item in state %}
-items.push(["{{ item.nombre_del_archivo }}", "{% url 'documento5' item.archivo item.colección item.caja item.legajo item.carpeta item.número_de_imagen %}"]);
-// srcs.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
-srcs.push("https://dzis.nyc3.digitaloceanspaces.com/{{ item.nombre_del_archivo }}.dzi")
+ITEMS.push([
+    "{{ item.nombre_del_archivo }}",
+    "{% url 'documento5' item.archivo item.colección item.caja item.legajo item.carpeta item.número_de_imagen %}",
+    "{{ item.localizacion_fisica }}"
+]);
+//SRCS.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
+SRCS.push("https://dzis.nyc3.digitaloceanspaces.com/{{ item.nombre_del_archivo }}.dzi")
 {% endfor %}
+
 </script>
-<script src="{% static "js/document_page.js" %}"></script>
+<script src="{% static 'gam_app/js/procesamiento.js' %}"></script>
 </div>
 
 

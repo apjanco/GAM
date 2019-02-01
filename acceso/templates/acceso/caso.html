@@ -21,7 +21,7 @@
         <div class="col-md-6">
             <div class="page-header">
 			  <h3>{% trans "Una descripción general" %}</h3>
-			  <div  style="width:100%; font-size: 16px; overflow:auto; height:400px;">
+			  <div  style="width:100%; font-size: 16px; overflow:auto; height:425px;">
 			      {{ caso.descripción |safe}} 
                 </div>
 
@@ -29,7 +29,7 @@
         </div>
         <div class="col-md-6">
           {% if images or face %}
-          <div id="cases" class="carousel slide" data-ride="carousel">
+          <div id="cases" class="carousel slide" data-ride="carousel" style="height:500px;">
             <ol class="carousel-indicators">
               <li data-target="#cases" data-slide-to="0" class="active"></li>
               {% for image in images %}
@@ -40,11 +40,11 @@
             <div class="carousel-inner">
 
 
-              <div class="carousel-item active" role="listbox">
+              <div class="item active" role="listbox">
                 <img class="d-block w-100" src="http://archivogam.haverford.edu/{{face}}" alt="First slide">
               </div>
               {% for image in images %}
-	            <div class="carousel-item">
+	            <div class="item">
 			      <img class="d-block w-100" src="http://archivogam.haverford.edu/{{image}}" alt="Slide number {{ forloop.counter  }}">
 	            </div>
 	          {% endfor %}

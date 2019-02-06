@@ -41,6 +41,13 @@
     <li>
           <a class="nav-text" href="{% url 'acceso:collection' %} ">{% trans "la colección" %}</a>
         </li>
+      <li>
+          <a class="nav-text" href="{% url 'acceso:buscador-de-casos' %} ">{% trans "Buscador de casos" %}</a>
+      </li>
+     <!--  <li>
+          <a class="nav-text" href="{% url 'acceso:documentos' %} ">{% trans "documentos" %}</a>
+      </li> -->
+
           {% get_current_language as LANGUAGE_CODE %}
           {% get_available_languages as LANGUAGES %}
           {% get_language_info_list for LANGUAGES as languages %}

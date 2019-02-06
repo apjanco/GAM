@@ -9,12 +9,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print("**Importar base de datos a Django**")
 
-        with open('/tmp/gam-loading-data.csv') as f:
+        with open('/tmp/gam-loading-data1.csv') as f:
             for row in csv.DictReader(f, skipinitialspace=True):
                 print(row)
                 Caso.objects.update_or_create(
                     caso=row['Caso'],
-                    fecha_desaparicion=row['fecha_desaparicion'],
+                    fecha_desaparicion=row['fecha_desaparicion'][:10],
                     departamento=row['departamento'],
                     local=row['local'],
                     area=row['area'],

@@ -1,11 +1,11 @@
-{% extends 'acceso/base.html' %}
+{% extends 'acceso/base2.html' %}
 {% load i18n %}
 {% load static %}
 
 {% block extra_static %}
-<script scr="//code.jquery.com/jquery-3.3.1.js"></script>
-<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="//code.jquery.com/jquery-3.3.1.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jq-3.3.1/dt-1.10.18/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs/jq-3.3.1/dt-1.10.18/datatables.min.js"></script>
 {% endblock %}
 
 {% block content2 %}
@@ -43,17 +43,6 @@
               <h3>{% trans "Carpetas" %}</h3>
 
 
-              <table class="myTable">
-                <thead>
-                  <tr>
-                    <th> Caso </th>
-                    <th> Fecha desparicion</th>
-                    <th> Departamento </th>
-                    <th> Descripción Caso </th>
-                  </tr>
-                </thead>
-              </table>
-
               <section>
                 <header>
                   <h3>{% trans "Ultrices tempor sagittis nisl"%}</h3>
@@ -84,20 +73,9 @@
               </section>
             </article>
             <hr />
-            
+
           </div>
 
         </div>
- <script>
-$(document).ready(function() {
-    $('.myTable').DataTable( {
-        "pageLength": 50,
-        "processing": true,
-        "serverSide": true,
-        "ajax": "{% url 'acceso:db_list_json' %}",
-    } );
-} );
-</script>
-
-      
+    
 {% endblock %}

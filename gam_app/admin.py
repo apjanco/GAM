@@ -92,7 +92,7 @@ admin.site.register(Organización, OrganizaciónAdmin)
 
 
 class CasoAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['caso']
 
 
 admin.site.register(Caso, CasoAdmin)

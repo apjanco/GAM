@@ -112,15 +112,15 @@ def caso(request, caso):
             legajo=x.legajo,
             carpeta=x.carpeta,
         ).order_by('número_de_imagen')
-    persona = caso.personas.all()[0]
+    personas = caso.personas.all()
     # iterate through personas to make a table of all people
-    info = [persona.nombre_de_la_persona, persona.nombre, persona.segundo, persona.apellido_paterno, persona.apellido_materno, persona.fecha_de_nacimiento, persona.fecha_desaparicion, persona.edad_en_el_momento, persona.género, persona.etnicidad, persona.profesión, persona.actividades_políticas]
-    if str(info[-1]) == "gam_app.Organización.None":
-        info[-1] = ""
+    #info = [persona.nombre_de_la_persona, persona.nombre, persona.segundo, persona.apellido_paterno, persona.apellido_materno, persona.fecha_de_nacimiento, persona.fecha_desaparicion, persona.edad_en_el_momento, persona.género, persona.etnicidad, persona.profesión, persona.actividades_políticas]
+    #if str(info[-1]) == "gam_app.Organización.None":
+    #    info[-1] = ""
     for x in caso.fotos.all():
         foto.append(x)
     profile_photos = Foto.objects.filter(caso__slug_name=caso)
-    context = {'caso': caso, 'images': foto,'info': info, 'dragon': dragon, 'face':imageprofile}
+    context = {'caso': caso, 'images': foto,'personas':personas, 'dragon': dragon, 'face':imageprofile}
 
     return render(request, 'acceso/caso.html', context)
 

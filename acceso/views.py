@@ -112,9 +112,11 @@ def caso(request, caso):
             legajo=x.legajo,
             carpeta=x.carpeta,
         ).order_by('número_de_imagen')
-
-    persona = Persona.objects.get(nombre_de_la_persona=caso)
+    persona = caso.personas.all()[0]
+    # iterate through personas to make a table of all people
     info = [persona.nombre_de_la_persona, persona.nombre, persona.segundo, persona.apellido_paterno, persona.apellido_materno, persona.fecha_de_nacimiento, persona.fecha_desaparicion, persona.edad_en_el_momento, persona.género, persona.etnicidad, persona.profesión, persona.actividades_políticas]
+    if str(info[-1]) == "gam_app.Organización.None":
+        info[-1] = ""
     for x in caso.fotos.all():
         foto.append(x)
     profile_photos = Foto.objects.filter(caso__slug_name=caso)

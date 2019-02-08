@@ -127,14 +127,25 @@
   border-top: none;
   margin-bottom: 10px;
 }
+
+/* Style the close button */
+.topright {
+  float: right;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.topright:hover {color: red;}
 </style>
 
-	{% for persona in personas %}
+
+{% for persona in personas %}
 <div class="tab" style="margin-bottom: 10px;">
-  <button class="tablinks" onclick="openCity(event, '{{ persona.nombre_de_la_persona }}')">{{ persona.nombre_de_la_persona }}</button>
+	<button class="tablinks" onclick="openCity(event, '{{ persona.nombre_de_la_persona }}')" {% if persona == personas.0 %} id="defaultOpen" {% endif %}>{{ persona.nombre_de_la_persona }}</button>
 </div>
 <div id="{{ persona.nombre_de_la_persona }}" class="tabcontent">
-          <table class="table table-striped" style="font-size:16px;">
+		<span onclick="this.parentElement.style.display='none'" class="topright">{% trans "Cerrar la tabla" %}</span>
+		  <table class="table table-striped" style="font-size:16px;">
             <thead>
               <tr>
 			    <th><b>{% trans "Typo de información" %}</b></th>
@@ -191,7 +202,6 @@
 				<td>{{ persona.actividades_políticas }}</td>
 				  {% endif %}
 			  </tr>
-
             </tbody>
           </table>
 </div>
@@ -216,6 +226,9 @@ function openCity(evt, cityName) {
   document.getElementById(cityName).style.display = "block";
   evt.currentTarget.className += " active";
 }
+
+// Get the element with id=defaultOpen and click it
+  document.getElementById("defaultOpen").click();
 </script>
 <!-- /container-->
 {% endblock %}

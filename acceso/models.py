@@ -29,6 +29,7 @@ class Caso(models.Model):
     slug_name = models.SlugField(blank=True)
     carpetas = models.ManyToManyField(Carpeta, blank=True, related_name='caso_carpetas')
     #  profile image field doesn't work yet
+    personas = models.ManyToManyField(Persona, blank=True, related_name="caso_personas")
     foto_de_perfil = models.OneToOneField(
         Foto,
         blank=True,

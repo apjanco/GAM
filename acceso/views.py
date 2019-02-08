@@ -11,6 +11,7 @@ import os
 import random
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.utils.html import escape
+from django.db.models import Count, Q
 
 def cycle(iterable):
     saved = []
@@ -64,9 +65,32 @@ def about(request):
 
 
 def collection(request):
-    database = Database.objects.all()
     photo = random_photo()
-    return render(request, 'acceso/collection.html', {'photo':photo, 'database':database, })
+
+    return render(request, 'acceso/collection.html', {'photo':photo, })
+
+def documentos(request):
+    casos = Caso.objects.all()
+    carpetas = [caso.carpetas.all() for caso in casos]
+    all_carpetas = []
+    for list_ in carpetas:
+        for carpeta in list_:
+            all_carpetas.append(carpeta)
+    imagens = []
+    for i, carpeta in enumerate(carpetas):
+        images = Imagen.objects.filter(
+            archivo=all_carpetas[i].archivo,
+            colección=all_carpetas[i].colección,
+            caja=all_carpetas[i].caja,
+            legajo=all_carpetas[i].legajo,
+            carpeta=all_carpetas[i].carpeta,
+        ).order_by('número_de_imagen')
+        imagens.append(images)
+    imagen_names = []
+    for image in imagens:
+        for imagen in image:
+            imagen_names.append(imagen.nombre_del_archivo)
+    return render(request, 'acceso/documentos.html', {'state':imagen_names, })
 
 
 def history(request):
@@ -90,13 +114,15 @@ def caso(request, caso):
             legajo=x.legajo,
             carpeta=x.carpeta,
         ).order_by('número_de_imagen')
-
-    persona = Persona.objects.get(nombre_de_la_persona=caso)
-    info = [persona.nombre_de_la_persona, persona.nombre, persona.segundo, persona.apellido_paterno, persona.apellido_materno, persona.fecha_de_nacimiento, persona.fecha_desaparicion, persona.edad_en_el_momento, persona.género, persona.etnicidad, persona.profesión, persona.actividades_políticas]
+    personas = caso.personas.all()
+    # iterate through personas to make a table of all people
+    #info = [persona.nombre_de_la_persona, persona.nombre, persona.segundo, persona.apellido_paterno, persona.apellido_materno, persona.fecha_de_nacimiento, persona.fecha_desaparicion, persona.edad_en_el_momento, persona.género, persona.etnicidad, persona.profesión, persona.actividades_políticas]
+    #if str(info[-1]) == "gam_app.Organización.None":
+    #    info[-1] = ""
     for x in caso.fotos.all():
         foto.append(x)
     profile_photos = Foto.objects.filter(caso__slug_name=caso)
-    context = {'caso': caso, 'images': foto,'info': info, 'dragon': dragon, 'face':imageprofile}
+    context = {'caso': caso, 'images': foto,'personas':personas, 'dragon': dragon, 'face':imageprofile}
 
     return render(request, 'acceso/caso.html', context)
 
@@ -110,6 +136,8 @@ def simple(request):
 def caso_index(request):
     return render(request, 'acceso/caso_index.html')
 
+def datatable(request):
+    return render(request, 'acceso/datatable.html')
 
 def caso_table(request, caso_id):
     # TODO: Probably want nombre_del_caso to be an explicit part of the URL rather than
@@ -139,6 +167,7 @@ class DbListJson(BaseDatatableView):
     max_display_length = 500
 
     def render_column(self, row, column):
+
         return super(DbListJson, self).render_column(row, column)
 
     def filter_queryset(self, qs):
@@ -147,6 +176,6 @@ class DbListJson(BaseDatatableView):
         # here is a simple example
         search = self.request.GET.get('search[value]', None)
         if search:
-            q = Q(caso__icontains=search) | Q(descripcion_caso_icontains=search)
+            q = Q(caso__icontains=search) | Q(descripcion_caso__icontains=search) | Q(fecha_desaparicion__icontains=search) | Q(departamento__icontains=search)
             qs = qs.filter(q)
         return qs

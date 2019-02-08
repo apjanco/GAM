@@ -19,10 +19,12 @@ urlpatterns = [
 
     # jsGrid
     path('caso-index/', views.caso_index, name='caso_index'),
+    path('buscador-de-casos/', views.datatable, name='buscador-de-casos'),
     path('api/<int:caso_id>/', views.caso_table),
     path(
-        'datatable/caso',
-        login_required(views.DbListJson.as_view()),
+        'datatable_caso/',
+        views.DbListJson.as_view(),
         name='db_list_json',
     ),
+    path('documentos/', views.documentos, name='documentos'),
 ]

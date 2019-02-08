@@ -385,6 +385,8 @@ def explorar(request):
         }  # , 'carpetas':carpetas}
         return render(request, 'publico_explorar.html', context)
 
+def bokeh(request):
+    pass
 
 def sobre(request):
     return render(request, 'about.html')

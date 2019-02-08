@@ -67,10 +67,12 @@
       <div class="row">
         <div style="width:100%;">
 		  <!-- Open sea dragon -->
+
 		  <h3> {% trans "Archivos Dentro del Caso" %} </h3>
           <script src="{% static 'acceso/js/seadragon/openseadragon.min.js.map' %}"></script>
           <script src="{% static 'acceso/js/seadragon/openseadragon.min.js' %}"></script>
-          <div id="seadragon-viewer" style="width:100%; height:500px;"></div>
+          
+			<div id="seadragon-viewer" style="width:100%; height:500px;"></div>
 
           <script>
             var SRC=[];
@@ -78,13 +80,72 @@
               SRC.push("https://dzis.nyc3.digitaloceanspaces.com/{{i.nombre_del_archivo}}.dzi");
               {% endfor %}
           </script>
+
           <script src="{% static 'acceso/js/seadragon/call_the_dragon.js' %}"></script>
         </div>
 	  </div>
-	  <div class="row"> 
-        <div  style="width:100%; margin-bottom:25px;">
-		  <h3>{% trans "Metadatos sobre el caso" %}</h3>
-          <table class="table table-striped" style="font-size:16px;">
+
+
+	<!--TABS -->
+	<style>
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+  margin-bottom: 10px;
+}
+
+/* Style the close button */
+.topright {
+  float: right;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.topright:hover {color: red;}
+</style>
+
+
+{% for persona in personas %}
+<div class="tab" style="margin-bottom: 10px;">
+	<button class="tablinks" onclick="openCity(event, '{{ persona.nombre_de_la_persona }}')" {% if persona == personas.0 %} id="defaultOpen" {% endif %}>{{ persona.nombre_de_la_persona }}</button>
+</div>
+<div id="{{ persona.nombre_de_la_persona }}" class="tabcontent">
+		<span onclick="this.parentElement.style.display='none'" class="topright">{% trans "Cerrar la tabla" %}</span>
+		  <table class="table table-striped" style="font-size:16px;">
             <thead>
               <tr>
 			    <th><b>{% trans "Typo de información" %}</b></th>
@@ -93,60 +154,81 @@
             </thead>
             <tbody>
 			  <tr>
-				<td>{% trans "Nombre de la Persona" %}</td>
-				<td>{{ info.0 }} </td>
-              </tr>
-			  <tr>
 		        <td>{% trans "Nombre" %}</td>
-				<td>{{ info.1 }}</td>
+				<td>{{ persona.nombre }}</td>
 			  </tr>
 			  <tr>
 			    <td>{% trans  "Segundo"  %}</td>
-				<td>{{ info.2 }}</td>
+				<td>{{ persona.segundo }}</td>
 			  </tr>
 			  <tr>
 				<td>{% trans "Apellido Paterno"  %}</td>
-				<td>{{ info.3 }}</td>
+				<td>{{ persona.apellido_paterno }}</td>
 			  </tr>
 			  <tr>
 				<td>{% trans "Apellido Materno" %}</td>
-				<td>{{ info.4 }}</td>
+				<td>{{ persona.apellido_materno }}</td>
 			  </tr>
 			  <tr>
 				<td>{% trans "Fecha de Nacimiento" %}</td>
-				<td>{{ info.5 }}</td>
+				<td>{{ persona.fecha_de_nacimiento }}</td>
 			  </tr>
 			  <tr>
 				<td>{% trans "Fecha de desaparición" %}</td>
-				<td>{{ info.6 }}</td>
+				<td>{{ persona.fecha_desaparicion }}</td>
 			  </tr>
 			  <tr>
 				<td>{% trans "Edad en el Momento" %}</td>
-				<td>{{ info.7 }}</td>
+				<td>{{ persona.edad_en_el_momento }}</td>
 			  </tr>
 			  <tr>
 				<td>{% trans "Género" %}</td>
-				<td>{{ info.8 }}</td>
+				<td>{{ persona.género }}</td>
 			  </tr>
 			  <tr>
 			    <td>{% trans "Etnicidad" %}</td>
-			    <td>{{ info.9}}</td>
+			    <td>{{ persona.etnicidad }}</td>
 			  </tr>
 			  <tr>
 			    <td>{% trans "Profesión" %}</td>
-			    <td>{{ info.10 }}</td>
+			    <td>{{ persona.profesión }}</td>
 			  </tr>
+
 			  <tr>
 		   	    <td>{% trans "Actividaded Políticas" %}</td>
-			    <td>{{ info.11 }}</td>
+				  {% if persona.actividades_políticas|slugify == 'gam_apporganizacionnone' %}
+				<td></td>
+				  {% else %}
+				<td>{{ persona.actividades_políticas }}</td>
+				  {% endif %}
 			  </tr>
             </tbody>
           </table>
-		</div>
-      </div>
+</div>
+{% endfor %}
 
-    
+
     </div>
 
-  </div> <!-- /container-->
+  </div>
+
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+// Get the element with id=defaultOpen and click it
+  document.getElementById("defaultOpen").click();
+</script>
+<!-- /container-->
 {% endblock %}

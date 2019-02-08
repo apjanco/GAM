@@ -1,0 +1,64 @@
+{% extends 'acceso/base2.html' %}
+
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% block content2 %}
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"
+	 integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+<style>
+.my-text {
+       margin-top: 80px;
+    margin-left: 5%;
+      margin-right: 5%;
+    width: 90%;
+    }
+.table {
+       margin-top: 20px;
+    margin-left: 5%;
+      margin-right: 5%;
+    width: 90%;
+    }
+
+</style>
+<div class="my-text">
+    <p>{% trans "Esta base de datos ofrece una lista de todos los casos en la colección de desapariciones en los archivos históricos del Grupo de Apoyo Mutuo. La colección aún se está procesando y los materiales más precisos y actualizados se pueden encontrar contactando al GAM." %}</p>
+
+</div>
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script type="text/javascript" src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<div class="table">
+<table class="myTable">
+                <thead>
+                  <tr>
+                    <th> Caso </th>
+                    <th> Fecha Desaparicion </th>
+                    <th> Departamento </th>
+                    <th> Descripcion Caso </th>
+                  </tr>
+                </thead>
+              </table>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.myTable').dataTable( {
+        "pageLength": 10,
+        "responsive": true,
+        {% if LANGUAGE_CODE == 'es' %}
+    "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+    },
+    {% elif LANGUAGE_CODE == 'de' %}
+    "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/German.json"
+    },
+    {% endif %}
+        "processing": true,
+        "serverSide": true,
+        "ajax": "{% url 'acceso:db_list_json' %}",
+    } );
+} );
+</script>
+
+{% endblock %}

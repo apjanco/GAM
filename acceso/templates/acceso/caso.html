@@ -1,0 +1,234 @@
+{% extends 'acceso/base.html' %}
+{% load i18n %}
+{% load static %}
+
+
+
+
+{% block content2 %}
+<!-- Why is this import here?  -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<div style="margin-top: 50px;" class="container">
+
+      <div class="row">
+          <div class="col">
+              <h2  class="text-left">{{ caso.nombre_del_caso }} </h2>
+          </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+            <div class="page-header">
+			  <h3>{% trans "Una descripción general" %}</h3>
+			  <div  style="width:100%; font-size: 16px; overflow:auto; height:425px;">
+			      {{ caso.descripción |safe}} 
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-6">
+          {% if images or face %}
+          <div id="cases" class="carousel slide" data-ride="carousel" style="height:500px;">
+            <ol class="carousel-indicators">
+              <li data-target="#cases" data-slide-to="0" class="active"></li>
+              {% for image in images %}
+              <li data-target="#cases" data-slide-to="{{ forloop.counter  }}"></li>
+              {% endfor %}
+
+            </ol>
+            <div class="carousel-inner">
+
+
+              <div class="item active" role="listbox">
+                <img class="d-block w-100" src="http://archivogam.haverford.edu/{{face}}" alt="First slide">
+              </div>
+              {% for image in images %}
+	            <div class="item">
+			      <img class="d-block w-100" src="http://archivogam.haverford.edu/{{image}}" alt="Slide number {{ forloop.counter  }}">
+	            </div>
+	          {% endfor %}
+            </div>
+
+            <a class="left carousel-control" href="#cases" role="button" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+    	    <a class="right carousel-control" href="#cases" role="button" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+            </a>
+
+          </div>
+		  {% endif %}
+        </div>
+	  </div>
+
+      <div class="row">
+        <div style="width:100%;">
+		  <!-- Open sea dragon -->
+
+		  <h3> {% trans "Archivos Dentro del Caso" %} </h3>
+          <script src="{% static 'acceso/js/seadragon/openseadragon.min.js.map' %}"></script>
+          <script src="{% static 'acceso/js/seadragon/openseadragon.min.js' %}"></script>
+          
+			<div id="seadragon-viewer" style="width:100%; height:500px;"></div>
+
+          <script>
+            var SRC=[];
+            {% for i in dragon %}
+              SRC.push("https://dzis.nyc3.digitaloceanspaces.com/{{i.nombre_del_archivo}}.dzi");
+              {% endfor %}
+          </script>
+
+          <script src="{% static 'acceso/js/seadragon/call_the_dragon.js' %}"></script>
+        </div>
+	  </div>
+
+
+	<!--TABS -->
+	<style>
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+  margin-bottom: 10px;
+}
+
+/* Style the close button */
+.topright {
+  float: right;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.topright:hover {color: red;}
+</style>
+
+
+{% for persona in personas %}
+<div class="tab" style="margin-bottom: 10px;">
+	<button class="tablinks" onclick="openCity(event, '{{ persona.nombre_de_la_persona }}')" {% if persona == personas.0 %} id="defaultOpen" {% endif %}>{{ persona.nombre_de_la_persona }}</button>
+</div>
+<div id="{{ persona.nombre_de_la_persona }}" class="tabcontent">
+		<span onclick="this.parentElement.style.display='none'" class="topright">{% trans "Cerrar la tabla" %}</span>
+		  <table class="table table-striped" style="font-size:16px;">
+            <thead>
+              <tr>
+			    <th><b>{% trans "Typo de información" %}</b></th>
+				<th><b>{% trans "Contenido" %}</b></th>
+              </tr>
+            </thead>
+            <tbody>
+			  <tr>
+		        <td>{% trans "Nombre" %}</td>
+				<td>{{ persona.nombre }}</td>
+			  </tr>
+			  <tr>
+			    <td>{% trans  "Segundo"  %}</td>
+				<td>{{ persona.segundo }}</td>
+			  </tr>
+			  <tr>
+				<td>{% trans "Apellido Paterno"  %}</td>
+				<td>{{ persona.apellido_paterno }}</td>
+			  </tr>
+			  <tr>
+				<td>{% trans "Apellido Materno" %}</td>
+				<td>{{ persona.apellido_materno }}</td>
+			  </tr>
+			  <tr>
+				<td>{% trans "Fecha de Nacimiento" %}</td>
+				<td>{{ persona.fecha_de_nacimiento }}</td>
+			  </tr>
+			  <tr>
+				<td>{% trans "Fecha de desaparición" %}</td>
+				<td>{{ persona.fecha_desaparicion }}</td>
+			  </tr>
+			  <tr>
+				<td>{% trans "Edad en el Momento" %}</td>
+				<td>{{ persona.edad_en_el_momento }}</td>
+			  </tr>
+			  <tr>
+				<td>{% trans "Género" %}</td>
+				<td>{{ persona.género }}</td>
+			  </tr>
+			  <tr>
+			    <td>{% trans "Etnicidad" %}</td>
+			    <td>{{ persona.etnicidad }}</td>
+			  </tr>
+			  <tr>
+			    <td>{% trans "Profesión" %}</td>
+			    <td>{{ persona.profesión }}</td>
+			  </tr>
+
+			  <tr>
+		   	    <td>{% trans "Actividaded Políticas" %}</td>
+				  {% if persona.actividades_políticas|slugify == 'gam_apporganizacionnone' %}
+				<td></td>
+				  {% else %}
+				<td>{{ persona.actividades_políticas }}</td>
+				  {% endif %}
+			  </tr>
+            </tbody>
+          </table>
+</div>
+{% endfor %}
+
+
+    </div>
+
+  </div>
+
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+// Get the element with id=defaultOpen and click it
+  document.getElementById("defaultOpen").click();
+</script>
+<!-- /container-->
+{% endblock %}

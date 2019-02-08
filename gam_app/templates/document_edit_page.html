@@ -1,18 +1,29 @@
 {% extends "base.html" %}
 {% block title %}GAM{% endblock %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block content %}
 {% if state %}
+{% trans "Archivo" %}: <a href="/{{ state.archivo }}/">{{ state.archivo }}</a>
+> {% trans "Colección" %}: <a href="/{{ state.archivo }}/{{ state.colección }}/">{{ state.colección }}</a>
+> {% trans "Caja" %}: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}">{{ state.caja }}</a>
+
+> {% trans "Legajo" %}: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/">{{ state.legajo }}</a>
+
+> {% trans "Carpeta" %}: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/">{{ state.carpeta }}</a>
+
+> {% trans "Número de imagen" %}: <a href="/{{ state.archivo }}/{{ state.colección }}/{{ state.caja }}/{{ state.legajo }}/{{ state.carpeta }}/{{ state.número_de_imagen }}/">{{ state.número_de_imagen }}</a><br><br>
+
   <ul>
-     <p>Nombre: {% for name in state.person.all %}{{ name }}<br></p>{% endfor %}
-    <p>Fecha desaparición: {{ state.date_of_disapearance }}<br></p>
-    <p>Ubicación geográfica: {% for place in state.geographic_location.all %}{{ place }}<br></p>{% endfor %}
-     <p>Número de víctimas: {{ state.no_victims }}<br></p>
-      <p>Edad en ese momento:  {{ state.age_at_time }}<br></p>
-       <p>Unidad policial o militar involucrada:  {{ state.police_military }}<br></p>
-    <p>Número de páginas: {{ state.page_count }}<br></p>
-     <p><a href="{{ state.url }}">Archivo de imagen</a></p>
+    <p>{% trans "Nombre" %}: {% for name in state.nombre_de_la_persona.all %}{{ name }}<br></p>{% endfor %}
+    <p>{% trans "Fecha desaparición" %}: {{ state.fecha_desaparicion }}<br></p>
+    <p>{% trans "Ubicación geográfica" %}: {% for place in state.ubicación_geográfica.all %}{{ place }}<br></p>{% endfor %}
+    <p>{% trans "Número de víctimas" %}: {{ state.número_de_víctimas }}<br></p>
+    <p>{% trans "Edad en ese momento" %}:  {{ state.edad_en_el_momento }}<br></p>
+    <p>{% trans "Unidad policial o militar involucrada" %}:  {{ state.policial_o_militar }}<br></p>
+    <p>{% trans "Número de páginas" %}: {{ state.conteo_de_páginas }}<br></p>
+    <p><a href="{{ state.url }}">{% trans "Archivo de imagen" %}</a></p>
 <hr>
 <style>
 * {
@@ -46,7 +57,7 @@ body {
 <script type="text/javascript">
     var viewer = OpenSeadragon({
         id: "openseadragon1",
-        tileSources: "{% url 'dzi' state.filename %}.dzi"
+        tileSources: "{% url 'dzi' state.nombre_del_archivo %}.dzi"
     });
 </script>
 </div>
@@ -54,15 +65,14 @@ body {
 <form action="editar" method="post" id="edit">
   {% csrf_token %}
 
-<p>Texto (<a href="/file/{{ state.filename}}">volver</a>):<br>
+  <p>{% trans "Texto" %}:<br>
 <textarea rows="30" cols="60" name="ocr_text" form="edit">
-{{ state.ocr_text }}</textarea>
-<input type="submit" value="Enviar" />
+{{ state.texto_de_OCR }}</textarea>
+<input type="submit" value="{% trans "Enviar" %}" />
 </form>
 </div>
   </ul>  
 {% else %}
-    <p>No document with that filename</p>
+<p>{% trans "Ningún documento con ese nombre de archivo" %}</p>
 {% endif %}
 {% endblock %}
-

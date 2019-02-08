@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+
+{% block extra_static %}
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script scr="//code.jquery.com/jquery-3.3.1.js"></script>
+
+<style>
+.sea-icon{
+  height: 30px;
+  width: 30px;
+}
+</style>
+{% endblock %}
+
+
+{% load staticfiles %}
+{% load i18n %}
+
+
+{% block title %}GAM{% endblock %}
+
+{% block content %}
+{% if archives %}
+<h3>{% trans "Archivos" %}</h3>
+<table class="resource_table" style="margin-top: 15px;">
+  <tr>
+    <th>{% trans "Nombre" %}</th>
+    
+    <th><div align="left">{% trans "Descripción" %}</div></th>
+  </tr>
+  <ul>
+{% for archive in archives %}
+      <tr>
+        <td> <a href="{% url 'documento0' archive.nombre_del_archivo %}">{{ archive.nombre_del_archivo }} </a></td>
+       
+        <td><div align="left"> {{ archive.descripción|safe }} </div></td>
+      
+      </tr>   
+    {% endfor %}
+     </ul>
+   </table>
+<br>   
+<h3>{% trans "Colecciónes" %}</h3><table class="resource_table">
+  <tr>
+    <th>{% trans "Nombre" %}</th>
+    <th><div align="left">{% trans "Descripción" %}</div></th>
+  </tr>
+  <ul>
+{% for collection in collections %}
+      <tr>
+        <td> <a href="{% url 'documento1' collection.archivo__nombre_del_archivo collection.colección__nombre_de_la_colección %}">{{ collection.colección__nombre_de_la_colección }}</a></td>
+        <td><div align="left"> {{ collection.descripción|safe }} </div></td>
+      </tr>   
+    {% endfor %}
+     </ul>
+   </table>
+<br>
+
+<h3>{% trans "Carpetas" %}</h3>
+<table class="resourceTable">
+  <thead>
+    <tr>
+      <th>{% trans "Nombre" %}</th>
+      <th><div align="left">{% trans "Descripción" %}</div></th>
+    </tr>
+  </thead>
+</table>
+<hr>
+
+
+
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!-- Current language: {{ LANGUAGE_CODE }} -->
+
+
+    
+{% else %}
+  <p>{% trans "Inicia sesión para ver este contenido" %}</p>
+{% endif %}
+
+<script>
+$(document).ready(function() {
+    $('.resourceTable').DataTable( {
+        "pageLength": 10,
+        "processing": true,
+        "serverSide": true,
+        "ajax": "{% url 'carpeta_list_json_buscar' %}",
+        {% if LANGUAGE_CODE == 'es' %}
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+        },
+        {% elif LANGUAGE_CODE == 'de' %}
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/German.json"
+        },
+        {% endif %}
+    } );
+} );
+</script>
+{% endblock %}

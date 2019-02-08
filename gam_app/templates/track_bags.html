@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load static %}
+{% load i18n %}
+
+
+{% block extra_static %}
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script scr="//code.jquery.com/jquery-3.3.1.js"></script>
+{% endblock %}
+
+{% block content %}
+<br>
+<h2>{% trans "Control de Misión" %}</h2>
+<br>
+
+<div>
+    <br>
+    <table class="resourceTable">
+      <thead>
+      <tr>
+        <th>{% trans "número de bolso" %}</th>
+        <th class="select">{% trans "status" %}</th>
+      </tr> 
+      </thead>
+      <tbody>
+      {% for bag in bags %}
+      <tr>
+        <td>{{ bag }}</td>
+        {% if bag in imported_bags %}
+          <td>{% trans "importado"%}</td>
+        {% else %}
+          <td>{% trans "no importado"%}</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+</div>
+
+<script>
+$(document).ready(function() {
+    $('.resourceTable').DataTable( {
+        "pageLength": 50,
+        initComplete: function () {
+            this.api().columns('.select').every( function () {
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo( $(column.header()) )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+            } );
+        }
+    } );
+} );
+</script>
+{% endblock %}
+

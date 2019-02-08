@@ -1,37 +1,154 @@
 {% extends "base.html" %}
 {% block title %}GAM{% endblock %}
+
+{% block extra_static %}
+<style>
+.sea-icon{
+  height: 30px;
+  width: 30px;
+}
+</style>
+{% endblock %}
+
 {% load staticfiles %}
+{% load i18n %}
 
 {% block content %}
+{% if clipboards %}
+<strong>{% trans  "Portapapeles" %}:</strong><br>
+{% for board in clipboards %}
+<a href="/portapapeles/{{ board }}">{{ board }}</a><br>
+{% endfor %}
+{% endif %}
+<hr>
 {% if state %}
-  
+
 <script type="text/javascript" src="{% static 'js/openseadragon.min.js' %}"></script>
 <script type="text/javascript" src="https://cdn.rawgit.com/Pin0/openseadragon-justified-collection/1.0.2/dist/openseadragon-justified-collection.min.js"></script>
-<div id="openseadragon1" style="width:100%; height: 200%;"></div>
-<script type="text/javascript">
-    var viewer = OpenSeadragon({
-        id: "openseadragon1",
-        crossOriginPolicy: 'Anonymous',
-        viewportMargins: {top:10, left: 10, right: 10, bottom: 10},
-        collectionColumns: 8,
-        collectionMode: true
-    });
 
-    viewer.addHandler('open', function() {
-            viewer.world.arrange();
-            viewer.viewport.goHome(true);
-        });
-</script>
-</div>
-    <ul>
-{% for item in state %}
+<span>
+   <img src={% static 'openseadragon-flat-toolbar-icons/images/zoomin_rest.png' %}   id='zoom-in' class='sea-icon'>
+   <img src={% static 'openseadragon-flat-toolbar-icons/images/zoomout_rest.png' %}  id='zoom-out' class='sea-icon'>
+   <img src={% static 'openseadragon-flat-toolbar-icons/images/home_rest.png' %}     id='home'  class='sea-icon'>
+   <img src={% static 'openseadragon-flat-toolbar-icons/images/fullpage_rest.png' %} id='full-page' class='sea-icon'  >
+   <img src={% static 'openseadragon-flat-toolbar-icons/images/rotateleft_rest.png' %} id='left-rotate' class='sea-icon'>
+   <img src={% static 'openseadragon-flat-toolbar-icons/images/rotateright_rest.png' %}     id='right-rotate' class='sea-icon'>
+</span>
+
+
+<div id="openseadragon1" style="width:100%; height: 100%;"></div>
+<script src="http://msalsbery.github.io/builds/openseadragonimaging/openseadragon-viewerinputhook.min.js"></script>
 <script type="text/javascript">
-viewer.addTiledImage({
-    tileSource: '{% url 'dzi' item.filename %}.dzi',
+var items = [];
+var srcs = [];
+{% for item in state %}
+items.push(["{{ item.nombre_del_archivo }}", "/{{ item.archivo }}/{{ item.colección }}/{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta}}/{{ item.número_de_imagen }}/"]);
+srcs.push("/dzi/{{ item.nombre_del_archivo }}.dzi")
+{% endfor %}
+var viewer = OpenSeadragon({
+    id: "openseadragon1",
+    homeButton: "home",        
+    zoomInButton: "zoom-in",
+    zoomOutButton: "zoom-out",
+    fullPageButton: "full-page",
+    rotateRightButton: "right-rotate", 
+    rotateLeftButton: "left-rotate", 
+
+    //tileSources: srcs,
+
+    crossOriginPolicy: 'Anonymous',
+    collectionColumns: 4,
+    collectionMode: true,
+    showRotationControl: true
 });
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+var images = [];
+for (var i = 0; i < items.length; i++) {
+  viewer.addTiledImage({
+      tileSource: '/dzi/' + items[i][0] + '.dzi',
+      success: function (event) {
+        images.push(event.item);
+      }
+  });
+}
+
+addLinkOverlays()
+
+async function addLinkOverlays() {
+  // Wait until OSD is finished arranging the images so that the coordinates are accurate.
+  await sleep(2000);
+
+  for (var i = 0; images.length; i++) {
+    addOneLinkOverlay(images[i], items[i][1]);
+  }
+}
+
+function addOneLinkOverlay(image, link) {
+    var imageRect = image.getBounds();
+    var rect = new OpenSeadragon.Rect(imageRect.x, imageRect.y, 0.05, 0.05);
+    console.log(rect);
+
+    var buttonElement = document.createElement("a");
+    var imgElement = document.createElement("img");
+    imgElement.src = '{% static 'edit_button.png' %}';
+    imgElement.href = link;
+    buttonElement.appendChild(imgElement);
+    //buttonElement.className = "highlight";
+    viewer.addOverlay(buttonElement, rect, OpenSeadragon.OverlayPlacement.CENTER);
+
+    viewer.addViewerInputHook({
+        hooks: [{
+            tracker: "viewer",
+            handler: "clickHandler",
+            hookHandler: function (event) {
+              event.preventDefaultAction = true;
+              var pos = viewer.viewport.viewerElementToViewportCoordinates(event.position);
+              if (isPointInsideRect(pos, rect.clone())) {
+                  window.location.href = link;
+              }
+            },
+        }]
+    });
+}
+
+
+function isPointInsideRect(point, rect) {
+    return point.x > rect.x && point.x < rect.x + rect.width && point.y > rect.y && point.y < rect.y + rect.height;
+}
 </script>
-{% endfor %}
+</div>
+
+
+</div> 
+</center>
+    
+<script>
+function myFunction() {
+  // Declare variables 
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("stateTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    } 
+  }
+}
+</script>
 
 
 </ul>
@@ -40,6 +157,6 @@ viewer.addTiledImage({
 
     
 {% else %}
-    <p>No document with that filename</p>
+<p>{% trans "Ningún documento con ese nombre de archivo" %}</p>
 {% endif %}
 {% endblock %}

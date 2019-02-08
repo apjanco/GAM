@@ -1,0 +1,171 @@
+
+/* Create in your CSS file and add at least two classes to style your 
+HTML5 file content. */
+
+.navback {
+    padding: 8px;
+	height: 150px;
+	position: relative;
+	background-color: #FAE746;
+}
+
+.card-title {
+	font-family: 'Quicksand';
+    font-size: 20px;
+    color:black;
+
+}
+
+.card-text {
+	font-family: 'Cormorant Garamond';
+    font-size: 16px;
+    color:black;
+
+}
+
+.card-link {
+    font-family: 'Quicksand';
+    font-size: 16px;
+    color:black;
+
+}
+
+.read-text {
+	font-family: 'Cormorant Garamond';
+    font-size: 24px;
+    color:black;
+
+}
+
+.mellow {
+    font-family: 'StarlaGX';
+	 font-variation-settings: 'wght' 20;
+    font-size: 16px;
+    color:darkgray;
+}
+
+body {
+    background-color: white;
+    padding: 8px;
+}
+
+h5, h6 {
+	 font-family: 'Quicksand';
+	font-size: 20px;
+    color:black;
+}
+
+
+a, button {
+    font-family: 'Quicksand';
+    font-size: 14px;
+    color:black;
+
+}
+
+
+a:link {
+    color: #561372;
+    text-align: center;
+}
+
+a:hover {
+
+    font-size: 20px;
+    color:black;
+
+}
+
+#header {
+	position: absolute;
+
+}
+#row {
+    display: flex;
+    position: relative;
+    color: lightgray;
+}
+
+#column {
+    flex: 50%;
+    padding: 8px;
+}
+
+#footer {
+	padding: 8px;
+	height: 150px;
+	position: relative;
+	background-image: url("https://static1.squarespace.com/static/53de3c8ee4b0361aeb6c3457/t/54be53f6e4b0bd774532f629/1421759483851/?format=1500w");
+
+}
+
+
+
+/* Add a table (Chapter 13) to your HTML5 file and style it. Note: your table can be as simple or as complex as you wish. */
+
+table {
+    border-collapse: collapse;
+    margin-top: 10px;
+    text-align: center;
+    width: 100%;
+    background-color: white;
+    font-family: 'Quicksand';
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+	background-color: white;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    font-family: 'MeritBadge';
+    font-variation-settings:'SANS' 0;
+    font-variation-settings:'wght' 100;
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    font-family: 'MeritBadge';
+    font-variation-settings:'BOLD' 0;
+    font-variation-settings:'wght' 300;
+    color: #818181;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+

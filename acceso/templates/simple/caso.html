@@ -1,0 +1,24 @@
+{% extends "simple/base.html" %}
+{% load static %}
+{% block content %}
+
+{% include "simple/navbar.html" %}
+<br>
+
+<!-- Section for subject headings -->
+
+{{ caso }}
+
+<script>
+
+    function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+{% include "simple/footer.html" %}
+{% endblock %}
+

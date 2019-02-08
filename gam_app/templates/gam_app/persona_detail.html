@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ persona.nombre_de_la_persona}}</h1>
+  <br>
+  <div class="container" style="font-size:20px">
+  <p><strong>Nombre:</strong>{{ persona.nombre }}</p> 
+  <p><strong>Segundo:</strong>{{ persona.segundo }}</p> 
+  <p><strong>Apellido Paterno:</strong>{{ persona.apellido_paterno }}</p> 
+  <p><strong>Apellido Materno:</strong>{{ persona.apellido_materno }}</p> 
+  <p><strong>Fecha De Nacimiento:</strong>{{ persona.fecha_de_nacimiento }}</p> 
+  <p><strong>Fecha Desaparicion:</strong>{{ persona.fecha_desaparicion }}</p> 
+  <p><strong>Edad En El Momento:</strong>{{ persona.edad_en_el_momento }}</p> 
+  <p><strong>Género:</strong>{{ persona.género }}</p> 
+  <p><strong>Etnicidad:</strong>{{ persona.etnicidad }}</p> 
+  <p><strong>Profesión:</strong>{{ persona.profesión }}</p> 
+  <p><strong>Actividades Políticas:</strong>{{ persona.actividades_políticas.objects.all }}</p>
+  <p><strong>Notas:</strong>{{ persona.notas }}</p> 
+  </div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block extra_static %}
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script scr="//code.jquery.com/jquery-3.3.1.js"></script>
+
+<style>
+.sea-icon{
+  height: 30px;
+  width: 30px;
+}
+</style>
+{% endblock %}
+
+{% load static %}
+{% load staticfiles %}
+{% load i18n %}
+
+
+{% block title %}GAM{% endblock %}
+
+{% block content %}
+
+{% if state %}
+
+
+<h3>{% trans "Archivos" %}</h3>
+<table class="resource_table" style="margin-top: 15px;">
+  <tr>
+    <th>{% trans "Nombre" %}</th>
+    
+    <th><div align="left">{% trans "Descripción" %}</div></th>
+  </tr>
+  <ul>
+{% for archive in archives %}
+      <tr>
+        <td> <a href="{% url 'documento0' archive.nombre_del_archivo %}">{{ archive.nombre_del_archivo }} </a></td>
+       
+        <td><div align="left"> {{ archive.descripción|safe }} </div></td>
+      
+      </tr>   
+    {% endfor %}
+     </ul>
+   </table>
+<br>   
+<h3>{% trans "Colecciónes" %}</h3><table class="resource_table">
+  <tr>
+    <th>{% trans "Nombre" %}</th>
+    <th><div align="left">{% trans "Descripción" %}</div></th>
+  </tr>
+  <ul>
+{% for collection in collections %}
+      <tr>
+        <td> <a href="{% url 'documento1' collection.archivo__nombre_del_archivo collection.colección__nombre_de_la_colección %}">{{ collection.colección__nombre_de_la_colección }}</a></td>
+        <td><div align="left"> {{ collection.descripción|safe }} </div></td>
+      </tr>   
+    {% endfor %}
+     </ul>
+   </table>
+<br>
+
+<h3>{% trans "Carpetas" %}</h3>
+<table class="resourceTable3">
+  <thead>
+    <tr>
+      <th>{% trans "Nombre" %}</th>
+      <th><div align="left">{% trans "Descripción" %}</div></th>
+    </tr>
+  </thead>
+</table>
+<hr>
+
+</div></div>
+
+{% else %}
+  <p>{% trans "Inicia sesión para ver este contenido" %}</p>
+{% endif %}
+
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.resourceTable3').DataTable( {
+        "pageLength": 50,
+        "processing": true,
+        "serverSide": true,
+        "ajax": "{% url 'carpeta_list_json_buscar' %}",
+    } );
+} );
+</script>
+{% endblock %}

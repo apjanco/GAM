@@ -95,6 +95,7 @@
   border: 1px solid #ccc;
   background-color: #f1f1f1;
   margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 /* Style the buttons inside the tab */
@@ -184,7 +185,11 @@
 
 			  <tr>
 		   	    <td>{% trans "Actividaded Políticas" %}</td>
-				<td>{{ persona.actividades_políticas|default_if_none:" " }}</td>
+				  {% if persona.actividades_políticas|slugify == 'gam_apporganizacionnone' %}
+				<td></td>
+				  {% else %}
+				<td>{{ persona.actividades_políticas }}</td>
+				  {% endif %}
 			  </tr>
 
             </tbody>

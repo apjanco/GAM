@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+
+{% block extra_static %}
+<style>
+.sea-icon{
+  height: 30px;
+  width: 30px;
+}
+</style>
+
+<!-- for DataTables -->
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+
+
+{% load staticfiles %}
+{% load i18n %}
+
+
+{% block title %}GAM{% endblock %}
+
+{% block content %}
+
+<style>
+
+.highlight {
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+    border: 3px solid #fae746;
+    outline: 4px auto #fae746;
+    background-color: black;
+}
+</style>
+
+<!-- search form -->
+<!-- build a form --> 
+<form id="searchers_form"  action="" method="GET" style="padding-top: 10px;">
+  <div class="form-group" id="searchers">
+    <div id="searcher1"></div>
+  </div>
+  <input id="full_info" type="hidden" value='' name="full_info">
+</form>
+
+<!-- add buttons -->    
+<span>{% trans "Agregar un término de búsqueda" %}</span>
+<input type="hidden" id="searcher_counter" name="seacher_count" value="1">
+<button type="button" style="border-color: #000000;" id="OR_search" class="btn">{% trans "O" %}</button>
+<button type="button" style="border-color: #000000;" id="AND_search" class="btn">{% trans "Y" %}</button>
+<button type="button" style="border-color: #000000;" id="NOT_search" class="btn">{% trans "NO" %}</button>
+
+
+<script>
+  // reset counter to 1
+  // might want to get rid of this if we load based on previous counter
+  $(document).ready(function(){
+    $("#searcher_counter").val("1");
+  });
+
+  // These long lines are just html we will be using and reusing
+  var select_fields = "<select class='form-control field_option'> <option>{% trans "Cualquier Campo" %}</option> <option>{% trans "Persona" %}</option> <option>{% trans "Ubicación Geográfica" %}</option> <option>{% trans "Género" %}</option> <option>{% trans "Etnicidad" %}</option></select>";
+  var delete_button = "<button class='delete_searcher' type='button'><span class='glyphicon glyphicon-remove delete_searcher'></span></button>"; 
+      
+  // let users switch to which operators they picked  
+  function createLogicDropdown(operator) {
+    if(operator=="AND") {
+      return  "<select class='form-control logic_option'> <option value='OR'>O</option> <option value='AND' selected='selected'>{% trans "Y" %}</option> <option value='NOT'>{% trans "NO" %}</option></select>";
+    }
+    else if (operator=="OR") {
+      return  "<select class='form-control logic_option'> <option selected='selected' value='OR'>O</option> <option value='AND'>{% trans "Y" %}</option> <option value='NOT'>{% trans "NO" %}</option></select>";
+    }
+    else {
+      return  "<select class='form-control logic_option'> <option value='OR'>{% trans "O" %}</option> <option value='AND'>Y</option> <option selected='selected' value='NOT'>{% trans "NO" %}</option></select>";
+    }
+  }
+    
+  // make first search bar. This one can't be deleted
+  $("#searcher1").append("<span><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='search' placeholder='{% trans "Buscar..." %}'><span class='input-group-addon'><button type='submit'><span class='glyphicon glyphicon-search'></span></button></span></div> en " + select_fields + "</span>");
+      
+  // what happens when you click AND
+  $("#AND_search").click(function(event) {
+    if($("#searcher_counter").val() < 11) {
+      // the plus here tells javascript to do as number addition so 1+1 doesn't equal 11.
+      $("#searcher_counter").val(+$("#searcher_counter").val() + 1);
+      var id_num = $("#searcher_counter").val();
+      $("#searchers").append("<div id='searcher"+ id_num +"' class='form-group'></div>");
+      $("#searcher" + id_num).append("<span>" + createLogicDropdown("AND") + "<br/><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='AND_search' placeholder='Buscar...'><span class='input-group-addon'>" + delete_button + "</span></div> en " + select_fields + "</span>");
+    }
+  });
+
+  // what happens when you click OR
+  $("#OR_search").click(function(event) {
+    if($("#searcher_counter").val() < 11) {
+      // the plus here tells javascript to do as number addition so 1+1 doesn't equal 11.
+      $("#searcher_counter").val(+$("#searcher_counter").val() + 1);
+      var id_num = $("#searcher_counter").val();
+      $("#searchers").append("<div id='searcher"+ id_num +"'></div>");
+      $("#searcher" + id_num).append("<span>" + createLogicDropdown("OR") + "<br/><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='OR_search' placeholder='Buscar...'><span class='input-group-addon'>" + delete_button + "</span></div> en " + select_fields + "</span>");
+    }
+  });
+   
+  // what happens when you click NOT
+  $("#NOT_search").click(function(event) {
+    if($("#searcher_counter").val() < 11) {
+      // the plus here tells javascript to do as number addition so 1+1 doesn't equal 11.
+      $("#searcher_counter").val(+$("#searcher_counter").val() + 1);
+      var id_num = $("#searcher_counter").val();
+      $("#searchers").append("<div id='searcher"+ id_num +"'></div>");
+      $("#searcher" + id_num).append("<span>" + createLogicDropdown("NOT") + "<br/><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='NOT_search' placeholder='Buscar...'><span class='input-group-addon'>" + delete_button + "</span></div> en " + select_fields + "</div>");
+    }
+  });
+  
+  // what happens when you click Delete
+  // Need to use event delegation because these deletes don't 
+  // exist on the initial page load
+  $("#searchers").on("click", ".delete_searcher", function(event) {
+    event.preventDefault();
+    console.log("DELETE");
+    $(event.target).parent().parent().parent().parent().remove();
+    $("#searcher_counter").val(+$("#searcher_counter").val() - 1);
+  });
+   
+  // on submit we generate full_info
+  $("#searchers_form").submit(function(event) {
+    // uncomment to prevent page submit
+    // event.preventDefault();
+    var the_request = "";
+    $("#searchers").children().each(function() {
+      // THIS IS A BAD WAY OF DOING IT THAT DEPENDS ON THE STRUCTURE OF THE PAGE
+      // console.log($(this).children().children().children(".search_text").val());
+      // console.log($(this).children().children(".logic_option").val());
+      // console.log($(this).children().children(".field_option").val());
+      // console.log($(this).children());
+       var text  = $(this).children().children().children(".search_text").val();
+       var logic = $(this).children().children(".logic_option").val();
+       var field = $(this).children().children(".field_option").val();
+       the_request += text + "-" + logic + "-" + field+"-";
+    });        
+    $("#full_info").val(the_request);
+    // console.log($("#full_info").val());
+  });
+</script>
+
+<hr>
+
+{% load my_tags %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+{% if state %}
+
+<br>
+<!-- tabs -->
+<ul id="myTab" class="nav nav-tabs nav-justified">
+  <li class="active"><a data-toggle="tab" href="#tab1-slug">
+    {% trans "All" %}</a>
+  </li>
+  <li><a data-toggle="tab" href="#tab2-slug">
+    {% trans "Image" %}</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+<div id="tab1-slug" class="tab-pane fade in active">
+<!-- result table -->
+<div style="width:60%; float: left;">
+<table class="myTable">
+<thead>
+<tr>
+  <th>{% trans "Result" %}</th>
+</tr>
+</thead>
+
+<tbody>
+{% for obj in state %}
+<tr>
+    {% if obj|get_type == "Persona" %}
+    <td><div>
+        <a href="/persona/{{obj.pk}}" style="color:firebrick; font-size:18px;">{{ obj.nombre_de_la_persona }}</a><br>
+        <span><em style="color:gray">{% trans "género" %}:</em> {{obj.género}} &nbsp;&nbsp;
+            <em style="color:gray">{% trans "etnicidad" %}:</em> {{obj.etnicidad}} &nbsp;&nbsp;
+            <em style="color:gray">{% trans "fecha desaparición" %}:</em> {{obj.fecha_desaparicion}}
+        </span>
+    </div></td>
+
+    {% elif obj|get_type == "Lugar" %}
+    <td style="color:firebrick; font-size:18px;">{{obj.nombre_del_lugar}}</td>
+
+    <!-- TODO: add more if for other categories -->
+    {% elif obj|get_type == "Imagen" %}
+    <td><div><a href="{% url 'documento5' obj.archivo obj.colección obj.caja obj.legajo obj.carpeta obj.número_de_imagen %}" style="color:firebrick; font-size:18px;">
+        <b>[{% trans 'Image' %}]</b> &nbsp; {{obj.localizacion_fisica}}</a><br>
+        <span> <em style="color:gray"> {% trans 'archivo' %}:</em> {{obj.archivo}} &nbsp;
+            <em style="color:gray"> {% trans 'colección' %}:</em> {{obj.colección}} &nbsp;
+            <em style="color:gray"> {% trans 'caja' %}:</em> {{obj.caja}} <br>
+            <em style="color:gray"> {% trans 'item' %}:</em> {{obj.item}} &nbsp;
+        </span>
+    </div></td>
+    {% endif %}
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+
+<script>
+$(document).ready( function () {  
+    $('.myTable').DataTable({
+        "pageLength": 20,
+        searching: false,
+        columnDefs: [
+            {
+                targets: -1,
+                className: 'dt-left'
+            }
+        ],
+        {% if LANGUAGE_CODE == 'es' %}
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+        },
+        {% elif LANGUAGE_CODE == 'de' %}
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/German.json"
+        },
+        {% endif %}
+        ordering: false
+    });
+} );
+</script>
+</div>
+
+<div class="container" style="width:40%; float:right;">
+    <br>
+    <div style="width:100%; margin:20px; border:1px solid darkgray; padding:30px">
+        <!-- if there is only one persona object returned -->
+        {% if persona_count == 1 %}
+        <div><h2 style="float:left; width:70%;">{{ persona.0 }}</h2><img src="{{persona.0.image.all.0 }}" style="float:right; width:30%;"></div>
+        <br><br>
+        <hr>
+        <div>
+            <b>{% trans "género" %} : </b> {{ persona.0.género }}<br>
+            <b>{% trans "etnicidad" %} : </b> {{ persona.0.etnicidad }}<br>
+            <b>{% trans "fecha de nacimiento" %} : </b> {{ persona.0.fecha_de_nacimiento}}<br>
+            <b>{% trans "profesión" %} : </b> {{ persona.0.profesión }}<br>
+            <b>{% trans "actividades políticas" %} : </b>
+                {% if persona.0.actividades_políticas.all|length == 0 %} N/A <!-- because this is a M2M field -->
+                {% else %}{{ persona.0.actividades_políticas.all }}{% endif %}<br>
+            <b>{% trans "fecha desaparicion" %} : </b> {{ persona.0.fecha_desaparicion}}<br>
+            <b>{% trans "edad en el momento" %} : </b> {{ persona.0.edad_en_el_momento}}
+        </div>
+
+        <!-- if there is only one lugar object returned -->
+        {% elif lugar_count == 1 %}
+        <div><h2 style="float:left;">{{ lugar.0 }}</h2></div>
+        <br><br>
+        <hr>
+        <div>
+        <!-- do not have ideas what to show here, because lugar model doesn't have many information...-->
+        </div>
+        <!-- TODO: add more objects -->
+
+        {% else %}
+        <div>
+            {% if persona_count %}
+            <span><b>{% trans "Persona" %}: </b> {{ persona_count }}</span><br>
+            {% endif %}
+            {% if lugar_count %}
+            <span><b>{% trans "Lugar" %}: </b>{{ lugar_count }}</span><br>
+            {% endif %}
+            {% if imagen_count %}
+            <span><b>{% trans "Imagen" %}: </b>{{ imagen_count}}</span><br>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+
+
+</div>
+<br>
+<br>
+
+
+</div>
+
+<div id="tab2-slug" class="tab-pane fade">
+<script type="text/javascript" src="{% static 'js/openseadragon.min.js' %}"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/Pin0/openseadragon-justified-collection/1.0.2/dist/openseadragon-justified-collection.min.js"></script>
+
+<div class="col" style="background-color:#aaa; width:100%; height:80%;">
+<span>
+   <img src={% static 'openseadragon-flat-toolbar-icons/images/zoomin_rest.png' %}   id='zoom-in' class='sea-icon'>
+   <img src={% static 'openseadragon-flat-toolbar-icons/images/zoomout_rest.png' %}  id='zoom-out' class='sea-icon'>
+   <img src={% static 'openseadragon-flat-toolbar-icons/images/home_rest.png' %}     id='home'  class='sea-icon'>
+   <img src={% static 'openseadragon-flat-toolbar-icons/images/fullpage_rest.png' %} id='full-page' class='sea-icon'  >
+   <img src={% static 'openseadragon-flat-toolbar-icons/images/rotateleft_rest.png' %} id='left-rotate' class='sea-icon'>
+   <img src={% static 'openseadragon-flat-toolbar-icons/images/rotateright_rest.png' %}     id='right-rotate' class='sea-icon'>
+</span>
+<div id="openseadragon1" style="width:100%; height:100%;" ></div>
+<script src="{% static 'js/openseadragon-viewerinputhook.min.js' %}"></script>
+
+<script type="text/javascript">
+var EDIT_BUTTON_URL = "/static/edit_button.png";
+var ITEMS = [];
+var SRCS = [];
+
+
+{% for object in state %}
+{% if object|get_type == "Persona" or "Lugar" %}
+{% for item in object.image.all %}
+ITEMS.push([
+    "{{ item.nombre_del_archivo }}",
+    "{% url 'documento5' item.archivo item.colección item.caja item.legajo item.carpeta item.número_de_imagen %}",
+    "{{ item.localizacion_fisica }}"
+]);
+SRCS.push("https://dzis.nyc3.digitaloceanspaces.com/{{ item.nombre_del_archivo }}.dzi")
+{% endfor%}
+{% endif%}
+
+{% if object|get_type == "Imagen" %}
+ITEMS.push([
+    "{{ object.nombre_del_archivo }}",
+    "{% url 'documento5' object.archivo object.colección object.caja object.legajo object.carpeta object.número_de_imagen %}",
+    "{{ object.localizacion_fisica }}"
+]);
+SRCS.push("https://dzis.nyc3.digitaloceanspaces.com/{{ object.nombre_del_archivo }}.dzi")
+{% endif %}
+{% endfor %}
+
+</script>
+<script src="{% static 'gam_app/js/procesamiento.js' %}"></script>
+<br><br><br>
+</div>
+</div>
+</div>
+
+{% else %}
+  <p>{% trans "Inicia sesión para ver este contenido" %}</p>
+{% endif %}
+{% endblock %}

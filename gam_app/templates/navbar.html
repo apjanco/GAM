@@ -1,29 +1,126 @@
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">Archivo del Grupo de Apoyo Mutuo
-</a>
+{% load staticfiles %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<header>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {margin: 0;}
+
+ul.topnav {
+
+  list-style-type: none;
+  margin-left: 85px;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
+}
+
+ul.topnav li {float:left;}
+
+ul.topnav li a {
+  display: block;
+  color: black;
+  text-align: center;
+  vertical-align: middle;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+ul.topnav li a:hover {
+    background-color: #FBE930;
+}
+
+ul.topnav li a.active {background-color: white;}
+
+ul.topnav li.right {float: right;}
+
+.topnav-centered a {
+  float: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media screen and (max-width: 600px) {
+  ul.topnav li.right,
+  ul.topnav li {float: none;}
+}
+
+.logo {
+  height: 80px;
+  vertical-align: middle;
+  background-color: #ffec00;
+  border-bottom: 2px solid #7E7E7E;
+  
+}
+
+.nav-text {
+    line-height: 12px;
+    font-weight: 600;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: Poppins,sans-serif;
+}
+</style>
+<div class="logo">
+    <a style="margin-left: 85px;" href="/"><img class="logo" style="border-bottom: 2px solid #ffec00; height: 95%; padding-top: 8px;" src="{% static 'Logo-GAM-header.png.1' %}" alt="GAM logo"/></a>
+</div>
+    <nav>
+
+<ul class="topnav">
+
+{% if LANGUAGE_CODE == 'en' %}
+    <li><b><a class="nav-text" href="{% url 'about' %}" >{% trans "Sobre" %}</a></b></li>
+
+{% elif LANGUAGE_CODE == 'de' %}
+    <li><b><a class="nav-text" href="{% url 'über' %}">{% trans "Sobre" %}</a></b></li>
+{% else %}
+    <li><b><a class="nav-text" href="{% url 'sobre' %}">{% trans "Sobre" %}</a></b></li>
+{% endif %}
+    <li><b><a class="nav-text" href="/acceso">{% trans "Acceso" %}</a></b></li>
+{% if user.is_authenticated %}
+
+    <li><a class="nav-text" href="/">{% trans "Buscar" %}</a></li>
+
+<li><b><a class="topnav-centered nav-text" href="{% url 'explorar' %}">{% trans "Explorar" %}</a></b></li>
+{% endif %}
+
+{% if request.user.is_staff %}
+    <li><b><a class="nav-text" href="{% url 'mission_control' %}">{% trans "Control de misión" %}</a></b></li>
+    <li><b><a class="nav-text" href="{% url 'track_bags' %}">{% trans "Bolsas" %}</a></b></li>
+{% endif %}
+
+{% if not user.is_authenticated %}
+    <li><b><a class="nav-text" href="/cuentas/login/">{% trans "Iniciar sesión" %}</a></b></li>
+
+{% else %}
+    <li><b><a class="nav-text" href="/cuentas/logout/">{% trans "Cerrar sesión" %}</a></b></li>
+
+{% endif %}
+
+        <li>
+<!-- https://docs.djangoproject.com/en/2.1/topics/i18n/translation/#set-language-redirect-view -->
+<form style="margin-top: 2px;" action="{% url 'set_language' %}" method="post">{% csrf_token %}
+    <input name="next" type="hidden" value="{{ redirect_to }}">
+    <select class="form-control" name="language" onchange="this.form.submit();">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+        {% for language in languages %}
+            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                <b>{{ language.name_local }}</b>
+            </option>
+        {% endfor %}
+    </select>
+</form>
+            </li>
+
+</ul></nav>
         </div>
-        <div id="navbar" class="collapse navbar-collapse">
 
-          <ul class="nav navbar-nav">
-            <li><a href="/sobre/">Sobre</a></li>
-            <li><a href="/caso/">Casos</a></li>
-            <li><a href="/documentos/">Documentos</a></li>
-            <li><a href="/multi/">Portapapeles</a></li>
-            <li><a href="/texto/">Sin imágenes</a></li>
-            
-
-
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+</header>
 

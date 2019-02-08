@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block extra_static %}
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script scr="//code.jquery.com/jquery-3.3.1.js"></script>
+
+<style>
+.sea-icon{
+  height: 30px;
+  width: 30px;
+}
+</style>
+{% endblock %}
+
+
+{% load staticfiles %}
+{% load i18n %}
+
+
+{% block title %}GAM{% endblock %}
+
+{% block content %}
+
+
+<div>
+{% if previous_caja %}
+  <div class="col-sm-2">
+<a class="previous" href="{% url 'documento2' location.archivo location.colección previous_caja %}"> < {% trans "Anterior" %} :</a>
+
+{% endif %}
+{% if next_caja %}
+<a href="{% url 'documento2' location.archivo location.colección next_caja %}">{% trans "Siguiente" %} ></a>
+</div>
+{% endif %}
+{% if previous_legajo %}
+  <div class="col-sm-2">
+<a href="{% url 'documento3' location.archivo location.colección location.caja previous_legajo %}"> < {% trans "Anterior" %} :</a>
+
+{% endif %}
+{% if next_legajo %}
+<a href="{% url 'documento3' location.archivo location.colección location.caja next_legajo %}">{% trans "Siguiente" %} ></a>
+</div>
+{% endif %}
+
+{% if previous_carpeta %}
+  <div class="col-sm-2">
+<a href="{% url 'documento4' location.archivo location.colección location.caja location.legajo previous_carpeta %}"> < {% trans "Anterior" %} :</a>
+
+{% endif %}
+{% if next_carpeta %}
+<a href="{% url 'documento4' location.archivo location.colección location.caja location.legajo next_carpeta %}">{% trans "Siguiente" %} ></a>
+</div>
+{% endif %}  
+
+<a href="{% url 'documento0' location.archivo %}">{{ location.archivo }}</a>
+
+{% if location.colección %}
+> <a href="{% url 'documento1' location.archivo location.colección %}">{{ location.colección }}</a>
+{% endif %}
+
+{% if location.caja %}
+> <a href="{% url 'documento2' location.archivo location.colección location.caja %}">{% trans "Caja" %}: {{ location.caja }}</a>
+{% endif %}
+
+{% if location.legajo %}
+> <a href="{% url 'documento3' location.archivo location.colección location.caja location.legajo %}">{% trans "Legajo" %}: {{ location.legajo }}</a>
+{% endif %}
+
+{% if location.carpeta %}
+> <a href="{% url 'documento4' location.archivo location.colección location.caja location.legajo location.carpeta %}">{% trans "Carpeta" %}: {{ location.carpeta }}</a>
+{% endif %}
+
+{% if location.número_de_imagen %}
+> <a href="{% url 'documento5' location.archivo location.colección location.caja location.legajo location.carpeta location.número_de_imagen %}">{% trans "Número de imagen" %}: {{ location.número_de_imagen }}</a>
+{% endif %}
+
+
+{% if colecciones %}
+
+<h3>{% trans "Colecciónes" %}</h3><table>
+  <tr>
+    <th>{% trans "Nombre" %}</th>
+    <th><div align="left">{% trans "Descripción" %}</div></th>
+  </tr>
+  <ul>
+{% for colección in colecciones %}
+      <tr>
+        <td> <a href="{% url 'documento1' colección.archivo  colección.nombre_de_la_colección %}">{{ colección.nombre_de_la_colección }}</a></td>
+        <td><div align="left"> {{ colección.descripción|safe }} </div></td>
+      </tr>   
+    {% endfor %}
+     </ul>
+   </table>
+<br>
+{% endif %}
+
+
+{% if cajas %}
+<h3>{% trans "Cajas" %}</h3>
+<table class="resourceTable">
+  <thead>
+    <tr>
+      <th>{% trans "Nombre" %}</th>
+      <th><div align="left">{% trans "Descripción" %}</div></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for caja in cajas %}
+      <tr>
+        <td><a href="{% url 'documento2' caja.archivo  caja.colección caja.número_de_caja %}">{{ caja.número_de_caja }}</a></td>
+  {% if caja.descripción %}
+  <td><div align="left"> {{ caja.descripción|safe }} </div></td>
+  {% else %}
+        <td><div align="left"> --- </div></td>
+  {% endif %}
+      </tr>   
+    {% endfor %}
+  </tbody>
+</table>
+<hr>
+{% endif %}
+
+
+  
+{% if legajos %}
+
+<h3>{% trans "Legajos" %}</h3>
+<table class="resourceTable1">
+  <thead>
+    <tr>
+      <th>{% trans "Nombre" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for value in legajos %}
+      <tr>
+        <td><a href="{% url 'documento3' location.archivo location.colección location.caja value %}">{{ value }}</a></td>
+
+      </tr>   
+    {% endfor %}
+  </tbody>
+</table>
+<hr>
+{% endif %}  
+
+{% if carpetas %}
+<h3>{% trans "Carpetas" %}</h3>
+<table class="resourceTable1">
+  <thead>
+    <tr>
+      <th>{% trans "Nombre" %}</th>
+      <th><div align="left">{% trans "Descripción" %}</div></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for carpeta in carpetas %}
+      <tr>
+        <td><a href="{% url 'documento4' carpeta.archivo  carpeta.colección carpeta.caja carpeta.legajo carpeta.carpeta %}">{{ carpeta.carpeta }}</a></td>
+  {% if carpeta.descripción %}
+  <td><div align="left"> {{ carpeta.descripción|safe }} </div></td>
+  {% else %}
+        <td><div align="left"> --- </div></td>
+  {% endif %}
+      </tr>   
+    {% endfor %}
+  </tbody>
+</table>
+<hr>
+{% endif%}
+
+{% if state %}
+
+<h3>{% trans "Items" %}</h3>
+<table class="resourceTable2">
+  <thead>
+    <tr>
+      <th>{% trans "Nombre" %}</th>
+      <th>{% trans "Descripción" %}</th>
+    </tr>
+  </thead>
+</table>
+<hr>
+
+
+
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!-- Current language: {{ LANGUAGE_CODE }} -->
+ 
+
+
+
+{% else %}
+  <p>{% trans "Inicia sesión para ver este contenido" %}</p>
+{% endif %}
+
+<script>
+$(document).ready( function () {
+    $('.resourceTable').DataTable( {
+     {% if LANGUAGE_CODE == 'es' %}
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+        },
+        {% elif LANGUAGE_CODE == 'de' %}
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/German.json"
+        },
+        {% endif %}
+      });
+
+$('.resourceTable1').DataTable( {
+     {% if LANGUAGE_CODE == 'es' %}
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+        },
+        {% elif LANGUAGE_CODE == 'de' %}
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/German.json"
+        },
+        {% endif %}
+      });
+
+$('.resourceTable2').DataTable( {
+     "pageLength": 10,
+     "processing": true,
+     "serverSide": true,
+     "ajax": "{% url 'imagen_desc_list_json' %}",
+     {% if LANGUAGE_CODE == 'es' %}
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+        },
+        {% elif LANGUAGE_CODE == 'de' %}
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/German.json"
+        },
+        {% endif %}
+      });} );
+</script>
+{% endblock %}

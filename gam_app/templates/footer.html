@@ -1,0 +1,84 @@
+
+{% load staticfiles %}
+{% load i18n %}
+
+{% block footer %}
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create four equal columns that floats next to each other */
+.footer-column {
+  float: left;
+  width: 25%;
+  padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the four columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
+</style>
+
+<footer style="margin-top: 15px; background-color: #ffec00; border-top: 2px solid #7E7E7E;">
+
+<div class="row">
+  <div class="footer-column">
+
+  </div>
+  <div class="footer-column">
+      <b>{% trans "COMO APOYAR" %}</b>
+      <p><a href="http://grupodeapoyomutuo.org.gt/contacto/">{% trans "¿Cómo donar?" %}</a></p>
+      <p><a href="http://grupodeapoyomutuo.org.gt/voluntariado/">{% trans "Voluntariado" %}</a></p>
+  </div>
+  <div class="footer-column">
+      <b>{% trans "CONTÁCTANOS" %}</b>
+      <p><i class="fa fa-map-marker"></i>{% trans "  8a calle 3-11 Zona 1" %}</p>
+      <p><i class="fa fa-phone"></i>   (+502) 22323208</p>
+      <i class="fa fa-envelope"></i><a href="mailto:grupodeapoyomutuo@gmail.com">  grupodeapoyomutuo@gmail.com</a>
+
+  </div>
+  <div class="footer-column">
+    <b>SÍGUENOS</b>
+    <div class="container" style="">
+<div class="row" style="display: flex;">
+<div class="col-md-1" style="width: 50px; height: 50px; text-align: center; border: 1px solid #7E7E7E !important; border-radius: 75%; background: #ffec00 !important;">
+      <a href="https://www.facebook.com/GAMGuatemala" target="_blank"></p>
+<div><span class="fa fa-facebook fa-lg fa" style="line-height: 50px; color: #7E7E7E;"></span></div>
+<p></a>
+    </div>
+<div class="col-md-1" style="width: 50px; height: 50px; text-align: center; border: 1px solid #7E7E7E !important; border-radius: 75%; background: #ffec00 !important; margin-left: 10px;">
+      <a href="https://twitter.com/apoyomutuo" target="_blank"></p>
+<div><span class="fa fa-twitter fa-lg fa" style="line-height: 50px; color: #7E7E7E;"></span></div>
+<p></a>
+    </div>
+<div class="col-md-10"></div>
+</p>
+</div>
+<div class="row" style="display: flex; margin-top: 10px;">
+<div class="col-md-1" style="width: 50px; height: 50px; text-align: center; border: 1px solid #7E7E7E !important; border-radius: 75%; background: #ffec00 !important;">
+      <a href="https://www.youtube.com/user/CanalGAM" target="_blank"></p>
+<div><span class="fa fa-youtube-play fa-lg fa" style="line-height: 50px; color: #7E7E7E;"></span></div>
+<p></a>
+    </div>
+<div class="col-md-1" style="width: 50px; height: 50px; text-align: center; border: 1px solid #7E7E7E !important; border-radius: 75%; background: #ffec00 !important; margin-left: 10px;">
+      <a href="https://www.instagram.com/grupodeapoyomutuo/" target="_blank"></p>
+<div><span class="fa fa-instagram fa-lg fa" style="line-height: 50px; color: #7E7E7E;"></span></div>
+<p></a>
+    </div>
+  </div>
+</div>
+
+</footer>
+
+{% endblock  %}

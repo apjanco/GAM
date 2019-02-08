@@ -1,0 +1,81 @@
+{% extends 'acceso/base2.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block extra_static %}
+<script src="//code.jquery.com/jquery-3.3.1.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jq-3.3.1/dt-1.10.18/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs/jq-3.3.1/dt-1.10.18/datatables.min.js"></script>
+{% endblock %}
+
+{% block content2 %}
+
+<style>
+#header {
+		background-image: url(https://archivogam.haverford.edu/static/pat_goudvis/{{ photo }});
+	}
+</style>
+<body class="homepage is-preload">
+  <div id="page-wrapper">
+    <!-- Header -->
+    <div id="header">
+  <!-- Inner -->
+        <div class="inner">
+    <hr />
+    <h4>{% trans "Casos del diario militar en los archivos del GAM" %}</h4>
+
+    <a href="#main"><i class="fa fa-angle-double-down" style="font-size:58px;"></i></a>
+      </div>
+  </div>
+      <!-- Main -->
+      
+        <div class="wrapper style1">
+
+          <div class="container">
+            <article id="main" class="special">
+              <header>
+                <h2><a href="#">{% trans "Ubicación"%}</a></h2>
+                <p>
+                  {% trans "Morbi convallis lectus malesuada sed fermentum dolore amet"%}
+                </p>
+              </header>
+
+              <h3>{% trans "Carpetas" %}</h3>
+
+
+              <section>
+                <header>
+                  <h3>{% trans "Ultrices tempor sagittis nisl"%}</h3>
+                </header>
+                <p>
+                  {% trans "Nascetur volutpat nibh ullamcorper vivamus at purus. Cursus ultrices porttitor sollicitudin imperdiet
+                  at pretium tellus in euismod a integer sodales neque. Nibh quis dui quis mattis eget imperdiet venenatis
+                  feugiat. Neque primis ligula cum erat aenean tristique luctus risus ipsum praesent iaculis. Fermentum elit
+                  fringilla consequat dis arcu. Pellentesque mus tempor vitae pretium sodales porttitor lacus. Phasellus
+                  egestas odio nisl duis sociis purus faucibus morbi. Eget massa mus etiam sociis pharetra magna."%}
+                </p>
+                <p>
+                  {% trans "Eleifend auctor turpis magnis sed porta nisl pretium. Aenean suspendisse nulla eget sed etiam parturient
+                  orci cursus nibh. Quisque eu nec neque felis laoreet diam morbi egestas. Dignissim cras rutrum consectetur
+                  ut penatibus fermentum nibh erat malesuada varius."%}
+                </p>
+              </section>
+              <section>
+                <header>
+                  <h3>{% trans "Augue euismod feugiat tempus"%}</h3>
+                </header>
+                <p>
+                  {% trans "Pretium tellus in euismod a integer sodales neque. Nibh quis dui quis mattis eget imperdiet venenatis
+                  feugiat. Neque primis ligula cum erat aenean tristique luctus risus ipsum praesent iaculis. Fermentum elit
+                  ut nunc urna volutpat donec cubilia commodo risus morbi. Lobortis vestibulum velit malesuada ante
+                  egestas odio nisl duis sociis purus faucibus morbi. Eget massa mus etiam sociis pharetra magna."%}
+                </p>
+              </section>
+            </article>
+            <hr />
+
+          </div>
+
+        </div>
+    
+{% endblock %}

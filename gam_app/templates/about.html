@@ -4,9 +4,10 @@
 {% load staticfiles %}
 
 {% block content %}
+{% if flatpage %}
+<div style="margin-top: 15px;">
+{{ flatpage.content }}
+</div>
+{% endif %}
 
-<p> Sobre </p>
-
-<p>Esta es una frase maravillosamente escrita y articulada que fue traducida con Google Translate. No puede usarse como evidencia de mi conocimiento del español. Probablemente no sea nada parecido al español guatemalteco y tiene muchos errores de máquina y otras cosas similares. Había una vez, Darth Vader se fue de compras para conseguir unos pantalones cortos. En la tienda encontró unos pantalones que estaban de moda, pero que no eran del tamaño correcto.</p>	
 {% endblock  %}
-

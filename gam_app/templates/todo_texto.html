@@ -1,22 +1,31 @@
 {% extends "base.html" %}
 {% block title %}GAM{% endblock %}
 
+{% load i18n %}
+
 {% block content %}
 {% if state %}
   
-    <ul>
+<div class ="row">
+<table class="table table-bordered">
+<thead>
+<tr>
+   <th class ="col-md-2">{% trans "Item" %}</th>
+   <th class ="col-md-5"><div align="left">{% trans "Transcripción" %}</div></th>
+   <th class ="col-md-5"><div align="left">{% trans "Traducción" %}</div></th>
+</tr>
+<tbody>
 {% for item in state %}
-    <p><a href="/file/{{ item.filename }}"><p>{{ item.physical_location }}</p></a>
-    <p>{{ item.ocr_text }}</p>
- 	<hr>
+<tr>
+  <td class ="col-md-2"><div align="left"><a href="{% url "documento5" item.archivo item.colección item.caja item.legajo item.carpeta item.número_de_imagen %}">{{ item.caja }}/{{ item.legajo }}/{{ item.carpeta }}/{{ item.número_de_imagen }}</a></div></td>
+  <td class ="col-md-5"><div align="left">{{ item.texto_de_OCR|striptags }}</div></td>
+  <td class ="col-md-5"><div align="left">{{ item.traducción|striptags }}</div></td>
+</tr>
 {% endfor %}
-</ul>
-    
-
-
-    
+</tbody>
+</table>
+</div>    
 {% else %}
-    <p>No document with that filename</p>
+<p>{% trans "Ningún documento con ese nombre de archivo" %}</p>
 {% endif %}
 {% endblock %}
-

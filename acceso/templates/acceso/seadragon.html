@@ -1,0 +1,15 @@
+{% load static %}
+{% load i18n %}
+<script src="{% static 'acceso/js/seadragon/openseadragon.min.js.map' %}"></script>
+<script src="{% static 'acceso/js/seadragon/openseadragon.min.js' %}"></script>
+<div id="seadragon-viewer" style="width:400px; height:300px;"></div>
+
+<script>
+    var SRC=[];
+    {% for i in dragon %}
+    SRC.push("http://archivogam.haverford.edu/{{i}}");
+    {% endfor %}
+
+
+</script>
+<script src="{% static 'acceso/js/seadragon/call_the_dragon.js' %}"></script>

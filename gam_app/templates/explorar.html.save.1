@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block extra_static %}
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script scr="//code.jquery.com/jquery-3.3.1.js"></script>
+
+<style>
+.sea-icon{
+  height: 30px;
+  width: 30px;
+}
+</style>
+{% endblock %}
+
+
+{% load staticfiles %}
+{% load i18n %}
+
+
+{% block title %}GAM{% endblock %}
+
+{% block content %}
+
+{% if state %}
+<h3>Archivos</h3>
+<table class="resource_table" style="margin-top: 15px;">
+  <tr>
+    <th>{% trans "Nombre" %}</th>
+    
+    <th><div align="left">{% trans "Descripción" %}</div></th>
+  </tr>
+  <ul>
+{% for archive in archives %}
+      <tr>
+        <td> <a href="{% url 'documento0' archive.nombre_del_archivo %}">{{ archive.nombre_del_archivo }} </a></td>
+       
+        <td><div align="left"> {{ archive.descripción }} </div></td>
+      
+      </tr>   
+    {% endfor %}
+     </ul>
+   </table>
+<br>   
+<h3>Colecciónes</h3><table class="resource_table">
+  <tr>
+    <th>{% trans "Nombre" %}</th>
+    <th><div align="left">{% trans "Descripción" %}</div></th>
+  </tr>
+  <ul>
+{% for collection in collections %}
+      <tr>
+        <td> <a href="{% url 'documento1' collection.archivo__nombre_del_archivo collection.colección__nombre_de_la_colección %}">{{ collection.colección__nombre_de_la_colección }}</a></td>
+        <td><div align="left"> {{ collection.descripción }} </div></td>
+      </tr>   
+    {% endfor %}
+     </ul>
+   </table>
+<br>
+
+<h3>Carpetas</h3>
+<table class="resourceTable">
+  <thead>
+    <tr>
+      <th>{% trans "Nombre" %}</th>
+      <th><div align="left">{% trans "Descripción" %}</div></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for carpeta in carpetas %}
+      <tr>
+        <td><a href="{% url 'documento4' carpeta.archivo carpeta.colección carpeta.caja carpeta.legajo carpeta.carpeta %}">{{ carpeta.colección }} {{ carpeta.caja }}/{{carpeta.legajo }}/{{ carpeta.carpeta }}</a></td>
+	{% if carpeta.descripción %}
+	<td><div align="left"> {{ carpeta.descripción }} </div></td>
+	{% elif carpeta.descripción_generada_automaticamente %}
+	<td><div align="left"> {{ carpeta.descripción_generada_automaticamente }} </div></td>
+	{% else %}
+        <td><div align="left"> --- </div></td>
+	{% endif %}
+      </tr>   
+    {% endfor %}
+  </tbody>
+</table>
+<hr>
+
+
+
+    
+
+
+    
+{% else %}
+  <p>{% trans "Inicia sesión para ver este contenido" %}</p>
+{% endif %}
+
+<script>
+$(document).ready( function () {
+    $('.resourceTable').DataTable();
+} );
+</script>
+{% endblock %}

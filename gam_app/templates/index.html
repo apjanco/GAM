@@ -2,30 +2,30 @@
 {% block title %}GAM{% endblock %}
 
 {% load staticfiles %}
+{% load i18n %}
 
 {% block content %}
-
 
 {% if failed %}
        <span>Error Message</span>
     {% endif %}
-    <span><img src="{% static 'Logo_01.png' %}" height="20%" width="16.2%"/></span>
 
-    <form id="searchers_form"  action="{% url 'advanced-search-submit' %}" method="GET">
-       {% csrf_token %}
-       <div id="searchers">
+{% if user.is_authenticated %}
+ 
+    <!--  url 'GAM:search' %} -->
+    <form id="searchers_form"  action="advanced_search_submit" method="GET" style="padding-top: 10px;">
+       <div class="form-group" id="searchers">
           <div id="searcher1"></div>
        </div>
-       <input id="search_submit_button" type="submit" value="Submit">
-       <input id="full_info" type="hidden" value='' name="full_info" >
+	<input id="full_info" type="hidden" value='' name="full_info">
     </form>
 
     
-    <span> </span>
+    <span>{% trans "Agregar un término de búsqueda" %}</span>
     <input type="hidden" id="searcher_counter" name="seacher_count" value="1">
-    <input id="OR_search" type='button' value='O'/>
-    <input id="AND_search" type='button' value='Y'/>
-    <input id="NOT_search" type='button' value='NO'/>
+    <button type="button" style="border-color: #000000;" id="OR_search" class="btn">{% trans "O" %}</button>
+    <button type="button" style="border-color: #000000;" id="AND_search" class="btn">{% trans "Y" %}</button>
+    <button type="button" style="border-color: #000000;" id="NOT_search" class="btn">{% trans "NO" %}</button>
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/jquery-ui.js' %}"></script>
     <script src="{% static 'js/jQDateRangeSlider-min.js' %}"></script>
@@ -36,38 +36,32 @@
 	$("#searcher_counter").val("1");
 	});
       // These long lines are just html we will be using and reusing
-      var select_fields = "<select class='field_option'> <option>cualquiera de estas palabras</option> <option>Title</option>  <option>Statement ID</option>  <option>Author</option>  <option>Organization</option> <option>Keyword</option>  <option>Context</option> <option>Keyword in Context</option></select>";
-      var delete_button = "<a href='#' class='delete_searcher'>  Borrar</a>"; 
+      var select_fields = "<select class='form-control field_option'> <option>{% trans "Cualquier Campo" %}</option> <option>{% trans "Persona" %}</option> <option>{% trans "Ubicación Geográfica" %}</option> <option>{% trans "Género" %}</option> <option>{% trans "Etnicidad" %}</option></select>";
+       var delete_button = "<button class='delete_searcher' type='button'><span class='glyphicon glyphicon-remove delete_searcher'></span></button>"; 
       
       function createLogicDropdown(operator) {
         if(operator=="AND") {
-            return  "<select class='logic_option'> <option value='OR'>OR</option> <option value='AND' selected='selected'>AND</option> <option value='NOT'>NOT</option></select>";
+            return  "<select class='form-control logic_option'> <option value='OR'>O</option> <option value='AND' selected='selected'>{% trans "Y" %}</option> <option value='NOT'>{% trans "NO" %}</option></select>";
         }
 	else if (operator=="OR") {
-            return  "<select class='logic_option'> <option selected='selected' value='OR'>OR</option> <option value='AND'>AND</option> <option value='NOT'>NOT</option></select>";
+            return  "<select class='form-control logic_option'> <option selected='selected' value='OR'>O</option> <option value='AND'>{% trans "Y" %}</option> <option value='NOT'>{% trans "NO" %}</option></select>";
         }
 	else {
-            return  "<select class='logic_option'> <option value='OR'>OR</option> <option value='AND'>AND</option> <option selected='selected' value='NOT'>NOT</option></select>";
+            return  "<select class='form-control logic_option'> <option value='OR'>{% trans "O" %}</option> <option value='AND'>Y</option> <option selected='selected' value='NOT'>{% trans "NO" %}</option></select>";
         }
       }
       // make first search bar. This one can't be deleted
-      $("#searcher1").append("<span><input type='text' class='search_text' name='search' placeholder='Buscar...'> in " + select_fields + "</span");
-       	// only submits the first slider as of right now
-	$("#filter_form").submit(function( event) {
-	  for(i=1; i <= $("#searcher_counter").val(); i++) {
-	    var dateValues = $("#searcher"+i).dateRangeSlider("values");
-	    //$("#dateLow"+i).val(dateValues.min.toString());
-            //$("#dateHigh"+i).val(dateValues.max.toString());
- 	  }	
-        });
+      $("#searcher1").append("<span><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='search' placeholder='{% trans "Buscar..." %}'><span class='input-group-addon'><button type='submit'><span class='glyphicon glyphicon-search'></span></button></span></div> en " + select_fields + "</span>");
+
+
       // what happens when you click AND
       $("#AND_search").click(function(event) {
 	if($("#searcher_counter").val() < 11) {
           // the plus              here tells javascript to do as number addition so 1+1 doesn't equal 11.
 	  $("#searcher_counter").val(+$("#searcher_counter").val() + 1);
 	  var id_num = $("#searcher_counter").val();
-          $("#searchers").append("<div id='searcher"+ id_num +"'></div>");
-	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("AND") + "<input type='text' class='search_text' name='AND_search' placeholder='Buscar...'> in " + select_fields + delete_button + "</span>");
+          $("#searchers").append("<div id='searcher"+ id_num +"' class='form-group'></div>");
+	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("AND") + "<br/><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='AND_search' placeholder='Buscar...'><span class='input-group-addon'>" + delete_button + "</span></div> en " + select_fields + "</span>");
 	}
       });
       // what happens when you click OR
@@ -77,7 +71,7 @@
 	  $("#searcher_counter").val(+$("#searcher_counter").val() + 1);
 	  var id_num = $("#searcher_counter").val();
           $("#searchers").append("<div id='searcher"+ id_num +"'></div>");
-	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("OR") + "<input type='text' class='search_text' name='OR_search' placeholder='Buscar...'> in "+ select_fields + delete_button + "</span>");
+	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("OR") + "<br/><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='OR_search' placeholder='Buscar...'><span class='input-group-addon'>" + delete_button + "</span></div> en " + select_fields + "</span>");
 	}
       });
       // what happens when you click NOT
@@ -87,7 +81,7 @@
 	  $("#searcher_counter").val(+$("#searcher_counter").val() + 1);
 	  var id_num = $("#searcher_counter").val();
           $("#searchers").append("<div id='searcher"+ id_num +"'></div>");
-	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("NOT") + "<input type='text' class='search_text' name='NOT_search' placeholder='Buscar...'> in "+ select_fields + delete_button + "</span>");
+	  $("#searcher" + id_num).append("<span>" + createLogicDropdown("NOT") + "<br/><div class='input-group stylish-input-group'><input type='text' class='form-control search_text' name='NOT_search' placeholder='Buscar...'><span class='input-group-addon'>" + delete_button + "</span></div> en " + select_fields + "</div>");
 	}
       });
       // what happens when you click Delete
@@ -95,32 +89,43 @@
       // exist on the initial page load
       $("#searchers").on("click", ".delete_searcher", function(event) {
           event.preventDefault();
-          $(event.target).parent().parent().remove();
+          console.log("DELETE");
+          $(event.target).parent().parent().parent().parent().remove();
 	  $("#searcher_counter").val(+$("#searcher_counter").val() - 1);
        });
-	// on - click
-      $(".delete_searcher").click(function(event) {
-	if($("#seacher_counter").val() != 1) {
-	  $("#seacher"+ $("#seacher_counter").val()).remove();
-	  $("#seacher_counter").val(+$("#slider_counter").val() - 1);
-	}
-      });
+      // on submit we generate full_info
       $("#searchers_form").submit(function(event) {
+	// uncomment to prevent page submit
+        // event.preventDefault();
         var the_request = "";
         $("#searchers").children().each(function() {
-          // alright, we got the values
-	  console.log($(this).children().children(".search_text").val());
+          // THIS IS A BAD WAY OF DOING IT THAT DEPENDS ON THE STRUCTURE OF THE PAGE
+	  console.log($(this).children().children().children(".search_text").val());
           console.log($(this).children().children(".logic_option").val());
           console.log($(this).children().children(".field_option").val());
-         
-          var text  = $(this).children().children(".search_text").val();
+          console.log($(this).children());
+          var text  = $(this).children().children().children(".search_text").val();
           var logic = $(this).children().children(".logic_option").val();
           var field = $(this).children().children(".field_option").val();
-	  the_request += text + "^" + logic + "^" + field+"^";
+	  the_request += text + "-" + logic + "-" + field+"-";
         });        
         $("#full_info").val(the_request);
       });
     </script>
+{% else %}
+
+<h2>Bienvenidos a los Archivos Digitales del Grupo de Apoyo Mutuo</h2>
+<br>
+<p><strong>{% trans "El Grupo de Apoyo Mutuo</strong>&nbsp;es una organizaci&oacute;n de la sociedad civil sin fines de lucro creada en 1984 que aglutina a los familiares de personas detenidas ilegalmente y desaparecidas forzadamente en Guatemala durante el Conflicto Armado Interno que dur&oacute; de 1960 a 1996. Nuestro &aacute;mbito de trabajo abarca la justicia por el desaparecido y la dignificaci&oacute;n de las v&iacute;ctimas, trabajo que ha llevado a GAM a estar nominado por el Premio Nobel de la Paz en 1986. Adem&aacute;s elaboramos informes tem&aacute;ticos relacionados a los &iacute;ndices de violencia actuales y monitoreo a las instituciones que conforman el sector de seguridad y justicia.&nbsp;" %}</p>
+<br>
+<a href="/cuentas/login/">{% trans "Haga clic aquí para crear una cuenta e iniciar sesión." %}</a>
+<br><br><br>
+
+<img style="position:relative; overflow:hidden; width:100%};" src="{% static "gam_image.jpeg" %}">
+
+
+
+{% endif %}
 
 
 {% endblock  %}

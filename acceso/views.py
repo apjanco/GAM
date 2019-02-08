@@ -56,11 +56,28 @@ def main(request):
     context = {'casos': casos, 'photo_list': photo_list, 'filter_list':filter_list, 'photo': photo}
     return render(request, 'acceso/index.html', context)
 
+def skynet(request):
+    photo = [[532, "dataset/cat/2008_007496.jpg", 0.4442075490951538],
+             [548, 'dataset/cat/2008_003622.jpg', 0.46999311447143555],
+             [530, 'dataset/cat/2008_006999.jpg', 0.471227765083313],
+             [543, 'dataset/cat/2008_005252.jpg', 0.4816729426383972],
+             [517, 'dataset/cat/2008_004303.jpg', 0.4869983196258545],
+             [508, 'dataset/cat/2008_001885.jpg', 0.49179962277412415],
+             [541, 'dataset/cat/2008_005386.jpg', 0.4957163631916046],
+             [509, 'dataset/cat/2008_000182.jpg', 0.4999980032444],
+             [527, 'dataset/cat/2008_000345.jpg', 0.5011175274848938],
+             [545, 'dataset/cat/2008_001335.jpg', 0.5041385889053345]]
+    n = 0
+    photoclean = []
+    for i in photo:
+        photoclean.append(i[1])
+    print(photoclean)
+
+    return render(request, 'acceso/skynet.html', {'photo':photoclean})
 
 def about(request):
     photo = random_photo()
     return render(request, 'acceso/about.html', {'photo':photo})
-
 
 def collection(request):
     photo = random_photo()

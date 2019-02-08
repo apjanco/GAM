@@ -15,6 +15,7 @@ urlpatterns = [
     path('colección/', views.collection, name='collection'),
     path('caso/<caso>', views.caso, name='caso'),
     path('simple/', views.simple, name='simple'),
+    path('skynet/', views.skynet, name='skynet'),
 
     # jsGrid
     path('caso-index/', views.caso_index, name='caso_index'),

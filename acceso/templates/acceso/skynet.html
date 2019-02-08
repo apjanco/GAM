@@ -33,7 +33,7 @@
 
           <script>
             var SRC=[];
-            {% for i in photo %}
+            {% for i in photoclean %}
               SRC.push("https://dzis.nyc3.digitaloceanspaces.com/{{i.nombre_del_archivo}}.dzi");
               {% endfor %}
           </script>

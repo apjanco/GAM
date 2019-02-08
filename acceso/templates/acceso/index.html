@@ -55,8 +55,13 @@
 
     <a href="{% url 'acceso:history' %}" class="button">{% trans "Sigue Leyendo Sobre la Historia" %}</a>
 
-    </div>
-        <!--End history section-->
+
+    </footer>
+            
+          
+  </article>
+
+<!--End history section-->
 
 
 <!-- carousel -->
@@ -176,6 +181,7 @@ figure {
 
     </div>
   </div>
+
 </div>
 
 <div class="container">
@@ -193,6 +199,7 @@ figure {
             <a  href="{% url 'acceso:caso' caso.slug_name %}"><img src="https://archivogam.haverford.edu/static/pat_goudvis/{{ photo }}"  #TODO This is a temporary fix, needs to have dynamic path
                                                                   alt="{{ caso.descripción|safe}}" /></a>
             {% endif %}
+
           </div>
         </div>
         <!-- <figcaption class="picture-item__title"><a href="{% url 'acceso:caso' caso.slug_name %}" target="_blank" rel="noopener">{{ caso.nombre_del_caso}}</a></figcaption> -->

@@ -9,7 +9,8 @@ from django.urls import include
 app_name = "acceso"
 
 urlpatterns = [
-    path('', views.main, name='index'),
+    path('', views.main,{'options': True},name='index'),
+    path('table/', views.main,{'options': False},name='table'),
     path('about/', views.about, name='about'),
     path('history/', views.history, name='history'),
     path('colección/', views.collection, name='collection'),

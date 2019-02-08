@@ -37,7 +37,7 @@ def next_photo():
             yield photos[num]
             num += 1
 
-def main(request):
+def main(request, options):
     casos = Caso.objects.all()
     filters = Filtros.objects.all()
     filter_list = []
@@ -47,6 +47,7 @@ def main(request):
     for caso in casos:
         photo_list.append(caso.fotos.first())
 
+
     photo = random_photo()
     #photos = os.listdir('/srv/GAM/acceso/static/pat_goudvis')
     #photo = cycle(photos)
@@ -54,6 +55,7 @@ def main(request):
     #print(photo)
     #print('casos:  ', casos)
     context = {'casos': casos, 'photo_list': photo_list, 'filter_list':filter_list, 'photo': photo}
+
     return render(request, 'acceso/index.html', context)
 
 def skynet(request):

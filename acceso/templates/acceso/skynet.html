@@ -25,17 +25,19 @@
         <div style="width:100%;">
 		  <!-- Open sea dragon -->
 
-		  <h3> {% trans "Archivos Dentro del Caso" %} </h3>
+		  <h3> {% trans "Hello I'm skynet" %} </h3>
           <script src="{% static 'acceso/js/seadragon/openseadragon.min.js.map' %}"></script>
           <script src="{% static 'acceso/js/seadragon/openseadragon.min.js' %}"></script>
 
 			<div id="seadragon-viewer" style="width:100%; height:500px;"></div>
 
+
           <script>
+
             var SRC=[];
             {% for i in photoclean %}
               SRC.push("https://dzis.nyc3.digitaloceanspaces.com/{{i.nombre_del_archivo}}.dzi");
-              {% endfor %}
+            {% endfor %}
           </script>
 
           <script src="{% static 'acceso/js/seadragon/call_the_dragon.js' %}"></script>

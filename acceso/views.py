@@ -1,5 +1,6 @@
 from itertools import cycle
-
+from bokeh.embed import server_document
+from bokeh.embed import server_session
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core import serializers
@@ -22,7 +23,10 @@ def cycle(iterable):
         for element in saved:
             yield element
 
-
+def bokeh(request):
+    script = server_document(url="https://archivogam.haverford.edu/acceso/bokeh/people", relative_urls=True)
+    return render(request, 'acceso/bokeh.html', {'script': script})
+	
 
 def random_photo():
     #yield from cycle(os.listdir('/srv/GAM/acceso/static/pat_goudvis'))

@@ -17,7 +17,7 @@ urlpatterns = [
     path('caso/<caso>', views.caso, name='caso'),
     path('simple/', views.simple, name='simple'),
     path('skynet/', views.skynet, name='skynet'),
-
+    path('bokeh/', views.bokeh, name='bokeh'),
     # jsGrid
     path('caso-index/', views.caso_index, name='caso_index'),
     path('buscador-de-casos/', views.datatable, name='buscador-de-casos'),

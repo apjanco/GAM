@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-29 20:13+0000\n"
+"POT-Creation-Date: 2019-02-15 14:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -434,6 +434,10 @@ msgstr "Aufzeichnungen von Organisationen"
 #: gam_app/templates/navbar.html:82
 msgid "Sobre"
 msgstr "Über"
+
+#: gam_app/templates/navbar.html:84
+msgid "Acceso"
+msgstr ""
 
 #: gam_app/templates/navbar.html:87
 msgid "Buscar"

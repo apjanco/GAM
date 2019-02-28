@@ -28,4 +28,5 @@ urlpatterns = [
         name='db_list_json',
     ),
     path('documentos/', views.documentos, name='documentos'),
+    path('index2/', views.index2, name='index2'),
 ]

@@ -23,6 +23,19 @@ class Foto(models.Model):
     def __str__(self):
         return str(self.file)
 
+class Photo(models.Model):
+    filtros = models.ManyToManyField(Filtros, blank=True, related_name='photo_filtros')
+    file = models.CharField(max_length=200,blank=True)
+    folder = models.CharField(max_length=200, blank=True)
+    def __str__(self):
+        return str(self.file)
+    def filters_list(self):
+        filters_list = []
+        for filter in self.filtros.values():
+            filters_list.append(filter['nombre_del_filtro'])
+        return str(filters_list).replace("'",'"')
+    def save(self, *args, **kwargs):
+        super(Photo, self).save(*args, **kwargs)
 
 class Caso(models.Model):
     nombre_del_caso = models.CharField(max_length=200, blank=True)

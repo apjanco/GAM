@@ -61,7 +61,7 @@ def main(request, options):
 
     return render(request, 'acceso/index.html', context)
 
-def index2(request):
+def filtrar_imagenes(request):
     filter_list = ["", "none"] #Don't know how to add filters since images models are being created dynamically
     photo = random_photo()
     photo_list = []
@@ -69,7 +69,7 @@ def index2(request):
         foto = Photo(file=image, folder=image[38:-11])
         photo_list.append(foto)
     context = {'photo_list':photo_list, 'filter_list': filter_list, 'photo':photo}
-    return render(request, 'acceso/index2.html', context)
+    return render(request, 'acceso/filtrar_imagenes.html', context)
 
 def skynet(request):
     photo = [[532, "dataset/cat/2008_007496.jpg", 0.4442075490951538],

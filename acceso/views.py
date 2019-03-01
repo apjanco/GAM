@@ -24,7 +24,7 @@ def cycle(iterable):
             yield element
 
 def bokeh(request):
-    script = server_document(url="https://archivogam.haverford.edu/acceso/bokeh/people", relative_urls=True)
+    script = server_document(url="https://archivogam.haverford.edu/en/acceso/bokeh/people", relative_urls=True)
     return render(request, 'acceso/bokeh.html', {'script': script})
 	
 

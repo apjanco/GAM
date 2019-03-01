@@ -5,31 +5,28 @@
 
 
 {% block content1 %}
-<html>
-	<head>
-		<title>Right Sidebar - Helios by HTML5 UP</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="{% static 'acceso/css/main.css' %}" />
-		<noscript><link rel="stylesheet" href="{% static 'acceso/css/noscript.css" /></noscript>
-	</head>
-	<body class="right-sidebar is-preload">
-		<div id="page-wrapper">
 
-			<!-- Header -->
-				<div id="header">
-
-					<!-- Inner -->
-						<div class="inner">
-							<header>
-								<h1><a href="index.html" id="logo">{% trans "Historia" %}</a></h1>
-							</header>
-						</div>
 {% endblock %}
 					<!-- Nav -->
 {% block content2 %}
+<style>
+#header {
+		background-image: url(https://archivogam.haverford.edu/static/pat_goudvis/{{ photo }});
+	}
+</style>
+<body class="homepage is-preload">
+  <div id="page-wrapper">
+    <!-- Header -->
+    <div id="header">
+  <!-- Inner -->
+        <div class="inner">
 
-				</div>
+    <hr />
+    <h4>{% trans "La historia del GAM" %}</h4>
+
+    <a href="#main"><i class="fa fa-angle-double-down" style="font-size:58px;"></i></a>
+      </div>
+  </div>
 
 			<!-- Main -->
 				<div class="wrapper style1">

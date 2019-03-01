@@ -3,7 +3,7 @@ from acceso.models import *
 
 # Register your models here.
 class CasoAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['carpetas']
+    autocomplete_fields = ['carpetas', 'personas',]
 
 
 admin.site.register(Caso, CasoAdmin)
@@ -14,3 +14,7 @@ class FotoAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Foto, FotoAdmin)
+
+class FiltrosAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Filtros, FiltrosAdmin)

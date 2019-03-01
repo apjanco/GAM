@@ -1,26 +1,32 @@
-{% extends 'acceso/base.html' %}
+{% extends 'acceso/base2.html' %}
 {% load i18n %}
 {% load static %}
 
-  {% block content1 %}
-  <body class="no-sidebar is-preload">
-    <div id="page-wrapper">
-
-      <!-- Header -->
-        <div id="header">
-
-          <!-- Inner -->
-            <div class="inner">
-              <header>
-                <h1><a href="index.html" id="logo">{% trans "Mapa"%}</a></h1>
-              </header>
-            </div>
-
-          {% endblock %}
+{% block extra_static %}
+<script src="//code.jquery.com/jquery-3.3.1.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jq-3.3.1/dt-1.10.18/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs/jq-3.3.1/dt-1.10.18/datatables.min.js"></script>
+{% endblock %}
 
 {% block content2 %}
-        </div>
 
+<style>
+#header {
+		background-image: url(https://archivogam.haverford.edu/static/pat_goudvis/{{ photo }});
+	}
+</style>
+<body class="homepage is-preload">
+  <div id="page-wrapper">
+    <!-- Header -->
+    <div id="header">
+  <!-- Inner -->
+        <div class="inner">
+    <hr />
+    <h4>{% trans "Casos del diario militar en los archivos del GAM" %}</h4>
+
+    <a href="#main"><i class="fa fa-angle-double-down" style="font-size:58px;"></i></a>
+      </div>
+  </div>
       <!-- Main -->
       
         <div class="wrapper style1">
@@ -33,15 +39,10 @@
                   {% trans "Morbi convallis lectus malesuada sed fermentum dolore amet"%}
                 </p>
               </header>
-              <a href="#" class="image featured"><img src="images/pic06.jpg" alt="" /></a>
-              <p>
-                {% trans "Commodo id natoque malesuada sollicitudin elit suscipit. Curae suspendisse mauris posuere accumsan massa
-                posuere lacus convallis tellus interdum. Amet nullam fringilla nibh nulla convallis ut venenatis purus
-                lobortis. Auctor etiam porttitor phasellus tempus cubilia ultrices tempor sagittis. Nisl fermentum
-                consequat integer interdum integer purus sapien. Nibh eleifend nulla nascetur pharetra commodo mi augue
-                interdum tellus. Ornare cursus augue feugiat sodales velit lorem. Semper elementum ullamcorper lacinia
-                natoque aenean scelerisque vel lacinia mollis quam sodales congue."%}
-              </p>
+
+              <h3>{% trans "Carpetas" %}</h3>
+
+
               <section>
                 <header>
                   <h3>{% trans "Ultrices tempor sagittis nisl"%}</h3>
@@ -72,10 +73,9 @@
               </section>
             </article>
             <hr />
-            
+
           </div>
 
         </div>
-
-      
+    
 {% endblock %}

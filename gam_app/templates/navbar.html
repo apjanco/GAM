@@ -81,7 +81,7 @@ ul.topnav li.right {float: right;}
 {% else %}
     <li><b><a class="nav-text" href="{% url 'sobre' %}">{% trans "Sobre" %}</a></b></li>
 {% endif %}
-
+    <li><b><a class="nav-text" href="/acceso">{% trans "Acceso" %}</a></b></li>
 {% if user.is_authenticated %}
 
     <li><a class="nav-text" href="/">{% trans "Buscar" %}</a></li>

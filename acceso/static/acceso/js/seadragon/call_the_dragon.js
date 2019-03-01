@@ -22,6 +22,12 @@ var test = [duomo, duomo,duomo];
 var viewer = OpenSeadragon({
   id: "seadragon-viewer",
   prefixUrl: "//openseadragon.github.io/openseadragon/images/",
+  homeButton: "home",
+    zoomInButton: "zoom-in",
+    zoomOutButton: "zoom-out",
+    fullPageButton: "full-page",
+    rotateRightButton: "right-rotate",
+    rotateLeftButton: "left-rotate",
   tileSources: SRC,
   collectionMode:       true,
   collectionRows:       2,

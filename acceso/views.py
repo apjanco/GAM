@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 
 from gam_app.models import *
@@ -21,6 +21,8 @@ def main(request):
 def about(request):
     return render(request, 'acceso/about.html', {})
 
+def network(request):
+    return render(request, 'acceso/bestsellers_graph.html',)
 
 def map(request):
     return render(request, 'acceso/map.html', {})
@@ -85,3 +87,43 @@ def caso_table(request, caso_id):
         .filter(nombre_del_caso__icontains=request.GET.get('nombre_del_caso')) \
         .filter(descripción__icontains=request.GET.get('descripción'))
     return JsonResponse(serializers.serialize(caso))
+
+
+def network_json(request):
+
+    """{
+      "nodes":[
+            {"name":"node1","group":1},
+            {"name":"node2","group":2},
+            {"name":"node3","group":2},
+            {"name":"node4","group":3}
+        ],
+        "links":[
+            {"source":2,"target":1,"weight":1},
+            {"source":0,"target":2,"weight":3}
+        ]
+    }"""
+
+    dict = {'nodes': [], 'links': []}
+    with open('/srv/GAM/acceso/my_file.txt', 'r') as f:
+        node_list = list([line.split(',')[0] for line in f])
+        for node in set(node_list):
+            dict['nodes'].append({"name": node, "group": 1}, )
+
+    with open('/srv/GAM/acceso/my_file.txt', 'r') as f: 
+        for line in f:
+            node = line.split(',')[0]
+            target = line.split(',')[1]
+            weight = line.replace('\n', '').split(',')[2]
+            if weight != "0.0":
+                node_index = dict['nodes'].index({"name":node, "group":1},)
+                try:
+                    target_index = dict['nodes'].index({"name": target,"group":1},)
+                except:
+                    pass
+                dict['links'].append({"source": node_index, "target": target_index, "weight": float(weight) * 10})
+
+
+
+        response = JsonResponse(dict)
+        return response

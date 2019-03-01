@@ -13,7 +13,8 @@ urlpatterns = [
     path('map/', views.map, name='map'),
     path('caso/<caso>', views.caso, name='caso'),
     path('simple/', views.simple, name='simple'),
-
+    path('network_json/', views.network_json, name='network_json'),
+    path('network', views.network, name='network'),
     # jsGrid
     path('caso-index/', views.caso_index, name='caso_index'),
     path('api/<int:caso_id>/', views.caso_table),

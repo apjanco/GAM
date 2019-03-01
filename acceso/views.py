@@ -51,7 +51,6 @@ def main(request, options):
     for caso in casos:
         photo_list.append(caso.fotos.first())
 
-
     photo = random_photo()
     #photos = os.listdir('/srv/GAM/acceso/static/pat_goudvis')
     #photo = cycle(photos)
@@ -61,6 +60,16 @@ def main(request, options):
     context = {'casos': casos, 'photo_list': photo_list, 'filter_list':filter_list, 'photo': photo}
 
     return render(request, 'acceso/index.html', context)
+
+def filtrar_imagenes(request):
+    filter_list = ["", "none"] #Don't know how to add filters since images models are being created dynamically
+    photo = random_photo()
+    photo_list = []
+    for image in os.listdir('/srv/GAM/acceso/static/diario_militar/thumbnails')[:10]:
+        foto = Photo(file=image, folder=image[38:-11])
+        photo_list.append(foto)
+    context = {'photo_list':photo_list, 'filter_list': filter_list, 'photo':photo}
+    return render(request, 'acceso/filtrar_imagenes.html', context)
 
 def skynet(request):
     photo = [[532, "dataset/cat/2008_007496.jpg", 0.4442075490951538],

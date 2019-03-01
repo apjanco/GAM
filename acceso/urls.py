@@ -28,4 +28,5 @@ urlpatterns = [
         name='db_list_json',
     ),
     path('documentos/', views.documentos, name='documentos'),
+    path('filtrar_imagenes/', views.filtrar_imagenes, name='filtrar_imagenes'),
 ]

@@ -1,5 +1,4 @@
-
-{% extends 'acceso/base.html' %}
+{% extends 'acceso/base2.html' %}
 {% load i18n %}
 {% load static %}
 {% load app_filters %}
@@ -49,23 +48,16 @@
       <p>
       {% trans "Sobre la historia  summary aenean eu aenean mollis mollis facilisis primis ornare penatibus aenean. Cursus ac enim pulvinar curabitur morbi convallis. Lectus malesuada sed fermentum dolore amet." %}
     </p>
-
-
     <a href="{% url 'acceso:history' %}" class="button">{% trans "Sigue Leyendo Sobre la Historia" %}</a>
 
-
     </footer>
-            
-          
+                      
   </article>
 
 <!--End history section-->
 
-
-<!-- carousel -->
-   </div>
-
-    <!-- AJ grid  -->
+  </div>
+<!-- AJ grid  -->
 <style>
 .outer-box {
   border: black;
@@ -158,7 +150,7 @@ figure {
 
 
 <div class="container">
-   <h2><a href="#">{% trans "Personas" %} </a></h2>
+  <h2><a href="#">{% trans "Photos" %} </a></h2>
   <div class="row">
     <div class="col-4@sm col-3@md">
       <div class="filters-group">
@@ -175,8 +167,8 @@ figure {
     <div class="col-12@sm filters-group-wrap">
       <div class="filters-group">
         <div class="btn-group filter-options">
-          {% for filter in filter_list %}
-          <button class="btn btn--primary" data-group="{{ filter }}">{{ filter }} </button>
+		  {% for filter in filter_list %} <!--Filter list needs to change to fix buttons -->
+		  <button class="btn btn--primary" data-group="{{ filter}} ">{{ filter }}</button>
           {% endfor %}
         </div>
       </div>
@@ -187,41 +179,24 @@ figure {
 </div>
 
 <div class="container">
-  <div id="grid" class="row my-shuffle-container">
-   {% for caso in casos %}
-     <figure class="picture-item" data-groups="{{ caso|filters }}" data-fecha-de-desaparicion="{{ caso.fecha_de_desaparicion|date:"Y-m-d" }}" data-title="{{ caso.nombre_del_caso}}">
-      <a  href="{% url 'acceso:caso' caso.slug_name %}"><b>{{ caso.nombre_del_caso }}</b></a>
+  <!-- Images do not show up with the following line -->
+  <!-- <div id="grid" class="row my-shuffle-container"> -->
+  <div class="picture-item my-shuffle">
+   {% for photo in photo_list %}
+   <figure class="picture-item" data-groups='[""]'>
       <div class="picture-item__inner">
         <div class="aspect aspect--16x9"> <!-- 16x9 -->
           <div class="aspect__inner" style="border: black; border-width: 5px; border-style: solid;">
-           {% if caso.foto_de_perfil %}
-            <a  href="{% url 'acceso:caso' caso.slug_name %}"><img src="https://archivogam.haverford.edu/{{ caso.foto_de_perfil }}"  #TODO This is a temporary fix, needs to have dynamic path
-                                                                  alt="{{ caso.descripción|safe}}" /></a>
-            {% else %}
-            <a  href="{% url 'acceso:caso' caso.slug_name %}"><img src="https://archivogam.haverford.edu/static/pat_goudvis/{{ photo }}"  #TODO This is a temporary fix, needs to have dynamic path
-                                                                  alt="{{ caso.descripción|safe}}" /></a>
-            {% endif %}
-
+				  <a  href="#"><img src="{% static "diario_militar/thumbnails/" %}{{ photo.file }}" alt="#" /></a>
           </div>
         </div>
-        <!-- <figcaption class="picture-item__title"><a href="{% url 'acceso:caso' caso.slug_name %}" target="_blank" rel="noopener">{{ caso.nombre_del_caso}}</a></figcaption> -->
-        <div class="picture-item__title" style="padding-top: 8px; padding-bottom: 8px">
-            <p>{{ caso.descripción|safe|truncatewords:150 }}<b><a href="{% url 'acceso:caso' caso.slug_name %}">{% trans "leer más aquí" %}</a></b></p>
-          <!-- <p class="picture-item__tags hidden@xs">caso</p> -->
-        </div>
-          <div hidden class="picture-item_details">
-              <p>{{ caso.descripción|safe}}</p>
       </div>
     </figure>
-
-            {% endfor %}
+   {% endfor %}
 
     <div class="col-1@sm col-1@xs my-sizer-element"></div>
   </div>
 </div>
-
-
-
 
 <script>
 
@@ -261,14 +236,14 @@ class Demo {
     if (!options) {
       return;
     }
-
-    const filterButtons = Array.from(options.children);
+   
+	const filterButtons = Array.from(options.children);
     const onClick = this._handleFilterClick.bind(this);
     filterButtons.forEach((button) => {
       button.addEventListener('click', onClick, false);
     });
-  }
-
+  s}
+  
   _handleFilterClick(evt) {
     const btn = evt.currentTarget;
     const isActive = btn.classList.contains('active');
@@ -285,7 +260,7 @@ class Demo {
       filterGroup = btnGroup;
     }
 
-    this.shuffle.filter(filterGroup);
+    //this.shuffle.filter(filterGroup);
   }
 
   _removeActiveClassFromChildren(parent) {

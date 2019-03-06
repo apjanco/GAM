@@ -10,10 +10,26 @@ from gam_app.models import Persona
 from gam_app.models import Caso as Database
 import os
 import random
+from django.views.generic.base import TemplateView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.utils.html import escape
 from django.db.models import Count, Q
-
+import mysql.connector
+from mysql.connector import errorcode
+import os
+import sys
+sys.path.append('/home/yayad/GAM/archivo/')
+from settings_secret import DATABASES
+import plotly 
+plotly.tools.set_credentials_file(username='ajanco', api_key='2uxIhIy1JmOasiWozwd7')
+import plotly.plotly as py
+import plotly.graph_objs as go 
+import cufflinks as cf
+import plotly.offline as opy
+from datetime import datetime
+import pandas as pd
+import numpy as np
+import plotly.graph_objs as go
 def cycle(iterable):
     saved = []
     for element in iterable:
@@ -24,7 +40,7 @@ def cycle(iterable):
             yield element
 
 def bokeh(request):
-    script = server_document(url="https://archivogam.haverford.edu/acceso/bokeh/people", relative_urls=True)
+    script = server_document(url="http://192.241.128.56:8000/en/acceso/bokeh/people", relative_urls=True)
     return render(request, 'acceso/bokeh.html', {'script': script})
 	
 
@@ -200,3 +216,118 @@ class DbListJson(BaseDatatableView):
             q = Q(caso__icontains=search) | Q(descripcion_caso__icontains=search) | Q(fecha_desaparicion__icontains=search) | Q(departamento__icontains=search)
             qs = qs.filter(q)
         return qs
+
+class Plotly(TemplateView):
+	template_name = 'acceso/plotly.html'
+	def get_context_data(self, **kwargs):
+		context = super(Plotly, self).get_context_data(**kwargs)
+		try:
+			conn = mysql.connector.connect(user=DATABASES['default']['USER'], password=DATABASES['default']['PASSWORD'], host=DATABASES['default']['HOST'], database=DATABASES['default']['NAME'])
+		except mysql.connector.Error as err:
+			if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+				print("Something is wrong with your user name or password")
+			elif err.errno == errorcode.ER_BAD_DB_ERROR:
+				print("Database does not exist")
+			else:
+				print(err)
+		c = conn.cursor()
+
+
+		df = pd.read_sql(
+                """
+                SELECT *
+                FROM gam_app_caso
+                """, con=conn)
+
+		df = df[df['fecha_desaparicion'] != '']
+		dates = np.array(df['fecha_desaparicion'], dtype=np.datetime64)
+		dates = np.unique(dates)
+		dates = dates[2:]
+		print(dates)
+		counts = []
+		for i in dates:
+			counts.append(df[df['fecha_desaparicion'] == str(i)]['fecha_desaparicion'].count())
+		trace = go.Scatter(x=dates,
+                   y=counts)
+		data = [trace]
+		layout = dict(
+    			title='Time series with range slider and selectors',
+    			xaxis=dict(
+        			rangeselector=dict(
+            				buttons=list([
+                				dict(count=1,
+                				     label='1m',
+                				     step='month',
+                				     stepmode='backward'),
+                				dict(count=6,
+                				     label='6m',
+                				     step='month',
+                				     stepmode='backward'),
+                				dict(count=1,
+                				    label='YTD',
+                				    step='year',
+                				    stepmode='todate'),
+                				dict(count=1,
+                				    label='1y',
+                				    step='year',
+                				    stepmode='backward'),
+                				dict(step='all')
+            				])
+        				),
+        			rangeslider=dict(
+       	  			   visible = True
+        		),
+        		type='date'
+    			)
+		)
+		fig = dict(data=data, layout=layout)
+		div = opy.plot(fig, auto_open=False, output_type='div')
+		df_geo = pd.read_sql(
+		"""
+		SELECT Y(punto), X(punto), nombre_del_lugar
+		FROM gam_app_lugar
+		""", con=conn)
+		df_geo = df_geo.dropna()
+		print(len(list(df_geo["Y(punto)"])))
+		print(len(list(df_geo["X(punto)"])))
+		data_geo = [ dict(
+			type = 'scattergeo',
+			#locationmode = 'ISO-3',
+			#locations = list('GTM'),
+			mode = 'markers+text',
+			lat = list(df_geo["Y(punto)"]),
+			lon = list(df_geo["X(punto)"]),
+			text = list(df_geo["nombre_del_lugar"]),
+			textposition = ['top right', 'top left', 'top center', 'bottom right', 'top right', 'top right', 'top left', 'top center', 'bottom right', 'top right', 'top right', 'top left', 'top center', 'bottom right', 'top right'],
+			marker = dict(
+				size = 7,
+				opacity = 0.8,
+				line = dict(width = 1),
+				color = ['#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd', '#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd', '#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd']
+			)
+
+
+		)]
+		print(data_geo)
+		layout_geo = dict(
+			title = 'Missing People Locations',
+			geo = dict(
+				scope='north america',
+				lonaxis = dict( range= [df_geo["X(punto)"].min(), df_geo["X(punto)"].max()]),
+				lataxis = dict(range = [df_geo["Y(punto)"].min(), df_geo["Y(punto)"].max()]),
+				showland = True,
+				landcolor = "rgb(250, 250, 250)",
+				subunitcolor = "rgb(217, 217, 217)",
+				countrycolor = "rgb(217, 217, 217)",
+				countrywidth = 0.5,
+				subunitwidth = 0.5
+
+			),			
+
+		)
+		
+		fig_geo = dict(data=data_geo, layout=layout_geo)
+		div_geo = opy.plot(fig_geo, auto_open=False, output_type='div')
+		context['graph'] = div
+		context['geo'] = div_geo
+		return context

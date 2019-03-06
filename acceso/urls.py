@@ -16,6 +16,8 @@ urlpatterns = [
     path('colección/', views.collection, name='collection'),
     path('caso/<caso>', views.caso, name='caso'),
     path('simple/', views.simple, name='simple'),
+    path('network_json/', views.network_json, name='network_json'),
+    path('network', views.network, name='network'),
     path('skynet/', views.skynet, name='skynet'),
     path('bokeh/people', views.bokeh, name='bokeh'),
     path('plotly/', views.Plotly.as_view(), name='plotly'),
@@ -29,4 +31,5 @@ urlpatterns = [
         name='db_list_json',
     ),
     path('documentos/', views.documentos, name='documentos'),
+    path('filtrar_imagenes/', views.filtrar_imagenes, name='filtrar_imagenes'),
 ]

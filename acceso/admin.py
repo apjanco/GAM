@@ -18,3 +18,8 @@ admin.site.register(Foto, FotoAdmin)
 class FiltrosAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Filtros, FiltrosAdmin)
+
+
+class PhotoAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Photo, PhotoAdmin)

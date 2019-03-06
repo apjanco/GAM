@@ -2,7 +2,7 @@ from itertools import cycle
 from bokeh.embed import server_document
 from bokeh.embed import server_session
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 
 from acceso.models import *
@@ -67,7 +67,6 @@ def main(request, options):
     for caso in casos:
         photo_list.append(caso.fotos.first())
 
-
     photo = random_photo()
     #photos = os.listdir('/srv/GAM/acceso/static/pat_goudvis')
     #photo = cycle(photos)
@@ -77,6 +76,16 @@ def main(request, options):
     context = {'casos': casos, 'photo_list': photo_list, 'filter_list':filter_list, 'photo': photo}
 
     return render(request, 'acceso/index.html', context)
+
+def filtrar_imagenes(request):
+    filter_list = ["", "none"] #Don't know how to add filters since images models are being created dynamically
+    photo = random_photo()
+    photo_list = []
+    for image in os.listdir('/srv/GAM/acceso/static/diario_militar/thumbnails')[:10]:
+        foto = Photo(file=image, folder=image[38:-11])
+        photo_list.append(foto)
+    context = {'photo_list':photo_list, 'filter_list': filter_list, 'photo':photo}
+    return render(request, 'acceso/filtrar_imagenes.html', context)
 
 def skynet(request):
     photo = [[532, "dataset/cat/2008_007496.jpg", 0.4442075490951538],
@@ -101,9 +110,11 @@ def about(request):
     photo = random_photo()
     return render(request, 'acceso/about.html', {'photo':photo})
 
+def network(request):
+    return render(request, 'acceso/bestsellers_graph.html',)
+
 def collection(request):
     photo = random_photo()
-
     return render(request, 'acceso/collection.html', {'photo':photo, })
 
 def documentos(request):
@@ -184,7 +195,45 @@ def caso_table(request, caso_id):
         .filter(descripción__icontains=request.GET.get('descripción'))
     return JsonResponse(serializers.serialize(caso))
 
+def network_json(request):
 
+    """{
+      "nodes":[
+            {"name":"node1","group":1},
+            {"name":"node2","group":2},
+            {"name":"node3","group":2},
+            {"name":"node4","group":3}
+        ],
+        "links":[
+            {"source":2,"target":1,"weight":1},
+            {"source":0,"target":2,"weight":3}
+        ]
+    }"""
+
+    dict = {'nodes': [], 'links': []}
+    with open('/srv/GAM/acceso/my_file.txt', 'r') as f:
+        node_list = list([line.split(',')[0] for line in f])
+        for node in set(node_list):
+            dict['nodes'].append({"name": node, "group": 1}, )
+
+    with open('/srv/GAM/acceso/my_file.txt', 'r') as f: 
+        for line in f:
+            node = line.split(',')[0]
+            target = line.split(',')[1]
+            weight = line.replace('\n', '').split(',')[2]
+            if weight != "0.0":
+                node_index = dict['nodes'].index({"name":node, "group":1},)
+                try:
+                    target_index = dict['nodes'].index({"name": target,"group":1},)
+                except:
+                    pass
+                dict['links'].append({"source": node_index, "target": target_index, "weight": float(weight) * 10})
+
+
+
+        response = JsonResponse(dict)
+        return response
+      
 class DbListJson(BaseDatatableView):
     # the model you're going to show
     model = Database

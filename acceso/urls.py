@@ -20,6 +20,7 @@ urlpatterns = [
     path('network', views.network, name='network'),
     path('skynet/', views.skynet, name='skynet'),
     path('bokeh/people', views.bokeh, name='bokeh'),
+    path('plotly/', views.Plotly.as_view(), name='plotly'),
     # jsGrid
     path('caso-index/', views.caso_index, name='caso_index'),
     path('buscador-de-casos/', views.datatable, name='buscador-de-casos'),

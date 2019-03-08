@@ -331,39 +331,71 @@ class Plotly(TemplateView):
 		)
 		fig = dict(data=data, layout=layout)
 		div = opy.plot(fig, auto_open=False, output_type='div')
+		df_loc = pd.read_sql(
+		"""
+		SELECT departamento
+		FROM gam_app_caso
+		""", con=conn)
+		df_loc = df_loc.dropna()
+		ls = list(df_loc["departamento"])
 		df_geo = pd.read_sql(
 		"""
 		SELECT Y(punto), X(punto), nombre_del_lugar
 		FROM gam_app_lugar
 		""", con=conn)
 		df_geo = df_geo.dropna()
-		print(len(list(df_geo["Y(punto)"])))
-		print(len(list(df_geo["X(punto)"])))
+		lss = list(df_geo["nombre_del_lugar"])
+		counts = []
+		for i in lss:
+			if ls.count(i) == 0:
+				counts.append(1)
+			else:
+				counts.append(ls.count(i))
+		df_geo["counts"] = counts
+		#print(len(list(df_geo["Y(punto)"])))
+		#print(len(list(df_geo["X(punto)"])))
+		df_geo["text"] = df_geo["nombre_del_lugar"] + ' Number: ' + df_geo["counts"].astype(str)
+		scl = [ [0,"rgb(5, 10, 172)"],[0.35,"rgb(40, 60, 190)"],[0.5,"rgb(70, 100, 245)"],\
+    [0.6,"rgb(90, 120, 245)"],[0.7,"rgb(106, 137, 247)"],[1,"rgb(220, 220, 220)"] ]
 		data_geo = [ dict(
 			type = 'scattergeo',
 			#locationmode = 'ISO-3',
 			#locations = list('GTM'),
-			mode = 'markers+text',
+			mode = 'markers',
 			lat = list(df_geo["Y(punto)"]),
 			lon = list(df_geo["X(punto)"]),
-			text = list(df_geo["nombre_del_lugar"]),
-			textposition = ['top right', 'top left', 'top center', 'bottom right', 'top right', 'top right', 'top left', 'top center', 'bottom right', 'top right', 'top right', 'top left', 'top center', 'bottom right', 'top right'],
+			text = list(df_geo["text"]),
+			#textposition = ['top right', 'top left', 'top center', 'bottom right', 'top right', 'bottom left', 'top left', 'top center', 'bottom right', 'top left', 'top right', 'bottom right', 'top center', 'top right', 'top right'],
 			marker = dict(
-				size = 7,
+				size = 8, 
 				opacity = 0.8,
-				line = dict(width = 1),
-				color = ['#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd', '#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd', '#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd']
+				reversescale = True,
+				autocolorscale = False,
+				symbol = 'square',
+				line = dict(
+					width=1,
+					color='rgba(102, 102, 102)'),
+				colorscale = scl,
+				cmin = 1,
+				color = df_geo['counts'],
+				cmax = df_geo['counts'].max(),
+				colorbar=dict(
+				title="Number of People")
+			#	size = 7,
+			#	opacity = 0.8,
+			#	line = dict(width = 1),
+			#	color = ['#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd', '#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd', '#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd']
 			)
 
 
 		)]
-		print(data_geo)
+		#print(data_geo)
 		layout_geo = dict(
 			title = 'Missing People Locations',
 			geo = dict(
 				scope='north america',
-				lonaxis = dict( range= [df_geo["X(punto)"].min(), df_geo["X(punto)"].max()]),
-				lataxis = dict(range = [df_geo["Y(punto)"].min(), df_geo["Y(punto)"].max()]),
+				lonaxis = dict(range= [df_geo["X(punto)"].min()-1, df_geo["X(punto)"].max()+1]),
+				lataxis = dict(range = [df_geo["Y(punto)"].min()-1, df_geo["Y(punto)"].max()+1]),
 				showland = True,
 				landcolor = "rgb(250, 250, 250)",
 				subunitcolor = "rgb(217, 217, 217)",

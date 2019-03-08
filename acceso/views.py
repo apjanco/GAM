@@ -62,7 +62,7 @@ def main(request, options):
     return render(request, 'acceso/index.html', context)
 
 def filtrar_imagenes(request):
-    filter_list = ["", "none"] #Don't know how to add filters since images models are being created dynamically
+    filter_list = ["test1", "apple"] #Don't know how to add filters since images models are being created dynamically
     photo = random_photo()
     photo_list = []
     for image in os.listdir('/srv/GAM/acceso/static/diario_militar/thumbnails')[:10]:

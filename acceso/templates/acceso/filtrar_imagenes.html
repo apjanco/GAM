@@ -145,7 +145,13 @@ img {
 figure {
   margin: 0;
   padding: 0;
+  height:250px;
+  width:250px;
 }
+
+
+
+
 </style>
 
 
@@ -167,8 +173,8 @@ figure {
     <div class="col-12@sm filters-group-wrap">
       <div class="filters-group">
         <div class="btn-group filter-options">
-		  {% for filter in filter_list %} <!--Filter list needs to change to fix buttons -->
-		  <button class="btn btn--primary" data-group="{{ filter}} ">{{ filter }}</button>
+		  {% for filter in filter_list %} 
+		  <button class="btn btn--primary" data-group="{{ filter}}">{{ filter }}</button>
           {% endfor %}
         </div>
       </div>
@@ -180,10 +186,9 @@ figure {
 
 <div class="container">
   <!-- Images do not show up with the following line -->
-  <!-- <div id="grid" class="row my-shuffle-container"> -->
-  <div class="picture-item my-shuffle">
+  <div id="grid" class="row my-shuffle-container">
    {% for photo in photo_list %}
-   <figure class="picture-item" data-groups='[""]'>
+   <figure class="picture-item" data-groups=["apple"]>
       <div class="picture-item__inner">
         <div class="aspect aspect--16x9"> <!-- 16x9 -->
           <div class="aspect__inner" style="border: black; border-width: 5px; border-style: solid;">
@@ -208,7 +213,7 @@ class Demo {
     this.shuffle = new Shuffle(element, {
       itemSelector: '.picture-item',
       sizer: element.querySelector('.my-sizer-element'),
-    });
+    })
 
     // Log events.
     this.addShuffleEventListeners();
@@ -233,7 +238,7 @@ class Demo {
 
   addFilterButtons() {
     const options = document.querySelector('.filter-options');
-    if (!options) {
+	if (!options) {
       return;
     }
    
@@ -242,13 +247,12 @@ class Demo {
     filterButtons.forEach((button) => {
       button.addEventListener('click', onClick, false);
     });
-  s}
+  }
   
   _handleFilterClick(evt) {
     const btn = evt.currentTarget;
     const isActive = btn.classList.contains('active');
     const btnGroup = btn.getAttribute('data-group');
-
     this._removeActiveClassFromChildren(btn.parentNode);
 
     let filterGroup;
@@ -258,28 +262,28 @@ class Demo {
     } else {
       btn.classList.add('active');
       filterGroup = btnGroup;
-    }
+	}
 
-    //this.shuffle.filter(filterGroup);
+    this.shuffle.filter(filterGroup);
   }
 
   _removeActiveClassFromChildren(parent) {
-    const { children } = parent;
-    for (let i = children.length - 1; i >= 0; i--) {
+	const { children } = parent;
+	for (let i = children.length - 1; i >= 0; i--) {
       children[i].classList.remove('active');
     }
   }
 
   addSorting() {
     const buttonGroup = document.querySelector('.sort-options');
-    if (!buttonGroup) {
+	if (!buttonGroup) {
       return;
     }
     buttonGroup.addEventListener('change', this._handleSortChange.bind(this));
   }
 
   _handleSortChange(evt) {
-    // Add and remove `active` class from buttons.
+    // Add and remove active class from buttons.
     const buttons = Array.from(evt.currentTarget.children);
     buttons.forEach((button) => {
       if (button.querySelector('input').value === evt.target.value) {
@@ -348,7 +352,7 @@ class Demo {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  window.demo = new Demo(document.getElementById('grid'));
+  window.demo = new Demo(document.getElementById("grid"));
 });
 </script>
 

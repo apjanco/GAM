@@ -82,7 +82,7 @@ def filtrar_imagenes(request):
     photo = random_photo()
     photo_list = []
     for image in os.listdir('/srv/GAM/acceso/static/diario_militar/thumbnails')[:10]:
-        foto = Photo(file=image, folder=image[38:-11])
+        foto = Photo(file=image, folder=image[38:-11], full_image=image[:-10] + ".jpg")
         photo_list.append(foto)
     context = {'photo_list':photo_list, 'filter_list': filter_list, 'photo':photo}
     return render(request, 'acceso/filtrar_imagenes.html', context)

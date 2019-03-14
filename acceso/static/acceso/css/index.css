@@ -1,0 +1,68 @@
+/* got from https://codepen.io/Paddle_/pen/grQOwX?editors=0100 */
+
+@mixin transition($transition-rpoperty, $transition-time, $method){
+	transition: $transition-property $transition-time $method;
+	-o-transition : $transition-property $transition-time $method;
+	-ms-transition : $transition-property $transition-time $method;
+	-moz-transition : $transition-property $transition-time $method;
+    -webkit-transition : $transition-property $transition-time $method;   
+
+}
+
+@mixin transition2 ($ transition-property1, $ transition-time1, $method1, $transition-property2, $transition-time2, $method2){
+	transition : $transition-property1 $transition-time1 $method1, $transition-property2 $transition-time2 $method2;
+	-o- transition : $transition-property1 $transition-time1  $method1, $transition-property2 $transition-time2 $method2;
+	-ms-transition:     $transition-property1 $transition-time1 $method1, $transition-property2 $transition-time2 $method2;
+	-moz-transition:    $transition-property1 $transition-time1 $method1, $transition-property2 $transition-time2 $method2;
+    -webkit-transition: $transition-property1 $transition-time1 $method1, $transition-property2 $transition-time2 $method2;   
+}
+
+$width_grid: 960px;
+
+#grid {
+	width: $width_grid;
+	max-width: 100%;
+	margin: 50px auto;
+	position: relative;
+	
+	@media screen and (max-width: $width_grid){
+		width: 100%;
+		margin: 15px auto;
+	}
+
+	@include transition(height, 300ms, ease-in-out);
+
+	.element{
+		border: 1px solid #b8b8b8;
+		position: absolute;
+		text-align: center;
+		background: #eaeaea;
+
+		@include transition2(top, 300ms, ease-in-out, left, 300ms, ease-in-out);
+		a{
+			display: flex;
+			width: 100%;
+			height: 100%;
+		}
+
+		.content{
+			display: block;
+			margin: auto;
+			color: #545454;
+		}
+		h3 {
+			font-size: 1em;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			font-weight: 300;
+		}
+		p{
+			font-style: italic;
+			font-size: .9em;
+			
+		}
+		
+	}
+
+}
+

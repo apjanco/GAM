@@ -4,7 +4,7 @@ import mysql.connector
 from mysql.connector import errorcode
 import os
 import sys
-sys.path.append('/home/yayad/GAM/archivo/')
+sys.path.append('/srv/GAM/archivo/')
 from settings_secret import DATABASES
 from bokeh.plotting import figure, output_file, show, curdoc
 from bokeh.layouts import column

@@ -39,7 +39,35 @@
                   {% trans "Morbi convallis lectus malesuada sed fermentum dolore amet"%}
                 </p>
               </header>
+		{% if graph %}
+<div style="width:600;height:500">
+{{ graph|safe }}
+</div>
+{% endif %}
 
+{% if geo %}
+<div style="width:600;height:500">
+{{ geo|safe }}
+</div>
+{% endif %}
+
+{% if age %}
+<div style="width:600;height:500">
+{{ age|safe }}
+</div>
+{% endif %}
+
+{% if gender %}
+<div style="width:600;height:500">
+{{ gender|safe }}
+</div>
+{% endif %}
+
+{% if pro %}
+<div style="width:600;height:500">
+{{ pro |safe }}
+</div>
+{% endif %}
               <h3>{% trans "Carpetas" %}</h3>
 
 

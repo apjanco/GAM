@@ -18,7 +18,7 @@ import mysql.connector
 from mysql.connector import errorcode
 import os
 import sys
-sys.path.append('/home/yayad/GAM/archivo/')
+sys.path.append('/srv/GAM/archivo/')
 from settings_secret import DATABASES
 import plotly 
 plotly.tools.set_credentials_file(username='ajanco', api_key='2uxIhIy1JmOasiWozwd7')
@@ -267,7 +267,7 @@ class DbListJson(BaseDatatableView):
         return qs
 
 class Plotly(TemplateView):
-	template_name = 'acceso/plotly.html'
+	template_name = 'acceso/collection.html'
 	def get_context_data(self, **kwargs):
 		context = super(Plotly, self).get_context_data(**kwargs)
 		try:
@@ -279,7 +279,7 @@ class Plotly(TemplateView):
 				print("Database does not exist")
 			else:
 				print(err)
-		c = conn.cursor()
+		#c = conn.cursor()
 
 
 		df = pd.read_sql(
@@ -300,7 +300,7 @@ class Plotly(TemplateView):
                    y=counts)
 		data = [trace]
 		layout = dict(
-    			title='Time series with range slider and selectors',
+    			title='Number of Missing People Over The Years',
     			xaxis=dict(
         			rangeselector=dict(
             				buttons=list([
@@ -355,8 +355,8 @@ class Plotly(TemplateView):
 		#print(len(list(df_geo["Y(punto)"])))
 		#print(len(list(df_geo["X(punto)"])))
 		df_geo["text"] = df_geo["nombre_del_lugar"] + ' Number: ' + df_geo["counts"].astype(str)
-		scl = [ [0,"rgb(5, 10, 172)"],[0.35,"rgb(40, 60, 190)"],[0.5,"rgb(70, 100, 245)"],\
-    [0.6,"rgb(90, 120, 245)"],[0.7,"rgb(106, 137, 247)"],[1,"rgb(220, 220, 220)"] ]
+		scl = [ [0,"rgb(255,255,0)"],[0.35,"rgb(255,215,0)"],[0.5,"rgb(245,222,179)"],\
+    [0.6,"rgb(255,250,205)"],[0.7,"rgb(250,250,210)"],[1,"rgb(255,255,224)"] ]
 		data_geo = [ dict(
 			type = 'scattergeo',
 			#locationmode = 'ISO-3',
@@ -409,6 +409,86 @@ class Plotly(TemplateView):
 		
 		fig_geo = dict(data=data_geo, layout=layout_geo)
 		div_geo = opy.plot(fig_geo, auto_open=False, output_type='div')
+		df_age = pd.read_sql(
+                """
+                SELECT edad_en_el_momento
+                FROM gam_app_persona
+                """, con=conn)
+		df_age = df_age.dropna()
+		ll = list(df_age["edad_en_el_momento"])
+		#print(ll)
+		lis = []
+		counts = []
+		for i in ll:
+			try:
+			#except ValueError:
+				if int(i.split(' ')[0]):
+					lis.append(i.split(" ")[0])
+			except ValueError:
+				continue
+		se = set(lis)
+		sel = list(se)
+		for i in sel:
+			counts.append(lis.count(i))
+		trace = go.Scatter(
+			x = sel,
+			y = counts,
+			mode = 'markers')
+		layout = {"title": "Age vs Missing Numbers",
+			"xaxis": {"title": "Age", },
+			"yaxis": {"title": "Number of Missing People"}}
+		figg = dict(data=[trace], layout=layout)
+		div_age = opy.plot(figg, auto_open=False, output_type='div')
+		df_gender = pd.read_sql(
+		"""
+		SELECT género
+		FROM gam_app_persona
+		"""
+		, con=conn)
+		df_gender = df_gender.dropna()
+		ll = list(df_gender['género'])
+		#print(ll)
+		dd = {'masculino': 0, 'femenino': 0}
+		for i in ll:
+			if i.lower() == 'masculino' or i.lower() == 'm' or i.lower() == 'hombre':
+				dd['masculino'] += 1
+			elif i != '':
+				dd['femenino'] += 1
+		labels = ['Masculino', 'Femenino']
+		values = [dd['masculino'], dd['femenino']]
+		fig = {
+			'data': [{'labels': labels, 'values': values, 'type': 'pie', 'marker': {'colors': ['rgb(255,236,0)', 'rgb(126,126,126)']}}],
+			'layout': {'title': 'Gender vs Missing People',
+               'showlegend': True}
+
+		}
+		
+		#tracess = go.Pie(labels=labels, values=values)
+		#div_gender = opy.plot([tracess], auto_open=False, output_type='div')
+		div_gender = opy.plot(fig, auto_open=False, output_type='div')
+		df_profession = pd.read_sql(
+                """
+                SELECT profesión
+                FROM gam_app_persona
+                """
+                , con=conn)
+		df_profession = df_profession.dropna()
+		li = list(df_profession['profesión'])
+		li = list(filter(lambda a: a != '', li))
+		#print(li)
+		se = list(set(li))
+		cou = []
+		for i in se:
+			cou.append(li.count(i))
+		layout = {"title": "Profession vs Missing Numbers",
+			"yaxis": {"title": "Number Missing", },
+			"xaxis": {"title": "Profession"}}
+		fig = go.Scatter(x=se, y = cou, line = dict(color = ('rgb(255,236,0)'),width = 4))
+		figg = dict(data=[fig], layout=layout)
+		div_pro = opy.plot(figg, auto_open=False, output_type='div')
 		context['graph'] = div
 		context['geo'] = div_geo
+		context['age'] = div_age
+		context['gender'] = div_gender
+		context['pro'] = div_pro
 		return context

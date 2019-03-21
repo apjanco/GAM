@@ -27,7 +27,6 @@ class Photo(models.Model):
     filtros = models.ManyToManyField(Filtros, blank=True, related_name='photo_filtros')
     file = models.CharField(max_length=200,blank=True)
     folder = models.CharField(max_length=200, blank=True)
-    full_image = models.CharField(max_length=200, blank=True)
     def __str__(self):
         return str(self.file)
     def filters_list(self):

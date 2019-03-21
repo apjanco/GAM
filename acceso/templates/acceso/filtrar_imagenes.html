@@ -112,6 +112,7 @@
   right: 0;
   bottom: 0;
   left: 0;
+  cursor: pointer;
 }
 
 .aspect--16x9 {
@@ -145,6 +146,130 @@ img {
 figure {
   margin: 0;
   padding: 0;
+  height:250px;
+  width:250px;
+}
+
+/* Modal CSS */
+
+/* The Modal (background) */
+.modal {
+  display:none;
+  position:fixed;
+  z-index:1;
+  padding-top: 100px;
+  left:0;
+  top: 0;
+  width:100%;
+  height:100%;
+  overflow: auto;
+  background-color: black;
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  margin: auto;
+  padding: 0;
+  width: 75%;
+  height: 75%;
+  max-width: 1200px;
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #999;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Hide the slides by default */
+.mySlides {
+  display: none;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* Caption text */
+.caption-container {
+  text-align: center;
+  background-color: black;
+  padding: 2px 16px;
+  color: white;
+}
+
+img.demo {
+  opacity: 0.6;
+}
+
+.active,
+.demo:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+img.hover-shadow {
+  transition: 0.3s;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.row > .modal-column {
+  padding: 0 8px;
+}
+.modal-column {
+  float: left;
+  width: 25%;
+  height:25%;
+  padding: 7px;
 }
 </style>
 
@@ -167,8 +292,8 @@ figure {
     <div class="col-12@sm filters-group-wrap">
       <div class="filters-group">
         <div class="btn-group filter-options">
-		  {% for filter in filter_list %} <!--Filter list needs to change to fix buttons -->
-		  <button class="btn btn--primary" data-group="{{ filter}} ">{{ filter }}</button>
+		  {% for filter in filter_list %} 
+		  <button class="btn btn--primary" data-group="{{ filter}}">{{ filter }}</button>
           {% endfor %}
         </div>
       </div>
@@ -179,15 +304,13 @@ figure {
 </div>
 
 <div class="container">
-  <!-- Images do not show up with the following line -->
-  <!-- <div id="grid" class="row my-shuffle-container"> -->
-  <div class="picture-item my-shuffle">
+  <div id="grid" class="row my-shuffle-container">
    {% for photo in photo_list %}
-   <figure class="picture-item" data-groups='[""]'>
-      <div class="picture-item__inner">
+   <figure class="picture-item" data-groups="{{ photo|filters }}">
+      <div class="picture-item__inner hover-shadow">
         <div class="aspect aspect--16x9"> <!-- 16x9 -->
           <div class="aspect__inner" style="border: black; border-width: 5px; border-style: solid;">
-				  <a  href="#"><img src="{% static "diario_militar/thumbnails/" %}{{ photo.file }}" alt="#" /></a>
+		    <img class="cursor" src="{% static "diario_militar/thumbnails/" %}{{ photo.file|add:".thumbnail" }}" alt="{{ photo.folder }}" onclick="openModal();currentSlide({{ forloop.counter }})"/ >
           </div>
         </div>
       </div>
@@ -198,6 +321,35 @@ figure {
   </div>
 </div>
 
+<!-- The modal/lightbox -->
+<div id="myModal" class="modal">
+  <span class="close cursor" onclick="closeModal()">&times;</span>
+  <div class="modal-content">
+    {% for photo in photo_list %}	  
+    <div class="mySlides">	
+	  <div class="numbertext">{{ forloop.counter }} / {{ photo_list|length }}</div>
+	  <img src="{% static "diario_militar/" %}{{ photo.file|add:".jpg" }}" style="width:100%">
+	</div>
+	{% endfor %}
+
+	<!-- Next/previous controls -->
+	<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+	<a class="next" onclick="plusSlides(1)">&#10095;</a>
+  
+	<!-- Caption Text -->
+	<div class="caption-container">
+	  <p id="caption"></p>
+	</div>
+
+	<!-- Thumnail image controls -->
+    {% for photo in photo_list %}
+    <div class="modal-column">
+	  <img class="demo cursor" src="{% static "diario_militar/thumbnails/" %}{{ photo.file|add:".thumbnail" }}" onclick="currentSlide({{ forloop.counter }})" alt="{{ photo.folder }}">
+	</div>
+	{% endfor %}
+  </div>
+</div>
+		  
 <script>
 
 let Shuffle = window.Shuffle;
@@ -208,7 +360,7 @@ class Demo {
     this.shuffle = new Shuffle(element, {
       itemSelector: '.picture-item',
       sizer: element.querySelector('.my-sizer-element'),
-    });
+    })
 
     // Log events.
     this.addShuffleEventListeners();
@@ -233,7 +385,7 @@ class Demo {
 
   addFilterButtons() {
     const options = document.querySelector('.filter-options');
-    if (!options) {
+	if (!options) {
       return;
     }
    
@@ -242,13 +394,12 @@ class Demo {
     filterButtons.forEach((button) => {
       button.addEventListener('click', onClick, false);
     });
-  s}
+  }
   
   _handleFilterClick(evt) {
     const btn = evt.currentTarget;
     const isActive = btn.classList.contains('active');
     const btnGroup = btn.getAttribute('data-group');
-
     this._removeActiveClassFromChildren(btn.parentNode);
 
     let filterGroup;
@@ -258,28 +409,28 @@ class Demo {
     } else {
       btn.classList.add('active');
       filterGroup = btnGroup;
-    }
+	}
 
-    //this.shuffle.filter(filterGroup);
+    this.shuffle.filter(filterGroup);
   }
 
   _removeActiveClassFromChildren(parent) {
-    const { children } = parent;
-    for (let i = children.length - 1; i >= 0; i--) {
+	const { children } = parent;
+	for (let i = children.length - 1; i >= 0; i--) {
       children[i].classList.remove('active');
     }
   }
 
   addSorting() {
     const buttonGroup = document.querySelector('.sort-options');
-    if (!buttonGroup) {
+	if (!buttonGroup) {
       return;
     }
     buttonGroup.addEventListener('change', this._handleSortChange.bind(this));
   }
 
   _handleSortChange(evt) {
-    // Add and remove `active` class from buttons.
+    // Add and remove active class from buttons.
     const buttons = Array.from(evt.currentTarget.children);
     buttons.forEach((button) => {
       if (button.querySelector('input').value === evt.target.value) {
@@ -348,8 +499,55 @@ class Demo {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  window.demo = new Demo(document.getElementById('grid'));
+  window.demo = new Demo(document.getElementById("grid"));
 });
+
+
+
+
+
+// Script for modal
+// Open the Modal
+function openModal() {
+  document.getElementById('myModal').style.display = "block";
+}
+
+// Close the Modal
+function closeModal() {
+  document.getElementById('myModal').style.display = "none";
+}
+
+var slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  var captionText = document.getElementById("caption");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+  captionText.innerHTML = dots[slideIndex-1].alt;
+}
+
 </script>
 
     <!-- end AJ grid -->

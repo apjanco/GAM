@@ -30,6 +30,7 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 import plotly.graph_objs as go
+from collections import OrderedDict 
 def cycle(iterable):
     saved = []
     for element in iterable:
@@ -281,13 +282,43 @@ class Plotly(TemplateView):
 				print(err)
 		#c = conn.cursor()
 
-
+		photo = random_photo()
+		context['photo'] = photo
 		df = pd.read_sql(
                 """
                 SELECT *
                 FROM gam_app_caso
                 """, con=conn)
-
+		#context['count_caja'] = df.caja_no.nunique()-1
+		estanteria = list(df.estanteria_no.unique())
+		estanteria = estanteria[1:]
+		estanteria.reverse()
+		dd = {}
+		caja_no = 0
+		total_files = df.shape[0]
+		for i in estanteria:
+			ll = []
+			count = 0
+			dff = df[(df['estanteria_no'] == i) & (df['fecha_desaparicion'] != '')]
+			dates = np.array(dff['fecha_desaparicion'], dtype=np.datetime64)
+			dates = np.unique(dates)
+			dates_sort = np.sort(dates, axis=0)
+			dates_sort = list(pd.DatetimeIndex(dates_sort).year)
+			dates_str = str(dates_sort[0]) + ' - ' + str(dates_sort[-1])
+			ll.append(dates_str)
+			fl = list(filter(None, list(df[df['estanteria_no'] == i].plato_no.unique())))
+			ll.append(len(fl))
+			for j in fl:
+				fll = list(df[(df['estanteria_no'] == i) & (df['plato_no'] == j)].caja_no.unique())
+				count += len(fll)
+				caja_no += len(fll)
+			ll.append(count)
+			dd[i] = ll
+		dd = OrderedDict(sorted(dd.items(), key = lambda t: t[0]))
+		context['cases'] = dd
+		context['files'] = total_files
+		context['caja'] = caja_no
+		
 		df = df[df['fecha_desaparicion'] != '']
 		dates = np.array(df['fecha_desaparicion'], dtype=np.datetime64)
 		dates = np.unique(dates)
@@ -297,9 +328,9 @@ class Plotly(TemplateView):
 		for i in dates:
 			counts.append(df[df['fecha_desaparicion'] == str(i)]['fecha_desaparicion'].count())
 		trace = go.Scatter(x=dates,
-                   y=counts)
+                   y=counts, line = dict(color = ('rgb(255,236,0)'),width = 4))
 		data = [trace]
-		layout = dict(
+		layout = go.Layout(
     			title='Number of Missing People Over The Years',
     			xaxis=dict(
         			rangeselector=dict(
@@ -327,7 +358,9 @@ class Plotly(TemplateView):
        	  			   visible = True
         		),
         		type='date'
-    			)
+    			),
+			width = 800,
+			height = 600
 		)
 		fig = dict(data=data, layout=layout)
 		div = opy.plot(fig, auto_open=False, output_type='div')
@@ -403,7 +436,9 @@ class Plotly(TemplateView):
 				countrywidth = 0.5,
 				subunitwidth = 0.5
 
-			),			
+			),
+			width = 800,
+			height = 600
 
 		)
 		
@@ -436,7 +471,7 @@ class Plotly(TemplateView):
 			mode = 'markers')
 		layout = {"title": "Age vs Missing Numbers",
 			"xaxis": {"title": "Age", },
-			"yaxis": {"title": "Number of Missing People"}}
+			"yaxis": {"title": "Number of Missing People"}, 'width': 800, 'height': 600}
 		figg = dict(data=[trace], layout=layout)
 		div_age = opy.plot(figg, auto_open=False, output_type='div')
 		df_gender = pd.read_sql(
@@ -459,7 +494,7 @@ class Plotly(TemplateView):
 		fig = {
 			'data': [{'labels': labels, 'values': values, 'type': 'pie', 'marker': {'colors': ['rgb(255,236,0)', 'rgb(126,126,126)']}}],
 			'layout': {'title': 'Gender vs Missing People',
-               'showlegend': True}
+               'showlegend': True, 'width': 800, 'height': 600}
 
 		}
 		
@@ -482,7 +517,7 @@ class Plotly(TemplateView):
 			cou.append(li.count(i))
 		layout = {"title": "Profession vs Missing Numbers",
 			"yaxis": {"title": "Number Missing", },
-			"xaxis": {"title": "Profession"}}
+			"xaxis": {"title": "Profession"}, 'width':800, 'height': 600}
 		fig = go.Scatter(x=se, y = cou, line = dict(color = ('rgb(255,236,0)'),width = 4))
 		figg = dict(data=[fig], layout=layout)
 		div_pro = opy.plot(figg, auto_open=False, output_type='div')

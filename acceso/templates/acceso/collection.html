@@ -14,6 +14,100 @@
 #header {
 		background-image: url(https://archivogam.haverford.edu/static/pat_goudvis/{{ photo }});
 	}
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+.tab {
+  /*padding-top: 50px;*/
+  margin-bottom: 20px;
+  position: static;
+  /*overflow: hidden;*/
+  background: #fff;
+  width: 70%;
+  /*margin: 0 auto;*/
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.5;
+  font-weight: 300;
+  color: #888;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tabs {
+  display: table;
+  position: static;
+  overflow: hidden;
+  margin: 0;
+  width: 100%;
+}
+.tabs li {
+  float: left;
+  line-height: 38px;
+  overflow: hidden;
+  padding: 0;
+  position: static;
+}
+.tabs a {
+  background-color: #eff0f2;
+  border-bottom: 1px solid #fff;
+  color: #888;
+  font-weight: 500;
+  display: block;
+  letter-spacing: 0;
+  outline: none;
+  padding: 0 20px;
+  text-decoration: none;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  border-bottom: 2px solid #ffec00;
+}
+
+.tabs_item {
+display: none;
+padding: 40px 0;
+}
+
+.tabs_item:first-child {
+  display: block;
+}
+
+.current a {
+  color: black;
+  background: #ffec00;
+}
+
+.asset-details th {
+    padding-left: 0;
+}
+
+.asset-details th {
+    vertical-align: top;
+    text-align: left;
+    padding: .5em;
+    min-width: 6em;
+    font-weight: 400;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: black;
+ /*   border: none;*/
+}
+
+td, th {
+/*    display: table-cell;*/
+   /* border: none;*/
+    vertical-align: inherit;
+}
+
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    /*border-color: inherit;*/
+}
+table tbody th {
+    border-right: none;
+}
 </style>
 <body class="homepage is-preload">
   <div id="page-wrapper">
@@ -39,7 +133,60 @@
                   {% trans "Morbi convallis lectus malesuada sed fermentum dolore amet"%}
                 </p>
               </header>
-		{% if graph %}
+	{% if count_caja %}
+	<p> {{ count_caja }} </p>
+	{% endif %}
+	<br>
+
+<div class="tab">
+<ul class="tabs">
+		<li><a href="#">Over the Years</a></li>
+		<li><a href="#">Locations</a></li>
+		<li><a href="#">Age</a></li>
+		<li><a href="#">Gender</a></li>
+		<li><a href="#">Profession</a></li>
+	</ul>
+	<div class="tab_content">
+		<div class="tabs_item">
+			{% if graph %}
+<div style="width:600;height:500">
+{{ graph|safe }}
+</div>
+{% endif %}
+		</div>
+		<div class="tabs_item">
+			{% if geo %}
+<div style="width:1500px;height:800px">
+{{ geo|safe }}
+</div>
+{% endif %}
+		</div>
+	<div class="tabs_item">
+		{% if age %}
+<div style="width:1500px;height:800px">
+{{ age|safe }}
+</div>
+{% endif %}
+	</div>
+
+	<div class="tabs_item">
+	{% if gender %}
+<div style="width:1500px;height:800px">
+{{ gender|safe }}
+</div>
+{% endif %}
+	</div>
+
+	<div class="tabs_item">
+	{% if pro %}
+<div style="width:1500px;height:800px">
+{{ pro |safe }}
+</div>
+{% endif %}
+	</div>
+	</div>
+</div>
+<!--		{% if graph %}
 <div style="width:600;height:500">
 {{ graph|safe }}
 </div>
@@ -67,7 +214,67 @@
 <div style="width:600;height:500">
 {{ pro |safe }}
 </div>
-{% endif %}
+{% endif %}-->
+<table class="table table-condensed">
+    <caption>Details of the Cases</caption>
+    <tbody>
+<tr>
+                <td class="text-right"><span class="text-right bold-martinique">Physical Description:</span></th>
+                <td class="text-left"><span class="text-left">
+                    {{ files }} Total Files </span>
+                </td>
+            </tr>
+
+<tr>
+                <td class="text-right"><span class="text-right bold-martinique">Count:</span></th>
+                <td class="text-left"><span class="text-left">
+                    {{ caja }} Legal Archives Box </span>
+                </td>
+            </tr>
+
+            </tbody>
+</table>
+
+<div class="tab">
+
+	<ul class="tabs">
+		{% for key, value in cases.items %}
+			<li><a href="#">Shelving {{ key }}</a></li>
+		{% endfor %}
+	</ul> <!-- / tabs -->
+
+	<div class="tab_content">
+		{% for key, value in cases.items %}
+			<div class="tabs_item">
+				<table class="table table-condensed">
+    <tbody>
+<tr>
+                <th class="text-right"><span class="text-right bold-martinique">Dates:</span></th>
+                <td class="text-left"><span class="text-left">
+                    {{ value.0 }}</span>
+                </td>
+            </tr>
+
+<tr>
+                <th class="text-right"><span class="text-right bold-martinique">Plato count:</span></th>
+                <td class="text-left"><span class="text-left">
+                    {{ value.1 }}</span>
+                </td>
+            </tr>
+
+		<th class="text-right"><span class="text-right bold-martinique">Caja count:</span></th>
+                <td class="text-left"><span class="text-left">
+                    {{ value.2 }}</span>
+                </td>
+            </tr>
+
+            </tbody>
+</table>
+			</div> <!-- / tabs_item -->
+
+		{% endfor %}
+	</div> <!-- / tab_content -->
+</div> <!-- / tab -->	
               <h3>{% trans "Carpetas" %}</h3>
 
 
@@ -105,5 +312,26 @@
           </div>
 
         </div>
-    
+<script>
+$(document).ready(function() { 
+
+	(function ($) { 
+		$('.tab ul.tabs').addClass('active').find('> li:eq(0)').addClass('current');
+		
+		$('.tab ul.tabs li a').click(function (g) { 
+			var tab = $(this).closest('.tab'), 
+				index = $(this).closest('li').index();
+			
+			tab.find('ul.tabs > li').removeClass('current');
+			$(this).closest('li').addClass('current');
+			
+			tab.find('.tab_content').find('div.tabs_item').not('div.tabs_item:eq(' + index + ')').slideUp();
+			tab.find('.tab_content').find('div.tabs_item:eq(' + index + ')').slideDown();
+			
+			g.preventDefault();
+		} );
+	})(jQuery);
+
+});
+</script>
 {% endblock %}

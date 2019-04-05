@@ -79,12 +79,9 @@ def main(request, options):
     return render(request, 'acceso/index.html', context)
 
 def filtrar_imagenes(request):
-    filter_list = ["", "none"] #Don't know how to add filters since images models are being created dynamically
     photo = random_photo()
-    photo_list = []
-    for image in os.listdir('/srv/GAM/acceso/static/diario_militar/thumbnails')[:10]:
-        foto = Photo(file=image, folder=image[38:-11])
-        photo_list.append(foto)
+    filter_list = ["apple", "none"]
+    photo_list = Photo.objects.all()[:10]
     context = {'photo_list':photo_list, 'filter_list': filter_list, 'photo':photo}
     return render(request, 'acceso/filtrar_imagenes.html', context)
 
@@ -164,10 +161,6 @@ def caso(request, caso):
             carpeta=x.carpeta,
         ).order_by('número_de_imagen')
     personas = caso.personas.all()
-    # iterate through personas to make a table of all people
-    #info = [persona.nombre_de_la_persona, persona.nombre, persona.segundo, persona.apellido_paterno, persona.apellido_materno, persona.fecha_de_nacimiento, persona.fecha_desaparicion, persona.edad_en_el_momento, persona.género, persona.etnicidad, persona.profesión, persona.actividades_políticas]
-    #if str(info[-1]) == "gam_app.Organización.None":
-    #    info[-1] = ""
     for x in caso.fotos.all():
         foto.append(x)
     profile_photos = Foto.objects.filter(caso__slug_name=caso)

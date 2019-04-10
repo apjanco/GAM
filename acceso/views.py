@@ -353,7 +353,8 @@ class Plotly(TemplateView):
         		type='date'
     			),
 			width = 800,
-			height = 600
+			height = 600,
+			autosize=True
 		)
 		fig = dict(data=data, layout=layout)
 		div = opy.plot(fig, auto_open=False, output_type='div')

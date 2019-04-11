@@ -18,7 +18,7 @@ import mysql.connector
 from mysql.connector import errorcode
 import os
 import sys
-sys.path.append('/home/yayad/GAM/archivo/')
+sys.path.append('/srv/GAM/archivo/')
 from settings_secret import DATABASES
 import plotly 
 plotly.tools.set_credentials_file(username='ajanco', api_key='2uxIhIy1JmOasiWozwd7')
@@ -30,6 +30,7 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 import plotly.graph_objs as go
+from collections import OrderedDict 
 def cycle(iterable):
     saved = []
     for element in iterable:
@@ -78,10 +79,9 @@ def main(request, options):
     return render(request, 'acceso/index.html', context)
 
 def filtrar_imagenes(request):
-    print(len(Photo.objects.all()))
     photo = random_photo()
-    filter_list = []
-    photo_list = Photo.objects.all()[:5]
+    filter_list = ["none"]
+    photo_list = Photo.objects.all()[:10]
     context = {'photo_list':photo_list, 'filter_list': filter_list, 'photo':photo}
     return render(request, 'acceso/filtrar_imagenes.html', context)
 
@@ -261,7 +261,7 @@ class DbListJson(BaseDatatableView):
         return qs
 
 class Plotly(TemplateView):
-	template_name = 'acceso/plotly.html'
+	template_name = 'acceso/collection.html'
 	def get_context_data(self, **kwargs):
 		context = super(Plotly, self).get_context_data(**kwargs)
 		try:
@@ -273,15 +273,45 @@ class Plotly(TemplateView):
 				print("Database does not exist")
 			else:
 				print(err)
-		c = conn.cursor()
+		#c = conn.cursor()
 
-
+		photo = random_photo()
+		context['photo'] = photo
 		df = pd.read_sql(
                 """
                 SELECT *
                 FROM gam_app_caso
                 """, con=conn)
-
+		#context['count_caja'] = df.caja_no.nunique()-1
+		estanteria = list(df.estanteria_no.unique())
+		estanteria = estanteria[1:]
+		estanteria.reverse()
+		dd = {}
+		caja_no = 0
+		total_files = df.shape[0]
+		for i in estanteria:
+			ll = []
+			count = 0
+			dff = df[(df['estanteria_no'] == i) & (df['fecha_desaparicion'] != '')]
+			dates = np.array(dff['fecha_desaparicion'], dtype=np.datetime64)
+			dates = np.unique(dates)
+			dates_sort = np.sort(dates, axis=0)
+			dates_sort = list(pd.DatetimeIndex(dates_sort).year)
+			dates_str = str(dates_sort[0]) + ' - ' + str(dates_sort[-1])
+			ll.append(dates_str)
+			fl = list(filter(None, list(df[df['estanteria_no'] == i].plato_no.unique())))
+			ll.append(len(fl))
+			for j in fl:
+				fll = list(df[(df['estanteria_no'] == i) & (df['plato_no'] == j)].caja_no.unique())
+				count += len(fll)
+				caja_no += len(fll)
+			ll.append(count)
+			dd[i] = ll
+		dd = OrderedDict(sorted(dd.items(), key = lambda t: t[0]))
+		context['cases'] = dd
+		context['files'] = total_files
+		context['caja'] = caja_no
+		
 		df = df[df['fecha_desaparicion'] != '']
 		dates = np.array(df['fecha_desaparicion'], dtype=np.datetime64)
 		dates = np.unique(dates)
@@ -291,10 +321,10 @@ class Plotly(TemplateView):
 		for i in dates:
 			counts.append(df[df['fecha_desaparicion'] == str(i)]['fecha_desaparicion'].count())
 		trace = go.Scatter(x=dates,
-                   y=counts)
+                   y=counts, line = dict(color = ('rgb(255,236,0)'),width = 4))
 		data = [trace]
-		layout = dict(
-    			title='Time series with range slider and selectors',
+		layout = go.Layout(
+    			title='Number of Missing People Over The Years',
     			xaxis=dict(
         			rangeselector=dict(
             				buttons=list([
@@ -321,43 +351,84 @@ class Plotly(TemplateView):
        	  			   visible = True
         		),
         		type='date'
-    			)
+    			),
+			width = 800,
+			height = 600,
+			autosize=True
 		)
 		fig = dict(data=data, layout=layout)
-		div = opy.plot(fig, auto_open=False, output_type='div')
+		div = opy.plot(fig, auto_open=False, include_plotlyjs=True, output_type='div')
+#		div_id = div.split('=')[1].split()[0].replace("'", "").replace('"', '')
+#		js = '''
+#		<script>
+#
+#		</script>'''.format(div_id=div_id)
+
+		df_loc = pd.read_sql(
+		"""
+		SELECT departamento
+		FROM gam_app_caso
+		""", con=conn)
+		df_loc = df_loc.dropna()
+		ls = list(df_loc["departamento"])
 		df_geo = pd.read_sql(
 		"""
 		SELECT Y(punto), X(punto), nombre_del_lugar
 		FROM gam_app_lugar
 		""", con=conn)
 		df_geo = df_geo.dropna()
-		print(len(list(df_geo["Y(punto)"])))
-		print(len(list(df_geo["X(punto)"])))
+		lss = list(df_geo["nombre_del_lugar"])
+		counts = []
+		for i in lss:
+			if ls.count(i) == 0:
+				counts.append(1)
+			else:
+				counts.append(ls.count(i))
+		df_geo["counts"] = counts
+		#print(len(list(df_geo["Y(punto)"])))
+		#print(len(list(df_geo["X(punto)"])))
+		df_geo["text"] = df_geo["nombre_del_lugar"] + ' Number: ' + df_geo["counts"].astype(str)
+		scl = [ [0,"rgb(255,255,0)"],[0.35,"rgb(255,215,0)"],[0.5,"rgb(245,222,179)"],\
+    [0.6,"rgb(255,250,205)"],[0.7,"rgb(250,250,210)"],[1,"rgb(255,255,224)"] ]
 		data_geo = [ dict(
 			type = 'scattergeo',
 			#locationmode = 'ISO-3',
 			#locations = list('GTM'),
-			mode = 'markers+text',
+			mode = 'markers',
 			lat = list(df_geo["Y(punto)"]),
 			lon = list(df_geo["X(punto)"]),
-			text = list(df_geo["nombre_del_lugar"]),
-			textposition = ['top right', 'top left', 'top center', 'bottom right', 'top right', 'top right', 'top left', 'top center', 'bottom right', 'top right', 'top right', 'top left', 'top center', 'bottom right', 'top right'],
+			text = list(df_geo["text"]),
+			#textposition = ['top right', 'top left', 'top center', 'bottom right', 'top right', 'bottom left', 'top left', 'top center', 'bottom right', 'top left', 'top right', 'bottom right', 'top center', 'top right', 'top right'],
 			marker = dict(
-				size = 7,
+				size = 8, 
 				opacity = 0.8,
-				line = dict(width = 1),
-				color = ['#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd', '#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd', '#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd']
+				reversescale = True,
+				autocolorscale = False,
+				symbol = 'square',
+				line = dict(
+					width=1,
+					color='rgba(102, 102, 102)'),
+				colorscale = scl,
+				cmin = 1,
+				color = df_geo['counts'],
+				cmax = df_geo['counts'].max(),
+				colorbar=dict(
+				title="Number of People")
+			#	size = 7,
+			#	opacity = 0.8,
+			#	line = dict(width = 1),
+			#	color = ['#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd', '#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd', '#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd']
 			)
 
 
 		)]
-		print(data_geo)
+		#print(data_geo)
 		layout_geo = dict(
 			title = 'Missing People Locations',
 			geo = dict(
 				scope='north america',
-				lonaxis = dict( range= [df_geo["X(punto)"].min(), df_geo["X(punto)"].max()]),
-				lataxis = dict(range = [df_geo["Y(punto)"].min(), df_geo["Y(punto)"].max()]),
+				lonaxis = dict(range= [df_geo["X(punto)"].min()-1, df_geo["X(punto)"].max()+1]),
+				lataxis = dict(range = [df_geo["Y(punto)"].min()-1, df_geo["Y(punto)"].max()+1]),
 				showland = True,
 				landcolor = "rgb(250, 250, 250)",
 				subunitcolor = "rgb(217, 217, 217)",
@@ -365,12 +436,94 @@ class Plotly(TemplateView):
 				countrywidth = 0.5,
 				subunitwidth = 0.5
 
-			),			
+			),
+			width = 800,
+			height = 600
 
 		)
 		
 		fig_geo = dict(data=data_geo, layout=layout_geo)
-		div_geo = opy.plot(fig_geo, auto_open=False, output_type='div')
+		div_geo = opy.plot(fig_geo, auto_open=False, include_plotlyjs=True, output_type='div')
+		df_age = pd.read_sql(
+                """
+                SELECT edad_en_el_momento
+                FROM gam_app_persona
+                """, con=conn)
+		df_age = df_age.dropna()
+		ll = list(df_age["edad_en_el_momento"])
+		#print(ll)
+		lis = []
+		counts = []
+		for i in ll:
+			try:
+			#except ValueError:
+				if int(i.split(' ')[0]):
+					lis.append(i.split(" ")[0])
+			except ValueError:
+				continue
+		se = set(lis)
+		sel = list(se)
+		for i in sel:
+			counts.append(lis.count(i))
+		trace = go.Scatter(
+			x = sel,
+			y = counts,
+			mode = 'markers')
+		layout = {"title": "Age vs Missing Numbers",
+			"xaxis": {"title": "Age", },
+			"yaxis": {"title": "Number of Missing People"}, 'width': 800, 'height': 600}
+		figg = dict(data=[trace], layout=layout)
+		div_age = opy.plot(figg, auto_open=False, output_type='div')
+		df_gender = pd.read_sql(
+		"""
+		SELECT género
+		FROM gam_app_persona
+		"""
+		, con=conn)
+		df_gender = df_gender.dropna()
+		ll = list(df_gender['género'])
+		#print(ll)
+		dd = {'masculino': 0, 'femenino': 0}
+		for i in ll:
+			if i.lower() == 'masculino' or i.lower() == 'm' or i.lower() == 'hombre':
+				dd['masculino'] += 1
+			elif i != '':
+				dd['femenino'] += 1
+		labels = ['Masculino', 'Femenino']
+		values = [dd['masculino'], dd['femenino']]
+		fig = {
+			'data': [{'labels': labels, 'values': values, 'type': 'pie', 'marker': {'colors': ['rgb(255,236,0)', 'rgb(126,126,126)']}}],
+			'layout': {'title': 'Gender vs Missing People',
+               'showlegend': True, 'width': 800, 'height': 600}
+
+		}
+		
+		#tracess = go.Pie(labels=labels, values=values)
+		#div_gender = opy.plot([tracess], auto_open=False, output_type='div')
+		div_gender = opy.plot(fig, auto_open=False, output_type='div')
+		df_profession = pd.read_sql(
+                """
+                SELECT profesión
+                FROM gam_app_persona
+                """
+                , con=conn)
+		df_profession = df_profession.dropna()
+		li = list(df_profession['profesión'])
+		li = list(filter(lambda a: a != '', li))
+		#print(li)
+		se = list(set(li))
+		cou = []
+		for i in se:
+			cou.append(li.count(i))
+		layout = {"title": "Profession vs Missing Numbers",
+			"yaxis": {"title": "Number Missing", },
+			"xaxis": {"title": "Profession"}, 'width':800, 'height': 600}
+		fig = go.Scatter(x=se, y = cou, line = dict(color = ('rgb(255,236,0)'),width = 4))
+		figg = dict(data=[fig], layout=layout)
+		div_pro = opy.plot(figg, auto_open=False, output_type='div')
 		context['graph'] = div
 		context['geo'] = div_geo
+		context['age'] = div_age
+		context['gender'] = div_gender
+		context['pro'] = div_pro
 		return context

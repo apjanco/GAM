@@ -10,9 +10,6 @@ class Filtros(models.Model):
 
     def __str__(self):
         return str(self.nombre_del_filtro)
-
-
-
 class Foto(models.Model):
     caso = models.ForeignKey('Caso', on_delete=models.CASCADE, default=1)
     file = models.FileField(upload_to='media/')
@@ -27,6 +24,10 @@ class Photo(models.Model):
     filtros = models.ManyToManyField(Filtros, blank=True, related_name='photo_filtros')
     file = models.CharField(max_length=200,blank=True)
     folder = models.CharField(max_length=200, blank=True)
+    
+    def show_link_to_image(self):
+        link = "http://archivogam.haverford/static/diario_milita    r/+" + self.file + ".jpg"
+        return format_html("<a href='{url}'>{url}</a>", url=link)
     def __str__(self):
         return str(self.file)
     def filters_list(self):

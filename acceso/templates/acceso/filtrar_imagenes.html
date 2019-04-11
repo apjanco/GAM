@@ -318,7 +318,7 @@ img.hover-shadow {
       <div class="picture-item__inner hover-shadow">
         <div class="aspect aspect--16x9"> <!-- 16x9 -->
           <div class="aspect__inner" style="border: black; border-width: 5px; border-style: solid;">
-		    <img class="cursor" src="{% static "diario_militar/thumbnails/" %}{{ photo.file|add:".thumbnail" }}" alt="{{ photo.folder }}" onclick="openModal();currentSlide({{ forloop.counter }})"/ >
+		    <img class="cursor" src="{% static "diario_militar/" %}{{ photo.file|add:".jpg" }}" alt="{{ photo.folder }}" onclick="openModal();currentSlide({{ forloop.counter }})"/ >
           </div>
         </div>
       </div>
@@ -339,7 +339,7 @@ img.hover-shadow {
     {% for photo in photo_list %}	  
     <div class="mySlides">	
 	  <div class="numbertext">{{ forloop.counter }} / {{ photo_list|length }}</div>
-	  <img src="{% static "diario_militar/" %}{{ photo.file|add:".jpg" }}" style="width:100%">
+	  <img src="{% static "diario_militar/lg_img" %}{{ photo.file|add:".jpg" }}" style="width:100%">
 	</div>
 	{% endfor %}
 
@@ -355,7 +355,7 @@ img.hover-shadow {
 	<!-- Thumnail image controls -->
     {% for photo in photo_list %}
     <div class="modal-column">
-	  <img class="demo cursor" src="{% static "diario_militar/thumbnails/" %}{{ photo.file|add:".thumbnail" }}" onclick="currentSlide({{ forloop.counter }})" alt="{{ photo.folder }}">
+	  <img class="demo cursor" src="{% static "diario_militar/" %}{{ photo.file|add:".jpg" }}" onclick="currentSlide({{ forloop.counter }})" alt="{{ photo.folder }}">
 	</div>
 	{% endfor %}
   </div>

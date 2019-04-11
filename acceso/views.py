@@ -19,9 +19,10 @@ from mysql.connector import errorcode
 import os
 import sys
 sys.path.append('/srv/GAM/archivo/')
-from settings_secret import DATABASES
+from archivo.settings_secret import DATABASES
 import plotly 
-plotly.tools.set_credentials_file(username='ajanco', api_key='2uxIhIy1JmOasiWozwd7')
+#plotly.tools.set_credentials_file(username='ajanco', api_key='2uxIhIy1JmOasiWozwd7')
+plotly.plotly.sign_in('ajanco', '1prkGNW7WC9aNhGtxk0X')
 import plotly.plotly as py
 import plotly.graph_objs as go 
 import cufflinks as cf

@@ -357,7 +357,13 @@ class Plotly(TemplateView):
 			autosize=True
 		)
 		fig = dict(data=data, layout=layout)
-		div = opy.plot(fig, auto_open=False, output_type='div')
+		div = opy.plot(fig, auto_open=False, include_plotlyjs=True, output_type='div')
+#		div_id = div.split('=')[1].split()[0].replace("'", "").replace('"', '')
+#		js = '''
+#		<script>
+#
+#		</script>'''.format(div_id=div_id)
+
 		df_loc = pd.read_sql(
 		"""
 		SELECT departamento
@@ -437,7 +443,7 @@ class Plotly(TemplateView):
 		)
 		
 		fig_geo = dict(data=data_geo, layout=layout_geo)
-		div_geo = opy.plot(fig_geo, auto_open=False, output_type='div')
+		div_geo = opy.plot(fig_geo, auto_open=False, include_plotlyjs=True, output_type='div')
 		df_age = pd.read_sql(
                 """
                 SELECT edad_en_el_momento

@@ -78,9 +78,10 @@ def main(request, options):
     return render(request, 'acceso/index.html', context)
 
 def filtrar_imagenes(request):
+    print(len(Photo.objects.all()))
     photo = random_photo()
-    filter_list = ["apple", "none"]
-    photo_list = Photo.objects.all()[:10]
+    filter_list = []
+    photo_list = Photo.objects.all()[:5]
     context = {'photo_list':photo_list, 'filter_list': filter_list, 'photo':photo}
     return render(request, 'acceso/filtrar_imagenes.html', context)
 

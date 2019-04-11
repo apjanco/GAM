@@ -339,7 +339,7 @@ img.hover-shadow {
     {% for photo in photo_list %}	  
     <div class="mySlides">	
 	  <div class="numbertext">{{ forloop.counter }} / {{ photo_list|length }}</div>
-	  <img src="{% static "diario_militar/lg_img" %}{{ photo.file|add:".jpg" }}" style="width:100%">
+	  <img src="{% static "diario_militar/lg_img/" %}{{ photo.file|add:".jpg" }}" style="width:100%">
 	</div>
 	{% endfor %}
 

@@ -230,7 +230,7 @@ figure {
 
 /* Number text (1/3 etc) */
 .numbertext {
-  color: #f2f2f2;
+  color: Black;
   font-size: 12px;
   padding: 8px 12px;
   position: absolute;
@@ -267,9 +267,13 @@ img.hover-shadow {
 }
 .modal-column {
   float: left;
-  width: 25%;
-  height:25%;
+  width: 80px;
+  height:105px;
   padding: 7px;
+}
+
+.col-md-8 {
+  width: 100%;
 }
 </style>
 
@@ -310,10 +314,13 @@ img.hover-shadow {
       <div class="picture-item__inner hover-shadow">
         <div class="aspect aspect--16x9"> <!-- 16x9 -->
           <div class="aspect__inner" style="border: black; border-width: 5px; border-style: solid;">
-		    <img class="cursor" src="{% static "diario_militar/thumbnails/" %}{{ photo.file|add:".thumbnail" }}" alt="{{ photo.folder }}" onclick="openModal();currentSlide({{ forloop.counter }})"/ >
+		    <img class="cursor" src="{% static "diario_militar/" %}{{ photo.file|add:".jpg" }}" alt="{{ photo.folder }}" onclick="openModal();currentSlide({{ forloop.counter }})"/ >
           </div>
         </div>
       </div>
+	  <div class="picture-item__title" style="width: 0px; height: 0px;">
+		<p>{{ photo.folder}}</p>
+	  </div>
     </figure>
    {% endfor %}
 
@@ -328,7 +335,7 @@ img.hover-shadow {
     {% for photo in photo_list %}	  
     <div class="mySlides">	
 	  <div class="numbertext">{{ forloop.counter }} / {{ photo_list|length }}</div>
-	  <img src="{% static "diario_militar/" %}{{ photo.file|add:".jpg" }}" style="width:100%">
+	  <img src="{% static "diario_militar/lg_img/" %}{{ photo.file|add:".jpg" }}" style="width:100%">
 	</div>
 	{% endfor %}
 
@@ -338,13 +345,13 @@ img.hover-shadow {
   
 	<!-- Caption Text -->
 	<div class="caption-container">
-	  <p id="caption"></p>
+	  <p id="caption" style="text-align:center"></p>
 	</div>
 
 	<!-- Thumnail image controls -->
     {% for photo in photo_list %}
     <div class="modal-column">
-	  <img class="demo cursor" src="{% static "diario_militar/thumbnails/" %}{{ photo.file|add:".thumbnail" }}" onclick="currentSlide({{ forloop.counter }})" alt="{{ photo.folder }}">
+	  <img class="demo cursor" src="{% static "diario_militar/" %}{{ photo.file|add:".jpg" }}" onclick="currentSlide({{ forloop.counter }})" alt="{{ photo.folder }}">
 	</div>
 	{% endfor %}
   </div>
@@ -503,6 +510,50 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+// Script for modal
+// Open the Modal
+function openModal() {
+  document.getElementById('myModal').style.display = "block";
+}
+
+// Close the Modal
+function closeModal() {
+  document.getElementById('myModal').style.display = "none";
+}
+
+var slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  var captionText = document.getElementById("caption");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+  captionText.innerHTML = dots[slideIndex-1].alt;
+}
+
+
+
 
 
 
@@ -548,11 +599,36 @@ function showSlides(n) {
   captionText.innerHTML = dots[slideIndex-1].alt;
 }
 
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+// When the user pushes escape, close it
+window.onkeyup = function(event) {
+  switch(event.key) {
+    case "ArrowRight": // Go to the next slide
+	  plusSlides(1);
+	  break;
+	case "ArrowLeft": //Go to the previous slide
+	  plusSlides(-1);
+	  break;
+	case "Escape": // Pressing escape closes the modal
+	  modal.style.display = "none";
+	  break;
+	default:
+	  return; // Quit when this doesn't handle the event
+  }
+}
+
 </script>
 
     <!-- end AJ grid -->
-
-
 
 </div>
 

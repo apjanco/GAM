@@ -19,9 +19,10 @@ from mysql.connector import errorcode
 import os
 import sys
 sys.path.append('/srv/GAM/archivo/')
-from settings_secret import DATABASES
+from archivo.settings_secret import DATABASES
 import plotly 
-plotly.tools.set_credentials_file(username='ajanco', api_key='2uxIhIy1JmOasiWozwd7')
+#plotly.tools.set_credentials_file(username='ajanco', api_key='2uxIhIy1JmOasiWozwd7')
+plotly.plotly.sign_in('ajanco', '1prkGNW7WC9aNhGtxk0X')
 import plotly.plotly as py
 import plotly.graph_objs as go 
 import cufflinks as cf
@@ -80,7 +81,7 @@ def main(request, options):
 
 def filtrar_imagenes(request):
     photo = random_photo()
-    filter_list = ["apple", "none"]
+    filter_list = ["none"]
     photo_list = Photo.objects.all()[:10]
     context = {'photo_list':photo_list, 'filter_list': filter_list, 'photo':photo}
     return render(request, 'acceso/filtrar_imagenes.html', context)

@@ -274,8 +274,8 @@ class Plotly(TemplateView):
 			else:
 				print(err)
 		#c = conn.cursor()
-
-		photo = random_photo()
+		photos = os.listdir('/srv/GAM/acceso/static/pat_goudvis')
+		photo = random.choice(photos)
 		context['photo'] = photo
 		df = pd.read_sql(
                 """

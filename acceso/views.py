@@ -8,6 +8,7 @@ from django.core import serializers
 from acceso.models import *
 from gam_app.models import Persona
 from gam_app.models import Caso as Database
+from gam_app.models import Carpeta
 import os
 import random
 from django.views.generic.base import TemplateView
@@ -82,7 +83,14 @@ def main(request, options):
 def filtrar_imagenes(request):
     photo = random_photo()
     filter_list = ["none"]
-    photo_list = Photo.objects.all()[:10]
+    photos = Photo.objects.all()
+    photo_list = {}
+    for photo in photos:
+        photo.folder = photo.folder[8:]
+        caja, legajo, carpeta = photo.folder[:3], photo.folder[4:7], photo.folder[8:11]
+        caso = Caso.objects.filter(carpetas__caja=caja, carpetas__legajo=legajo, carpetas__carpeta=carpeta)
+        photo_list[photo] = caso[0]
+        photo.folder = "GAM Des " +  caja + " " + legajo + " " + carpeta
     context = {'photo_list':photo_list, 'filter_list': filter_list, 'photo':photo}
     return render(request, 'acceso/filtrar_imagenes.html', context)
 

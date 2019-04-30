@@ -1,0 +1,199 @@
+{% load static %}
+
+<script src="https://d3js.org/d3.v2.min.js?2.9.3"></script>
+<style>
+
+
+.link {
+
+    stroke: #99fca3;}
+
+.node{
+ color:white;
+}
+.node:not(:hover) text{
+    display: none;
+
+
+}
+/*
+.images{
+ display: none;
+}
+.node{
+ display:none;
+}
+*/
+.node circle{
+stroke: rgba(0, 0, 0, 0);
+stroke-width:10px;
+fill: rgba(252, 248, 247, 0);
+}
+
+</style>
+
+<div style="width: 100%;margin: auto;">
+ <h> Image to Image</h>
+<body > </body>
+</div>
+
+
+<script>
+
+    //slash and burn method
+
+/*
+    var w = 960,
+    h = 800,
+    maxNodeSize = 50,
+    x_browser = 20,
+    y_browser = 25,
+    root;
+
+    var vis;
+    var force = d3.layout.force();
+
+    vis = d3.select("#vis").append("svg").attr("width", w).attr("height", h);
+    d3.json("{% url 'acceso:network_json' %}", function(json){
+        root = json;
+        root.fixed = true;
+        root.x = w / 2;
+        root.y = h / 4;
+    });
+*/
+    //burned reboot
+
+var width = 1500, height = 1500;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var force = d3.layout.force()
+    .gravity(.005)
+    .distance(500)
+    .charge(-100)
+    .size([width, height]);
+
+d3.json("{% url 'acceso:network_json' %}", function(json) {
+  force
+      .nodes(json.nodes)
+      .links(json.links)
+      .start();
+
+  var link = svg.selectAll(".link")
+      .data(json.links)
+      .enter().append("line")
+      //.style("fill", function (d) { return '#ff300b'; })
+      .attr("id",function(d) {return "target"+d.index})
+      .attr("class", "link")
+      .style("stroke-width", function(d) { return Math.sqrt(d.weight); });
+
+
+
+  var node = svg.selectAll(".node")
+      .data(json.nodes)
+      .enter().append("g")
+      .attr("class", "node")
+      .attr("id",function(d) {return  "node"+d.index})
+      .call(force.drag);
+
+
+
+
+  node.append("circle")
+      .attr("r","5");
+
+      //.style('fill', 'url(node.name)');
+
+  //node.append("icon")
+      //.attr("image","node.name");
+
+  node.append("svg:image")
+       .attr( "xlink:href" ,function(d) { return "https://archivogam.haverford.edu/static/diario_militar/"+d.name;})
+        .attr("id",function(d) {return  "image"+(d.index)})
+        .attr("x", function(d) { return -25;})
+        .attr("y", function(d) { return -25;})
+        .attr("height", 50)
+        .attr("width", 50)
+        .attr("class", "images");
+
+
+
+  node.append("text")
+      .style("fill", function (d) { return '#9efc5d'; })
+      .attr("dx", 12)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name });
+
+
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+     node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  });
+//enlarge a hovered over image
+ //remember to fix the nodes image id
+
+     var image = svg.selectAll(".images")
+           .on('mouseover', function(d) {
+            d3.selectAll('.images')
+                    .attr("height", 50)
+                    .attr("width", 50)
+                    .style("display", "none")
+            d3.selectAll('.link')
+                    .style("display", "none")
+            for(item in d.pop){
+              d3.select(("#image" + item))
+                   .style("display", "")
+                   .attr("height", 200)
+                   .attr("width", 200)
+            }
+            d3.select(this)
+                     .style("display", "")
+                     .attr("height", 200)
+                     .attr("width", 200)
+
+/*
+             for (linker in json.links) {
+              lintarget = parseInt(linker.target);
+              linsource = parseInt(linker.source);
+              i = parseInt(d.index)
+              if (i == lintarget) {
+               d3.select(("#image" + linsource))
+                       .style("display", "")
+                       .attr("height", 200)
+                       .attr("width", 200)
+
+              } else if (i == linsource) {
+               d3.select(("#image" + lintarget))
+                       .style("display", "")
+                       .attr("height", 200)
+                       .attr("width", 200)
+
+              }
+             }
+*/
+
+             //add for loop here
+
+
+
+           })
+            .on('mouseout', function(d) {
+                  d3.selectAll('.link')
+                     .style("display","")
+                 d3.selectAll('.node')
+                     .style("display","")
+                  d3.selectAll('.images')
+                      .style("display","")
+                      .attr("height", 50)
+                      .attr("width", 50)});
+
+    
+});
+</script>

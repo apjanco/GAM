@@ -10,6 +10,7 @@ index/
 logs
 uwsgi_params
 *.save 
+*.backup
 .venv
 
 /gam_app/dzis

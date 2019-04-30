@@ -8,12 +8,31 @@ from django.core import serializers
 from acceso.models import *
 from gam_app.models import Persona
 from gam_app.models import Caso as Database
+from gam_app.models import Carpeta
 import os
 import random
+from django.views.generic.base import TemplateView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.utils.html import escape
 from django.db.models import Count, Q
-
+import mysql.connector
+from mysql.connector import errorcode
+import os
+import sys
+sys.path.append('/srv/GAM/archivo/')
+from archivo.settings_secret import DATABASES
+import plotly 
+#plotly.tools.set_credentials_file(username='ajanco', api_key='2uxIhIy1JmOasiWozwd7')
+plotly.plotly.sign_in('ajanco', '1prkGNW7WC9aNhGtxk0X')
+import plotly.plotly as py
+import plotly.graph_objs as go 
+import cufflinks as cf
+import plotly.offline as opy
+from datetime import datetime
+import pandas as pd
+import numpy as np
+import plotly.graph_objs as go
+from collections import OrderedDict 
 def cycle(iterable):
 	saved = []
 	for element in iterable:
@@ -24,8 +43,8 @@ def cycle(iterable):
 			yield element
 
 def bokeh(request):
-	script = server_document(url="https://archivogam.haverford.edu/en/acceso/bokeh/people", relative_urls=True)
-	return render(request, 'acceso/bokeh.html', {'script': script})
+    script = server_document(url="http://192.241.128.56:8000/en/acceso/bokeh/people", relative_urls=True)
+    return render(request, 'acceso/bokeh.html', {'script': script})
 	
 
 def random_photo():
@@ -62,14 +81,18 @@ def main(request, options):
 	return render(request, 'acceso/index.html', context)
 
 def filtrar_imagenes(request):
-	filter_list = ["", "none"] #Don't know how to add filters since images models are being created dynamically
-	photo = random_photo()
-	photo_list = []
-	for image in os.listdir('/srv/GAM/acceso/static/diario_militar/thumbnails')[:10]:
-		foto = Photo(file=image, folder=image[38:-11])
-		photo_list.append(foto)
-	context = {'photo_list':photo_list, 'filter_list': filter_list, 'photo':photo}
-	return render(request, 'acceso/filtrar_imagenes.html', context)
+    photo = random_photo()
+    filter_list = ["none"]
+    photos = Photo.objects.all()
+    photo_list = {}
+    for photo in photos:
+        photo.folder = photo.folder[8:]
+        caja, legajo, carpeta = photo.folder[:3], photo.folder[4:7], photo.folder[8:11]
+        caso = Caso.objects.filter(carpetas__caja=caja, carpetas__legajo=legajo, carpetas__carpeta=carpeta)
+        photo_list[photo] = caso[0]
+        photo.folder = "GAM Des " +  caja + " " + legajo + " " + carpeta
+    context = {'photo_list':photo_list, 'filter_list': filter_list, 'photo':photo}
+    return render(request, 'acceso/filtrar_imagenes.html', context)
 
 def skynet(request):
 	photo = [[532, "dataset/cat/2008_007496.jpg", 0.4442075490951538],
@@ -131,32 +154,28 @@ def history(request):
 
 
 def caso(request, caso):
-	caso = Caso.objects.get(slug_name=caso)
-	#caso = CasoFilter(request.GET, queryset=Caso.objects.get(slug_name=caso))
-	foto = []
-	dragon = []
-	imageprofile = caso.foto_de_perfil
+    caso = Caso.objects.get(slug_name=caso)
+    #caso = CasoFilter(request.GET, queryset=Caso.objects.get(slug_name=caso))
+    foto = []
+    dragon = []
+    imageprofile = caso.foto_de_perfil
 
 
-	for x in caso.carpetas.all():
-		dragon = Imagen.objects.filter(
-			archivo=x.archivo,
-			colección=x.colección,
-			caja=x.caja,
-			legajo=x.legajo,
-			carpeta=x.carpeta,
-		).order_by('número_de_imagen')
-	personas = caso.personas.all()
-	# iterate through personas to make a table of all people
-	#info = [persona.nombre_de_la_persona, persona.nombre, persona.segundo, persona.apellido_paterno, persona.apellido_materno, persona.fecha_de_nacimiento, persona.fecha_desaparicion, persona.edad_en_el_momento, persona.género, persona.etnicidad, persona.profesión, persona.actividades_políticas]
-	#if str(info[-1]) == "gam_app.Organización.None":
-	#    info[-1] = ""
-	for x in caso.fotos.all():
-		foto.append(x)
-	profile_photos = Foto.objects.filter(caso__slug_name=caso)
-	context = {'caso': caso, 'images': foto,'personas':personas, 'dragon': dragon, 'face':imageprofile}
+    for x in caso.carpetas.all():
+        dragon = Imagen.objects.filter(
+            archivo=x.archivo,
+            colección=x.colección,
+            caja=x.caja,
+            legajo=x.legajo,
+            carpeta=x.carpeta,
+        ).order_by('número_de_imagen')
+    personas = caso.personas.all()
+    for x in caso.fotos.all():
+        foto.append(x)
+    profile_photos = Foto.objects.filter(caso__slug_name=caso)
+    context = {'caso': caso, 'images': foto,'personas':personas, 'dragon': dragon, 'face':imageprofile}
 
-	return render(request, 'acceso/caso.html', context)
+    return render(request, 'acceso/caso.html', context)
 
 
 def simple(request):
@@ -216,6 +235,7 @@ def network_json(request):
 
 	return response
 
+
 class DbListJson(BaseDatatableView):
 	# the model you're going to show
 	model = Database
@@ -248,55 +268,271 @@ class DbListJson(BaseDatatableView):
 			qs = qs.filter(q)
 		return qs
 
+class Plotly(TemplateView):
+	template_name = 'acceso/collection.html'
+	def get_context_data(self, **kwargs):
+		context = super(Plotly, self).get_context_data(**kwargs)
+		try:
+			conn = mysql.connector.connect(user=DATABASES['default']['USER'], password=DATABASES['default']['PASSWORD'], host=DATABASES['default']['HOST'], database=DATABASES['default']['NAME'])
+		except mysql.connector.Error as err:
+			if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+				print("Something is wrong with your user name or password")
+			elif err.errno == errorcode.ER_BAD_DB_ERROR:
+				print("Database does not exist")
+			else:
+				print(err)
+		#c = conn.cursor()
+		photos = os.listdir('/srv/GAM/acceso/static/pat_goudvis')
+		photo = random.choice(photos)
+		context['photo'] = photo
+		df = pd.read_sql(
+                """
+                SELECT *
+                FROM gam_app_caso
+                """, con=conn)
+		#context['count_caja'] = df.caja_no.nunique()-1
+		estanteria = list(df.estanteria_no.unique())
+		estanteria = estanteria[1:]
+		estanteria.reverse()
+		dd = {}
+		caja_no = 0
+		total_files = df.shape[0]
+		for i in estanteria:
+			ll = []
+			count = 0
+			dff = df[(df['estanteria_no'] == i) & (df['fecha_desaparicion'] != '')]
+			dates = np.array(dff['fecha_desaparicion'], dtype=np.datetime64)
+			dates = np.unique(dates)
+			dates_sort = np.sort(dates, axis=0)
+			dates_sort = list(pd.DatetimeIndex(dates_sort).year)
+			dates_str = str(dates_sort[0]) + ' - ' + str(dates_sort[-1])
+			ll.append(dates_str)
+			fl = list(filter(None, list(df[df['estanteria_no'] == i].plato_no.unique())))
+			ll.append(len(fl))
+			for j in fl:
+				fll = list(df[(df['estanteria_no'] == i) & (df['plato_no'] == j)].caja_no.unique())
+				count += len(fll)
+				caja_no += len(fll)
+			ll.append(count)
+			dd[i] = ll
+		dd = OrderedDict(sorted(dd.items(), key = lambda t: t[0]))
+		context['cases'] = dd
+		context['files'] = total_files
+		context['caja'] = caja_no
+		
+		df = df[df['fecha_desaparicion'] != '']
+		dates = np.array(df['fecha_desaparicion'], dtype=np.datetime64)
+		dates = np.unique(dates)
+		dates = dates[2:]
+		print(dates)
+		counts = []
+		for i in dates:
+			counts.append(df[df['fecha_desaparicion'] == str(i)]['fecha_desaparicion'].count())
+		trace = go.Scatter(x=dates,
+                   y=counts, line = dict(color = ('rgb(255,236,0)'),width = 4))
+		data = [trace]
+		layout = go.Layout(
+    			title='Number of Missing People Over The Years',
+    			xaxis=dict(
+        			rangeselector=dict(
+            				buttons=list([
+                				dict(count=1,
+                				     label='1m',
+                				     step='month',
+                				     stepmode='backward'),
+                				dict(count=6,
+                				     label='6m',
+                				     step='month',
+                				     stepmode='backward'),
+                				dict(count=1,
+                				    label='YTD',
+                				    step='year',
+                				    stepmode='todate'),
+                				dict(count=1,
+                				    label='1y',
+                				    step='year',
+                				    stepmode='backward'),
+                				dict(step='all')
+            				])
+        				),
+        			rangeslider=dict(
+       	  			   visible = True
+        		),
+        		type='date'
+    			),
+			width = 800,
+			height = 600,
+			autosize=True
+		)
+		fig = dict(data=data, layout=layout)
+		div = opy.plot(fig, auto_open=False, include_plotlyjs=True, output_type='div')
+#		div_id = div.split('=')[1].split()[0].replace("'", "").replace('"', '')
+#		js = '''
+#		<script>
+#
+#		</script>'''.format(div_id=div_id)
 
-"""{
-          "nodes":[
-                {"name":"node1","group":1},
-                {"name":"node2","group":2},
-                {"name":"node3","group":2},
-                {"name":"node4","group":3}
-            ],
-            "links":[
-                {"source":2,"target":1,"weight":1},
-                {"source":0,"target":2,"weight":3}
-            ]
-        }"""
+		df_loc = pd.read_sql(
+		"""
+		SELECT departamento
+		FROM gam_app_caso
+		""", con=conn)
+		df_loc = df_loc.dropna()
+		ls = list(df_loc["departamento"])
+		df_geo = pd.read_sql(
+		"""
+		SELECT Y(punto), X(punto), nombre_del_lugar
+		FROM gam_app_lugar
+		""", con=conn)
+		df_geo = df_geo.dropna()
+		lss = list(df_geo["nombre_del_lugar"])
+		counts = []
+		for i in lss:
+			if ls.count(i) == 0:
+				counts.append(1)
+			else:
+				counts.append(ls.count(i))
+		df_geo["counts"] = counts
+		#print(len(list(df_geo["Y(punto)"])))
+		#print(len(list(df_geo["X(punto)"])))
+		df_geo["text"] = df_geo["nombre_del_lugar"] + ' Number: ' + df_geo["counts"].astype(str)
+		scl = [ [0,"rgb(255,255,0)"],[0.35,"rgb(255,215,0)"],[0.5,"rgb(245,222,179)"],\
+    [0.6,"rgb(255,250,205)"],[0.7,"rgb(250,250,210)"],[1,"rgb(255,255,224)"] ]
+		data_geo = [ dict(
+			type = 'scattergeo',
+			#locationmode = 'ISO-3',
+			#locations = list('GTM'),
+			mode = 'markers',
+			lat = list(df_geo["Y(punto)"]),
+			lon = list(df_geo["X(punto)"]),
+			text = list(df_geo["text"]),
+			#textposition = ['top right', 'top left', 'top center', 'bottom right', 'top right', 'bottom left', 'top left', 'top center', 'bottom right', 'top left', 'top right', 'bottom right', 'top center', 'top right', 'top right'],
+			marker = dict(
+				size = 8, 
+				opacity = 0.8,
+				reversescale = True,
+				autocolorscale = False,
+				symbol = 'square',
+				line = dict(
+					width=1,
+					color='rgba(102, 102, 102)'),
+				colorscale = scl,
+				cmin = 1,
+				color = df_geo['counts'],
+				cmax = df_geo['counts'].max(),
+				colorbar=dict(
+				title="Number of People")
+			#	size = 7,
+			#	opacity = 0.8,
+			#	line = dict(width = 1),
+			#	color = ['#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd', '#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd', '#bebada', '#fdb462', '#fb8072', '#d9d9d9', '#bc80bd']
+			)
 
 
-"""
-        dict = {'nodesuntracked': [], 'links': [],'nodes':[]}
+		)]
+		#print(data_geo)
+		layout_geo = dict(
+			title = 'Missing People Locations',
+			geo = dict(
+				scope='north america',
+				lonaxis = dict(range= [df_geo["X(punto)"].min()-1, df_geo["X(punto)"].max()+1]),
+				lataxis = dict(range = [df_geo["Y(punto)"].min()-1, df_geo["Y(punto)"].max()+1]),
+				showland = True,
+				landcolor = "rgb(250, 250, 250)",
+				subunitcolor = "rgb(217, 217, 217)",
+				countrycolor = "rgb(217, 217, 217)",
+				countrywidth = 0.5,
+				subunitwidth = 0.5
 
-        with open('/srv/GAM/acceso/my_file.txt', 'r') as f:
-            for line in f:
-                node_list = list([line.split(',')[0]])
-                for node in set(node_list):
-                    dict['nodesuntracked'].append({"name": node, "group": 1},)
-                for node in set(node_list):
-                    node_index = dict['nodesuntracked'].index({"name": node, "group": 1}, )
-                    dict['nodes'].append({"name": node, "group": 1, "index":node_index})
+			),
+			width = 800,
+			height = 600
 
-        with open('/srv/GAM/acceso/my_file.txt', 'r') as f:
-            i=0
-            for line in f:
-                node = line.split(',')[0]
-                target = line.split(',')[1]
-                weight = line.replace('\n', '').split(',')[2]
-                if weight != "0.0":
-                    node_index = int(dict['nodesuntracked'].index({"name":node, "group":1},))
-                    try:
-                        target_index = int(dict['nodesuntracked'].index({"name": target,"group":1},))
-                    except:
-                        pass
-                    dict['links'].append({"source": node_index, "target": target_index, "weight": float(weight) * 10})
-    	 for node in dict['nodes']:
-			popers=[]
-			for link in dict['links']:
-				if(node["index"]==link["source"]):
-					popers.append(link["target"])
-				elif(node["index"]==link["target"]):
-					popers.append(link["source"])
-        	node["pop"]=popers
+		)
+		
+		fig_geo = dict(data=data_geo, layout=layout_geo)
+		div_geo = opy.plot(fig_geo, auto_open=False, include_plotlyjs=True, output_type='div')
+		df_age = pd.read_sql(
+                """
+                SELECT edad_en_el_momento
+                FROM gam_app_persona
+                """, con=conn)
+		df_age = df_age.dropna()
+		ll = list(df_age["edad_en_el_momento"])
+		#print(ll)
+		lis = []
+		counts = []
+		for i in ll:
+			try:
+			#except ValueError:
+				if int(i.split(' ')[0]):
+					lis.append(i.split(" ")[0])
+			except ValueError:
+				continue
+		se = set(lis)
+		sel = list(se)
+		for i in sel:
+			counts.append(lis.count(i))
+		trace = go.Scatter(
+			x = sel,
+			y = counts,
+			mode = 'markers')
+		layout = {"title": "Age vs Missing Numbers",
+			"xaxis": {"title": "Age", },
+			"yaxis": {"title": "Number of Missing People"}, 'width': 800, 'height': 600}
+		figg = dict(data=[trace], layout=layout)
+		div_age = opy.plot(figg, auto_open=False, output_type='div')
+		df_gender = pd.read_sql(
+		"""
+		SELECT género
+		FROM gam_app_persona
+		"""
+		, con=conn)
+		df_gender = df_gender.dropna()
+		ll = list(df_gender['género'])
+		#print(ll)
+		dd = {'masculino': 0, 'femenino': 0}
+		for i in ll:
+			if i.lower() == 'masculino' or i.lower() == 'm' or i.lower() == 'hombre':
+				dd['masculino'] += 1
+			elif i != '':
+				dd['femenino'] += 1
+		labels = ['Masculino', 'Femenino']
+		values = [dd['masculino'], dd['femenino']]
+		fig = {
+			'data': [{'labels': labels, 'values': values, 'type': 'pie', 'marker': {'colors': ['rgb(255,236,0)', 'rgb(126,126,126)']}}],
+			'layout': {'title': 'Gender vs Missing People',
+               'showlegend': True, 'width': 800, 'height': 600}
 
-    
-    
-    """
+		}
+		
+		#tracess = go.Pie(labels=labels, values=values)
+		#div_gender = opy.plot([tracess], auto_open=False, output_type='div')
+		div_gender = opy.plot(fig, auto_open=False, output_type='div')
+		df_profession = pd.read_sql(
+                """
+                SELECT profesión
+                FROM gam_app_persona
+                """
+                , con=conn)
+		df_profession = df_profession.dropna()
+		li = list(df_profession['profesión'])
+		li = list(filter(lambda a: a != '', li))
+		#print(li)
+		se = list(set(li))
+		cou = []
+		for i in se:
+			cou.append(li.count(i))
+		layout = {"title": "Profession vs Missing Numbers",
+			"yaxis": {"title": "Number Missing", },
+			"xaxis": {"title": "Profession"}, 'width':800, 'height': 600}
+		fig = go.Scatter(x=se, y = cou, line = dict(color = ('rgb(255,236,0)'),width = 4))
+		figg = dict(data=[fig], layout=layout)
+		div_pro = opy.plot(figg, auto_open=False, output_type='div')
+		context['graph'] = div
+		context['geo'] = div_geo
+		context['age'] = div_age
+		context['gender'] = div_gender
+		context['pro'] = div_pro
+		return context
+

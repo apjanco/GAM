@@ -81,7 +81,7 @@ def main(request, options):
     return render(request, 'acceso/index.html', context)
 
 def filtrar_imagenes(request):
-    photo = random_photo()
+    photo_mostrar = random_photo()
     filter_list = ["none"]
     photos = Photo.objects.all()
     photo_list = {}
@@ -91,7 +91,7 @@ def filtrar_imagenes(request):
         caso = Caso.objects.filter(carpetas__caja=caja, carpetas__legajo=legajo, carpetas__carpeta=carpeta)
         photo_list[photo] = caso[0]
         photo.folder = "GAM Des " +  caja + " " + legajo + " " + carpeta
-    context = {'photo_list':photo_list, 'filter_list': filter_list, 'photo':photo}
+    context = {'photo_list':photo_list, 'filter_list': filter_list, 'photo_mostrar':photo}
     return render(request, 'acceso/filtrar_imagenes.html', context)
 
 def skynet(request):

@@ -1,4 +1,4 @@
-{% extends 'acceso/base2.html' %}
+{% extends 'acceso/base.html' %}
 {% load i18n %}
 {% load static %}
 {% load app_filters %}
@@ -22,8 +22,8 @@
 {% block content2 %}
 <style>
 
-	#header {
-		background-image: url(https://archivogam.haverford.edu/static/pat_goudvis/{{ photo }});
+	header {
+		background-image: url(https://archivogam.haverford.edu/static/pat_goudvis/{{ photo_mostrar }});
 	}
 </style>
 <body class="homepage is-preload">
@@ -172,7 +172,6 @@ figure {
   margin: auto;
   padding: 0;
   width: 75%;
-  height: 75%;
   max-width: 1200px;
 }
 
@@ -207,7 +206,7 @@ figure {
   width: auto;
   padding: 16px;
   margin-top: -50px;
-  color: white;
+  color: red;
   font-weight: bold;
   font-size: 20px;
   transition: 0.6s ease;
@@ -275,8 +274,29 @@ img.hover-shadow {
 .col-md-8 {
   width: 100%;
 }
+/* scroll back to top button */
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+#myBtn:hover {
+  background-color: #555;
+}
 </style>
 
+<button onclick="topFunction()" id="myBtn" title="Go to top">{% trans "Back to Top" %}</button>
 
 <div class="container">
   <h2><a href="#">{% trans "Photos" %} </a></h2>
@@ -288,7 +308,6 @@ img.hover-shadow {
       </div>
         <div>
             <br></br>
-
       </div>
     </div>
 
@@ -319,7 +338,11 @@ img.hover-shadow {
         </div>
       </div>
 	  <div class="picture-item__title" style="display: block; overflow: hidden;">
-   	    <p>{{ caso.nombre_del_caso}}</p>
+   	    <p>
+		<a href="https://archivogam.haverford.edu/acceso/caso/{{ caso.slug_name }}" target="_blank" title='{% trans "Go to Case" %}'>
+	        {{ caso.nombre_del_caso}}
+	      </a>
+		</p>
 		<p> {{ photo.folder }}</p>
 		<p style="display: block; line-height: 0; height: 0; overflow: hidden;">
 		  {{ caso.descripción|striptags|safe }}
@@ -336,21 +359,20 @@ img.hover-shadow {
 <div id="myModal" class="modal">
   <span class="close cursor" onclick="closeModal()">&times;</span>
   <div class="modal-content">
-	<div class="modal-image" style="height:100%; width:100%; margin-bottom:10px;">
+	<div class="modal-image" style="height:100%; width:100%;">
 	  {% for photo, caso in photo_list.items %}	  
-	  <div class="mySlides" style="height:98%; width:100%;">	
+	  <div class="mySlides" style="height:100%; width:100%;">	
 	    <div class="numbertext">{{ forloop.counter }} / {{ photo_list|length }}</div>
-	    <img class="lazy-lg" data-src="{% static "diario_militar/lg_img/" %}{{ photo.file|add:".jpg" }}" style="width:100%">
+	    <img class="lazy-lg" data-src="{% static "diario_militar/lg_img/" %}{{ photo.file|add:".jpg" }}" style="width:75%; height:100%; margin-left: auto; margin-right:auto; margin-top: auto">
 	  </div>
 	  {% endfor %}
 
 	  <!-- Next/previous controls -->
 	  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
 	  <a class="next" onclick="plusSlides(1)">&#10095;</a>
-  
 	  <!-- Caption Text -->
-	  <div class="caption-container">
-	    <p id="caption" style="text-align:center"></p>
+      <div class="caption-container">
+	    <p id="caption" style="text-align:center;"></p>
 	  </div>
     </div>
 	<div class="thumbnail-control">
@@ -562,12 +584,18 @@ function showSlides(n) {
   }
   slides[slideIndex-1].style.display = "block";
   dots[slideIndex-1].className += " active";
-  captionText.innerHTML = dots[slideIndex-1].alt;
   slides[slideIndex-1].setAttribute("id", "modal-focus");
-  
+  // var full_file = dots[slideIndex-1].alt.slice(8,11) + '/' + dots[slideIndex-1].alt.slice(12,15) + '/' + dots[slideIndex-1].alt.slice(16,19) + '/" ' +  'target="_blank">';
+  // var link = '<a href="https://archivogam.haverford.edu/en/imagen/Archivo%20del%20GAM/Desaparecidos/';
+  // captionText.innerHTML = link + full_file + dots[slideIndex-1].alt + '</a>';
+  // Could link to the processing layer above
+  // Below, link to the image in a new window
   // get the image
   var image = document.getElementById("modal-focus").getElementsByClassName("lazy-lg")[0];
   lazyloadLarge(image);
+  var image = document.getElementById('modal-focus').getElementsByTagName('img')[0];
+  captionText.innerHTML = '<a href="https://archivogam.haverford.edu' + image.src.slice(26,) + '" ' + 'target=_blank title="{% trans "Open the image"%}">' + dots[slideIndex-1].alt + '</a>';
+  document.getElementById('myModal').scrollTo({top: 0, behavior: 'smooth'});
 }
 
 // Get the modal
@@ -675,6 +703,19 @@ function lazyloadLarge(img) {
   img.classList.remove('lazy-lg');
 }
 
+// script for scroll back to top button
+window.onscroll = function() {scrollFunction()};
+function scrollFunction() {
+  if (document.body.scrollTop > 2000 || document.documentElement.scrollTop > 2000) {
+    document.getElementById("myBtn").style.display = "block";
+  } else {
+    document.getElementById("myBtn").style.display = "none";
+  }
+}
+function topFunction() {
+  document.body.scrollTo({top: 910, behavior: 'smooth'});
+  document.documentElement.scrollTo({top:910, behavior: 'smooth'});
+}
 </script>
 
     <!-- end AJ grid -->

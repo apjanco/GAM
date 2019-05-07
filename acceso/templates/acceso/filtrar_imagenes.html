@@ -1,4 +1,4 @@
-{% extends 'acceso/base2.html' %}
+{% extends 'acceso/base.html' %}
 {% load i18n %}
 {% load static %}
 {% load app_filters %}
@@ -22,8 +22,8 @@
 {% block content2 %}
 <style>
 
-	#header {
-		background-image: url(https://archivogam.haverford.edu/static/pat_goudvis/{{ photo }});
+	header {
+		background-image: url(https://archivogam.haverford.edu/static/pat_goudvis/{{ photo_mostrar }});
 	}
 </style>
 <body class="homepage is-preload">
@@ -172,7 +172,6 @@ figure {
   margin: auto;
   padding: 0;
   width: 75%;
-  height: 75%;
   max-width: 1200px;
 }
 
@@ -207,7 +206,7 @@ figure {
   width: auto;
   padding: 16px;
   margin-top: -50px;
-  color: white;
+  color: red;
   font-weight: bold;
   font-size: 20px;
   transition: 0.6s ease;
@@ -275,8 +274,29 @@ img.hover-shadow {
 .col-md-8 {
   width: 100%;
 }
+/* scroll back to top button */
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+#myBtn:hover {
+  background-color: #555;
+}
 </style>
 
+<button onclick="topFunction()" id="myBtn" title="Go to top">{% trans "Back to Top" %}</button>
 
 <div class="container">
   <h2><a href="#">{% trans "Photos" %} </a></h2>
@@ -288,7 +308,6 @@ img.hover-shadow {
       </div>
         <div>
             <br></br>
-
       </div>
     </div>
 
@@ -309,17 +328,25 @@ img.hover-shadow {
 
 <div class="container">
   <div id="grid" class="row my-shuffle-container">
-   {% for photo in photo_list %}
+   {% for photo, caso in photo_list.items %}
    <figure class="picture-item" data-groups="{{ photo|filters }}">
       <div class="picture-item__inner hover-shadow">
         <div class="aspect aspect--16x9"> <!-- 16x9 -->
           <div class="aspect__inner" style="border: black; border-width: 5px; border-style: solid;">
-		    <img class="cursor" src="{% static "diario_militar/" %}{{ photo.file|add:".jpg" }}" alt="{{ photo.folder }}" onclick="openModal();currentSlide({{ forloop.counter }})"/ >
+		    <img class="lazy cursor" data-src="{% static "diario_militar/" %}{{ photo.file|add:".jpg" }}" alt="{{ photo.folder }}" onclick="openModal();currentSlide({{ forloop.counter }})"/>
           </div>
         </div>
       </div>
-	  <div class="picture-item__title" style="width: 0px; height: 0px;">
-		<p>{{ photo.folder}}</p>
+	  <div class="picture-item__title" style="display: block; overflow: hidden;">
+   	    <p>
+		<a href="https://archivogam.haverford.edu/acceso/caso/{{ caso.slug_name }}" target="_blank" title='{% trans "Go to Case" %}'>
+	        {{ caso.nombre_del_caso}}
+	      </a>
+		</p>
+		<p> {{ photo.folder }}</p>
+		<p style="display: block; line-height: 0; height: 0; overflow: hidden;">
+		  {{ caso.descripción|striptags|safe }}
+		</p>
 	  </div>
     </figure>
    {% endfor %}
@@ -332,28 +359,30 @@ img.hover-shadow {
 <div id="myModal" class="modal">
   <span class="close cursor" onclick="closeModal()">&times;</span>
   <div class="modal-content">
-    {% for photo in photo_list %}	  
-    <div class="mySlides">	
-	  <div class="numbertext">{{ forloop.counter }} / {{ photo_list|length }}</div>
-	  <img src="{% static "diario_militar/lg_img/" %}{{ photo.file|add:".jpg" }}" style="width:100%">
-	</div>
-	{% endfor %}
+	<div class="modal-image" style="height:100%; width:100%;">
+	  {% for photo, caso in photo_list.items %}	  
+	  <div class="mySlides" style="height:100%; width:100%;">	
+	    <div class="numbertext">{{ forloop.counter }} / {{ photo_list|length }}</div>
+	    <img class="lazy-lg" data-src="{% static "diario_militar/lg_img/" %}{{ photo.file|add:".jpg" }}" style="width:75%; height:100%; margin-left: auto; margin-right:auto; margin-top: auto">
+	  </div>
+	  {% endfor %}
 
-	<!-- Next/previous controls -->
-	<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-	<a class="next" onclick="plusSlides(1)">&#10095;</a>
-  
-	<!-- Caption Text -->
-	<div class="caption-container">
-	  <p id="caption" style="text-align:center"></p>
-	</div>
-
-	<!-- Thumnail image controls -->
-    {% for photo in photo_list %}
-    <div class="modal-column">
-	  <img class="demo cursor" src="{% static "diario_militar/" %}{{ photo.file|add:".jpg" }}" onclick="currentSlide({{ forloop.counter }})" alt="{{ photo.folder }}">
-	</div>
-	{% endfor %}
+	  <!-- Next/previous controls -->
+	  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+	  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+	  <!-- Caption Text -->
+      <div class="caption-container">
+	    <p id="caption" style="text-align:center;"></p>
+	  </div>
+    </div>
+	<div class="thumbnail-control">
+	  <!-- Thumnail image controls -->
+      {% for photo, caso in photo_list.items %}
+      <div class="modal-column">
+	    <img class="demo cursor" src="{% static "diario_militar/" %}{{ photo.file|add:".jpg" }}" onclick="currentSlide({{ forloop.counter }})" alt="{{ photo.folder }}">
+	  </div>
+	  {% endfor %}
+    </div>
   </div>
 </div>
 		  
@@ -499,9 +528,12 @@ class Demo {
         }
       }
       const titleElement = element.querySelector('.picture-item__title');
-      const titleText = titleElement.textContent.toLowerCase().trim();
-      return titleText.indexOf(searchText) !== -1;
-    });
+      // need something to append to titleElement that contains text of description and other information
+	  const titleText = titleElement.textContent.toLowerCase().trim();
+	  return titleText.indexOf(searchText) !== -1;
+	  // Make images searchable by descriptive text and metadata
+	 
+	});
   }
 }
 
@@ -509,8 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.demo = new Demo(document.getElementById("grid"));
 });
 
-
-// Script for modal
+// Script for the modal image viewer
 // Open the Modal
 function openModal() {
   document.getElementById('myModal').style.display = "block";
@@ -543,60 +574,28 @@ function showSlides(n) {
   if (n < 1) {slideIndex = slides.length}
   for (i = 0; i < slides.length; i++) {
     slides[i].style.display = "none";
+  	slides[i].removeAttribute("id")
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
   }
   for (i = 0; i < dots.length; i++) {
     dots[i].className = dots[i].className.replace(" active", "");
   }
   slides[slideIndex-1].style.display = "block";
   dots[slideIndex-1].className += " active";
-  captionText.innerHTML = dots[slideIndex-1].alt;
-}
-
-
-
-
-
-
-// Script for modal
-// Open the Modal
-function openModal() {
-  document.getElementById('myModal').style.display = "block";
-}
-
-// Close the Modal
-function closeModal() {
-  document.getElementById('myModal').style.display = "none";
-}
-
-var slideIndex = 1;
-showSlides(slideIndex);
-
-// Next/previous controls
-function plusSlides(n) {
-  showSlides(slideIndex += n);
-}
-
-// Thumbnail image controls
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
-
-function showSlides(n) {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("demo");
-  var captionText = document.getElementById("caption");
-  if (n > slides.length) {slideIndex = 1}
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
-  }
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";
-  dots[slideIndex-1].className += " active";
-  captionText.innerHTML = dots[slideIndex-1].alt;
+  slides[slideIndex-1].setAttribute("id", "modal-focus");
+  // var full_file = dots[slideIndex-1].alt.slice(8,11) + '/' + dots[slideIndex-1].alt.slice(12,15) + '/' + dots[slideIndex-1].alt.slice(16,19) + '/" ' +  'target="_blank">';
+  // var link = '<a href="https://archivogam.haverford.edu/en/imagen/Archivo%20del%20GAM/Desaparecidos/';
+  // captionText.innerHTML = link + full_file + dots[slideIndex-1].alt + '</a>';
+  // Could link to the processing layer above
+  // Below, link to the image in a new window
+  // get the image
+  var image = document.getElementById("modal-focus").getElementsByClassName("lazy-lg")[0];
+  lazyloadLarge(image);
+  var image = document.getElementById('modal-focus').getElementsByTagName('img')[0];
+  captionText.innerHTML = '<a href="https://archivogam.haverford.edu' + image.src.slice(26,) + '" ' + 'target=_blank title="{% trans "Open the image"%}">' + dots[slideIndex-1].alt + '</a>';
+  document.getElementById('myModal').scrollTo({top: 0, behavior: 'smooth'});
 }
 
 // Get the modal
@@ -625,7 +624,98 @@ window.onkeyup = function(event) {
 	  return; // Quit when this doesn't handle the event
   }
 }
+var modal = document.getElementById('myModal');
 
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+// When the user pushes escape, close it
+window.onkeyup = function(event) {
+  switch(event.key) {
+    case "ArrowRight": // Go to the next slide
+	  plusSlides(1);
+	  break;
+	case "ArrowLeft": //Go to the previous slide
+	  plusSlides(-1);
+	  break;
+	case "Escape": // Pressing escape closes the modal
+	  modal.style.display = "none";
+	  break;
+	default:
+	  return; // Quit when this doesn't handle the event
+  }
+}
+
+// Script for lazy loading thumbnail images
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyloadImages;
+
+  if ("IntersectionObserver" in window) {
+    lazyloadImages = document.querySelectorAll(".lazy");
+	var imageObserver = new IntersectionObserver(function(entries, observer) {
+	  entries.forEach(function(entry) {
+	    if (entry.isIntersecting) {
+		  var image = entry.target;
+		  image.src = image.dataset.src;
+		  image.classList.remove("lazy");
+		  imageObserver.unobserve(image);
+		}
+	  });
+	});
+
+	lazyloadImages.forEach(function(image) {
+      imageObserver.observe(image);
+	});
+  } else {
+	var lazyloadThrottleTimeout;
+	lazyloadImages = document.querySelectorAll(".lazy");
+	function lazyload() {
+	  if(lazyloadThrottleTimeout) {
+		clearTimeout(lazyloadThrottleTimeout);
+	  }
+	  lazyloadThrottleTimeout = setTimeout(function() {
+		var scrollTop = window.pageYOffset;
+		lazyloadImages.forEach(function(img) {
+		  if(img.offsetTop < (window.innerHeight + scrollTop)) {
+		    img.src = img.dataset.src;
+			img.classList.remove('lazy');
+		  }
+		});
+		if(lazyloadImages.length == 0) {
+		  document.removeEventListener("scroll", lazyload);
+		  window.removeEventListener("resize", lazyload);
+		  window.removeEventListener("orientationChange", lazyload);
+		}
+	  }, 20);
+	}
+	document.adddEventListener("scroll", lazyload);
+	window.addEventListener("resize", lazyload);
+	window.addEventListener("orientationChange", lazyload);
+  }  
+});
+
+function lazyloadLarge(img) {
+  img.src = img.dataset.src;
+  img.classList.remove('lazy-lg');
+}
+
+// script for scroll back to top button
+window.onscroll = function() {scrollFunction()};
+function scrollFunction() {
+  if (document.body.scrollTop > 2000 || document.documentElement.scrollTop > 2000) {
+    document.getElementById("myBtn").style.display = "block";
+  } else {
+    document.getElementById("myBtn").style.display = "none";
+  }
+}
+function topFunction() {
+  document.body.scrollTo({top: 910, behavior: 'smooth'});
+  document.documentElement.scrollTo({top:910, behavior: 'smooth'});
+}
 </script>
 
     <!-- end AJ grid -->

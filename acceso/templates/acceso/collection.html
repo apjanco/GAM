@@ -1,7 +1,7 @@
 {% extends 'acceso/base2.html' %}
 {% load i18n %}
 {% load static %}
-
+{% load plotly_dash %}
 {% block extra_static %}
 <script src="//code.jquery.com/jquery-3.3.1.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jq-3.3.1/dt-1.10.18/datatables.min.css"/>
@@ -147,6 +147,7 @@ table tbody th {
 	{% endif %}
 	<br>
 
+<!--{%plotly_app name="SimpleExample"%}-->
 <div class="tab">
 <ul class="tabs">
 		<li><a href="#">Over the Years</a></li>
@@ -158,38 +159,241 @@ table tbody th {
 	<div class="tab_content">
 		<div class="tabs_item">
 			{% if graph %}
-<div id="graphD" style="width:100%;height:100%">
-{{ graph|safe }}
+<div id="graphDiv" style="width:100%;height:100%">
+{{graph|safe }}
+<script>
+var selectorOptions = {
+    buttons: [{
+        step: 'month',
+        stepmode: 'backward',
+        count: 1,
+        label: '1m'
+    }, {
+        step: 'month',
+        stepmode: 'backward',
+        count: 6,
+        label: '6m'
+    }, {
+        step: 'year',
+        stepmode: 'todate',
+        count: 1,
+        label: 'YTD'
+    }, {
+        step: 'year',
+        stepmode: 'backward',
+        count: 1,
+        label: '1y'
+    }, {
+        step: 'all',
+    }],
+};
+var data = [{ mode: 'lines', x: {{ x_first | safe }}, y: {{y_first | safe }} }];
+    var layout = {
+        title: 'Number of Missing People Over The Years',
+        xaxis: {
+            rangeselector: selectorOptions,
+            rangeslider: {}
+        },
+        yaxis: {
+            fixedrange: true
+        }
+    };
+
+Plotly.plot('graphDiv', data, layout);
+window.onresize = function() {
+  Plotly.relayout('graphDiv', {
+    width: 0.9 * window.innerWidth,
+    height: 0.9 * window.innerHeight
+  })
+};
+</script>
 </div>
 {% endif %}
 		</div>
 		<div class="tabs_item">
 			{% if geo %}
-<div id="graphDiv" style="width:1500px;height:800px">
-{{ geo|safe }}
+<div id="graphDivgeo" style="width:800px;height:600px">
+
+<script>
+var data_geo = [{
+        type: 'scattermapbox',
+        mode: 'markers',
+        text: {{ geo_text|safe}},
+        lon: {{ geo_lon | safe }},
+        lat: {{ geo_lat | safe }},
+        marker: {
+          color: {{ geo_counts | safe }},
+          colorscale: {{ geo_colorscale | safe }},
+          cmin: 0,
+          cmax: {{ geo_cmax | safe }},
+          reversescale: true,
+          //opacity: 0.5,
+          size: 10,
+          colorbar:{
+            thickness: 10,
+            titleside: 'right',
+            outlinecolor: 'rgba(102, 102, 102)',
+            ticks: 'outside',
+            ticklen: 3,
+            shoticksuffix: 'last',
+            ticksuffix: 'inches',
+            dtick: 0.1
+          }
+        },
+        name: 'Number of People'
+    }];
+var layout_geo = {
+      dragmode: 'zoom',
+      mapbox: {
+        center: {
+          lat: {{ center_lat|safe}},
+          lon: {{ center_lon|safe}}
+        },
+	pitch:0,
+    zoom:6
+
+},
+margin: {
+      r: 50,
+      t: 50,
+      b: 50,
+      l: 50,
+      pad: 0
+    },
+      showlegend: false
+   };
+Plotly.setPlotConfig({
+    mapboxAccessToken: 'pk.eyJ1Ijoic2Z4aWEiLCJhIjoiY2p0eXFmbXhkMThwczN5cnpoY3V2NXM2OSJ9.y1v1n6o9IQ8q-7xiYE6zNw'
+  });
+
+    Plotly.newPlot('graphDivgeo', data_geo, layout_geo);
+window.onresize = function() {
+  Plotly.relayout('graphDivgeo', {
+    width: 0.9 * window.innerWidth,
+    height: 0.9 * window.innerHeight
+  })
+};
+</script>
 </div>
 {% endif %}
 		</div>
 	<div class="tabs_item">
 		{% if age %}
-<div id="graphDiv" style="width:1500px;height:800px">
-{{ age|safe }}
+<div id="graphDivage" style="width:800px;height:600px">
+<!--{{ age|safe }}-->
+
+<script>
+var trace = {
+  x: {{ sell }},
+  y: {{ count }},
+  mode: 'markers',
+  type: 'scatter',
+  marker: { size: 12 } 
+};
+
+var data = [trace];
+var layout = {
+ title: "Age vs Missing Numbers",
+ xaxis: {title: "Age", }, yaxis: {"title": "Number of Missing People"}};
+
+Plotly.newPlot('graphDivage', data, layout);
+window.onresize = function() {
+  Plotly.relayout('graphDivage', {
+    width: 0.9 * window.innerWidth,
+    height: 0.9 * window.innerHeight
+  })
+};
+</script> 
 </div>
 {% endif %}
 	</div>
 
 	<div class="tabs_item">
 	{% if gender %}
-<div id="graphDiv" style="width:1500px;height:800px">
-{{ gender|safe }}
+<div id="graphDivgender" style="width:800px;height:600px">
+<!--{{ gender|safe }}-->
+<script>
+var layout = {title: 'Gender vs Missing People',
+               showlegend: true, width: 800, height: 600};
+Plotly.newPlot('graphDivgender', {{gender_data | safe}}, layout);
+window.onresize = function() {
+  Plotly.relayout('graphDivgender', {
+    width: 0.9 * window.innerWidth,
+    height: 0.9 * window.innerHeight
+  })
+};
+
+</script>
+
 </div>
 {% endif %}
 	</div>
 
 	<div class="tabs_item">
 	{% if pro %}
-<div id="graphDiv" style="width:1500px;height:800px">
-{{ pro |safe }}
+<div id="graphDivpro" style="width:800px;height:600px">
+<!--{{ pro |safe }}-->
+
+<script>
+var trace = {
+	x: {{ se|safe }},
+	y: {{ cou | safe }},
+	mode: 'markers',
+	type: 'scatter'
+}
+
+var data = [trace];
+var layout = {title: 'Gender vs Missing People',
+               showlegend: true, width: 800, height: 600};
+Plotly.newPlot('graphDivpro', data, {{layout_pro | safe}});
+window.onresize = function() {
+  Plotly.relayout('graphDivpro', {
+    width: 0.9 * window.innerWidth,
+    height: 0.9 * window.innerHeight
+  })
+}
+window.onresize = function() {
+  Plotly.relayout('graphDiv', {
+    width: 0.9 * window.innerWidth,
+    height: 0.9 * window.innerHeight
+  })
+}
+window.onresize = function() {
+  Plotly.relayout('graphDivgeo', {
+    width: 0.9 * window.innerWidth,
+    height: 0.9 * window.innerHeight
+  })
+}
+window.onresize = function() {
+  Plotly.relayout('graphDivgender', {
+    width: 0.9 * window.innerWidth,
+    height: 0.9 * window.innerHeight
+  })
+}
+window.onresize = function() {
+  Plotly.relayout('graphDivage', {
+    width: 0.9 * window.innerWidth,
+    height: 0.9 * window.innerHeight
+  });
+  Plotly.relayout('graphDivgender', {
+    width: 0.9 * window.innerWidth,
+    height: 0.9 * window.innerHeight
+  });
+  Plotly.relayout('graphDivgeo', {
+    width: 0.9 * window.innerWidth,
+    height: 0.9 * window.innerHeight
+  });
+  Plotly.relayout('graphDiv', {
+    width: 0.9 * window.innerWidth,
+    height: 0.9 * window.innerHeight
+  });
+  Plotly.relayout('graphDivpro', {
+    width: 0.9 * window.innerWidth,
+    height: 0.9 * window.innerHeight
+  })
+};
+</script>
+
 </div>
 {% endif %}
 	</div>

@@ -32,6 +32,50 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objs as go
 from collections import OrderedDict 
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+
+from django_plotly_dash import DjangoDash
+#app = DjangoDash('SimpleExample')   # replaces dash.Dash
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+app = DjangoDash('SimpleExample')
+colors = {
+    'background': '#111111',
+    'text': '#7FDBFF'
+                }
+app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
+    html.H1(
+        children='Hello Dash',
+        style={
+            'textAlign': 'center',
+            'color': colors['text']
+        }
+    ),
+    html.Div(children='Dash: A web application framework for Python.', style={
+        'textAlign': 'center',
+        'color': colors['text']
+    }),
+    dcc.Graph(
+        id='Graph1',
+        figure={
+            'data': [
+                {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+                {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
+            ],
+            'layout': {
+                'plot_bgcolor': colors['background'],
+                'paper_bgcolor': colors['background'],
+                'font': {
+                    'color': colors['text']
+                }
+            }
+        }
+    )
+                ])
+
+
 def cycle(iterable):
     saved = []
     for element in iterable:
@@ -321,6 +365,12 @@ class Plotly(TemplateView):
 		counts = []
 		for i in dates:
 			counts.append(df[df['fecha_desaparicion'] == str(i)]['fecha_desaparicion'].count())
+		def myconverter(o):
+			if isinstance(o, datetime):
+				return o.__str__()
+		#context['x_first'] = pd.Series(dates).to_json(orient='values')
+		context['x_first'] = json.dumps(np.datetime_as_string(dates).tolist())
+		context['y_first'] = counts
 		trace = go.Scatter(x=dates,
                    y=counts, line = dict(color = ('rgb(255,236,0)'),width = 4))
 		data = [trace]
@@ -357,6 +407,8 @@ class Plotly(TemplateView):
 			height = 600,
 			autosize=True
 		)
+		context['data_first'] = data
+		context['layout_first'] = layout
 		fig = dict(data=data, layout=layout)
 		div = opy.plot(fig, auto_open=False, include_plotlyjs=True, output_type='div')
 #		div_id = div.split('=')[1].split()[0].replace("'", "").replace('"', '')
@@ -391,6 +443,14 @@ class Plotly(TemplateView):
 		df_geo["text"] = df_geo["nombre_del_lugar"] + ' Number: ' + df_geo["counts"].astype(str)
 		scl = [ [0,"rgb(255,255,0)"],[0.35,"rgb(255,215,0)"],[0.5,"rgb(245,222,179)"],\
     [0.6,"rgb(255,250,205)"],[0.7,"rgb(250,250,210)"],[1,"rgb(255,255,224)"] ]
+		context["geo_lat"] = list(df_geo["Y(punto)"])
+		context["geo_lon"] = list(df_geo["X(punto)"])
+		context["geo_text"] = list(df_geo["text"])
+		context["geo_counts"] = list(df_geo['counts'])
+		context["geo_colorscale"] = scl
+		context["geo_cmax"] = df_geo['counts'].max()
+		context["center_lon"] = (df_geo["X(punto)"].min() + df_geo["X(punto)"].max())/2
+		context["center_lat"] = (df_geo["Y(punto)"].min() + df_geo["Y(punto)"].max())/2
 		data_geo = [ dict(
 			type = 'scattergeo',
 			#locationmode = 'ISO-3',
@@ -442,7 +502,8 @@ class Plotly(TemplateView):
 			height = 600
 
 		)
-		
+		context['data_geo'] = data_geo
+		context['laytout_geo'] = layout_geo		
 		fig_geo = dict(data=data_geo, layout=layout_geo)
 		div_geo = opy.plot(fig_geo, auto_open=False, include_plotlyjs=True, output_type='div')
 		df_age = pd.read_sql(
@@ -466,6 +527,9 @@ class Plotly(TemplateView):
 		sel = list(se)
 		for i in sel:
 			counts.append(lis.count(i))
+		sell = list(map(int, sel))
+		context['sell'] = sell
+		context['count'] = counts
 		trace = go.Scatter(
 			x = sel,
 			y = counts,
@@ -492,6 +556,9 @@ class Plotly(TemplateView):
 				dd['femenino'] += 1
 		labels = ['Masculino', 'Femenino']
 		values = [dd['masculino'], dd['femenino']]
+		context['gender_data'] = [{'labels': labels, 'values': values, 'type': 'pie', 'marker': {'colors': ['rgb(255,236,0)', 'rgb(126,126,126)']}}]
+#		context['gender_layout'] = {'title': 'Gender vs Missing People',
+ #              'showlegend': true}
 		fig = {
 			'data': [{'labels': labels, 'values': values, 'type': 'pie', 'marker': {'colors': ['rgb(255,236,0)', 'rgb(126,126,126)']}}],
 			'layout': {'title': 'Gender vs Missing People',
@@ -502,6 +569,20 @@ class Plotly(TemplateView):
 		#tracess = go.Pie(labels=labels, values=values)
 		#div_gender = opy.plot([tracess], auto_open=False, output_type='div')
 		div_gender = opy.plot(fig, auto_open=False, output_type='div')
+		#div_g, plotly_js = div_gender.split('<script type="text/javascript">')
+		#my_js = '''
+		#window.onresize = function() {
+  #Plotly.relayout('{div_id}', {
+   # width: 0.9 * window.innerWidth,
+    #height: 0.9 * window.innerHeight
+  #})
+#}
+
+#'''.format(div_id = div_g[9:45])
+#		front, back = plotly_js.split('<\script>')
+#		new_js = front + my_js + back
+#		context['div_g'] = div_g
+#		context['gender_js'] = new_js
 		df_profession = pd.read_sql(
                 """
                 SELECT profesión
@@ -516,10 +597,15 @@ class Plotly(TemplateView):
 		cou = []
 		for i in se:
 			cou.append(li.count(i))
+		se = list(map(str, se))
+		context['se'] = se
+		context['cou'] = cou
 		layout = {"title": "Profession vs Missing Numbers",
 			"yaxis": {"title": "Number Missing", },
 			"xaxis": {"title": "Profession"}, 'width':800, 'height': 600}
 		fig = go.Scatter(x=se, y = cou, line = dict(color = ('rgb(255,236,0)'),width = 4))
+		context['data_pro'] = [fig]
+		context['layout_pro'] = layout
 		figg = dict(data=[fig], layout=layout)
 		div_pro = opy.plot(figg, auto_open=False, output_type='div')
 		context['graph'] = div
@@ -528,3 +614,6 @@ class Plotly(TemplateView):
 		context['gender'] = div_gender
 		context['pro'] = div_pro
 		return context
+
+if __name__ == '__main__':
+    app.run_server(debug=True, host='192.241.128.56', port=8000)

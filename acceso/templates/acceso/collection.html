@@ -212,7 +212,7 @@ window.onresize = function() {
 		</div>
 		<div class="tabs_item">
 			{% if geo %}
-<div id="graphDivgeo" style="width:800px;height:600px">
+<div id="graphDivgeo">
 
 <script>
 var data_geo = [{
@@ -224,20 +224,23 @@ var data_geo = [{
         marker: {
           color: {{ geo_counts | safe }},
           colorscale: {{ geo_colorscale | safe }},
-          cmin: 0,
+          cmin: 1,
           cmax: {{ geo_cmax | safe }},
           reversescale: true,
+	  autocolorscale: false,
           //opacity: 0.5,
-          size: 10,
+          size: 8,
+	  line: {width:1, color:'rgba(102, 102, 102)'},
           colorbar:{
-            thickness: 10,
+            /*thickness: 10,
             titleside: 'right',
             outlinecolor: 'rgba(102, 102, 102)',
             ticks: 'outside',
             ticklen: 3,
             shoticksuffix: 'last',
             ticksuffix: 'inches',
-            dtick: 0.1
+            dtick: 0.1*/
+	    title:"Number of People"
           }
         },
         name: 'Number of People'
@@ -279,7 +282,7 @@ window.onresize = function() {
 		</div>
 	<div class="tabs_item">
 		{% if age %}
-<div id="graphDivage" style="width:800px;height:600px">
+<div id="graphDivage">
 <!--{{ age|safe }}-->
 
 <script>
@@ -310,7 +313,7 @@ window.onresize = function() {
 
 	<div class="tabs_item">
 	{% if gender %}
-<div id="graphDivgender" style="width:800px;height:600px">
+<div id="graphDivgender">
 <!--{{ gender|safe }}-->
 <script>
 var layout = {title: 'Gender vs Missing People',
